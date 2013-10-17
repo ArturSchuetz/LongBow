@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Device">
+      <UniqueIdentifier>{d8df5434-f446-44c9-9268-d0ed22deac71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Device">
+      <UniqueIdentifier>{79383041-7f9c-4cde-b5fa-2d833465f628}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Device\Shader">
+      <UniqueIdentifier>{75dff8b2-d8c1-4c25-bd8e-d7444a867114}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Device\Shader">
+      <UniqueIdentifier>{2829b994-5bd1-4b7d-95a5-19fa9c9bbe0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Device\Context">
+      <UniqueIdentifier>{dd80eec8-85f7-41c7-a71e-f903b97b853a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Device\Context">
+      <UniqueIdentifier>{a923628d-ab7a-452b-9a30-cc96e49393bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Device\Context\VertexArray">
+      <UniqueIdentifier>{d4e30d23-425c-450b-9c0e-a07cc76d7d54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Device\Context\VertexArray">
+      <UniqueIdentifier>{91e72a80-9f72-45d7-9b5b-7c7e585ec8ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Device\Textures">
+      <UniqueIdentifier>{41f5ab48-0c60-40b7-bb02-5627877ca16c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Device\Textures">
+      <UniqueIdentifier>{4726828a-6520-49f1-9e54-14ecf3a9bf47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Device\Buffer">
+      <UniqueIdentifier>{20bf64c7-fb8c-4823-a7ef-4be214dda4be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Device\Buffer">
+      <UniqueIdentifier>{87b30241-225e-452e-b9e9-67db40fa4398}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Device\Context\FrameBuffer">
+      <UniqueIdentifier>{af557045-d202-45e4-9e68-ef88f01fd87d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Device\Context\FrameBuffer">
+      <UniqueIdentifier>{ad671b3f-9d72-465b-aea4-08f801606b18}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DLLExport.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLRenderDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLGraphicsWindow.cpp">
+      <Filter>Source Files\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLTypeConverter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLShaderObject.cpp">
+      <Filter>Source Files\Device\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLShaderProgramName.cpp">
+      <Filter>Source Files\Device\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLFragmentOutputs.cpp">
+      <Filter>Source Files\Device\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLUniform.cpp">
+      <Filter>Source Files\Device\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLRendererContext.cpp">
+      <Filter>Source Files\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLVertexArray.cpp">
+      <Filter>Source Files\Device\Context\VertexArray</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLVertexArrayName.cpp">
+      <Filter>Source Files\Device\Context\VertexArray</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLBufferName.cpp">
+      <Filter>Source Files\Device\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLVertexBufferAttributes.cpp">
+      <Filter>Source Files\Device\Context\VertexArray</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLIndexBuffer.cpp">
+      <Filter>Source Files\Device\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLBuffer.cpp">
+      <Filter>Source Files\Device\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLVertexBuffer.cpp">
+      <Filter>Source Files\Device\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLTexture2D.cpp">
+      <Filter>Source Files\Device\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLTextureName.cpp">
+      <Filter>Source Files\Device\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLReadPixelBuffer.cpp">
+      <Filter>Source Files\Device\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLWritePixelBuffer.cpp">
+      <Filter>Source Files\Device\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLPixelBuffer.cpp">
+      <Filter>Source Files\Device\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLTextureSampler.cpp">
+      <Filter>Source Files\Device\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLSamplerName.cpp">
+      <Filter>Source Files\Device\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLTextureUnit.cpp">
+      <Filter>Source Files\Device\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLTextureUnits.cpp">
+      <Filter>Source Files\Device\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLColorAttachments.cpp">
+      <Filter>Source Files\Device\Context\FrameBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLFramebuffer.cpp">
+      <Filter>Source Files\Device\Context\FrameBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLFramebufferName.cpp">
+      <Filter>Source Files\Device\Context\FrameBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLShaderProgram.cpp">
+      <Filter>Source Files\Device\Shader</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="OGLRenderDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\LongBow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLTypeConverter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLGraphicsWindow.h">
+      <Filter>Header Files\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLShaderObject.h">
+      <Filter>Header Files\Device\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLShaderProgramName.h">
+      <Filter>Header Files\Device\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLFragmentOutputs.h">
+      <Filter>Header Files\Device\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLUniform.h">
+      <Filter>Header Files\Device\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLRenderContext.h">
+      <Filter>Header Files\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLVertexArray.h">
+      <Filter>Header Files\Device\Context\VertexArray</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLBufferName.h">
+      <Filter>Header Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLBuffer.h">
+      <Filter>Header Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLIndexBuffer.h">
+      <Filter>Header Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLVertexBuffer.h">
+      <Filter>Header Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLVertexArrayName.h">
+      <Filter>Header Files\Device\Context\VertexArray</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLVertexBufferAttributes.h">
+      <Filter>Header Files\Device\Context\VertexArray</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLTexture2D.h">
+      <Filter>Header Files\Device\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLTextureName.h">
+      <Filter>Header Files\Device\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLReadPixelBuffer.h">
+      <Filter>Header Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLWritePixelBuffer.h">
+      <Filter>Header Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLTextureSampler.h">
+      <Filter>Header Files\Device\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLSamplerName.h">
+      <Filter>Header Files\Device\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLPixelBuffer.h">
+      <Filter>Header Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLTextureUnit.h">
+      <Filter>Header Files\Device\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLTextureUnits.h">
+      <Filter>Header Files\Device\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLColorAttachments.h">
+      <Filter>Header Files\Device\Context\FrameBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLFramebuffer.h">
+      <Filter>Header Files\Device\Context\FrameBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLFramebufferName.h">
+      <Filter>Header Files\Device\Context\FrameBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLShaderProgram.h">
+      <Filter>Header Files\Device\Shader</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

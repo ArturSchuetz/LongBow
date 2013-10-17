@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Interface Files">
+      <UniqueIdentifier>{3ab0d60f-9638-4984-ba32-73c4cea1a2c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface Files\Device">
+      <UniqueIdentifier>{52036d48-7f0b-4c5a-90b0-1ffe72e97ca6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Device">
+      <UniqueIdentifier>{b2d840e4-6a72-402f-853d-1f8065dbf9ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface Files\Device\Shader">
+      <UniqueIdentifier>{2ad73c71-f75d-45d2-ba51-e2847ad2ba25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Device\Context">
+      <UniqueIdentifier>{1bfdbbf3-07dc-47c4-b2b7-b149807796a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface Files\Device\Context">
+      <UniqueIdentifier>{c6f0d6e6-ab0e-4897-8665-faadad12d7e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Device\RenderStates">
+      <UniqueIdentifier>{31e96a25-3715-446a-b399-fbc709e84c5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface Files\Device\Context\VertexArray">
+      <UniqueIdentifier>{11afe530-09ba-446d-a752-2cc6976c71f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Device\Context\VertexArray">
+      <UniqueIdentifier>{72b014a6-77ad-4848-acb4-f1d9ccdda285}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface Files\Device\Buffer">
+      <UniqueIdentifier>{c12051c9-3f3f-4cab-b4b0-4107e5d140ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface Files\Device\Textures">
+      <UniqueIdentifier>{a2c08db8-6f4c-4354-a04d-f59f3d7244fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Device\Buffer">
+      <UniqueIdentifier>{543d143b-cf12-4cf5-af5e-2672b213ef9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Device\Textures">
+      <UniqueIdentifier>{6fbf148b-d524-418c-a65a-ef2f73e389f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface Files\Device\Context\FrameBuffer">
+      <UniqueIdentifier>{9ddfff05-6f70-4a9d-9621-1fcdfbff6d26}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BowRenderDeviceManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Includes\BowRenderDeviceManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\LongBow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\IBowRenderDevice.h">
+      <Filter>Interface Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\IBowGraphicsWindow.h">
+      <Filter>Interface Files\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\BowScissorTest.h">
+      <Filter>Header Files\Device\RenderStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\BowColorMask.h">
+      <Filter>Header Files\Device\RenderStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\BowBlending.h">
+      <Filter>Header Files\Device\RenderStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\BowDepthRange.h">
+      <Filter>Header Files\Device\RenderStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\BowDepthTest.h">
+      <Filter>Header Files\Device\RenderStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\BowFacetCulling.h">
+      <Filter>Header Files\Device\RenderStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\BowPrimitiveRestart.h">
+      <Filter>Header Files\Device\RenderStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\BowStencilTest.h">
+      <Filter>Header Files\Device\RenderStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\BowStencilTestFace.h">
+      <Filter>Header Files\Device\RenderStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\IBowFragmentOutputs.h">
+      <Filter>Interface Files\Device\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\IBowUniform.h">
+      <Filter>Interface Files\Device\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\IBowShaderVertexAttribute.h">
+      <Filter>Interface Files\Device\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\IBowRenderContext.h">
+      <Filter>Interface Files\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\BowRenderState.h">
+      <Filter>Header Files\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\BowClearState.h">
+      <Filter>Header Files\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\IBowIndexBuffer.h">
+      <Filter>Interface Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\IBowVertexBuffer.h">
+      <Filter>Interface Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\BowBufferHint.h">
+      <Filter>Header Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\IBowVertexArray.h">
+      <Filter>Interface Files\Device\Context\VertexArray</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\BowVertexBufferAttribute.h">
+      <Filter>Header Files\Device\Context\VertexArray</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\BowComponentDatatype.h">
+      <Filter>Header Files\Device\Context\VertexArray</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\BowVertexArraySizes.h">
+      <Filter>Header Files\Device\Context\VertexArray</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\BowIndexBufferDatatype.h">
+      <Filter>Header Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\IBowWritePixelBuffer.h">
+      <Filter>Interface Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\BowPixelBufferHint.h">
+      <Filter>Header Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\BowTexture2DDescription.h">
+      <Filter>Header Files\Device\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\IBowTexture2D.h">
+      <Filter>Interface Files\Device\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\IBowReadPixelBuffer.h">
+      <Filter>Interface Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\IBowTextureSampler.h">
+      <Filter>Interface Files\Device\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\IBowColorAttachments.h">
+      <Filter>Interface Files\Device\Context\FrameBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\IBowFramebuffer.h">
+      <Filter>Interface Files\Device\Context\FrameBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Includes\IBowShaderProgram.h">
+      <Filter>Interface Files\Device\Shader</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
