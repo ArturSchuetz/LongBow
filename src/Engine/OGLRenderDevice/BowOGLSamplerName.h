@@ -1,0 +1,23 @@
+#pragma once
+#include "BowPrerequisites.h"
+
+namespace Bow {
+	namespace Renderer {
+
+		class OGLSamplerName
+		{
+		public:
+			OGLSamplerName();
+			~OGLSamplerName();
+
+			unsigned int GetValue();
+
+		private:
+			OGLSamplerName(const OGLSamplerName &obj){}
+			unsigned int m_value;
+		};
+
+		typedef std::shared_ptr<OGLSamplerName> OGLSamplerNamePtr;
+
+	}
+}

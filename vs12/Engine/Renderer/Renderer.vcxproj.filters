@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Interface Files">
+      <UniqueIdentifier>{78b325d4-b063-48fa-9d8a-0f05146125c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Device">
+      <UniqueIdentifier>{d8e2e204-2ee7-40e7-bb45-1068a343f0e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface Files\Device">
+      <UniqueIdentifier>{086249c6-d6a5-48ff-910b-0b2402a86634}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Device\Context">
+      <UniqueIdentifier>{9646d96d-1361-4461-8b7e-798ad94ced5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Device\Buffer">
+      <UniqueIdentifier>{18e8983b-7773-4ffa-a87f-79628506ff31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Device\RenderStates">
+      <UniqueIdentifier>{c85debb8-097a-4ec1-ab90-a34f7982e123}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Device\Textures">
+      <UniqueIdentifier>{dfd2071c-3503-4d9c-b32a-7f24a360872f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface Files\Device\Buffer">
+      <UniqueIdentifier>{fd259616-4aef-45b0-aad5-8e5f11f41d40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface Files\Device\Context">
+      <UniqueIdentifier>{b712b527-b287-4615-b176-f841ee5584c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface Files\Device\Shader">
+      <UniqueIdentifier>{5fb4e4df-f76a-4f53-8e2f-ea449c6d74e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface Files\Device\Textures">
+      <UniqueIdentifier>{c8b80af4-231f-4ab5-b0cc-9cdfe644e1ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Device\Context\VertexArray">
+      <UniqueIdentifier>{23a2c8e0-0948-454f-8f62-a41d71aec9df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface Files\Device\Context\FrameBuffer">
+      <UniqueIdentifier>{4e17ef7a-ea3f-44c1-acd8-0d064ac32466}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface Files\Device\Context\VertexArray">
+      <UniqueIdentifier>{013ebfe3-5ca4-4d4b-9fb1-faf20db9eecd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Device\Shader">
+      <UniqueIdentifier>{86c2dd95-468c-41a2-97ee-9e69240c2f56}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\BowRenderDeviceManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\IBowRenderDevice.h">
+      <Filter>Interface Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowRenderState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowClearState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\IBowRenderContext.h">
+      <Filter>Interface Files\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\IBowGraphicsWindow.h">
+      <Filter>Interface Files\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowBufferHint.h">
+      <Filter>Header Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowIndexBufferDatatype.h">
+      <Filter>Header Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowPixelBufferHint.h">
+      <Filter>Header Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowVertexArraySizes.h">
+      <Filter>Header Files\Device\Context\VertexArray</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowVertexBufferAttribute.h">
+      <Filter>Header Files\Device\Context\VertexArray</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowBlending.h">
+      <Filter>Header Files\Device\RenderStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowColorMask.h">
+      <Filter>Header Files\Device\RenderStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowDepthRange.h">
+      <Filter>Header Files\Device\RenderStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowDepthTest.h">
+      <Filter>Header Files\Device\RenderStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowFaceCulling.h">
+      <Filter>Header Files\Device\RenderStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowPrimitiveRestart.h">
+      <Filter>Header Files\Device\RenderStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowScissorTest.h">
+      <Filter>Header Files\Device\RenderStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowStencilTest.h">
+      <Filter>Header Files\Device\RenderStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowStencilTestFace.h">
+      <Filter>Header Files\Device\RenderStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowTexture2DDescription.h">
+      <Filter>Header Files\Device\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\IBowIndexBuffer.h">
+      <Filter>Interface Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\IBowReadPixelBuffer.h">
+      <Filter>Interface Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\IBowVertexBuffer.h">
+      <Filter>Interface Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\IBowWritePixelBuffer.h">
+      <Filter>Interface Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\IBowColorAttachments.h">
+      <Filter>Interface Files\Device\Context\FrameBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\IBowFramebuffer.h">
+      <Filter>Interface Files\Device\Context\FrameBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\IBowVertexArray.h">
+      <Filter>Interface Files\Device\Context\VertexArray</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\IBowFragmentOutputs.h">
+      <Filter>Interface Files\Device\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\IBowShaderProgram.h">
+      <Filter>Interface Files\Device\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\IBowTexture2D.h">
+      <Filter>Interface Files\Device\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\IBowTextureSampler.h">
+      <Filter>Interface Files\Device\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowShaderVertexAttribute.h">
+      <Filter>Header Files\Device\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowPrerequisites.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowRendererPredeclares.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowComponentDatatype.h">
+      <Filter>Header Files\Device\Context\VertexArray</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\Engine\Renderer\BowRenderDeviceManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

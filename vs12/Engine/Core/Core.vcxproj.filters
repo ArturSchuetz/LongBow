@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Interface Files">
+      <UniqueIdentifier>{0c71cb84-f022-4a4a-8643-035154748a1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Geometry">
+      <UniqueIdentifier>{7b2b477e-6fa7-4841-8ef2-c1fda625e358}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Ressources">
+      <UniqueIdentifier>{3ad77577-fae5-48ab-8cf8-276b229445b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface Files\Geometry">
+      <UniqueIdentifier>{b645a6b1-2908-492d-ac9a-3a3ff11086aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Geometry">
+      <UniqueIdentifier>{d23ac050-fe65-41d2-b831-fc00ce24e6a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Ressources">
+      <UniqueIdentifier>{c0b300cb-9ac1-4d7a-a7c9-d6dbbd6ade65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface Files\DesignPattern">
+      <UniqueIdentifier>{53eecd0a-1967-41ed-ac7b-c641721890e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface Files\Geometry\Indices">
+      <UniqueIdentifier>{3543ec95-d167-41cc-87c7-dba9ba0d5d49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface Files\Geometry\VertexAttributes">
+      <UniqueIdentifier>{3ebef1dc-139f-4415-bcab-467843639a61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Geometry\Indices">
+      <UniqueIdentifier>{690b664a-5043-4ce8-b408-4b034af59e15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Geometry\VertexAttributes">
+      <UniqueIdentifier>{4df484b1-9248-4cd1-8c61-1b9783e73d4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Geometry\Indices">
+      <UniqueIdentifier>{7af38144-7edc-4a5b-9a71-e52e970c2aee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Geometry\VertexAttributes">
+      <UniqueIdentifier>{24067dfb-f9f2-4eb2-aec7-41e712101efd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\Engine\Core\BowLogger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Core\BowBitmap.cpp">
+      <Filter>Source Files\Ressources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Core\BowVertexAttributeFloat.cpp">
+      <Filter>Source Files\Geometry\VertexAttributes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Core\BowVertexAttributeFloatVec3.cpp">
+      <Filter>Source Files\Geometry\VertexAttributes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Core\BowIndicesUnsignedInt.cpp">
+      <Filter>Source Files\Geometry\Indices</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Core\BowIndicesUnsignedShort.cpp">
+      <Filter>Source Files\Geometry\Indices</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\BowLogger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\IBowCleanableObserver.h">
+      <Filter>Interface Files\DesignPattern</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowBitmap.h">
+      <Filter>Header Files\Ressources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\IBowIndicesBase.h">
+      <Filter>Interface Files\Geometry\Indices</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\IBowVertexAttribute.h">
+      <Filter>Interface Files\Geometry\VertexAttributes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowIndicesUnsignedInt.h">
+      <Filter>Header Files\Geometry\Indices</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowIndicesUnsignedShort.h">
+      <Filter>Header Files\Geometry\Indices</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowVertexAttributeFloat.h">
+      <Filter>Header Files\Geometry\VertexAttributes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowVertexAttributeFloatVec3.h">
+      <Filter>Header Files\Geometry\VertexAttributes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowCorePredeclares.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowPrerequisites.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
