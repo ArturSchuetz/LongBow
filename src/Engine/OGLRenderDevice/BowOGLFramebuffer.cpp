@@ -10,23 +10,28 @@
 namespace Bow {
 	namespace Renderer {
 
+
 		OGLFramebuffer::OGLFramebuffer() : m_name(new OGLFramebufferName())
 		{
 		}
 
+
 		OGLFramebuffer::~OGLFramebuffer()
 		{
 		}
+
 
 		void OGLFramebuffer::Bind()
 		{
 			glBindFramebuffer(GL_FRAMEBUFFER, m_name->GetValue());
 		}
 
+
 		void OGLFramebuffer::UnBind()
 		{
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		}
+
 
 		void OGLFramebuffer::Clean()
 		{
@@ -81,20 +86,24 @@ namespace Bow {
 			}
 		}
 
+
 		Texture2DPtr OGLFramebuffer::GetColorAttachment(int index) const
 		{
 			return m_colorAttachments.GetAttachment(index);
 		}
+
 
 		void OGLFramebuffer::SetColorAttachment(int index, Texture2DPtr texture)
 		{
 			m_colorAttachments.SetAttachment(index, texture);
 		}
 
+
 		Texture2DPtr OGLFramebuffer::GetDepthAttachment(void) const
 		{
 			return m_depthAttachment;
 		}
+
 
 		void OGLFramebuffer::SetDepthAttachment(Texture2DPtr texture)
 		{
@@ -113,6 +122,7 @@ namespace Bow {
 			return m_depthStencilAttachment;
 		}
 
+
 		void OGLFramebuffer::SetDepthStencilAttachment(Texture2DPtr texture)
 		{
 			if (m_depthStencilAttachment != texture)
@@ -123,6 +133,7 @@ namespace Bow {
 				m_dirtyFlags = (DirtyFlags)((int)m_dirtyFlags | (int)DirtyFlags::DepthStencilAttachment);
 			}
 		}
+
 
 		void OGLFramebuffer::Attach(unsigned int attachPoint, OGLTexture2DPtr texture)
 		{

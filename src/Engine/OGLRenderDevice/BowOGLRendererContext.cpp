@@ -16,11 +16,25 @@
 #include "BowOGLIndexBuffer.h"
 #include "BowOGLVertexArray.h"
 
-#include <GL/wglew.h>
-#include <memory>
+#include <GL\glew.h>
+#include <GLFW\glfw3.h>
 
 namespace Bow {
 	namespace Renderer {
+
+		enum class StencilFace : GLenum
+		{
+			Front = GL_FRONT,
+			Back = GL_BACK,
+			FrontAndBack = GL_FRONT_AND_BACK
+		};
+
+		enum class MaterialFace : GLenum
+		{
+			Front = GL_FRONT,
+			Back = GL_BACK,
+			FrontAndBack = GL_FRONT_AND_BACK
+		};
 
 		void Enable(GLenum enableCap, bool enable)
 		{
@@ -35,109 +49,40 @@ namespace Bow {
 		}
 
 
-		OGLRenderContext::OGLRenderContext(void)
+		OGLRenderContext* OGLRenderContext::m_currentContext;
+
+		OGLRenderContext::OGLRenderContext(GLFWwindow* window) :
+			m_window(window), 
+			m_initialized(false)
 		{
-		}
-
-
-		OGLRenderContext::~OGLRenderContext(void)
-		{
-			VRelease();
-		}
-
-
-		bool OGLRenderContext::VInitialize(HWND hWnd, int width, int height)
-		{
-			m_hWnd = hWnd;
-			m_hdc = GetDC(hWnd);
-			if (m_hdc == NULL)
+			if (m_currentContext != this)
 			{
-				LOG_ERROR("Could not fetch Device Context!");
-				return false;
+				glfwMakeContextCurrent(m_window);
+				m_currentContext = this;
 			}
 
-			PIXELFORMATDESCRIPTOR pfd;
-			memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
-			pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
-			pfd.nVersion = 1;
-			pfd.dwFlags = PFD_DOUBLEBUFFER | PFD_SUPPORT_OPENGL | PFD_DRAW_TO_WINDOW;
-			pfd.iPixelType = PFD_TYPE_RGBA;
-			pfd.cColorBits = 32;
-			pfd.cDepthBits = 32;
-			pfd.iLayerType = PFD_MAIN_PLANE;
-
-			int pixel_format = ChoosePixelFormat(m_hdc, &pfd);
-			if (pixel_format == 0)
+			if (GLEW_OK != glewInit())
 			{
-				LOG_ERROR("Could not Choose PixelFormat!");
-				return false;
-			}
-
-			if (SetPixelFormat(m_hdc, pixel_format, &pfd) == FALSE)
-			{
-				LOG_ERROR("Could not Set PixelFormat!");
-				return false;
-			}
-
-			HGLRC tempContext = wglCreateContext(m_hdc);
-			if (tempContext == NULL)
-			{
-				LOG_ERROR("Could not Create Context!");
-				return false;
-			}
-
-			// Activate the rendering context.
-			if (wglMakeCurrent(m_hdc, tempContext) == FALSE)
-			{
-				LOG_ERROR("Could not make Context as Current!");
-				return false;
-			}
-
-			GLenum error = glewInit();
-			if (error != GLEW_OK)
-			{
-				LOG_ERROR("Init glew failed!");
-				return false;
-			}
-
-			//Or better yet, use the GL3 way to get the version number
-			int OpenGLVersion[2];
-			glGetIntegerv(GL_MAJOR_VERSION, &OpenGLVersion[0]);
-			glGetIntegerv(GL_MINOR_VERSION, &OpenGLVersion[1]);
-
-			int attribs[] =
-			{
-				WGL_CONTEXT_MAJOR_VERSION_ARB, OpenGLVersion[0],
-				WGL_CONTEXT_MINOR_VERSION_ARB, OpenGLVersion[1],
-				WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB, // Set our OpenGL context to be forward compatible
-				0
-			};
-
-			if (wglewIsSupported("WGL_ARB_create_context") == 1)
-			{
-				m_hrc = wglCreateContextAttribsARB(m_hdc, NULL, attribs);
-				wglMakeCurrent(NULL, NULL);
-				wglDeleteContext(tempContext);
-				wglMakeCurrent(m_hdc, m_hrc);
-				LOG_DEBUG("Initialized OpenGL!");
+				LOG_ERROR("Could not initialize GLEW!");
 			}
 			else
 			{
-				//It's not possible to make a GL 3.x context. Use the old style context (GL 2.1 and before)
-				LOG_ERROR("WGL_ARB_create_context is not Supported! Using OpenGL 2.1 and before instead.");
-				m_hrc = tempContext;
+				LOG_DEBUG("GLEW sucessfully initialized!");
 			}
 
 			//Checking GL version
 			const GLubyte *GLVersionString = glGetString(GL_VERSION);
 			LOG_DEBUG("GL_VERSION: %s", GLVersionString);
+		}
 
-			if (!m_hrc)
+
+		bool OGLRenderContext::Initialize(int width, int height)
+		{
+			if (m_currentContext != this)
 			{
-				LOG_ERROR("Render Context Init failed.");
-				return false;
+				glfwMakeContextCurrent(m_window);
+				m_currentContext = this;
 			}
-			LOG_DEBUG("Successfully Initialized");
 
 			float clearColor[4];
 			glGetFloatv(GL_DEPTH_CLEAR_VALUE, &m_clearDepth);
@@ -156,36 +101,25 @@ namespace Bow {
 			//
 			ForceApplyRenderState(m_renderState);
 
-			m_width = width;
-			m_height = height;
-			VSetViewport(Viewport(0, 0, m_width, m_height));
+			VSetViewport(Viewport(0, 0, width, height));
+			m_initialized = true;
 
-			return true;
+			LOG_DEBUG("OpenGL-Context sucessfully initialized!");
+			return m_initialized;
+		}
+
+
+		OGLRenderContext::~OGLRenderContext(void)
+		{
+			VRelease();
 		}
 
 
 		void OGLRenderContext::VRelease(void)
 		{
-			wglMakeCurrent(m_hdc, 0); // Remove the rendering context from our device context  
-
-			if (m_hrc != NULL)
-			{
-				wglMakeCurrent(NULL, NULL);
-				wglDeleteContext(m_hrc); // Delete our rendering context  
-				m_hrc = NULL;
-			}
-
-			if (m_hdc != NULL)
-			{
-				ReleaseDC(m_hWnd, m_hdc); // Release the device context from our window  
-				m_hdc = NULL;
-			}
-		}
-
-
-		void OGLRenderContext::VMakeCurrent()
-		{
-			wglMakeCurrent(m_hdc, m_hrc);
+			m_initialized = false;
+			m_window = nullptr;
+			LOG_DEBUG("OGLRenderContext released");
 		}
 
 
@@ -203,6 +137,12 @@ namespace Bow {
 
 		void OGLRenderContext::VClear(ClearState clearState)
 		{
+			if (m_currentContext != this)
+			{
+				glfwMakeContextCurrent(m_window);
+				m_currentContext = this;
+			}
+
 			ApplyFramebuffer();
 
 			ApplyScissorTest(clearState.ScissorTest);
@@ -236,7 +176,6 @@ namespace Bow {
 		{
 			if (m_renderState.ColorMask != colorMask)
 			{
-				LOG_DEBUG("Set ColorMask to: %d, %d, %d, %d", colorMask.GetRed(), colorMask.GetGreen(), colorMask.GetBlue(), colorMask.GetAlpha());
 				glColorMask(colorMask.GetRed(), colorMask.GetGreen(), colorMask.GetBlue(), colorMask.GetAlpha());
 				m_renderState.ColorMask = colorMask;
 			}
@@ -247,7 +186,6 @@ namespace Bow {
 		{
 			if (m_renderState.DepthMask != depthMask)
 			{
-				LOG_DEBUG("Set DepthMask to: %d", depthMask);
 				glDepthMask(depthMask);
 				m_renderState.DepthMask = depthMask;
 			}
@@ -335,7 +273,8 @@ namespace Bow {
 
 		void OGLRenderContext::VSwapBuffers(void)
 		{
-			SwapBuffers(m_hdc);
+			glfwSwapBuffers(m_window);
+			glfwPollEvents();
 		}
 
 
@@ -450,7 +389,6 @@ namespace Bow {
 		{
 			if (m_renderState.PrimitiveRestart.Enabled != primitiveRestart.Enabled)
 			{
-				LOG_DEBUG("Set PrimitiveRestart Enabled: %d", primitiveRestart.Enabled);
 				Enable(GL_PRIMITIVE_RESTART, primitiveRestart.Enabled);
 				m_renderState.PrimitiveRestart.Enabled = primitiveRestart.Enabled;
 			}
@@ -470,7 +408,6 @@ namespace Bow {
 		{
 			if (m_renderState.FaceCulling.Enabled != FaceCulling.Enabled)
 			{
-				LOG_DEBUG("Set FaceCulling Enabled: %d", FaceCulling.Enabled);
 				Enable(GL_CULL_FACE, FaceCulling.Enabled);
 				m_renderState.FaceCulling.Enabled = FaceCulling.Enabled;
 			}
@@ -530,7 +467,6 @@ namespace Bow {
 
 			if (m_renderState.ScissorTest.Enabled != scissorTest.Enabled)
 			{
-				LOG_DEBUG("Set ScissorTest Enabled: %d", scissorTest.Enabled);
 				Enable(GL_SCISSOR_TEST, scissorTest.Enabled);
 				m_renderState.ScissorTest.Enabled = scissorTest.Enabled;
 			}
@@ -550,7 +486,6 @@ namespace Bow {
 		{
 			if (m_renderState.StencilTest.Enabled != stencilTest.Enabled)
 			{
-				LOG_DEBUG("Set StencilTest Enabled: %d", stencilTest.Enabled);
 				Enable(GL_STENCIL_TEST, stencilTest.Enabled);
 				m_renderState.StencilTest.Enabled = stencilTest.Enabled;
 			}
@@ -599,7 +534,6 @@ namespace Bow {
 		{
 			if (m_renderState.DepthTest.Enabled != depthTest.Enabled)
 			{
-				LOG_DEBUG("Set DepthTest Enabled: %d", depthTest.Enabled);
 				Enable(GL_DEPTH_TEST, depthTest.Enabled);
 				m_renderState.DepthTest.Enabled = depthTest.Enabled;
 			}
@@ -644,7 +578,6 @@ namespace Bow {
 		{
 			if (m_renderState.Blending.Enabled != blending.Enabled)
 			{
-				LOG_DEBUG("Set Blending Enabled: %d", blending.Enabled);
 				Enable(GL_BLEND, blending.Enabled);
 				m_renderState.Blending.Enabled = blending.Enabled;
 			}
@@ -681,7 +614,6 @@ namespace Bow {
 
 				if (m_renderState.Blending.color != blending.color)
 				{
-					LOG_DEBUG("Set BlendColor to: %d, %d, %d, %d", blending.color[0], blending.color[1], blending.color[2], blending.color[3]);
 					glBlendColor(blending.color[0], blending.color[1], blending.color[2], blending.color[3]);
 					memcpy(&m_renderState.Blending.color, &blending.color, sizeof(float)* 4);
 				}

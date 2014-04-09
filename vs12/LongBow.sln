@@ -43,6 +43,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "03_Textures", "Samples\03_T
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "04_FrameBuffer", "Samples\04_FrameBuffer\04_FrameBuffer.vcxproj", "{D946F85F-1DF4-4948-8E17-702FAA38ACAF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{88880C42-EC11-4BCA-B4FA-732BFB0CFBEF} = {88880C42-EC11-4BCA-B4FA-732BFB0CFBEF}
+		{D1B3D672-1304-4EA4-8DEB-095D0656E932} = {D1B3D672-1304-4EA4-8DEB-095D0656E932}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

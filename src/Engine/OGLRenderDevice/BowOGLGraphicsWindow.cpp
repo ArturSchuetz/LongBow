@@ -1,71 +1,50 @@
 #include "BowOGLGraphicsWindow.h"
+#include "BowLogger.h"
+
+#include "BowOGLRenderDevice.h"
 #include "BowOGLRenderContext.h"
+
+#include <GL\glew.h>
+#include <GLFW\glfw3.h>
 
 namespace Bow {
 	namespace Renderer {
 
 		LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-		OGLGraphicsWindow::OGLGraphicsWindow()
+		OGLGraphicsWindow::OGLGraphicsWindow() :
+			m_Context(nullptr)
 		{
-			m_Context = nullptr;
-			m_hWnd = NULL;
+		}
+
+
+		bool OGLGraphicsWindow::Initialize(unsigned int width, unsigned int height, const std::string& title, WindowType windowType)
+		{
+			// Create a fullscrenn window?
+			GLFWmonitor* monitor = nullptr;
+			if (windowType == WindowType::Fullscreen)
+				monitor = glfwGetPrimaryMonitor();
+
+			// Creating Window with a cool custom deleter
+			m_Window = glfwCreateWindow(width, height, title.c_str(), monitor, NULL);
+
+			if (!m_Window)
+			{
+				glfwTerminate();
+				LOG_ERROR("Error while creating OpenGL-Window with glfw!");
+				return false;
+			}
+
+			m_Context = OGLRenderContextPtr(new OGLRenderContext(m_Window));
+
+			LOG_DEBUG("OpenGL-Window sucessfully initialized!");
+			return m_Context->Initialize(width, height);
 		}
 
 
 		OGLGraphicsWindow::~OGLGraphicsWindow(void)
 		{
 			VRelease();
-		}
-
-
-		bool OGLGraphicsWindow::VInitialize(HINSTANCE hInstance, int width, int height, std::string title)
-		{
-			TCHAR szWindowClass[] = TEXT("OGLWindow");
-
-			WNDCLASSEX wcex;
-
-			wcex.cbSize = sizeof(WNDCLASSEX);
-
-			wcex.style = CS_HREDRAW | CS_VREDRAW;
-			wcex.lpfnWndProc = WndProc;
-			wcex.cbClsExtra = 0;
-			wcex.cbWndExtra = 0;
-			wcex.hInstance = hInstance;
-			//wcex.hIcon		= LoadIcon(hInstance, MAKEINTRESOURCE(IDI_HELLOWORLD));
-			wcex.hIcon = LoadIcon(hInstance, IDI_APPLICATION);
-			wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
-			wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-			wcex.lpszMenuName = 0;
-			wcex.lpszClassName = szWindowClass;
-			wcex.hIconSm = LoadIcon(wcex.hInstance, IDI_APPLICATION);
-
-			RegisterClassEx(&wcex);
-
-			m_hWnd = CreateWindow(szWindowClass, title.c_str(), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, 0, width, height, NULL, NULL, hInstance, NULL);
-
-			if (!m_hWnd)
-			{
-				return FALSE;
-			}
-
-			RECT rect;
-			if (GetClientRect(m_hWnd, &rect))
-			{
-				m_width = rect.right - rect.left;
-				m_height = rect.bottom - rect.top;
-			}
-			else
-			{
-				m_width = width;
-				m_height = height;
-			}
-
-			ShowWindow(m_hWnd, SW_SHOWDEFAULT);
-			UpdateWindow(m_hWnd);
-
-			m_Context = OGLRenderContextPtr(new OGLRenderContext());
-			return m_Context->VInitialize(m_hWnd, m_width, m_height);
 		}
 
 
@@ -76,6 +55,10 @@ namespace Bow {
 				m_Context->VRelease();
 				m_Context.reset();
 			}
+			glfwDestroyWindow(m_Window);
+			m_Window = nullptr;
+
+			LOG_DEBUG("OGLGraphicsWindow released");
 		}
 
 
@@ -85,50 +68,25 @@ namespace Bow {
 		}
 
 
-		HWND OGLGraphicsWindow::VGetWindowHandle() const
-		{
-			return m_hWnd;
-		}
-
-
 		int OGLGraphicsWindow::VGetWidth() const
 		{
-			return m_width;
+			int width, height;
+			glfwGetWindowSize(m_Window, &width, &height);
+			return width;
 		}
 
 
 		int OGLGraphicsWindow::VGetHeight() const
 		{
-			return m_height;
+			int width, height;
+			glfwGetWindowSize(m_Window, &width, &height);
+			return height;
 		}
 
 
-		//
-		//  FUNCTION: WndProc(HWND, UINT, WPARAM, LPARAM)
-		//
-		//  PURPOSE:  Processes messages for the main window.
-		//
-		//  WM_DESTROY	- post a quit message and return
-		//
-		//
-		LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+		bool OGLGraphicsWindow::VShouldClose() const
 		{
-			switch (message)
-			{
-			case WM_DESTROY:
-				PostQuitMessage(0);
-				break;
-
-			case WM_SETFOCUS:
-				break;
-
-			case WM_KILLFOCUS:
-				break;
-
-			default:
-				return DefWindowProc(hWnd, message, wParam, lParam);
-			}
-			return 0;
+			return glfwWindowShouldClose(m_Window) != 0;
 		}
 
 	}

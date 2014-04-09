@@ -24,6 +24,9 @@
 
 #include "resource.h"
 
+using namespace Bow;
+using namespace Renderer;
+
 std::string LoadShader(int name)
 {
 	DWORD size = 0;
@@ -38,26 +41,26 @@ std::string LoadShader(int name)
 int main()
 {
 	// Creating Render Device
-	Bow::Renderer::RenderDevicePtr DeviceOGL = Bow::Renderer::RenderDeviceManager::GetInstance().GetOrCreateDevice(Bow::Renderer::API::OpenGL3x);
+	RenderDevicePtr DeviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(API::OpenGL3x);
 	if (DeviceOGL == nullptr)
 	{
 		return 0;
 	}
 
 	// Creating Window
-	Bow::Renderer::GraphicsWindowPtr WindowOGL = DeviceOGL->VCreateWindow(800, 600, "Textures Sample", Bow::Renderer::WindowType::Windowed);
+	GraphicsWindowPtr WindowOGL = DeviceOGL->VCreateWindow(800, 600, "Textures Sample", WindowType::Windowed);
 	if (WindowOGL == nullptr)
 	{
 		return 0;
 	}
 
-	Bow::Renderer::RenderContextPtr ContextOGL = WindowOGL->VGetContext();
-	Bow::Renderer::ShaderProgramPtr ShaderProgram = DeviceOGL->VCreateShaderProgram(LoadShader(IDS_VERTEXSHADER), LoadShader(IDS_FRAGMENTSHADER));
+	RenderContextPtr ContextOGL = WindowOGL->VGetContext();
+	ShaderProgramPtr ShaderProgram = DeviceOGL->VCreateShaderProgram(LoadShader(IDS_VERTEXSHADER), LoadShader(IDS_FRAGMENTSHADER));
 
 	///////////////////////////////////////////////////////////////////
 	// ClearState and Color
 
-	Bow::Renderer::ClearState clearState;
+	ClearState clearState;
 	float cornflowerBlue[] = { 0.392f, 0.584f, 0.929f, 1.0f };
 	memcpy(&clearState.Color, &cornflowerBlue, sizeof(float)* 4);
 
@@ -69,28 +72,36 @@ int main()
 	vert[3] = 0.0f; vert[4] = -1.0f; vert[5] = 1.0f;
 	vert[6] = 1.0f; vert[7] = 1.0f; vert[8] = 1.0f;
 
-	// fill buffer with informations
-	Bow::Renderer::VertexBufferAttributePtr	PositionAttribute = Bow::Renderer::VertexBufferAttributePtr(new Bow::Renderer::VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(Bow::Renderer::BufferHint::StaticDraw, sizeof(float)* 9), Bow::Renderer::ComponentDatatype::Float, 3));
-	PositionAttribute->GetVertexBuffer()->CopyFromSystemMemory(vert, 0, sizeof(float)* 9);
+	// Create vertex position buffer and fill with informations
+	VertexBufferPtr PositionBuffer =  DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float)* 9);
+	PositionBuffer->CopyFromSystemMemory(vert, 0, sizeof(float)* 9);
+
+	// Define buffer as vertexattribute for shaders
+	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(PositionBuffer, ComponentDatatype::Float, 3));
+
 
 	float* texcoor = new float[6];
 	texcoor[0] = 0.0f; texcoor[1] = 1.0f;
 	texcoor[2] = 0.5f; texcoor[3] = 0.0f;
 	texcoor[4] = 1.0f; texcoor[5] = 1.0f;
 
-	Bow::Renderer::VertexBufferAttributePtr	TextureCoordAttribute = Bow::Renderer::VertexBufferAttributePtr(new Bow::Renderer::VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(Bow::Renderer::BufferHint::StaticDraw, sizeof(float)* 6), Bow::Renderer::ComponentDatatype::Float, 2));
-	TextureCoordAttribute->GetVertexBuffer()->CopyFromSystemMemory(texcoor, 0, sizeof(float)* 6);
+	// Create vertex texturecoodinate buffer and fill with informations
+	VertexBufferPtr TextureCoordBuffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float)* 6);
+	TextureCoordBuffer->CopyFromSystemMemory(texcoor, 0, sizeof(float)* 6);
 
-	// create VertexArray and connect buffer with location
-	Bow::Renderer::VertexArrayPtr VertexArray = ContextOGL->CreateVertexArray();
+	// Define buffer as vertexattribute for shaders
+	VertexBufferAttributePtr	TextureCoordAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(TextureCoordBuffer, ComponentDatatype::Float, 2));
+
+	// create VertexArray and connect attributeBuffers with location
+	VertexArrayPtr VertexArray = ContextOGL->CreateVertexArray();
 	VertexArray->SetAttribute(ShaderProgram->GetVertexAttribute("in_Position")->Location, PositionAttribute);
 	VertexArray->SetAttribute(ShaderProgram->GetVertexAttribute("in_TexCoord")->Location, TextureCoordAttribute);
 
 	///////////////////////////////////////////////////////////////////
 	// Textures
 
-	Bow::Renderer::Texture2DPtr texture = DeviceOGL->VCreateTexture2DFromFile("Data/Textures/Logo_Art_wip_6.jpg");
-	Bow::Renderer::TextureSamplerPtr sampler = DeviceOGL->VCreateTexture2DSampler(Bow::Renderer::TextureMinificationFilter::Linear, Bow::Renderer::TextureMagnificationFilter::Linear, Bow::Renderer::TextureWrap::Clamp, Bow::Renderer::TextureWrap::Clamp);
+	Texture2DPtr texture = DeviceOGL->VCreateTexture2DFromFile("Data/Textures/Logo_Art_wip_6.jpg");
+	TextureSamplerPtr sampler = DeviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Clamp, TextureWrap::Clamp);
 
 	int TexID = 0;
 	ContextOGL->VSetTexture(TexID, texture);
@@ -100,27 +111,19 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// RenderState
 
-	Bow::Renderer::RenderState renderState;
+	RenderState renderState;
 	renderState.FaceCulling.Enabled = false;
 	renderState.DepthTest.Enabled = false;
 
 	MSG msg = { 0 };
-	while (WM_QUIT != msg.message)
+	while (!WindowOGL->VShouldClose())
 	{
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-		else
-		{
-			// Clear Backbuffer to our ClearState
-			ContextOGL->VClear(clearState);
+		// Clear Backbuffer to our ClearState
+		ContextOGL->VClear(clearState);
 
-			ContextOGL->VDraw(Bow::Renderer::PrimitiveType::Triangles, 0, 3, VertexArray, ShaderProgram, renderState);
+		ContextOGL->VDraw(PrimitiveType::Triangles, 0, 3, VertexArray, ShaderProgram, renderState);
 
-			ContextOGL->VSwapBuffers();
-		}
+		ContextOGL->VSwapBuffers();
 	}
 	return (int)msg.wParam;
 }

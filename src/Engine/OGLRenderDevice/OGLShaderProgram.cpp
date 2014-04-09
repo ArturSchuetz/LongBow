@@ -48,7 +48,7 @@ namespace Bow {
 			}
 			else
 			{
-				LOG_DEBUG("Shader successfully  linked!");
+				LOG_DEBUG("Shader successfully linked!");
 				m_ready = true;
 			}
 
@@ -141,7 +141,7 @@ namespace Bow {
 			ShaderVertexAttributeMap vertexAttributes = ShaderVertexAttributeMap();
 
 			if (numberOfAttributes > 0)
-				LOG_DEBUG("VertexAttributes:");
+				LOG_DEBUG("\tVertexAttributes:");
 
 			for (unsigned int i = 0; i < (unsigned int)numberOfAttributes; ++i)
 			{
@@ -160,7 +160,7 @@ namespace Bow {
 				}
 				int attributeLocation = glGetAttribLocation(programHandle, attributeName);
 
-				LOG_DEBUG("\tName: %s, \tLocation: %d", attributeName, attributeLocation);
+				LOG_DEBUG("\t\tName: %s, \tLocation: %d", attributeName, attributeLocation);
 				vertexAttributes.insert(std::pair<std::string, ShaderVertexAttributePtr>(attributeName, ShaderVertexAttributePtr(new ShaderVertexAttribute(attributeLocation, OGLTypeConverter::ToActiveAttribType(attributeType), attributeLength))));
 			}
 			return vertexAttributes;
@@ -179,7 +179,7 @@ namespace Bow {
 
 			UniformMap uniforms;
 			if (numberOfUniforms > 0)
-				LOG_DEBUG("Uniforms:");
+				LOG_DEBUG("\tUniforms:");
 
 			for (unsigned int i = 0; i < (unsigned int)numberOfUniforms; ++i)
 			{
@@ -211,7 +211,7 @@ namespace Bow {
 
 				int uniformLocation = glGetUniformLocation(programHandle, uniformName);
 
-				LOG_DEBUG("\tName: %s, \tLocation: %d, \tArraySize: %d", uniformName, uniformLocation, uniformSize);
+				LOG_DEBUG("\t\tName: %s, \tLocation: %d, \tArraySize: %d", uniformName, uniformLocation, uniformSize);
 				//uniforms.insert(std::pair<std::string, UniformPtr>(uniformName, UniformPtr(new OGLUniform(uniformLocation, uniformSize, OGLTypeConverter::ToActiveUniformType(uniformType), this))));
 				UniformType type = OGLTypeConverter::ToActiveUniformType(uniformType);
 

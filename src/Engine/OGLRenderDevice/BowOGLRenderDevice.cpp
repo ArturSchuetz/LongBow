@@ -14,17 +14,30 @@
 
 #include "BowBitmap.h"
 
-#include <GL/glew.h>
+#include <GL\glew.h>
+#include <GLFW\glfw3.h>
 
 namespace Bow {
 	namespace Renderer {
 
 		using namespace Core;
 
-		OGLRenderDevice::OGLRenderDevice(HINSTANCE hInstance)
+		void error_callback(int error, const char* description)
 		{
-			m_hInstance = hInstance;
-			m_currentWindow = 0;
+			LOG_ERROR(description);
+		}
+
+		OGLRenderDevice::OGLRenderDevice(void)
+		{
+			glfwSetErrorCallback(error_callback);
+			if (GL_TRUE != glfwInit())
+			{
+				LOG_ERROR("Could not initialize GLFW!");
+			}
+			else
+			{
+				LOG_DEBUG("GLFW sucessfully initialized!");
+			}
 		}
 
 		OGLRenderDevice::~OGLRenderDevice(void)
@@ -32,33 +45,33 @@ namespace Bow {
 			VRelease();
 		}
 
-		GraphicsWindowPtr OGLRenderDevice::VCreateWindow(int width, int height, std::string title, WindowType type)
-		{
-			// Initialise GLFW
-			OGLGraphicsWindowPtr pGraphicsWindow = OGLGraphicsWindowPtr(new OGLGraphicsWindow());
-
-			if (!pGraphicsWindow->VInitialize(m_hInstance, width, height, title))
-			{
-				return OGLGraphicsWindowPtr(nullptr);
-			}
-			glGetIntegerv(GL_MAX_VERTEX_ATOMIC_COUNTERS, &m_maximumNumberOfVertexAttributes);
-			glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &m_numberOfTextureUnits);
-			glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &m_maximumNumberOfColorAttachments);
-
-			m_GraphicsWindowMap.insert(std::pair<int, OGLGraphicsWindowPtr>(m_currentWindow++, pGraphicsWindow));
-			return pGraphicsWindow;
-		}
-
 		void OGLRenderDevice::VRelease(void)
 		{
-			for (auto it = m_GraphicsWindowMap.begin(); it != m_GraphicsWindowMap.end(); it++)
+			glfwTerminate();
+			LOG_DEBUG("RenderDeviceOGL3x released.");
+		}
+
+		GraphicsWindowPtr OGLRenderDevice::VCreateWindow(int width, int height, const std::string& title, WindowType type)
+		{
+			OGLGraphicsWindowPtr pGraphicsWindow = OGLGraphicsWindowPtr(new OGLGraphicsWindow());
+			if (pGraphicsWindow->Initialize(width, height, title, type))
 			{
-				if (it->second != nullptr)
-				{
-					it->second->VRelease();
-				}
+				glGetIntegerv(GL_MAX_VERTEX_ATOMIC_COUNTERS, &m_maximumNumberOfVertexAttributes);
+				LOG_DEBUG("\tMaximum number of Vertex Attributes: %i", m_maximumNumberOfVertexAttributes);
+
+				glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &m_numberOfTextureUnits);
+				LOG_DEBUG("\tMaximum number of Texture Units: %i", m_numberOfTextureUnits);
+
+				glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &m_maximumNumberOfColorAttachments);
+				LOG_DEBUG("\tMaximum number of Color Attachments; %i", m_maximumNumberOfColorAttachments);
+
+				return pGraphicsWindow;
 			}
-			m_GraphicsWindowMap.clear();
+			else
+			{
+				LOG_ERROR("Error while creating OpenGL-Window!");
+				return GraphicsWindowPtr(nullptr);
+			}
 		}
 
 		// =========================================================================

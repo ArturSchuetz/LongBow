@@ -3,6 +3,8 @@
 
 #include "IBowGraphicsWindow.h"
 
+struct GLFWwindow;
+
 namespace Bow {
 	namespace Renderer {
 
@@ -17,21 +19,22 @@ namespace Bow {
 			// =========================================================================
 			// INIT/RELEASE STUFF:
 			// =========================================================================
-			bool VInitialize(HINSTANCE hInstance, int width, int height, std::string title);
+			bool Initialize(unsigned int width, unsigned int height, const std::string& title, WindowType windowType);
 			void VRelease(void);
 
 			RenderContextPtr VGetContext() const;
-			HWND VGetWindowHandle() const;
 
 			int VGetWidth() const;
 			int VGetHeight() const;
+			bool VShouldClose() const;
 
 		private:
-			OGLRenderContextPtr m_Context;
-			HWND m_hWnd;
+			//you shall not copy
+			OGLGraphicsWindow(OGLGraphicsWindow&) : m_Context(nullptr){}
+			OGLGraphicsWindow& operator=(const OGLGraphicsWindow&) { return *this; }
 
-			int m_width;
-			int m_height;
+			OGLRenderContextPtr m_Context;
+			GLFWwindow			*m_Window;
 		};
 
 		typedef std::shared_ptr<OGLGraphicsWindow> OGLGraphicsWindowPtr;

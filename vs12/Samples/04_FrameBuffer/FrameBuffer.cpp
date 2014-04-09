@@ -25,6 +25,9 @@
 
 #include "resource.h"
 
+using namespace Bow;
+using namespace Renderer;
+
 std::string LoadShader(int name)
 {
 	DWORD size = 0;
@@ -39,26 +42,26 @@ std::string LoadShader(int name)
 int main()
 {
 	// Creating Render Device
-	Bow::Renderer::RenderDevicePtr DeviceOGL = Bow::Renderer::RenderDeviceManager::GetInstance().GetOrCreateDevice(Bow::Renderer::API::OpenGL3x);
+	RenderDevicePtr DeviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(API::OpenGL3x);
 	if (DeviceOGL == nullptr)
 	{
 		return 0;
 	}
 
 	// Creating Window
-	Bow::Renderer::GraphicsWindowPtr WindowOGL = DeviceOGL->VCreateWindow(800, 600, "Textures Sample", Bow::Renderer::WindowType::Windowed);
+	GraphicsWindowPtr WindowOGL = DeviceOGL->VCreateWindow(800, 600, "Textures Sample", WindowType::Windowed);
 	if (WindowOGL == nullptr)
 	{
 		return 0;
 	}
 
-	Bow::Renderer::RenderContextPtr ContextOGL = WindowOGL->VGetContext();
-	Bow::Renderer::ShaderProgramPtr ShaderProgram = DeviceOGL->VCreateShaderProgram(LoadShader(IDS_VERTEXSHADER), LoadShader(IDS_FRAGMENTSHADER));
+	RenderContextPtr ContextOGL = WindowOGL->VGetContext();
+	ShaderProgramPtr ShaderProgram = DeviceOGL->VCreateShaderProgram(LoadShader(IDS_VERTEXSHADER), LoadShader(IDS_FRAGMENTSHADER));
 
 	///////////////////////////////////////////////////////////////////
 	// ClearState and Color
 
-	Bow::Renderer::ClearState clearState;
+	ClearState clearState;
 	float cornflowerBlue[] = { 0.392f, 0.584f, 0.929f, 1.0f };
 	memcpy(&clearState.Color, &cornflowerBlue, sizeof(float)* 4);
 
@@ -71,7 +74,7 @@ int main()
 	vert[6] = 1.0f; vert[7] = 1.0f; vert[8] = 1.0f;
 
 	// fill buffer with informations
-	Bow::Renderer::VertexBufferAttributePtr	PositionAttribute = Bow::Renderer::VertexBufferAttributePtr(new Bow::Renderer::VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(Bow::Renderer::BufferHint::StaticDraw, sizeof(float)* 9), Bow::Renderer::ComponentDatatype::Float, 3));
+	VertexBufferAttributePtr	PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float)* 9), ComponentDatatype::Float, 3));
 	PositionAttribute->GetVertexBuffer()->CopyFromSystemMemory(vert, 0, sizeof(float)* 9);
 
 	float* texcoor = new float[6];
@@ -79,18 +82,16 @@ int main()
 	texcoor[2] = 0.5f; texcoor[3] = 0.0f;
 	texcoor[4] = 1.0f; texcoor[5] = 1.0f;
 
-	Bow::Renderer::VertexBufferAttributePtr	TextureCoordAttribute = Bow::Renderer::VertexBufferAttributePtr(new Bow::Renderer::VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(Bow::Renderer::BufferHint::StaticDraw, sizeof(float)* 6), Bow::Renderer::ComponentDatatype::Float, 2));
+	VertexBufferAttributePtr	TextureCoordAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float)* 6), ComponentDatatype::Float, 2));
 	TextureCoordAttribute->GetVertexBuffer()->CopyFromSystemMemory(texcoor, 0, sizeof(float)* 6);
 
 	// create VertexArray and connect buffer with location
-	Bow::Renderer::VertexArrayPtr VertexArray = ContextOGL->CreateVertexArray();
+	VertexArrayPtr VertexArray = ContextOGL->CreateVertexArray();
 	VertexArray->SetAttribute(ShaderProgram->GetVertexAttribute("in_Position")->Location, PositionAttribute);
 	VertexArray->SetAttribute(ShaderProgram->GetVertexAttribute("in_TexCoord")->Location, TextureCoordAttribute);
 
 	///////////////////////////////////////////////////////////////////
 	// Screenfilling Quad Preperations
-
-	auto QuadShaderProgram = DeviceOGL->VCreateShaderProgram(LoadShader(IDS_VERTEXSHADER), LoadShader(IDS_FRAGMENTSHADER));
 
 	float* QuadVert = new float[8];     // vertex array 
 	QuadVert[0] = -1.0f; QuadVert[1] = 1.0f;
@@ -105,35 +106,35 @@ int main()
 	QuadTexcoor[6] = 1.0f; QuadTexcoor[7] = 0.0f;
 
 	// fill buffer with informations
-	auto QuadPositionAttribute = Bow::Renderer::VertexBufferAttributePtr(new Bow::Renderer::VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(Bow::Renderer::BufferHint::StaticDraw, sizeof(float)* 8), Bow::Renderer::ComponentDatatype::Float, 2));
+	auto QuadPositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float)* 8), ComponentDatatype::Float, 2));
 	QuadPositionAttribute->GetVertexBuffer()->CopyFromSystemMemory(QuadVert, 0, sizeof(float)* 8);
 
-	auto QuadTextureCoordAttribute = Bow::Renderer::VertexBufferAttributePtr(new Bow::Renderer::VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(Bow::Renderer::BufferHint::StaticDraw, sizeof(float)* 8), Bow::Renderer::ComponentDatatype::Float, 2));
+	auto QuadTextureCoordAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float)* 8), ComponentDatatype::Float, 2));
 	QuadTextureCoordAttribute->GetVertexBuffer()->CopyFromSystemMemory(QuadTexcoor, 0, sizeof(float)* 8);
 
 	// connect buffer with location
 	auto QuadVertexArray = ContextOGL->CreateVertexArray();
-	QuadVertexArray->SetAttribute(QuadShaderProgram->GetVertexAttribute("in_Position")->Location, QuadPositionAttribute);
-	QuadVertexArray->SetAttribute(QuadShaderProgram->GetVertexAttribute("in_TexCoord")->Location, QuadTextureCoordAttribute);
+	QuadVertexArray->SetAttribute(ShaderProgram->GetVertexAttribute("in_Position")->Location, QuadPositionAttribute);
+	QuadVertexArray->SetAttribute(ShaderProgram->GetVertexAttribute("in_TexCoord")->Location, QuadTextureCoordAttribute);
 
 	///////////////////////////////////////////////////////////////////
 	// Textures
 
-	Bow::Renderer::Texture2DPtr texture = DeviceOGL->VCreateTexture2DFromFile("Data/Textures/Logo_Art_wip_6.jpg");
-	Bow::Renderer::TextureSamplerPtr sampler = DeviceOGL->VCreateTexture2DSampler(Bow::Renderer::TextureMinificationFilter::Linear, Bow::Renderer::TextureMagnificationFilter::Linear, Bow::Renderer::TextureWrap::Clamp, Bow::Renderer::TextureWrap::Clamp);
+	Texture2DPtr texture = DeviceOGL->VCreateTexture2DFromFile("Data/Textures/Logo_Art_wip_6.jpg");
+	TextureSamplerPtr sampler = DeviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Repeat, TextureWrap::Repeat);
 
 	///////////////////////////////////////////////////////////////////
 	// FrameBuffer
 
-	Bow::Renderer::FramebufferPtr FrameBuffer = ContextOGL->CreateFramebuffer();
+	FramebufferPtr FrameBuffer = ContextOGL->CreateFramebuffer();
 	int out_Color_Location = ShaderProgram->GetFragmentOutputLocation("out_Color");
 
-	FrameBuffer->SetColorAttachment(out_Color_Location, DeviceOGL->VCreateTexture2D(Bow::Renderer::Texture2DDescription(WindowOGL->VGetWidth(), WindowOGL->VGetHeight(), Bow::Renderer::TextureFormat::RedGreenBlue8)));
+	FrameBuffer->SetColorAttachment(out_Color_Location, DeviceOGL->VCreateTexture2D(Texture2DDescription(WindowOGL->VGetWidth(), WindowOGL->VGetHeight(), TextureFormat::RedGreenBlue8)));
 
 	///////////////////////////////////////////////////////////////////
 	// RenderState
 
-	Bow::Renderer::RenderState renderState;
+	RenderState renderState;
 	renderState.FaceCulling.Enabled = false;
 	renderState.DepthTest.Enabled = false;
 	renderState.StencilTest.Enabled = false;
@@ -141,40 +142,28 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Gameloop
 
+	int diffuseTex = 0;
+	ContextOGL->VSetTextureSampler(diffuseTex, sampler);
+	ShaderProgram->SetUniform("diffuseTex", diffuseTex);
+
 	MSG msg = { 0 };
-	while (WM_QUIT != msg.message)
+	while (!WindowOGL->VShouldClose())
 	{
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-		else
-		{
-			int diffuseTex = 0;
-			// Clear Backbuffer to our ClearState
-			ContextOGL->VClear(clearState);
+		// Render Triangle to Framebuffer
+		ContextOGL->VSetFramebuffer(FrameBuffer);
 
-			// Render Triangle to Framebuffer
-			ContextOGL->VSetFramebuffer(FrameBuffer);
+		ContextOGL->VClear(clearState);
+		ContextOGL->VSetTexture(diffuseTex, texture);
+		ContextOGL->VDraw(PrimitiveType::Triangles, VertexArray, ShaderProgram, renderState);
 
-			ContextOGL->VClear(clearState);
-			ContextOGL->VSetTexture(diffuseTex, texture);
-			ContextOGL->VSetTextureSampler(diffuseTex, sampler);
-			ShaderProgram->SetUniform("diffuseTex", diffuseTex);
-			ContextOGL->VDraw(Bow::Renderer::PrimitiveType::Triangles, VertexArray, ShaderProgram, renderState);
+		// TODO: Render Fullscreen Quad to Backbuffer
+		ContextOGL->VSetFramebuffer(nullptr);
 
-			// TODO: Render Fullscreen Quad to Backbuffer
-			ContextOGL->VSetFramebuffer(nullptr);
+		ContextOGL->VClear(clearState);
+		ContextOGL->VSetTexture(diffuseTex, FrameBuffer->GetColorAttachment(out_Color_Location));
+		ContextOGL->VDraw(PrimitiveType::TriangleStrip, QuadVertexArray, ShaderProgram, renderState);
 
-			ContextOGL->VClear(clearState);
-			ContextOGL->VSetTexture(diffuseTex, FrameBuffer->GetColorAttachment(out_Color_Location));
-			ContextOGL->VSetTextureSampler(diffuseTex, sampler);
-			ShaderProgram->SetUniform("diffuseTex", diffuseTex);
-			ContextOGL->VDraw(Bow::Renderer::PrimitiveType::TriangleStrip, QuadVertexArray, QuadShaderProgram, renderState);
-
-			ContextOGL->VSwapBuffers();
-		}
+		ContextOGL->VSwapBuffers();
 	}
 	return (int)msg.wParam;
 }

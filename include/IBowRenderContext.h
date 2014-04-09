@@ -54,7 +54,6 @@ namespace Bow {
 			// =========================================================================
 			// RENDERING STUFF:
 			// =========================================================================
-			virtual void VMakeCurrent() = 0;
 			virtual VertexArrayPtr CreateVertexArray() = 0;
 			virtual FramebufferPtr CreateFramebuffer() = 0;
 

@@ -4,8 +4,7 @@
 #include "IBowRenderContext.h"
 #include "BowRenderState.h"
 
-#include <GL/glew.h>
-#include <Windows.h>
+struct GLFWwindow;
 
 namespace Bow {
 	namespace Renderer {
@@ -14,36 +13,24 @@ namespace Bow {
 		typedef std::shared_ptr<class OGLTextureUnits> OGLTextureUnitsPtr;
 		typedef std::shared_ptr<class OGLFramebuffer> OGLFramebufferPtr;
 
-		enum class StencilFace : GLenum
-		{
-			Front = GL_FRONT,
-			Back = GL_BACK,
-			FrontAndBack = GL_FRONT_AND_BACK
-		};
-
-		enum class MaterialFace : GLenum
-		{
-			Front = GL_FRONT,
-			Back = GL_BACK,
-			FrontAndBack = GL_FRONT_AND_BACK
-		};
+		enum class StencilFace : unsigned int;
+		enum class MaterialFace : unsigned int;
 
 		class OGLRenderContext : public IRenderContext
 		{
 		public:
-			OGLRenderContext(void);
+			OGLRenderContext(GLFWwindow* window);
 			~OGLRenderContext(void);
 
 			// =========================================================================
 			// INIT/RELEASE STUFF:
 			// =========================================================================
-			bool	VInitialize(HWND hWnd, int width, int height);
+			bool	Initialize(int width, int height);
 			void	VRelease(void);
 
 			// =========================================================================
 			// RENDERING STUFF:
 			// =========================================================================
-			void	VMakeCurrent(void);
 			VertexArrayPtr	CreateVertexArray();
 			FramebufferPtr	CreateFramebuffer();
 
@@ -61,6 +48,10 @@ namespace Bow {
 			void	VSwapBuffers(void);
 
 		private:
+			//you shall not copy
+			OGLRenderContext(OGLRenderContext&){}
+			OGLRenderContext& operator=(const OGLRenderContext&) { return *this; }
+
 			void ApplyRenderState(RenderState renderState);
 			void ApplyVertexArray(VertexArrayPtr vertexArray);
 			void ApplyShaderProgram(ShaderProgramPtr shaderProgram);
@@ -82,12 +73,6 @@ namespace Bow {
 
 			void ApplyFramebuffer();
 
-			int		m_width;
-			int		m_height;
-
-			HGLRC	m_hrc;
-			HDC		m_hdc;
-
 			Viewport m_viewport;
 
 			float	m_clearColor[4];
@@ -101,7 +86,9 @@ namespace Bow {
 			OGLFramebufferPtr	m_boundFramebuffer;
 			OGLFramebufferPtr	m_setFramebuffer;
 
-			HWND	m_hWnd;
+			GLFWwindow*					m_window;
+			static OGLRenderContext*	m_currentContext;
+			bool						m_initialized;
 		};
 
 		typedef std::shared_ptr<OGLRenderContext> OGLRenderContextPtr;

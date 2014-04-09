@@ -10,15 +10,19 @@
 #include "IBowVertexBuffer.h"
 #include "IBowVertexArray.h"
 #include "IBowShaderProgram.h"
-#include "BowShaderVertexAttribute.h"
 
 #include "BowBufferHint.h"
 #include "BowVertexBufferAttribute.h"
+
+#include "BowShaderVertexAttribute.h"
 
 #include <cstdint>
 #include <windows.h>
 
 #include "resource.h"
+
+using namespace Bow;
+using namespace Renderer;
 
 std::string LoadShader(int name)
 {
@@ -34,25 +38,25 @@ std::string LoadShader(int name)
 int main()
 {
 	// Creating Render Device
-	Bow::Renderer::RenderDevicePtr DeviceOGL = Bow::Renderer::RenderDeviceManager::GetInstance().GetOrCreateDevice(Bow::Renderer::API::OpenGL3x);
+	RenderDevicePtr DeviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(API::OpenGL3x);
 	if (DeviceOGL == nullptr)
 	{
 		return 0;
 	}
 
 	// Creating Window
-	Bow::Renderer::GraphicsWindowPtr WindowOGL = DeviceOGL->VCreateWindow(800, 600, "Triangle Sample", Bow::Renderer::WindowType::Windowed);
+	GraphicsWindowPtr WindowOGL = DeviceOGL->VCreateWindow(800, 600, "Triangle Sample", WindowType::Windowed);
 	if (WindowOGL == nullptr)
 	{
 		return 0;
 	}
-	Bow::Renderer::RenderContextPtr ContextOGL = WindowOGL->VGetContext();
-	Bow::Renderer::ShaderProgramPtr ShaderProgram = DeviceOGL->VCreateShaderProgram(LoadShader(IDS_VERTEXSHADER), LoadShader(IDS_FRAGMENTSHADER));
+	RenderContextPtr ContextOGL = WindowOGL->VGetContext();
+	ShaderProgramPtr ShaderProgram = DeviceOGL->VCreateShaderProgram(LoadShader(IDS_VERTEXSHADER), LoadShader(IDS_FRAGMENTSHADER));
 
 	///////////////////////////////////////////////////////////////////
 	// ClearState and Color
 
-	Bow::Renderer::ClearState clearState;
+	ClearState clearState;
 	float cornflowerBlue[] = { 0.392f, 0.584f, 0.929f, 1.0f };
 	memcpy(&clearState.Color, &cornflowerBlue, sizeof(float)* 4);
 
@@ -64,15 +68,18 @@ int main()
 	vert[3] = -0.8f; vert[4] = -0.5f; vert[5] = -1.0f;
 	vert[6] = 0.2f; vert[7] = -0.5f; vert[8] = -1.0f;
 
-	// create VertexArray
-	Bow::Renderer::VertexArrayPtr VertexArray = ContextOGL->CreateVertexArray();
-
 	// fill buffer with informations
-	Bow::Renderer::VertexBufferAttributePtr	VertexBufferAttribute = Bow::Renderer::VertexBufferAttributePtr(new Bow::Renderer::VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(Bow::Renderer::BufferHint::StaticDraw, sizeof(float)* 9), Bow::Renderer::ComponentDatatype::Float, 3));
-	VertexBufferAttribute->GetVertexBuffer()->CopyFromSystemMemory(vert, 0, sizeof(float)* 9);
+	VertexBufferPtr PositionBuffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float)* 9);
+	PositionBuffer->CopyFromSystemMemory(vert, 0, sizeof(float)* 9);
+	
+	// Define buffer as vertexShaderAttribute for shaders
+	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(PositionBuffer, ComponentDatatype::Float, 3));
+	
+	// create VertexArray
+	VertexArrayPtr VertexArray = ContextOGL->CreateVertexArray();
 
-	// connect buffer with location
-	VertexArray->SetAttribute(ShaderProgram->GetVertexAttribute("in_Position")->Location, VertexBufferAttribute);
+	// connect buffer with location in shader
+	VertexArray->SetAttribute(ShaderProgram->GetVertexAttribute("in_Position")->Location, PositionAttribute);
 
 	///////////////////////////////////////////////////////////////////
 	// Uniforms
@@ -83,7 +90,7 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// RenderState
 
-	Bow::Renderer::RenderState renderState;
+	RenderState renderState;
 	renderState.FaceCulling.Enabled = false;
 	renderState.DepthTest.Enabled = false;
 
@@ -100,7 +107,7 @@ int main()
 			// Clear Backbuffer to our ClearState
 			ContextOGL->VClear(clearState);
 
-			ContextOGL->VDraw(Bow::Renderer::PrimitiveType::Triangles, 0, 3, VertexArray, ShaderProgram, renderState);
+			ContextOGL->VDraw(PrimitiveType::Triangles, 0, 3, VertexArray, ShaderProgram, renderState);
 
 			ContextOGL->VSwapBuffers();
 		}

@@ -3,6 +3,10 @@
 
 #include "IBowRenderDevice.h"
 
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
 namespace Bow
 {
 	namespace Renderer
@@ -14,7 +18,7 @@ namespace Bow
 		// Function inside the DLL we want to call to create our Device-Object
 		extern "C"
 		{
-			typedef IRenderDevice* (*CREATERENDERDEVICE)(HINSTANCE hInstance, EventLogger& logger);
+			typedef IRenderDevice* (*CREATERENDERDEVICE)(EventLogger& logger);
 		}
 
 		RenderDeviceManager::~RenderDeviceManager(void)
@@ -46,13 +50,8 @@ namespace Bow
 			}
 		}
 
+
 		RenderDevicePtr RenderDeviceManager::GetOrCreateDevice(API api)
-		{
-			return GetOrCreateDevice(api, GetModuleHandle(0));
-		}
-
-
-		RenderDevicePtr RenderDeviceManager::GetOrCreateDevice(API api, HINSTANCE hInstance)
 		{
 			if (DeviceMap.find(api) == DeviceMap.end())
 			{
@@ -69,7 +68,6 @@ namespace Bow
 					if (!hDLL)
 					{
 						LOG_ERROR("Could not find OGLRenderDevice.dll!");
-						MessageBox(NULL, "Loading 'OGLRenderDevice.dll' failed.", "LongBowEngine - error", MB_OK | MB_ICONERROR);
 						return RenderDevicePtr(nullptr);
 					}
 				}
@@ -84,7 +82,6 @@ namespace Bow
 					if (!hDLL)
 					{
 						LOG_ERROR("Could not find D3D11Device.dll!");
-						MessageBox(NULL, "Loading 'D3D11Device.dll' failed.", "LongBowEngine - error", MB_OK | MB_ICONERROR);
 						return RenderDevicePtr(nullptr);
 					}
 				}
@@ -92,7 +89,6 @@ namespace Bow
 				default:
 				{
 					LOG_ERROR("Renderer API is not supported!");
-					MessageBox(NULL, "API is not supported.", "LongBowEngine - error", MB_OK | MB_ICONERROR);
 					return RenderDevicePtr(nullptr);
 				}
 					break;
@@ -104,7 +100,7 @@ namespace Bow
 				_CreateRenderDevice = (CREATERENDERDEVICE)GetProcAddress(hDLL, "CreateRenderDevice");
 
 				GetWindowLong(GetActiveWindow(), 0);
-				IRenderDevice* pDevice = _CreateRenderDevice(GetModuleHandle(NULL), EventLogger::GetInstance());
+				IRenderDevice* pDevice = _CreateRenderDevice(EventLogger::GetInstance());
 
 				// aufruf der dll Create-Funktionc
 				if (pDevice == nullptr)

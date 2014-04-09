@@ -1,9 +1,7 @@
 #pragma once
 #include "BowPrerequisites.h"
 
-#ifdef _WIN32
-#include <Windows.h>
-#endif
+
 
 namespace Bow {
 	namespace Renderer {
@@ -36,7 +34,6 @@ namespace Bow {
 			//! \param api The API which should be used.
 			//! \return shared_pointer of RenderDevice
 			RenderDevicePtr GetOrCreateDevice(API api);
-			RenderDevicePtr GetOrCreateDevice(API api, HINSTANCE hInstance);
 			void ReleaseDevice(API api);
 		};
 

@@ -12,13 +12,13 @@ namespace Bow {
 		class OGLRenderDevice : public IRenderDevice
 		{
 		public:
-			OGLRenderDevice(HINSTANCE hInstance);
+			OGLRenderDevice(void);
 			~OGLRenderDevice(void);
 
 			// =========================================================================
 			// INIT/RELEASE STUFF:
 			// =========================================================================
-			GraphicsWindowPtr VCreateWindow(int width, int height, std::string title, WindowType type);
+			GraphicsWindowPtr VCreateWindow(int width, int height, const std::string& title, WindowType type);
 			void VRelease(void);
 
 			// =========================================================================
@@ -41,15 +41,14 @@ namespace Bow {
 
 			TextureSamplerPtr		VCreateTexture2DSampler(TextureMinificationFilter minificationFilter, TextureMagnificationFilter magnificationFilter, TextureWrap wrapS, TextureWrap wrapT, float maximumAnistropy);
 
-		private:
+		private:		
+			//you shall not copy
+			OGLRenderDevice(OGLRenderDevice&){}
+			OGLRenderDevice& operator=(const OGLRenderDevice&) { return *this; }
+
 			int	m_maximumNumberOfVertexAttributes;
 			int	m_numberOfTextureUnits;
 			int	m_maximumNumberOfColorAttachments;
-
-			int	m_currentWindow;
-			OGLGraphicsWindowMap m_GraphicsWindowMap;
-
-			HINSTANCE m_hInstance;
 		};
 
 		typedef std::shared_ptr<OGLRenderDevice> OGLRenderDevicePtr;

@@ -9,24 +9,27 @@
 #include <cstdint>
 #include <windows.h>
 
+using namespace Bow;
+using namespace Renderer;
+
 int main()
 {
 	// Creating Render Device
-	Bow::Renderer::RenderDevicePtr DeviceOGL = Bow::Renderer::RenderDeviceManager::GetInstance().GetOrCreateDevice(Bow::Renderer::API::OpenGL3x);
+	RenderDevicePtr DeviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(API::OpenGL3x);
 	if (DeviceOGL == nullptr)
 	{
 		return 0;
 	}
 
 	// Creating Window
-	Bow::Renderer::GraphicsWindowPtr WindowOGL = DeviceOGL->VCreateWindow(800, 600, "HelloWorld", Bow::Renderer::WindowType::Windowed);
+	GraphicsWindowPtr WindowOGL = DeviceOGL->VCreateWindow(800, 600, "HelloWorld", WindowType::Windowed);
 	if (WindowOGL == nullptr)
 	{
 		return 0;
 	}
 
 	// Change ClearColor
-	Bow::Renderer::ClearState clearState;
+	ClearState clearState;
 	float cornflowerBlue[] = { 0.392f, 0.584f, 0.929f, 1.0f };
 	memcpy(&clearState.Color, &cornflowerBlue, sizeof(float)* 4);
 

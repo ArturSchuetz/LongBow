@@ -25,7 +25,7 @@ namespace Bow {
 			// =========================================================================
 			// INIT/RELEASE STUFF:
 			// =========================================================================
-			virtual GraphicsWindowPtr	VCreateWindow(int width = 800, int height = 600, std::string title = "LongBow Game", WindowType type = WindowType::Windowed) = 0;
+			virtual GraphicsWindowPtr	VCreateWindow(int width = 800, int height = 600, const std::string& title = "LongBow Game", WindowType type = WindowType::Windowed) = 0;
 
 			virtual ShaderProgramPtr	VCreateShaderProgramFromFile(const std::string& VertexShaderFilename, const std::string& FragementShaderFilename) = 0;
 			virtual ShaderProgramPtr	VCreateShaderProgramFromFile(const std::string& VertexShaderFilename, const std::string& GeometryShaderFilename, const std::string& FragementShaderFilename) = 0;
