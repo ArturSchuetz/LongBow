@@ -27,6 +27,7 @@ namespace Bow {
 			LOG_ERROR(description);
 		}
 
+
 		OGLRenderDevice::OGLRenderDevice(void)
 		{
 			glfwSetErrorCallback(error_callback);
@@ -40,16 +41,19 @@ namespace Bow {
 			}
 		}
 
+
 		OGLRenderDevice::~OGLRenderDevice(void)
 		{
 			VRelease();
 		}
+
 
 		void OGLRenderDevice::VRelease(void)
 		{
 			glfwTerminate();
 			LOG_DEBUG("RenderDeviceOGL3x released.");
 		}
+
 
 		GraphicsWindowPtr OGLRenderDevice::VCreateWindow(int width, int height, const std::string& title, WindowType type)
 		{

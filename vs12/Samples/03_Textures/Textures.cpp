@@ -115,7 +115,6 @@ int main()
 	renderState.FaceCulling.Enabled = false;
 	renderState.DepthTest.Enabled = false;
 
-	MSG msg = { 0 };
 	while (!WindowOGL->VShouldClose())
 	{
 		// Clear Backbuffer to our ClearState
@@ -125,5 +124,5 @@ int main()
 
 		ContextOGL->VSwapBuffers();
 	}
-	return (int)msg.wParam;
+	return 0;
 }

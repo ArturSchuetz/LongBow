@@ -94,23 +94,14 @@ int main()
 	renderState.FaceCulling.Enabled = false;
 	renderState.DepthTest.Enabled = false;
 
-	MSG msg = { 0 };
-	while (WM_QUIT != msg.message)
+	while (!WindowOGL->VShouldClose())
 	{
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-		else
-		{
-			// Clear Backbuffer to our ClearState
-			ContextOGL->VClear(clearState);
+		// Clear Backbuffer to our ClearState
+		ContextOGL->VClear(clearState);
 
-			ContextOGL->VDraw(PrimitiveType::Triangles, 0, 3, VertexArray, ShaderProgram, renderState);
+		ContextOGL->VDraw(PrimitiveType::Triangles, 0, 3, VertexArray, ShaderProgram, renderState);
 
-			ContextOGL->VSwapBuffers();
-		}
+		ContextOGL->VSwapBuffers();
 	}
-	return (int)msg.wParam;
+	return 0;
 }

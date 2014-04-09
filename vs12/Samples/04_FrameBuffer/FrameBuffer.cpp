@@ -61,9 +61,13 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// ClearState and Color
 
-	ClearState clearState;
+	ClearState clearBlue;
 	float cornflowerBlue[] = { 0.392f, 0.584f, 0.929f, 1.0f };
-	memcpy(&clearState.Color, &cornflowerBlue, sizeof(float)* 4);
+	memcpy(&clearBlue.Color, &cornflowerBlue, sizeof(float)* 4);
+
+	ClearState clearBlack;
+	float black[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	memcpy(&clearBlack.Color, &black, sizeof(float)* 4);
 
 	///////////////////////////////////////////////////////////////////
 	// Vertex Array
@@ -74,7 +78,7 @@ int main()
 	vert[6] = 1.0f; vert[7] = 1.0f; vert[8] = 1.0f;
 
 	// fill buffer with informations
-	VertexBufferAttributePtr	PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float)* 9), ComponentDatatype::Float, 3));
+	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float)* 9), ComponentDatatype::Float, 3));
 	PositionAttribute->GetVertexBuffer()->CopyFromSystemMemory(vert, 0, sizeof(float)* 9);
 
 	float* texcoor = new float[6];
@@ -82,7 +86,7 @@ int main()
 	texcoor[2] = 0.5f; texcoor[3] = 0.0f;
 	texcoor[4] = 1.0f; texcoor[5] = 1.0f;
 
-	VertexBufferAttributePtr	TextureCoordAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float)* 6), ComponentDatatype::Float, 2));
+	VertexBufferAttributePtr TextureCoordAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float)* 6), ComponentDatatype::Float, 2));
 	TextureCoordAttribute->GetVertexBuffer()->CopyFromSystemMemory(texcoor, 0, sizeof(float)* 6);
 
 	// create VertexArray and connect buffer with location
@@ -127,9 +131,11 @@ int main()
 	// FrameBuffer
 
 	FramebufferPtr FrameBuffer = ContextOGL->CreateFramebuffer();
-	int out_Color_Location = ShaderProgram->GetFragmentOutputLocation("out_Color");
 
-	FrameBuffer->SetColorAttachment(out_Color_Location, DeviceOGL->VCreateTexture2D(Texture2DDescription(WindowOGL->VGetWidth(), WindowOGL->VGetHeight(), TextureFormat::RedGreenBlue8)));
+	Viewport viewport		= ContextOGL->VGetViewport();
+	int out_Color_Location	= ShaderProgram->GetFragmentOutputLocation("out_Color");
+
+	FrameBuffer->SetColorAttachment(out_Color_Location, DeviceOGL->VCreateTexture2D(Texture2DDescription(viewport.width, viewport.height, TextureFormat::RedGreenBlue8)));
 
 	///////////////////////////////////////////////////////////////////
 	// RenderState
@@ -146,24 +152,23 @@ int main()
 	ContextOGL->VSetTextureSampler(diffuseTex, sampler);
 	ShaderProgram->SetUniform("diffuseTex", diffuseTex);
 
-	MSG msg = { 0 };
 	while (!WindowOGL->VShouldClose())
 	{
 		// Render Triangle to Framebuffer
 		ContextOGL->VSetFramebuffer(FrameBuffer);
 
-		ContextOGL->VClear(clearState);
+		ContextOGL->VClear(clearBlue);
 		ContextOGL->VSetTexture(diffuseTex, texture);
 		ContextOGL->VDraw(PrimitiveType::Triangles, VertexArray, ShaderProgram, renderState);
 
-		// TODO: Render Fullscreen Quad to Backbuffer
+		// Render Fullscreen Quad to Backbuffer
 		ContextOGL->VSetFramebuffer(nullptr);
 
-		ContextOGL->VClear(clearState);
+		ContextOGL->VClear(clearBlack);
 		ContextOGL->VSetTexture(diffuseTex, FrameBuffer->GetColorAttachment(out_Color_Location));
 		ContextOGL->VDraw(PrimitiveType::TriangleStrip, QuadVertexArray, ShaderProgram, renderState);
 
 		ContextOGL->VSwapBuffers();
 	}
-	return (int)msg.wParam;
+	return 0;
 }

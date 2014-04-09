@@ -10,7 +10,6 @@
 namespace Bow {
 	namespace Renderer {
 
-		LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 		OGLGraphicsWindow::OGLGraphicsWindow() :
 			m_Context(nullptr)
@@ -38,7 +37,7 @@ namespace Bow {
 			m_Context = OGLRenderContextPtr(new OGLRenderContext(m_Window));
 
 			LOG_DEBUG("OpenGL-Window sucessfully initialized!");
-			return m_Context->Initialize(width, height);
+			return m_Context->Initialize();
 		}
 
 

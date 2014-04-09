@@ -48,7 +48,6 @@ namespace Bow {
 			}
 		}
 
-
 		OGLRenderContext* OGLRenderContext::m_currentContext;
 
 		OGLRenderContext::OGLRenderContext(GLFWwindow* window) :
@@ -76,7 +75,7 @@ namespace Bow {
 		}
 
 
-		bool OGLRenderContext::Initialize(int width, int height)
+		bool OGLRenderContext::Initialize()
 		{
 			if (m_currentContext != this)
 			{
@@ -101,10 +100,12 @@ namespace Bow {
 			//
 			ForceApplyRenderState(m_renderState);
 
+			int width, height;
+			glfwGetFramebufferSize(m_window, &width, &height);
 			VSetViewport(Viewport(0, 0, width, height));
-			m_initialized = true;
 
 			LOG_DEBUG("OpenGL-Context sucessfully initialized!");
+			m_initialized = true;
 			return m_initialized;
 		}
 

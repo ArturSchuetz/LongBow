@@ -140,11 +140,12 @@ namespace Bow {
 			if (texture != nullptr)
 			{
 				// TODO:  Mipmap level
-				glFramebufferTexture(GL_FRAMEBUFFER, attachPoint, texture->GetHandle()->GetValue(), 0);
+				// glFramebufferTexture(GL_FRAMEBUFFER, attachPoint, texture->GetHandle()->GetValue(), 0); <== Does not work for OpenGL3.1
+				glFramebufferTexture2D(GL_FRAMEBUFFER, attachPoint, GL_TEXTURE_2D, texture->GetHandle()->GetValue(), 0);
 			}
 			else
 			{
-				glFramebufferTexture(GL_FRAMEBUFFER, attachPoint, 0, 0);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, attachPoint, GL_TEXTURE_2D, 0, 0);
 			}
 		}
 

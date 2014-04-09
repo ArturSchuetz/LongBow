@@ -37,21 +37,12 @@ int main()
 	// Gameloop
 	auto ContextOGL = WindowOGL->VGetContext();
 
-	MSG msg = { 0 };
-	while (WM_QUIT != msg.message)
+	while (!WindowOGL->VShouldClose())
 	{
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-		else
-		{
-			// Clear Backbuffer to our ClearState
-			ContextOGL->VClear(clearState);
+		// Clear Backbuffer to our ClearState
+		ContextOGL->VClear(clearState);
 
-			ContextOGL->VSwapBuffers();
-		}
+		ContextOGL->VSwapBuffers();
 	}
-	return (int)msg.wParam;
+	return 0;
 }
