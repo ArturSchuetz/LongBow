@@ -1,22 +1,17 @@
 #pragma once
-#include <string>
-#include <list>
+#include "BowPrerequisites.h"
+#include "BowCorePredeclares.h"
 
 namespace Bow {
 	namespace Core {
 
-		enum class VertexAttributeType : char
+		/*enum class VertexAttributeType : char
 		{
 			UnsignedByte,
-			HalfFloat,
-			HalfFloatVector2,
-			HalfFloatVector3,
-			HalfFloatVector4,
 			Float,
 			FloatVector2,
 			FloatVector3,
 			FloatVector4,
-			EmulatedDoubleVector3
 		};
 
 		struct IVertexAttribute
@@ -54,7 +49,7 @@ namespace Bow {
 
 		public:
 			const std::list<T> Values;
-		};
+		};*/
 
 	}
 }

@@ -1,20 +1,4 @@
-#include "BowRenderDeviceManager.h"
-
-#include "BowClearState.h"
-#include "BowRenderState.h"
-
-#include "IBowGraphicsWindow.h"
-#include "IBowRenderDevice.h"
-#include "IBowRenderContext.h"
-
-#include "IBowVertexBuffer.h"
-#include "IBowVertexArray.h"
-#include "IBowShaderProgram.h"
-
-#include "BowBufferHint.h"
-#include "BowVertexBufferAttribute.h"
-
-#include "BowShaderVertexAttribute.h"
+#include "BowRenderer.h"
 
 #include <cstdint>
 #include <windows.h>
@@ -63,17 +47,16 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Vertex Array
 
-	float* vert = new float[9];     // vertex array 
-	vert[0] = -0.3f; vert[1] = 0.5f; vert[2] = -1.0f;
-	vert[3] = -0.8f; vert[4] = -0.5f; vert[5] = -1.0f;
-	vert[6] = 0.2f; vert[7] = -0.5f; vert[8] = -1.0f;
+	Vector4F vertices[3];
+	vertices[0] = Vector4F(-1.0f, 1.0f, 1.0f);
+	vertices[1] = Vector4F(0.0f, -1.0f, 1.0f);
+	vertices[2] = Vector4F(1.0f, 1.0f, 1.0f);
 
 	// fill buffer with informations
-	VertexBufferPtr PositionBuffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float)* 9);
-	PositionBuffer->CopyFromSystemMemory(vert, 0, sizeof(float)* 9);
-	
-	// Define buffer as vertexShaderAttribute for shaders
-	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(PositionBuffer, ComponentDatatype::Float, 3));
+	VertexBufferPtr buffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector4F)* 3);
+					buffer->CopyFromSystemMemory(vertices, 0, sizeof(Vector4F)* 3);
+
+	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(buffer, ComponentDatatype::Float, 4));
 	
 	// create VertexArray
 	VertexArrayPtr VertexArray = ContextOGL->CreateVertexArray();

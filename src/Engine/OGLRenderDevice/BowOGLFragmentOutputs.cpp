@@ -1,18 +1,15 @@
 #pragma once
 #include "BowOGLFragmentOutputs.h"
 #include "BowLogger.h"
-#include "BowOGLShaderProgramName.h"
 
 #include <GL/glew.h>
 
 namespace Bow {
 	namespace Renderer {
 
-		OGLFragmentOutputs::OGLFragmentOutputs(OGLShaderProgramNamePtr program)
+		OGLFragmentOutputs::OGLFragmentOutputs(unsigned int program)
 		{
-			LOG_ASSERT(program.get() != nullptr, "OGLShaderProgramNamePtr is a nullptr.");
-
-			m_program = program;
+			m_ShaderProgramHandle = program;
 		}
 
 
@@ -24,7 +21,7 @@ namespace Bow {
 		int OGLFragmentOutputs::operator[](std::string index) const
 		{
 			unsigned int i = -1;
-			i = glGetFragDataLocation(m_program->GetValue(), index.c_str());
+			i = glGetFragDataLocation(m_ShaderProgramHandle, index.c_str());
 
 			if (i == -1)
 			{

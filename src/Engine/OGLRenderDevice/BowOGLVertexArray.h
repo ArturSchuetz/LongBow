@@ -8,7 +8,6 @@
 namespace Bow {
 	namespace Renderer {
 
-		typedef std::shared_ptr<class OGLVertexArrayName> OGLVertexArrayNamePtr;
 		typedef std::shared_ptr<class OGLIndexBuffer> OGLIndexBufferPtr;
 
 		class OGLVertexArray : public IVertexArray
@@ -29,10 +28,11 @@ namespace Bow {
 			void						SetIndexBuffer(IndexBufferPtr pointer);
 
 		private:
-			OGLVertexArrayNamePtr		m_name;
 			OGLVertexBufferAttributes	m_attributes;
 			OGLIndexBufferPtr			m_indexBuffer;
 			bool						m_dirtyIndexBuffer;
+
+			unsigned int				m_VertexArrayHandle;
 		};
 
 		typedef std::shared_ptr<OGLVertexArray> OGLVertexArrayPtr;

@@ -1,6 +1,8 @@
 #pragma once
-#include "IBowVertexBuffer.h"
+#include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"
+
+#include "IBowVertexBuffer.h"
 
 #include "BowComponentDatatype.h"
 #include "BowVertexArraySizes.h"

@@ -66,49 +66,13 @@
     <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLTypeConverter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\OGLBuffer.cpp">
-      <Filter>Source Files\Device\Buffer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\OGLBufferName.cpp">
-      <Filter>Source Files\Device\Buffer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\OGLIndexBuffer.cpp">
-      <Filter>Source Files\Device\Buffer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\OGLPixelBuffer.cpp">
-      <Filter>Source Files\Device\Buffer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\OGLReadPixelBuffer.cpp">
-      <Filter>Source Files\Device\Buffer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\OGLVertexArray.cpp">
-      <Filter>Source Files\Device\Context\VertexArray</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\OGLVertexArrayName.cpp">
-      <Filter>Source Files\Device\Context\VertexArray</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\OGLVertexBufferAttributes.cpp">
-      <Filter>Source Files\Device\Context\VertexArray</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\OGLShaderObject.cpp">
-      <Filter>Source Files\Device\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\OGLShaderProgram.cpp">
-      <Filter>Source Files\Device\Shader</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLGraphicsWindow.cpp">
       <Filter>Source Files\Device</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLRendererContext.cpp">
       <Filter>Source Files\Device</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLSamplerName.cpp">
-      <Filter>Source Files\Device\Textures</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLTexture2D.cpp">
-      <Filter>Source Files\Device\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLTextureName.cpp">
       <Filter>Source Files\Device\Textures</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLTextureSampler.cpp">
@@ -126,9 +90,6 @@
     <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLUniformUI.cpp">
       <Filter>Source Files\Device\Shader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLShaderProgramName.cpp">
-      <Filter>Source Files\Device\Shader</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLFragmentOutputs.cpp">
       <Filter>Source Files\Device\Shader</Filter>
     </ClCompile>
@@ -138,17 +99,44 @@
     <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLColorAttachments.cpp">
       <Filter>Source Files\Device\Context\FrameBuffer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLFramebuffer.cpp">
-      <Filter>Source Files\Device\Context\FrameBuffer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLFramebufferName.cpp">
-      <Filter>Source Files\Device\Context\FrameBuffer</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLTextureUnits.cpp">
       <Filter>Source Files\Device\Textures</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLTextureUnit.cpp">
       <Filter>Source Files\Device\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLRendererContext_RenderState.cpp">
+      <Filter>Source Files\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLVertexArray.cpp">
+      <Filter>Source Files\Device\Context\VertexArray</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLVertexBufferAttributes.cpp">
+      <Filter>Source Files\Device\Context\VertexArray</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLShaderProgram.cpp">
+      <Filter>Source Files\Device\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLShaderObject.cpp">
+      <Filter>Source Files\Device\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLBuffer.cpp">
+      <Filter>Source Files\Device\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLBufferName.cpp">
+      <Filter>Source Files\Device\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLIndexBuffer.cpp">
+      <Filter>Source Files\Device\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLPixelBuffer.cpp">
+      <Filter>Source Files\Device\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLReadPixelBuffer.cpp">
+      <Filter>Source Files\Device\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLFramebuffer.cpp">
+      <Filter>Source Files\Device\Context\FrameBuffer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -194,23 +182,11 @@
     <ClInclude Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLFramebuffer.h">
       <Filter>Header Files\Device\Context\FrameBuffer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLFramebufferName.h">
-      <Filter>Header Files\Device\Context\FrameBuffer</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLVertexArray.h">
-      <Filter>Header Files\Device\Context\VertexArray</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLVertexArrayName.h">
       <Filter>Header Files\Device\Context\VertexArray</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLVertexBufferAttributes.h">
       <Filter>Header Files\Device\Context\VertexArray</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLSamplerName.h">
-      <Filter>Header Files\Device\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLTextureName.h">
-      <Filter>Header Files\Device\Textures</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLTextureSampler.h">
       <Filter>Header Files\Device\Textures</Filter>
@@ -228,9 +204,6 @@
       <Filter>Header Files\Device\Shader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLShaderProgram.h">
-      <Filter>Header Files\Device\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLShaderProgramName.h">
       <Filter>Header Files\Device\Shader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\Engine\OGLRenderDevice\BowOGLUniform.h">

@@ -10,10 +10,7 @@ namespace Bow{
 		{
 			// set the new instance of the logger to prevent the creation of a new one inside this dll
 			EventLogger::SetInstance(logger);
-
-			IRenderDevice* result = nullptr;
-			result = new OGLRenderDevice();
-			return result;
+			return new OGLRenderDevice();
 		}
 
 	}

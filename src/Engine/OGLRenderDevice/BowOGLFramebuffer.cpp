@@ -1,8 +1,6 @@
 #include "BowOGLFramebuffer.h"
 #include "BowLogger.h"
 
-#include "BowOGLFramebufferName.h"
-#include "BowOGLTextureName.h"
 #include "BowOGLTexture2D.h"
 
 #include <GL\glew.h>
@@ -11,19 +9,26 @@ namespace Bow {
 	namespace Renderer {
 
 
-		OGLFramebuffer::OGLFramebuffer() : m_name(new OGLFramebufferName())
+		OGLFramebuffer::OGLFramebuffer() : m_FramebufferHandle(0)
 		{
+			m_FramebufferHandle = 0;
+			glGenFramebuffers(1, &m_FramebufferHandle);
 		}
 
 
 		OGLFramebuffer::~OGLFramebuffer()
 		{
+			if (m_FramebufferHandle != 0)
+			{
+				glDeleteFramebuffers(1, &m_FramebufferHandle);
+				m_FramebufferHandle = 0;
+			}
 		}
 
 
 		void OGLFramebuffer::Bind()
 		{
-			glBindFramebuffer(GL_FRAMEBUFFER, m_name->GetValue());
+			glBindFramebuffer(GL_FRAMEBUFFER, m_FramebufferHandle);
 		}
 
 
@@ -140,8 +145,8 @@ namespace Bow {
 			if (texture != nullptr)
 			{
 				// TODO:  Mipmap level
-				// glFramebufferTexture(GL_FRAMEBUFFER, attachPoint, texture->GetHandle()->GetValue(), 0); <== Does not work for OpenGL3.1
-				glFramebufferTexture2D(GL_FRAMEBUFFER, attachPoint, GL_TEXTURE_2D, texture->GetHandle()->GetValue(), 0);
+				// glFramebufferTexture(GL_FRAMEBUFFER, attachPoint, texture->GetHandle(), 0); <== Does not work for OpenGL3.1
+				glFramebufferTexture2D(GL_FRAMEBUFFER, attachPoint, GL_TEXTURE_2D, texture->GetHandle(), 0);
 			}
 			else
 			{

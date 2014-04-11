@@ -1,7 +1,6 @@
 #include "BowOGLTexture2D.h"
 #include "BowLogger.h"
 
-#include "BowOGLTextureName.h"
 #include "BowOGLTextureSampler.h"
 #include "BowTexture2DDescription.h"
 
@@ -62,6 +61,7 @@ namespace Bow {
 			return -1;
 		}
 
+
 		inline int SizeInBytes(ImageDatatype dataType)
 		{
 			switch (dataType)
@@ -120,6 +120,7 @@ namespace Bow {
 			return -1;
 		}
 
+
 		inline void VerifyRowAlignment(int rowAlignment)
 		{
 			if ((rowAlignment != 1) &&
@@ -131,10 +132,12 @@ namespace Bow {
 			}
 		}
 
+
 		inline bool IsPowerOfTwo(unsigned int i)
 		{
 			return (i != 0) && ((i & (i - 1)) == 0);
 		}
+
 
 		inline int RequiredSizeInBytes(int width, int height, ImageFormat format, ImageDatatype dataType, int rowAlignment)
 		{
@@ -146,8 +149,12 @@ namespace Bow {
 			return rowSize * height;
 		}
 
-		OGLTexture2D::OGLTexture2D(Texture2DDescription description, GLenum textureTarget) : m_description(description), m_target(textureTarget), m_name(new OGLTextureName())
+
+		OGLTexture2D::OGLTexture2D(Texture2DDescription description, GLenum textureTarget) : m_description(description), m_target(textureTarget), m_TextureHandle(0)
 		{
+			m_TextureHandle = 0;
+			glGenTextures(1, &m_TextureHandle);
+
 			LOG_ASSERT(!(description.GetWidth() <= 0), "description.Width must be greater than zero.");
 			LOG_ASSERT(!(description.GetHeight() <= 0), "description.Height must be greater than zero.");
 
@@ -181,20 +188,34 @@ namespace Bow {
 			ApplySampler(OGLTextureSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Clamp, TextureWrap::Clamp, 1));
 		}
 
-		OGLTextureNamePtr OGLTexture2D::GetHandle()
+
+		OGLTexture2D::~OGLTexture2D()
 		{
-			return m_name;
+			if (m_TextureHandle != 0)
+			{
+				glDeleteTextures(1, &m_TextureHandle);
+				m_TextureHandle = 0;
+			}
 		}
+
+
+		unsigned int OGLTexture2D::GetHandle()
+		{
+			return m_TextureHandle;
+		}
+
 
 		GLenum OGLTexture2D::GetTarget()
 		{
 			return m_target;
 		}
 
+
 		void OGLTexture2D::Bind()
 		{
-			glBindTexture(m_target, m_name->GetValue());
+			glBindTexture(m_target, m_TextureHandle);
 		}
+
 
 		void OGLTexture2D::BindToLastTextureUnit()
 		{
@@ -202,10 +223,12 @@ namespace Bow {
 			Bind();
 		}
 
+
 		void OGLTexture2D::UnBind(GLenum textureTarget)
 		{
 			glBindTexture(textureTarget, 0);
 		}
+
 
 		void OGLTexture2D::CopyFromBuffer(WritePixelBufferPtr pixelBuffer, int xOffset, int yOffset, int width, int height, ImageFormat format, ImageDatatype dataType, int rowAlignment)
 		{
@@ -227,6 +250,7 @@ namespace Bow {
 			GenerateMipmaps();
 		}
 
+
 		void OGLTexture2D::CopyFromSystemMemory(void* bitmapInSystemMemory, int xOffset, int yOffset, int width, int height, ImageFormat format, ImageDatatype dataType, int rowAlignment)
 		{
 			LOG_ASSERT(!(xOffset < 0), "xOffset must be greater than or equal to zero.");
@@ -244,6 +268,7 @@ namespace Bow {
 			GenerateMipmaps();
 		}
 
+
 		std::shared_ptr<void> OGLTexture2D::CopyToSystemMemory(ImageFormat format, ImageDatatype dataType, int rowAlignment)
 		{
 			LOG_ASSERT(!(format == ImageFormat::StencilIndex), "StencilIndex is not supported by CopyToBuffer, .Try DepthStencil instead");
@@ -259,10 +284,12 @@ namespace Bow {
 			return std::shared_ptr<void>(nullptr);
 		}
 
+
 		Texture2DDescription OGLTexture2D::GetDescription()
 		{
 			return m_description;
 		}
+
 
 		void OGLTexture2D::GenerateMipmaps()
 		{
@@ -271,6 +298,7 @@ namespace Bow {
 				glGenerateMipmap(GL_TEXTURE_2D);
 			}
 		}
+
 
 		void OGLTexture2D::ApplySampler(OGLTextureSampler sampler)
 		{

@@ -2,7 +2,6 @@
 #include "BowLogger.h"
 
 #include "BowOGLTypeConverter.h"
-#include "BowOGLSamplerName.h"
 
 #include <GL/glew.h>
 
@@ -10,17 +9,20 @@ namespace Bow {
 	namespace Renderer {
 
 		OGLTextureSampler::OGLTextureSampler(TextureMinificationFilter minificationFilter, TextureMagnificationFilter magnificationFilter, TextureWrap wrapS, TextureWrap wrapT, float maximumAnistropy)
-			: ITextureSampler(minificationFilter, magnificationFilter, wrapS, wrapT, maximumAnistropy), m_name(new OGLSamplerName())
+			: ITextureSampler(minificationFilter, magnificationFilter, wrapS, wrapT, maximumAnistropy), m_SamplerHandle(0)
 		{
+			m_SamplerHandle = 0;
+			glGenSamplers(1, &m_SamplerHandle);
+
 			int glMinificationFilter = (int)OGLTypeConverter::To(minificationFilter);
 			int glMagnificationFilter = (int)OGLTypeConverter::To(magnificationFilter);
 			int glWrapS = (int)OGLTypeConverter::To(wrapS);
 			int glWrapT = (int)OGLTypeConverter::To(wrapT);
 
-			glSamplerParameteri(m_name->GetValue(), GL_TEXTURE_MIN_FILTER, glMinificationFilter);
-			glSamplerParameteri(m_name->GetValue(), GL_TEXTURE_MAG_FILTER, glMagnificationFilter);
-			glSamplerParameteri(m_name->GetValue(), GL_TEXTURE_WRAP_S, glWrapS);
-			glSamplerParameteri(m_name->GetValue(), GL_TEXTURE_WRAP_T, glWrapT);
+			glSamplerParameteri(m_SamplerHandle, GL_TEXTURE_MIN_FILTER, glMinificationFilter);
+			glSamplerParameteri(m_SamplerHandle, GL_TEXTURE_MAG_FILTER, glMagnificationFilter);
+			glSamplerParameteri(m_SamplerHandle, GL_TEXTURE_WRAP_S, glWrapS);
+			glSamplerParameteri(m_SamplerHandle, GL_TEXTURE_WRAP_T, glWrapT);
 
 			/*
 			if (Device.Extensions.AnisotropicFiltering)
@@ -34,9 +36,18 @@ namespace Bow {
 			*/
 		}
 
+		OGLTextureSampler::~OGLTextureSampler()
+		{
+			if (m_SamplerHandle != 0)
+			{
+				glDeleteSamplers(1, &m_SamplerHandle);
+				m_SamplerHandle = 0;
+			}
+		}
+
 		void OGLTextureSampler::Bind(int textureUnitIndex)
 		{
-			glBindSampler(textureUnitIndex, m_name->GetValue());
+			glBindSampler(textureUnitIndex, m_SamplerHandle);
 		}
 
 		void OGLTextureSampler::UnBind(int textureUnitIndex)

@@ -177,9 +177,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\..\..\src\Engine\Core\BowBitmap.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core\BowIndicesUnsignedInt.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core\BowIndicesUnsignedShort.cpp" />
@@ -189,11 +186,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\BowBitmap.h" />
+    <ClInclude Include="..\..\..\include\BowCore.h" />
     <ClInclude Include="..\..\..\include\BowCorePredeclares.h" />
     <ClInclude Include="..\..\..\include\BowIndicesUnsignedInt.h" />
     <ClInclude Include="..\..\..\include\BowIndicesUnsignedShort.h" />
     <ClInclude Include="..\..\..\include\BowLogger.h" />
+    <ClInclude Include="..\..\..\include\BowMath.h" />
+    <ClInclude Include="..\..\..\include\BowVector2.h" />
     <ClInclude Include="..\..\..\include\BowPrerequisites.h" />
+    <ClInclude Include="..\..\..\include\BowVector3.h" />
+    <ClInclude Include="..\..\..\include\BowVector4.h" />
     <ClInclude Include="..\..\..\include\BowVertexAttributeFloat.h" />
     <ClInclude Include="..\..\..\include\BowVertexAttributeFloatVec3.h" />
     <ClInclude Include="..\..\..\include\IBowCleanableObserver.h" />

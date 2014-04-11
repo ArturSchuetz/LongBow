@@ -1,4 +1,6 @@
 #pragma once
+#include "BowPrerequisites.h"
+
 #include "BowBlending.h"
 #include "BowColorMask.h"
 #include "BowDepthRange.h"

@@ -1,7 +1,6 @@
 #include "BowOGLTextureUnit.h"
 #include "BowLogger.h"
 
-#include "BowOGLTextureName.h"
 #include "BowOGLTexture2D.h"
 #include "BowOGLTextureSampler.h"
 

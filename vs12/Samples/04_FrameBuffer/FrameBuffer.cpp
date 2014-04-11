@@ -1,24 +1,4 @@
-#include "BowRenderDeviceManager.h"
-
-#include "BowClearState.h"
-#include "BowRenderState.h"
-
-#include "IBowGraphicsWindow.h"
-#include "IBowRenderDevice.h"
-#include "IBowRenderContext.h"
-
-#include "IBowVertexBuffer.h"
-#include "IBowVertexArray.h"
-#include "IBowShaderProgram.h"
-
-#include "IBowTexture2D.h"
-#include "IBowTextureSampler.h"
-
-#include "BowBufferHint.h"
-#include "BowVertexBufferAttribute.h"
-#include "BowShaderVertexAttribute.h"
-
-#include "IBowFramebuffer.h"
+#include "BowRenderer.h"
 
 #include <cstdint>
 #include <windows.h>
@@ -80,6 +60,7 @@ int main()
 	// fill buffer with informations
 	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float)* 9), ComponentDatatype::Float, 3));
 	PositionAttribute->GetVertexBuffer()->CopyFromSystemMemory(vert, 0, sizeof(float)* 9);
+	delete[] vert;
 
 	float* texcoor = new float[6];
 	texcoor[0] = 0.0f; texcoor[1] = 1.0f;
@@ -88,6 +69,7 @@ int main()
 
 	VertexBufferAttributePtr TextureCoordAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float)* 6), ComponentDatatype::Float, 2));
 	TextureCoordAttribute->GetVertexBuffer()->CopyFromSystemMemory(texcoor, 0, sizeof(float)* 6);
+	delete[] texcoor;
 
 	// create VertexArray and connect buffer with location
 	VertexArrayPtr VertexArray = ContextOGL->CreateVertexArray();
@@ -112,9 +94,11 @@ int main()
 	// fill buffer with informations
 	auto QuadPositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float)* 8), ComponentDatatype::Float, 2));
 	QuadPositionAttribute->GetVertexBuffer()->CopyFromSystemMemory(QuadVert, 0, sizeof(float)* 8);
+	delete[] QuadVert;
 
 	auto QuadTextureCoordAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float)* 8), ComponentDatatype::Float, 2));
 	QuadTextureCoordAttribute->GetVertexBuffer()->CopyFromSystemMemory(QuadTexcoor, 0, sizeof(float)* 8);
+	delete[] QuadTexcoor;
 
 	// connect buffer with location
 	auto QuadVertexArray = ContextOGL->CreateVertexArray();

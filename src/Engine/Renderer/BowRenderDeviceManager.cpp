@@ -59,38 +59,38 @@ namespace Bow
 				switch (api)
 				{
 				case API::OpenGL3x:
-				{
-#ifdef _DEBUG
-					hDLL = LoadLibraryExW(L"OGLRenderDevice_d.dll", NULL, 0);
-#else
-					hDLL = LoadLibraryExW(L"OGLRenderDevice.dll", NULL, 0);
-#endif
-					if (!hDLL)
 					{
-						LOG_ERROR("Could not find OGLRenderDevice.dll!");
-						return RenderDevicePtr(nullptr);
+#ifdef _DEBUG
+						hDLL = LoadLibraryExW(L"OGLRenderDevice_d.dll", NULL, 0);
+#else
+						hDLL = LoadLibraryExW(L"OGLRenderDevice.dll", NULL, 0);
+#endif
+						if (!hDLL)
+						{
+							LOG_ERROR("Could not find OGLRenderDevice.dll!");
+							return RenderDevicePtr(nullptr);
+						}
 					}
-				}
 					break;
 				case API::Direct3D11:
-				{
-#ifdef _DEBUG
-					hDLL = LoadLibraryExW(L"D3D11Device_d.dll", NULL, 0);
-#else
-					hDLL = LoadLibraryExW(L"D3D11Device.dll", NULL, 0);
-#endif
-					if (!hDLL)
 					{
-						LOG_ERROR("Could not find D3D11Device.dll!");
-						return RenderDevicePtr(nullptr);
+#ifdef _DEBUG
+						hDLL = LoadLibraryExW(L"D3D11Device_d.dll", NULL, 0);
+#else
+						hDLL = LoadLibraryExW(L"D3D11Device.dll", NULL, 0);
+#endif
+						if (!hDLL)
+						{
+							LOG_ERROR("Could not find D3D11Device.dll!");
+							return RenderDevicePtr(nullptr);
+						}
 					}
-				}
 					break;
 				default:
-				{
-					LOG_ERROR("Renderer API is not supported!");
-					return RenderDevicePtr(nullptr);
-				}
+					{
+						LOG_ERROR("Renderer API is not supported!");
+						return RenderDevicePtr(nullptr);
+					}
 					break;
 				}
 
@@ -98,8 +98,6 @@ namespace Bow
 
 				// Zeiger auf die dll Funktion 'CreateRenderDevice'
 				_CreateRenderDevice = (CREATERENDERDEVICE)GetProcAddress(hDLL, "CreateRenderDevice");
-
-				GetWindowLong(GetActiveWindow(), 0);
 				IRenderDevice* pDevice = _CreateRenderDevice(EventLogger::GetInstance());
 
 				// aufruf der dll Create-Funktionc

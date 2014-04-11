@@ -1,4 +1,7 @@
 #pragma once
+#include "BowPrerequisites.h"
+#include "BowCorePredeclares.h"
+
 #include <fstream>
 
 // Chose one of this LogLevels to define LOG_LEVEL

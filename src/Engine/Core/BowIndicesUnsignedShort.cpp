@@ -4,7 +4,7 @@
 namespace Bow {
 	namespace Core {
 
-		IndicesUnsignedShort::IndicesUnsignedShort() : IIndicesBase(IndicesType::UnsignedInt), Values(std::list<unsigned short>())
+		/*IndicesUnsignedShort::IndicesUnsignedShort() : IIndicesBase(IndicesType::UnsignedInt), Values(std::list<unsigned short>())
 		{
 		}
 
@@ -14,7 +14,7 @@ namespace Bow {
 
 		IndicesUnsignedShort::~IndicesUnsignedShort()
 		{
-		}
+		}*/
 
 	}
 }

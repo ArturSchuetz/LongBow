@@ -67,7 +67,7 @@ namespace Bow {
 				LOG_DEBUG("\tMaximum number of Texture Units: %i", m_numberOfTextureUnits);
 
 				glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &m_maximumNumberOfColorAttachments);
-				LOG_DEBUG("\tMaximum number of Color Attachments; %i", m_maximumNumberOfColorAttachments);
+				LOG_DEBUG("\tMaximum number of Color Attachments: %i", m_maximumNumberOfColorAttachments);
 
 				return pGraphicsWindow;
 			}

@@ -1,23 +1,4 @@
-#include "BowRenderDeviceManager.h"
-
-#include "BowClearState.h"
-#include "BowRenderState.h"
-
-#include "IBowGraphicsWindow.h"
-#include "IBowRenderDevice.h"
-#include "IBowRenderContext.h"
-
-#include "IBowVertexBuffer.h"
-#include "IBowVertexArray.h"
-#include "IBowShaderProgram.h"
-
-#include "IBowTexture2D.h"
-#include "IBowTextureSampler.h"
-
-#include "BowBufferHint.h"
-#include "BowVertexBufferAttribute.h"
-
-#include "BowShaderVertexAttribute.h"
+#include "BowRenderer.h"
 
 #include <cstdint>
 #include <windows.h>
@@ -75,6 +56,7 @@ int main()
 	// Create vertex position buffer and fill with informations
 	VertexBufferPtr PositionBuffer =  DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float)* 9);
 	PositionBuffer->CopyFromSystemMemory(vert, 0, sizeof(float)* 9);
+	delete[] vert;
 
 	// Define buffer as vertexattribute for shaders
 	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(PositionBuffer, ComponentDatatype::Float, 3));
@@ -88,6 +70,7 @@ int main()
 	// Create vertex texturecoodinate buffer and fill with informations
 	VertexBufferPtr TextureCoordBuffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float)* 6);
 	TextureCoordBuffer->CopyFromSystemMemory(texcoor, 0, sizeof(float)* 6);
+	delete[] texcoor;
 
 	// Define buffer as vertexattribute for shaders
 	VertexBufferAttributePtr	TextureCoordAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(TextureCoordBuffer, ComponentDatatype::Float, 2));

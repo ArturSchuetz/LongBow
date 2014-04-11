@@ -52,9 +52,9 @@
     <Filter Include="Source Files\Geometry\VertexAttributes">
       <UniqueIdentifier>{24067dfb-f9f2-4eb2-aec7-41e712101efd}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="ReadMe.txt" />
+    <Filter Include="Header Files\Math">
+      <UniqueIdentifier>{d887ea83-0a01-4f4a-90ea-2014613e0b9d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\Engine\Core\BowLogger.cpp">
@@ -109,6 +109,21 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\BowPrerequisites.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowCore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowMath.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowVector2.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowVector3.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowVector4.h">
+      <Filter>Header Files\Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

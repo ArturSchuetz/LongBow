@@ -1,4 +1,5 @@
 #pragma once
+#include "BowPrerequisites.h"
 
 namespace Bow
 {

@@ -65,7 +65,6 @@ namespace Bow {
 			UnsignedIntSampler2DArray
 		};
 
-
 		class IOGLUniform : public ICleanable
 		{
 		public:

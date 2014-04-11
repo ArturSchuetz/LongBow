@@ -1,4 +1,5 @@
 #pragma once
+#include "BowPrerequisites.h"
 
 namespace Bow {
 	namespace Renderer{
@@ -27,11 +28,6 @@ namespace Bow {
 		typedef std::shared_ptr<ShaderVertexAttribute> ShaderVertexAttributePtr;
 		typedef std::hash_map<std::string, ShaderVertexAttributePtr> ShaderVertexAttributeMap;
 
-		////////////////////////////////////////////////////
-		// Textures
-
-		struct Texture2DDescription;
-			enum class TextureFormat : char;
 
 		////////////////////////////////////////////////////
 		// Clearstate
@@ -103,6 +99,10 @@ namespace Bow {
 
 				////////////////////////////////////////////////////
 				// Textures
+
+				struct Texture2DDescription;
+					enum class TextureFormat : char;
+
 				class ITexture2D;
 					enum class ImageDatatype : char;
 					enum class ImageFormat : char;

@@ -1,6 +1,5 @@
 #pragma once
-#include <memory>
-#include <hash_map>
+#include "BowPrerequisites.h"
 
 namespace Bow {
 	namespace Renderer{

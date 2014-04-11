@@ -1,10 +1,4 @@
-#include "BowRenderDeviceManager.h"
-
-#include "BowClearState.h"
-
-#include "IBowGraphicsWindow.h"
-#include "IBowRenderDevice.h"
-#include "IBowRenderContext.h"
+#include "BowRenderer.h"
 
 #include <cstdint>
 #include <windows.h>

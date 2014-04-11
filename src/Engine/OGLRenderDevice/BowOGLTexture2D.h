@@ -9,14 +9,14 @@ namespace Bow {
 	namespace Renderer {
 
 		class OGLTextureSampler;
-		typedef std::shared_ptr<class OGLTextureName> OGLTextureNamePtr;
 
 		class OGLTexture2D : public ITexture2D
 		{
 		public:
 			OGLTexture2D(Texture2DDescription description, GLenum textureTarget);
+			~OGLTexture2D();
 
-			OGLTextureNamePtr GetHandle();
+			unsigned int GetHandle();
 			GLenum GetTarget();
 
 			void Bind();
@@ -33,10 +33,11 @@ namespace Bow {
 			void GenerateMipmaps();
 			void ApplySampler(OGLTextureSampler sampler);
 
-			const OGLTextureNamePtr		m_name;
 			const GLenum				m_target;
 			const Texture2DDescription	m_description;
 			GLenum						m_lastTextureUnit;
+
+			unsigned int				m_TextureHandle;
 		};
 
 		typedef std::shared_ptr<OGLTexture2D> OGLTexture2DPtr;

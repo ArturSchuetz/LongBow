@@ -1,4 +1,7 @@
 #pragma once
+#include "BowPrerequisites.h"
+#include "BowCorePredeclares.h"
+
 #include "IBowIndicesBase.h"
 
 #include <list>
@@ -6,7 +9,7 @@
 namespace Bow {
 	namespace Core {
 
-		struct IndicesUnsignedInt : IIndicesBase
+		/*struct IndicesUnsignedInt : IIndicesBase
 		{
 		public:
 			IndicesUnsignedInt();
@@ -14,7 +17,7 @@ namespace Bow {
 			~IndicesUnsignedInt();
 
 			const std::list<unsigned int> Values;
-		};
+		};*/
 
 	}
 }

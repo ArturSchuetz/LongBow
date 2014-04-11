@@ -4,7 +4,6 @@
 namespace Bow {
 	namespace Renderer {
 
-		typedef std::shared_ptr<class OGLShaderProgramName> OGLShaderProgramNamePtr;
 		typedef unsigned int GLenum;
 
 		class OGLShaderObject

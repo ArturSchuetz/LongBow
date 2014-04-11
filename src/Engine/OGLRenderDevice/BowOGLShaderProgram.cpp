@@ -2,7 +2,6 @@
 #include "BowLogger.h"
 
 #include "BowOGLTypeConverter.h"
-#include "BowOGLShaderProgramName.h"
 #include "BowOGLShaderObject.h"
 #include "BowOGLFragmentOutputs.h"
 #include "BowOGLRenderContext.h"
@@ -15,8 +14,13 @@
 namespace Bow {
 	namespace Renderer {
 
-		OGLShaderProgram::OGLShaderProgram(const std::string& vertexShaderSource, const std::string& geometryShaderSource, const std::string& fragmentShaderSource)
+		OGLShaderProgram::OGLShaderProgram(const std::string& vertexShaderSource, const std::string& geometryShaderSource, const std::string& fragmentShaderSource) :
+			m_ShaderProgramHandle(0)
 		{
+			m_ShaderProgramHandle = glCreateProgram();
+			if (m_ShaderProgramHandle == 0)
+				LOG_ERROR("Could not create Shaderobject.");
+
 			m_ready = false;
 			m_vertexShader = OGLShaderObjectPtr(new OGLShaderObject(GL_VERTEX_SHADER, vertexShaderSource));
 			if (geometryShaderSource.length() > 0)
@@ -25,25 +29,21 @@ namespace Bow {
 			}
 			m_fragmentShader = OGLShaderObjectPtr(new OGLShaderObject(GL_FRAGMENT_SHADER, fragmentShaderSource));
 
-			m_program = OGLShaderProgramNamePtr(new OGLShaderProgramName());
-
-			int programHandle = m_program->GetValue();
-
-			glAttachShader(programHandle, m_vertexShader->GetShader());
+			glAttachShader(m_ShaderProgramHandle, m_vertexShader->GetShader());
 			if (geometryShaderSource.length() > 0)
 			{
-				glAttachShader(programHandle, m_geometryShader->GetShader());
+				glAttachShader(m_ShaderProgramHandle, m_geometryShader->GetShader());
 			}
-			glAttachShader(programHandle, m_fragmentShader->GetShader());
+			glAttachShader(m_ShaderProgramHandle, m_fragmentShader->GetShader());
 
-			glLinkProgram(programHandle);
+			glLinkProgram(m_ShaderProgramHandle);
 
 			int linkStatus;
-			glGetProgramiv(programHandle, GL_LINK_STATUS, &linkStatus);
+			glGetProgramiv(m_ShaderProgramHandle, GL_LINK_STATUS, &linkStatus);
 
 			if (linkStatus == 0)
 			{
-				LOG_ERROR(m_program->GetInfoLog().c_str());
+				LOG_ERROR(GetLog().c_str());
 				m_ready = false;
 			}
 			else
@@ -52,21 +52,31 @@ namespace Bow {
 				m_ready = true;
 			}
 
-			m_fragmentOutputs = OGLFragmentOutputsPtr(new OGLFragmentOutputs(m_program));
-			m_shaderVertexAttributes = FindVertexAttributes(m_program);
+			m_fragmentOutputs = OGLFragmentOutputsPtr(new OGLFragmentOutputs(m_ShaderProgramHandle));
+			m_shaderVertexAttributes = FindVertexAttributes(m_ShaderProgramHandle);
 
-			m_uniforms = FindUniforms(m_program);
+			m_uniforms = FindUniforms(m_ShaderProgramHandle);
 		}
 
 
 		OGLShaderProgram::~OGLShaderProgram()
 		{
+			glDeleteProgram(m_ShaderProgramHandle);
 		}
 
 
 		std::string	OGLShaderProgram::GetLog()
 		{
-			return GetProgramInfoLog();
+			char* buffer;
+			GLint length, result;
+
+			/* get the shader info log */
+			glGetProgramiv(m_ShaderProgramHandle, GL_INFO_LOG_LENGTH, &length);
+			buffer = (char*)malloc(length);
+
+			glGetProgramInfoLog(m_ShaderProgramHandle, length, &result, buffer);
+
+			return std::string(buffer);
 		}
 
 
@@ -82,16 +92,15 @@ namespace Bow {
 		}
 
 
-		OGLShaderProgramNamePtr	OGLShaderProgram::GetProgram()
+		unsigned int OGLShaderProgram::GetProgram()
 		{
-			LOG_ASSERT(m_program.get() != nullptr, "OGLShaderProgramNamePtr is a nullptr");
-			return m_program;
+			return m_ShaderProgramHandle;
 		}
 
 
 		void OGLShaderProgram::Bind()
 		{
-			glUseProgram(m_program->GetValue());
+			glUseProgram(m_ShaderProgramHandle);
 		}
 
 
@@ -120,18 +129,8 @@ namespace Bow {
 		// PRIVATE FUNCTIONS
 		// =====================================================================
 
-		std::string	OGLShaderProgram::GetProgramInfoLog()
+		ShaderVertexAttributeMap OGLShaderProgram::FindVertexAttributes(unsigned int programHandle)
 		{
-			LOG_ASSERT(m_program.get() != nullptr, "OGLShaderProgramNamePtr is a nullptr.");
-
-			return m_program->GetInfoLog();
-		}
-
-
-		ShaderVertexAttributeMap OGLShaderProgram::FindVertexAttributes(OGLShaderProgramNamePtr Program)
-		{
-			int programHandle = Program->GetValue();
-
 			int numberOfAttributes;
 			glGetProgramiv(programHandle, GL_ACTIVE_ATTRIBUTES, &numberOfAttributes);
 
@@ -167,10 +166,8 @@ namespace Bow {
 		}
 
 
-		UniformMap OGLShaderProgram::FindUniforms(OGLShaderProgramNamePtr program)
+		UniformMap OGLShaderProgram::FindUniforms(unsigned int programHandle)
 		{
-			int programHandle = program->GetValue();
-
 			int numberOfUniforms;
 			glGetProgramiv(programHandle, GL_ACTIVE_UNIFORMS, &numberOfUniforms);
 
@@ -212,36 +209,35 @@ namespace Bow {
 				int uniformLocation = glGetUniformLocation(programHandle, uniformName);
 
 				LOG_DEBUG("\t\tName: %s, \tLocation: %d, \tArraySize: %d", uniformName, uniformLocation, uniformSize);
-				//uniforms.insert(std::pair<std::string, UniformPtr>(uniformName, UniformPtr(new OGLUniform(uniformLocation, uniformSize, OGLTypeConverter::ToActiveUniformType(uniformType), this))));
-				UniformType type = OGLTypeConverter::ToActiveUniformType(uniformType);
 
+				UniformType type = OGLTypeConverter::ToActiveUniformType(uniformType);
 				switch (type)
 				{
-				case(UniformType::Float) :
-				case(UniformType::FloatVector2) :
-				case(UniformType::FloatVector3) :
-				case(UniformType::FloatVector4) :
-				case(UniformType::FloatMatrix22) :
-				case(UniformType::FloatMatrix23) :
-				case(UniformType::FloatMatrix24) :
-				case(UniformType::FloatMatrix32) :
-				case(UniformType::FloatMatrix33) :
-				case(UniformType::FloatMatrix34) :
-				case(UniformType::FloatMatrix44) :
-												 uniforms.insert(std::pair<std::string, OGLUniformPtr>(uniformName, OGLUniformPtr(new OGLUniformF(uniformLocation, type, uniformSize, this))));
-					break;
-				case(UniformType::Int) :
-				case(UniformType::IntVector2) :
-				case(UniformType::IntVector3) :
-				case(UniformType::IntVector4) :
-											  uniforms.insert(std::pair<std::string, OGLUniformPtr>(uniformName, OGLUniformPtr(new OGLUniformI(uniformLocation, type, uniformSize, this))));
-					break;
-				case(UniformType::UnsignedInt) :
-				case(UniformType::UnsignedIntVector2) :
-				case(UniformType::UnsignedIntVector3) :
-				case(UniformType::UnsignedIntVector4) :
-													  uniforms.insert(std::pair<std::string, OGLUniformPtr>(uniformName, OGLUniformPtr(new OGLUniformUI(uniformLocation, type, uniformSize, this))));
-					break;
+					case(UniformType::Float) :
+					case(UniformType::FloatVector2) :
+					case(UniformType::FloatVector3) :
+					case(UniformType::FloatVector4) :
+					case(UniformType::FloatMatrix22) :
+					case(UniformType::FloatMatrix23) :
+					case(UniformType::FloatMatrix24) :
+					case(UniformType::FloatMatrix32) :
+					case(UniformType::FloatMatrix33) :
+					case(UniformType::FloatMatrix34) :
+					case(UniformType::FloatMatrix44) :
+						uniforms.insert(std::pair<std::string, OGLUniformPtr>(uniformName, OGLUniformPtr(new OGLUniformF(uniformLocation, type, uniformSize, this))));
+						break;
+					case(UniformType::Int) :
+					case(UniformType::IntVector2) :
+					case(UniformType::IntVector3) :
+					case(UniformType::IntVector4) :
+						uniforms.insert(std::pair<std::string, OGLUniformPtr>(uniformName, OGLUniformPtr(new OGLUniformI(uniformLocation, type, uniformSize, this))));
+						break;
+					case(UniformType::UnsignedInt) :
+					case(UniformType::UnsignedIntVector2) :
+					case(UniformType::UnsignedIntVector3) :
+					case(UniformType::UnsignedIntVector4) :
+						uniforms.insert(std::pair<std::string, OGLUniformPtr>(uniformName, OGLUniformPtr(new OGLUniformUI(uniformLocation, type, uniformSize, this))));
+						break;
 				}
 			}
 			return uniforms;

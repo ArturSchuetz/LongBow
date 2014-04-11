@@ -2,7 +2,6 @@
 #include "BowLogger.h"
 
 #include "BowOGLTextureUnit.h"
-#include "BowOGLTextureName.h"
 #include "BowOGLTexture2D.h"
 
 #include <GL\glew.h>

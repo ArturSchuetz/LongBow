@@ -1,4 +1,6 @@
 #pragma once
+#include "BowPrerequisites.h"
+
 #include "BowLogger.h"
 
 #include "BowIndexBufferDatatype.h"

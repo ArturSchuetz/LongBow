@@ -58,7 +58,7 @@ namespace Bow {
 			// ===========================================
 			// New Functions
 			// ===========================================
-			OGLShaderProgramNamePtr		GetProgram();
+			unsigned int GetProgram();
 
 			void Bind();
 			void Clean();
@@ -78,15 +78,14 @@ namespace Bow {
 
 			std::string				GetProgramInfoLog();
 
-			ShaderVertexAttributeMap	FindVertexAttributes(OGLShaderProgramNamePtr Program);
-			UniformMap					FindUniforms(OGLShaderProgramNamePtr program);
+			ShaderVertexAttributeMap	FindVertexAttributes(unsigned int Program);
+			UniformMap					FindUniforms(unsigned int program);
 
 			bool					IsMatrix(UniformType type);
 
 			OGLShaderObjectPtr		m_vertexShader;
 			OGLShaderObjectPtr		m_geometryShader;
 			OGLShaderObjectPtr		m_fragmentShader;
-			OGLShaderProgramNamePtr	m_program;
 
 			ShaderVertexAttributeMap	m_shaderVertexAttributes;
 			OGLFragmentOutputsPtr	m_fragmentOutputs;
@@ -95,6 +94,8 @@ namespace Bow {
 
 			std::list<ICleanable*>	m_dirtyUniforms;
 			bool m_ready;
+
+			unsigned int			m_ShaderProgramHandle;
 		};
 
 		typedef std::shared_ptr<OGLShaderProgram> OGLShaderProgramPtr;

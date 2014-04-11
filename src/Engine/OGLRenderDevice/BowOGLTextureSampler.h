@@ -6,18 +6,17 @@
 namespace Bow {
 	namespace Renderer {
 
-		typedef std::shared_ptr<class OGLSamplerName> OGLSamplerNamePtr;
-
 		class OGLTextureSampler : public ITextureSampler
 		{
 		public:
 			OGLTextureSampler(TextureMinificationFilter minificationFilter, TextureMagnificationFilter magnificationFilter, TextureWrap wrapS, TextureWrap wrapT, float maximumAnistropy = 1);
+			~OGLTextureSampler();
 
 			void Bind(int textureUnitIndex);
 			static void UnBind(int textureUnitIndex);
 
 		private:
-			const OGLSamplerNamePtr m_name;
+			unsigned int m_SamplerHandle;
 		};
 
 		typedef std::shared_ptr<OGLTextureSampler> OGLTextureSamplerPtr;

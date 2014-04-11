@@ -177,9 +177,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\..\..\include\BowBlending.h" />
     <ClInclude Include="..\..\..\include\BowBufferHint.h" />
     <ClInclude Include="..\..\..\include\BowClearState.h" />
@@ -193,6 +190,7 @@
     <ClInclude Include="..\..\..\include\BowPrerequisites.h" />
     <ClInclude Include="..\..\..\include\BowPrimitiveRestart.h" />
     <ClInclude Include="..\..\..\include\BowRenderDeviceManager.h" />
+    <ClInclude Include="..\..\..\include\BowRenderer.h" />
     <ClInclude Include="..\..\..\include\BowRendererPredeclares.h" />
     <ClInclude Include="..\..\..\include\BowRenderState.h" />
     <ClInclude Include="..\..\..\include\BowScissorTest.h" />

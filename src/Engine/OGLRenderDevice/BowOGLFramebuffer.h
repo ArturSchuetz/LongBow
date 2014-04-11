@@ -39,11 +39,12 @@ namespace Bow {
 				DepthStencilAttachment = 2
 			};
 
-			OGLFramebufferNamePtr	m_name;
 			OGLColorAttachments		m_colorAttachments;
 			OGLTexture2DPtr			m_depthAttachment;
 			OGLTexture2DPtr			m_depthStencilAttachment;
 			DirtyFlags				m_dirtyFlags;
+
+			unsigned int			m_FramebufferHandle; // Name
 		};
 
 		typedef std::shared_ptr<OGLFramebuffer> OGLFramebufferPtr;

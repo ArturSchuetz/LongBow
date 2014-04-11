@@ -52,12 +52,14 @@ namespace Bow {
 			OGLRenderContext(OGLRenderContext&){}
 			OGLRenderContext& operator=(const OGLRenderContext&) { return *this; }
 
-			void ApplyRenderState(RenderState renderState);
 			void ApplyVertexArray(VertexArrayPtr vertexArray);
 			void ApplyShaderProgram(ShaderProgramPtr shaderProgram);
+			void ApplyFramebuffer();
 
 			void ForceApplyRenderState(RenderState renderState);
 			void ForceApplyRenderStateStencil(StencilFace face, StencilTestFace test);
+
+			void ApplyRenderState(RenderState renderState);
 			void ApplyPrimitiveRestart(PrimitiveRestart primitiveRestart);
 			void ApplyFaceCulling(FaceCulling FaceCulling);
 			void ApplyProgramPointSize(ProgramPointSize programPointSize);
@@ -70,8 +72,6 @@ namespace Bow {
 			void ApplyBlending(Blending blending);
 			void ApplyColorMask(ColorMask colorMask);
 			void ApplyDepthMask(bool depthMask);
-
-			void ApplyFramebuffer();
 
 			Viewport m_viewport;
 

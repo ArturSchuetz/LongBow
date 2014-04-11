@@ -1,7 +1,6 @@
 #include "BowOGLVertexArray.h"
 #include "BowLogger.h"
 
-#include "BowOGLVertexArrayName.h"
 #include "BowOGLIndexBuffer.h"
 
 #include <GL\glew.h>
@@ -9,17 +8,23 @@
 namespace Bow {
 	namespace Renderer {
 
-		OGLVertexArray::OGLVertexArray() : m_dirtyIndexBuffer(false), m_name(OGLVertexArrayNamePtr(new OGLVertexArrayName()))
+		OGLVertexArray::OGLVertexArray() : m_dirtyIndexBuffer(false), m_VertexArrayHandle(0)
 		{
+			glGenVertexArrays(1, &m_VertexArrayHandle);
 		}
 
 		OGLVertexArray::~OGLVertexArray()
 		{
+			if (m_VertexArrayHandle != 0)
+			{
+				glDeleteVertexArrays(1, &m_VertexArrayHandle);
+				m_VertexArrayHandle = 0;
+			}
 		}
 
 		void OGLVertexArray::Bind()
 		{
-			glBindVertexArray(m_name->GetValue());
+			glBindVertexArray(m_VertexArrayHandle);
 		}
 
 		void OGLVertexArray::Clean()
