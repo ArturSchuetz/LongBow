@@ -154,7 +154,11 @@ namespace Bow
 			strcpy_s(buffer2, MAX_DEBUG_LINE_LEN, "ERROR: ");
 			strcpy_s(buffer2 + 7, MAX_DEBUG_LINE_LEN - 7, buffer);
 			LogOutput(buffer2);
+#if defined(_WIN32)
 			MessageBox(NULL, buffer2, "LongBow - ERROR", MB_OK | MB_ICONERROR);
+#else
+			std::cerr << "An exception has occured: " << e.getFullDescription().c_str() << std::endl;
+#endif
 		}
 
 

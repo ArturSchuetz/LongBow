@@ -6,21 +6,15 @@ namespace Bow {
 		class Bitmap;
 		class EventLogger;
 
-		// Math
-		class Vector2LD;
-		class Vector2D;
-		class Vector2F;
-		class Vector2I;
+		// MATH
+		class FloatVector2;
+		class FloatVector3;
+		class FloatVector4;
 
-		class Vector3LD;
-		class Vector3D;
-		class Vector3F;
-		class Vector3I;
+		class FloatMatrix2x2;
 
-		class Vector4LD;
-		class Vector4D;
-		class Vector4F;
-		class Vector4I;
+		class FloatMatrix2D;
+		class FloatMatrix3D;
 
 		struct IndicesUnsignedInt;
 		struct IndicesUnsignedShort;

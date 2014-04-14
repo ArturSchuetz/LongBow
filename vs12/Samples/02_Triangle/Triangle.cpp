@@ -47,16 +47,16 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Vertex Array
 
-	Vector4F vertices[3];
-	vertices[0] = Vector4F(-1.0f, 1.0f, 1.0f);
-	vertices[1] = Vector4F(0.0f, -1.0f, 1.0f);
-	vertices[2] = Vector4F(1.0f, 1.0f, 1.0f);
+	FloatVector2 vertices[3];
+	vertices[0] = FloatVector2(-1.0f, 1.0f);
+	vertices[1] = FloatVector2(0.0f, -1.0f);
+	vertices[2] = FloatVector2(1.0f, 1.0f);
 
 	// fill buffer with informations
-	VertexBufferPtr buffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector4F)* 3);
-					buffer->CopyFromSystemMemory(vertices, 0, sizeof(Vector4F)* 3);
+	VertexBufferPtr buffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(FloatVector2)* 3);
+	buffer->CopyFromSystemMemory(vertices, 0, sizeof(FloatVector2)* 3);
 
-	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(buffer, ComponentDatatype::Float, 4));
+	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(buffer, ComponentDatatype::Float, 2));
 	
 	// create VertexArray
 	VertexArrayPtr VertexArray = ContextOGL->CreateVertexArray();

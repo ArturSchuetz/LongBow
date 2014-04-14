@@ -5,7 +5,7 @@
 namespace Bow {
 	namespace Core {
 
-		/*enum class IndicesType : char
+		enum class IndicesType : char
 		{
 			UnsignedShort,
 			UnsignedInt
@@ -25,7 +25,7 @@ namespace Bow {
 
 		private:
 			const IndicesType m_type;
-		};*/
+		};
 
 	}
 }

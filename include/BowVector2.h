@@ -21,8 +21,7 @@ namespace Bow {
 
 			Vector2()
 			{
-				x = 0;
-				y = 0;
+				x = y = 0;
 			}
 
 			Vector2(T _x, T _y)
@@ -55,134 +54,92 @@ namespace Bow {
 				return x * other.x + y * other.y;
 			}
 
-			inline Vector2 Normalized() const
+			inline Vector2 Normalize() const
 			{
 				return (*this) / Length();
 			}
 
-			inline Vector2 Negated() const
+			inline Vector2 Negate() const
 			{
 				return Vector2(-x, -y);
 			}
 
-			void operator += (const Vector2& other)
+			inline void operator += (const Vector2& other)
 			{
 				x += other.x;
 				y += other.y;
 			}
 
-			Vector2 operator + (const Vector2& other) const
+			inline Vector2 operator + (const Vector2& other) const
 			{
 				return Vector2(x + other.x, y + other.y);
 			}
 
-			void operator -= (const Vector2& other)
+			inline void operator -= (const Vector2& other)
 			{
 				x -= other.x;
 				y -= other.y;
 			}
 
-			Vector2 operator - (const Vector2& other) const
+			inline Vector2 operator - (const Vector2& other) const
 			{
 				return Vector2(x - other.x, y - other.y);
 			}
 
-			void operator *= (T other)
+			inline void operator *= (T other)
 			{
 				x *= other;
 				y *= other;
 			}
 
-			Vector2 operator * (T other) const
+			inline Vector2 operator * (T other) const
 			{
 				return Vector2(x * other, y * other);
 			}
 
-			void operator /= (T other)
+			inline void operator /= (T other)
 			{
 				x /= other;
 				y /= other;
 			}
 
-			Vector2 operator / (T other) const
+			inline Vector2 operator / (T other) const
 			{
 				return Vector2(x / other, y / other);
 			}
 
-			bool operator == (const Vector2& other) const
+			inline bool operator == (const Vector2& other) const
 			{
 				return x == other.x && y == other.y;
 			}
 
-			bool operator != (const Vector2& other) const
+			inline bool operator != (const Vector2& other) const
 			{
 				return x != other.x || y != other.y;
 			}
+
+			template <typename C>
+			inline operator Vector2<C>()
+			{
+				return Vector2<C>((C)x, (C)y);
+			}
 		};
 		/*----------------------------------------------------------------*/
 
-		class Vector2LD : public Vector2<long double>
+		class FloatVector2 : public Vector2<float>
 		{
 		public:
-			Vector2LD()
+			FloatVector2()
 			{
 				x = 0.0;
 				y = 0.0;
 			}
 
-			Vector2LD(long double _x, long double _y)
-			{
-				x = _x, y = _y;
-			}
-		};
-		/*----------------------------------------------------------------*/
-
-		class Vector2D : public Vector2<double>
-		{
-		public:
-			Vector2D()
-			{
-				x = 0.0;
-				y = 0.0;
-			}
-
-			Vector2D(double _x, double _y)
-			{
-				x = _x, y = _y;
-			}
-		};
-		/*----------------------------------------------------------------*/
-
-		class Vector2F : public Vector2<float>
-		{
-		public:
-			Vector2F()
-			{
-				x = 0.0;
-				y = 0.0;
-			}
-
-			Vector2F(float _x, float _y)
+			FloatVector2(float _x, float _y)
 			{
 				x = _x, y = _y;
 			}
 
-		};
-		/*----------------------------------------------------------------*/
-
-		class Vector2I : public Vector2<int>
-		{
-		public:
-			Vector2I()
-			{
-				x = 0;
-				y = 0;
-			}
-
-			Vector2I(int _x, int _y)
-			{
-				x = _x, y = _y;
-			}
 		};
 		/*----------------------------------------------------------------*/
 	}

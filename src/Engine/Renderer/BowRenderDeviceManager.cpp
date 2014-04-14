@@ -98,7 +98,7 @@ namespace Bow
 
 				// Zeiger auf die dll Funktion 'CreateRenderDevice'
 				_CreateRenderDevice = (CREATERENDERDEVICE)GetProcAddress(hDLL, "CreateRenderDevice");
-				IRenderDevice* pDevice = _CreateRenderDevice(EventLogger::GetInstance());
+				IRenderDevice *pDevice = _CreateRenderDevice(EventLogger::GetInstance());
 
 				// aufruf der dll Create-Funktionc
 				if (pDevice == nullptr)

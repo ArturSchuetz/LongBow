@@ -29,7 +29,7 @@ int main()
 	}
 
 	// Creating Window
-	GraphicsWindowPtr WindowOGL = DeviceOGL->VCreateWindow(800, 600, "Textures Sample", WindowType::Windowed);
+	GraphicsWindowPtr WindowOGL = DeviceOGL->VCreateWindow(800, 800, "Textures Sample", WindowType::Windowed);
 	if (WindowOGL == nullptr)
 	{
 		return 0;
@@ -48,29 +48,26 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Vertex Array
 
-	float* vert = new float[9];
-	vert[0] = -1.0f; vert[1] = 1.0f; vert[2] = 1.0f;
-	vert[3] = 0.0f; vert[4] = -1.0f; vert[5] = 1.0f;
-	vert[6] = 1.0f; vert[7] = 1.0f; vert[8] = 1.0f;
+	Vector2<float> vertices[3];
+	vertices[0] = Vector2<float>(0.0f, 1.0f);
+	vertices[1] = Vector2<float>(-1.0f, -1.0f);
+	vertices[2] = Vector2<float>(1.0f, -1.0f);
 
 	// Create vertex position buffer and fill with informations
-	VertexBufferPtr PositionBuffer =  DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float)* 9);
-	PositionBuffer->CopyFromSystemMemory(vert, 0, sizeof(float)* 9);
-	delete[] vert;
+	VertexBufferPtr PositionBuffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector2<float>) * 3);
+	PositionBuffer->CopyFromSystemMemory(vertices, 0, sizeof(Vector2<float>) * 3);
 
 	// Define buffer as vertexattribute for shaders
-	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(PositionBuffer, ComponentDatatype::Float, 3));
+	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(PositionBuffer, ComponentDatatype::Float, 2));
 
-
-	float* texcoor = new float[6];
-	texcoor[0] = 0.0f; texcoor[1] = 1.0f;
-	texcoor[2] = 0.5f; texcoor[3] = 0.0f;
-	texcoor[4] = 1.0f; texcoor[5] = 1.0f;
+	Vector2<float> texcoor[3];
+	texcoor[0] = Vector2<float>(0.5f, 1.0f);
+	texcoor[1] = Vector2<float>(0.0f, 0.0f);
+	texcoor[2] = Vector2<float>(1.0f, 0.0f);
 
 	// Create vertex texturecoodinate buffer and fill with informations
-	VertexBufferPtr TextureCoordBuffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float)* 6);
-	TextureCoordBuffer->CopyFromSystemMemory(texcoor, 0, sizeof(float)* 6);
-	delete[] texcoor;
+	VertexBufferPtr TextureCoordBuffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector2<float>) * 3);
+	TextureCoordBuffer->CopyFromSystemMemory(texcoor, 0, sizeof(Vector2<float>) * 3);
 
 	// Define buffer as vertexattribute for shaders
 	VertexBufferAttributePtr	TextureCoordAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(TextureCoordBuffer, ComponentDatatype::Float, 2));

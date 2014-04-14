@@ -9,7 +9,7 @@
 namespace Bow {
 	namespace Core {
 
-		/*struct IndicesUnsignedShort : IIndicesBase
+		struct IndicesUnsignedShort : IIndicesBase
 		{
 		public:
 			IndicesUnsignedShort();
@@ -17,7 +17,7 @@ namespace Bow {
 			~IndicesUnsignedShort();
 
 			const std::list<unsigned short> Values;
-		};*/
+		};
 
 	}
 }

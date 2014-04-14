@@ -21,9 +21,7 @@ namespace Bow {
 
 			Vector3()
 			{
-				x = 0;
-				y = 0;
-				y = 0;
+				x = y = z = 0;
 			}
 
 			Vector3(T _x, T _y, T _z)
@@ -63,12 +61,12 @@ namespace Bow {
 				z = x * other.y - y * other.x;
 			}
 
-			inline Vector3 Normalized() const
+			inline Vector3 Normalize() const
 			{
 				return (*this) / Length();
 			}
 
-			inline Vector3 Negated() const
+			inline Vector3 Negate() const
 			{
 				return Vector3(-x, -y, -z);
 			}
@@ -133,68 +131,17 @@ namespace Bow {
 		};
 		/*----------------------------------------------------------------*/
 
-		class Vector3LD : public Vector3<long double>
+		class FloatVector3 : public Vector3<float>
 		{
 		public:
-			Vector3LD()
+			FloatVector3()
 			{
 				x = 0.0;
 				y = 0.0;
 				z = 0.0;
 			}
 
-			Vector3LD(long double _x, long double _y, long double _z)
-			{
-				x = _x, y = _y, z = _z;
-			}
-		};
-		/*----------------------------------------------------------------*/
-
-		class Vector3D : public Vector3<double>
-		{
-		public:
-			Vector3D()
-			{
-				x = 0.0;
-				y = 0.0;
-				z = 0.0;
-			}
-
-			Vector3D(double _x, double _y, double _z)
-			{
-				x = _x, y = _y, z = _z;
-			}
-		};
-		/*----------------------------------------------------------------*/
-
-		class Vector3F : public Vector3<float>
-		{
-		public:
-			Vector3F()
-			{
-				x = 0.0;
-				y = 0.0;
-				z = 0.0;
-			}
-
-			Vector3F(float _x, float _y, float _z)
-			{
-				x = _x, y = _y, z = _z;
-			}
-		};
-		/*----------------------------------------------------------------*/
-
-		class Vector3I : public Vector3<int>
-		{
-		public:
-			Vector3I()
-			{
-				x = 0;
-				y = 0;
-				z = 0;
-			}
-
-			Vector3I(int _x, int _y, int _z)
+			FloatVector3(float _x, float _y, float _z)
 			{
 				x = _x, y = _y, z = _z;
 			}

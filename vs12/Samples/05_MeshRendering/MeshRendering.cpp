@@ -48,15 +48,29 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Vertex Array
 
-	Vector4F vertices[3];
-	vertices[0] = Vector4F(-1.0f,  1.0f, 1.0f);
-	vertices[1] = Vector4F( 0.0f, -1.0f, 1.0f);
-	vertices[2] = Vector4F( 1.0f,  1.0f, 1.0f);
+	Vector2<float> vertices[3];
+	vertices[1] = Vector2<float>(0.0f, 1.0f);
+	vertices[2] = Vector2<float>(-1.0f, -1.0f);
+	vertices[0] = Vector2<float>(1.0f, -1.0f);
+
+	Matrix2D<long double> mat;
+	mat.Translate(Vector2<float>(0.5, 0.0));
+	mat.Rotate(3.14*0.5);
+	auto invmat = mat.Inverse();
+
+	vertices[0] = mat * vertices[0];
+	vertices[1] = mat * vertices[1];
+	vertices[2] = mat * vertices[2];
+
+	vertices[0] = invmat * vertices[0];
+	vertices[1] = invmat * vertices[1];
+	vertices[2] = invmat * vertices[2];
 
 	// fill buffer with informations
-	VertexBufferPtr buffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector4F)*3);
-					buffer->CopyFromSystemMemory(vertices, 0, sizeof(Vector4F)*3);
-	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(buffer, ComponentDatatype::Float, 4));
+	VertexBufferPtr buffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector2<float>) * 3);
+					buffer->CopyFromSystemMemory(vertices, 0, sizeof(Vector2<float>) * 3);
+
+	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(buffer, ComponentDatatype::Float, 2));
 
 	// create VertexArray and connect buffer with location
 	VertexArrayPtr	vertexArray = ContextOGL->CreateVertexArray();

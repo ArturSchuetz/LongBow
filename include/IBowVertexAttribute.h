@@ -5,7 +5,7 @@
 namespace Bow {
 	namespace Core {
 
-		/*enum class VertexAttributeType : char
+		enum class VertexAttributeType : char
 		{
 			UnsignedByte,
 			Float,
@@ -49,7 +49,7 @@ namespace Bow {
 
 		public:
 			const std::list<T> Values;
-		};*/
+		};
 
 	}
 }

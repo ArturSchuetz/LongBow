@@ -5,3 +5,8 @@
 #include "BowVector2.h"
 #include "BowVector3.h"
 #include "BowVector4.h"
+
+#include "BowMatrix2x2.h"
+
+#include "BowMatrix2D.h"
+#include "BowMatrix3D.h"

@@ -21,9 +21,7 @@ namespace Bow {
 
 			Vector4()
 			{
-				x = 0;
-				y = 0;
-				y = 0;
+				x = y = z = 0;
 				w = 1;
 			}
 
@@ -65,12 +63,12 @@ namespace Bow {
 				w = 1.0f;
 			}
 
-			inline Vector4 Normalized() const
+			inline Vector4 Normalize() const
 			{
 				return (*this) / Length();
 			}
 
-			inline Vector4 Negated() const
+			inline Vector4 Negate() const
 			{
 				return Vector4(-x, -y, -z);
 			}
@@ -135,28 +133,10 @@ namespace Bow {
 		};
 		/*----------------------------------------------------------------*/
 
-		class Vector4LD : public Vector4<long double>
+		class FloatVector4 : public Vector4<float>
 		{
 		public:
-			Vector4LD()
-			{
-				x = 0.0;
-				y = 0.0;
-				y = 0.0;
-				w = 1.0;
-			}
-
-			Vector4LD(long double _x, long double _y, long double _z, long double _w = 1.0f)
-			{
-				x = _x, y = _y, z = _z, w = _w;
-			}
-		};
-		/*----------------------------------------------------------------*/
-
-		class Vector4D : public Vector4<double>
-		{
-		public:
-			Vector4D()
+			FloatVector4()
 			{
 				x = 0.0;
 				y = 0.0;
@@ -164,43 +144,7 @@ namespace Bow {
 				w = 1.0;
 			}
 
-			Vector4D(double _x, double _y, double _z, double _w = 1.0f)
-			{
-				x = _x, y = _y, z = _z, w = _w;
-			}
-		};
-		/*----------------------------------------------------------------*/
-
-		class Vector4F : public Vector4<float>
-		{
-		public:
-			Vector4F()
-			{
-				x = 0.0;
-				y = 0.0;
-				z = 0.0;
-				w = 1.0;
-			}
-
-			Vector4F(float _x, float _y, float _z, float _w = 1.0f)
-			{
-				x = _x, y = _y, z = _z, w = _w;
-			}
-		};
-		/*----------------------------------------------------------------*/
-
-		class Vector4I : public Vector4<int>
-		{
-		public:
-			Vector4I()
-			{
-				x = 0;
-				y = 0;
-				z = 0;
-				w = 1;
-			}
-
-			Vector4I(int _x, int _y, int _z, int _w = 1)
+			FloatVector4(float _x, float _y, float _z, float _w = 1.0f)
 			{
 				x = _x, y = _y, z = _z, w = _w;
 			}
