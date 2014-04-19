@@ -10,13 +10,10 @@ using namespace Renderer;
 
 std::string LoadShader(int name)
 {
-	DWORD size = 0;
-	const char* data = NULL;
-	HMODULE handle = ::GetModuleHandle(NULL);
-	HRSRC rc = ::FindResource(handle, MAKEINTRESOURCE(name), MAKEINTRESOURCE(SHADER));
-	HGLOBAL rcData = ::LoadResource(handle, rc);
-	size = ::SizeofResource(handle, rc);
-	return std::string(static_cast<const char*>(::LockResource(rcData)));
+	HMODULE handle	= GetModuleHandle(NULL);
+	HRSRC rc		= FindResource(handle, MAKEINTRESOURCE(name), MAKEINTRESOURCE(SHADER));
+	HGLOBAL rcData	= LoadResource(handle, rc);
+	return std::string(static_cast<const char*>(LockResource(rcData)));
 }
 
 int main()
@@ -52,19 +49,6 @@ int main()
 	vertices[1] = Vector2<float>(0.0f, 1.0f);
 	vertices[2] = Vector2<float>(-1.0f, -1.0f);
 	vertices[0] = Vector2<float>(1.0f, -1.0f);
-
-	Matrix2D<long double> mat;
-	mat.Translate(Vector2<float>(0.5, 0.0));
-	mat.Rotate(3.14*0.5);
-	auto invmat = mat.Inverse();
-
-	vertices[0] = mat * vertices[0];
-	vertices[1] = mat * vertices[1];
-	vertices[2] = mat * vertices[2];
-
-	vertices[0] = invmat * vertices[0];
-	vertices[1] = invmat * vertices[1];
-	vertices[2] = invmat * vertices[2];
 
 	// fill buffer with informations
 	VertexBufferPtr buffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector2<float>) * 3);

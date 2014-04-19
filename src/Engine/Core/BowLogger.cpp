@@ -1,4 +1,5 @@
 #include "BowLogger.h"
+
 #include <stdarg.h>
 #include <memory>
 #include <assert.h>

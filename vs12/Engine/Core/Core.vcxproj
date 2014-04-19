@@ -177,6 +177,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\Engine\Core\BowBasicTimer.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core\BowBitmap.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core\BowIndicesUnsignedInt.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core\BowIndicesUnsignedShort.cpp" />
@@ -185,6 +186,7 @@
     <ClCompile Include="..\..\..\src\Engine\Core\BowVertexAttributeFloatVec3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\include\BowBasicTimer.h" />
     <ClInclude Include="..\..\..\include\BowBitmap.h" />
     <ClInclude Include="..\..\..\include\BowCore.h" />
     <ClInclude Include="..\..\..\include\BowCorePredeclares.h" />

@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Interface Files">
       <UniqueIdentifier>{0c71cb84-f022-4a4a-8643-035154748a1f}</UniqueIdentifier>
     </Filter>
@@ -75,6 +71,9 @@
     <ClCompile Include="..\..\..\src\Engine\Core\BowIndicesUnsignedShort.cpp">
       <Filter>Source Files\Geometry\Indices</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Core\BowBasicTimer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\BowLogger.h">
@@ -133,6 +132,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\BowMatrix2x2.h">
       <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowBasicTimer.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

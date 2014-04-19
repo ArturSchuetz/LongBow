@@ -39,7 +39,7 @@ namespace Bow {
 			virtual WritePixelBufferPtr	VCreateWritePixelBuffer(PixelBufferHint usageHint, int sizeInBytes) = 0;
 
 			virtual Texture2DPtr		VCreateTexture2DFromFile(const std::string& Filename, bool generateMipmaps = false) = 0;
-			virtual Texture2DPtr		VCreateTexture2D(Bitmap dayBitmap, TextureFormat format, bool generateMipmaps = false) = 0;
+			virtual Texture2DPtr		VCreateTexture2D(Bitmap bitmap, TextureFormat format, bool generateMipmaps = false) = 0;
 			virtual Texture2DPtr		VCreateTexture2D(Texture2DDescription description) = 0;
 			virtual TextureSamplerPtr	VCreateTexture2DSampler(TextureMinificationFilter minificationFilter, TextureMagnificationFilter magnificationFilter, TextureWrap wrapS, TextureWrap wrapT, float maximumAnistropy = 1) = 0;
 		};

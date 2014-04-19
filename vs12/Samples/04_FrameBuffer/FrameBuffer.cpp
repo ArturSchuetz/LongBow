@@ -10,13 +10,10 @@ using namespace Renderer;
 
 std::string LoadShader(int name)
 {
-	DWORD size = 0;
-	const char* data = NULL;
-	HMODULE handle = ::GetModuleHandle(NULL);
-	HRSRC rc = ::FindResource(handle, MAKEINTRESOURCE(name), MAKEINTRESOURCE(SHADER));
-	HGLOBAL rcData = ::LoadResource(handle, rc);
-	size = ::SizeofResource(handle, rc);
-	return std::string(static_cast<const char*>(::LockResource(rcData)));
+	HMODULE handle = GetModuleHandle(NULL);
+	HRSRC rc = FindResource(handle, MAKEINTRESOURCE(name), MAKEINTRESOURCE(SHADER));
+	HGLOBAL rcData = LoadResource(handle, rc);
+	return std::string(static_cast<const char*>(LockResource(rcData)));
 }
 
 int main()
