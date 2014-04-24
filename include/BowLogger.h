@@ -54,7 +54,7 @@ namespace Bow
 	{
 		/**
 		* \~german
-		* \brief	EventLogger um Ereignisse innerhalb der Engine aufzuzeichnen
+		* \brief	Zeichnet die Ereignisse innerhalb der Engine auf.
 		*
 		* Der EvnetLogger ermöglicht verschiedene Ereignisse aufzuzeichnen und auf mehreren Ausgabeflächen gleichzeitig auszugeben.
 		* Jeder Logeintrag wird sofort in eine Datei gestreamt und alle Logs sind auch nach einem Absturz verfügbar.

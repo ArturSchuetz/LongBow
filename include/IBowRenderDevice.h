@@ -16,6 +16,10 @@ namespace Bow {
 			Fullscreen
 		};
 
+		/**
+		* \~german
+		* \todo Tessalation implementieren
+		**/
 		class IRenderDevice
 		{
 		public:
