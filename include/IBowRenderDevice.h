@@ -20,7 +20,7 @@ namespace Bow {
 		{
 		public:
 			IRenderDevice(void){};
-			virtual ~IRenderDevice(void){};
+			virtual ~IRenderDevice(void){}
 			virtual void VRelease(void) = 0;
 
 			// =========================================================================

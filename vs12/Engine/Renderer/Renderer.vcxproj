@@ -196,7 +196,6 @@
     <ClInclude Include="..\..\..\include\BowScissorTest.h" />
     <ClInclude Include="..\..\..\include\BowStencilTest.h" />
     <ClInclude Include="..\..\..\include\BowStencilTestFace.h" />
-    <ClInclude Include="..\..\..\include\BowTexture2DDescription.h" />
     <ClInclude Include="..\..\..\include\BowVertexArraySizes.h" />
     <ClInclude Include="..\..\..\include\BowVertexBufferAttribute.h" />
     <ClInclude Include="..\..\..\include\IBowColorAttachments.h" />

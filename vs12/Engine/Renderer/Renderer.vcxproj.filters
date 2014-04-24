@@ -86,9 +86,6 @@
     <ClInclude Include="..\..\..\include\BowStencilTestFace.h">
       <Filter>Header Files\Device\RenderStates</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\BowTexture2DDescription.h">
-      <Filter>Header Files\Device\Textures</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\IBowColorAttachments.h">
       <Filter>Header Files\Device\Context\FrameBuffer</Filter>
     </ClInclude>

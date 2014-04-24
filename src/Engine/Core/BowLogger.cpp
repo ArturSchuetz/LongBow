@@ -46,7 +46,6 @@ namespace Bow
 			return *Instance.get();
 		}
 
-		//! \brief Initialize log file.
 		void EventLogger::InitLogFile()
 		{
 			m_logStream.open("Log.txt", std::fstream::out);
@@ -76,6 +75,33 @@ namespace Bow
 			m_logStream.close();
 
 			m_initialized = false;
+		}
+
+
+		void EventLogger::LogTrace(const char* text, ...)
+		{
+			if (!IsInitialized())
+				return;
+
+			char buffer[MAX_DEBUG_LINE_LEN];
+
+			va_list args;
+			va_start(args, text);
+
+#if defined(WINVER) || defined(_XBOX)
+			int buf = _vsnprintf_s(buffer, MAX_DEBUG_LINE_LEN, text, args);
+#else
+			int buf = vsnprintf(buffer, MAX_DEBUG_LINE_LEN, text, args);
+#endif
+
+			assert((buf >= 0) && (buf < MAX_DEBUG_LINE_LEN));
+			va_end(args);
+
+			// Log output to debug windows and/or disk depending on options
+			char buffer2[MAX_DEBUG_LINE_LEN];
+			strcpy_s(buffer2, MAX_DEBUG_LINE_LEN, "TRACE: ");
+			strcpy_s(buffer2 + 7, MAX_DEBUG_LINE_LEN - 7, buffer);
+			LogOutput(buffer2);
 		}
 
 
@@ -156,9 +182,9 @@ namespace Bow
 			strcpy_s(buffer2 + 7, MAX_DEBUG_LINE_LEN - 7, buffer);
 			LogOutput(buffer2);
 #if defined(_WIN32)
-			MessageBox(NULL, buffer2, "LongBow - ERROR", MB_OK | MB_ICONERROR);
+			MessageBox(NULL, buffer, "LongBow - ERROR", MB_OK | MB_ICONERROR);
 #else
-			std::cerr << "An exception has occured: " << e.getFullDescription().c_str() << std::endl;
+			std::cerr << "An exception has occured: " << buffer << std::endl;
 #endif
 		}
 
@@ -187,10 +213,13 @@ namespace Bow
 
 			m_logStream << buffer << '\n';
 
+#ifdef _DEBUG
 			DebugOutput(buffer);
+#endif
 		}
 
 
+#ifdef _DEBUG
 		void EventLogger::DebugOutput(const char* buffer)
 		{
 #ifdef _WIN32
@@ -200,6 +229,7 @@ namespace Bow
 			OutputDebugString(buf);
 #endif
 		}
+#endif
 
 	}
 }

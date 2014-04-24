@@ -2,7 +2,6 @@
 #include "BowLogger.h"
 
 #include "BowOGLTextureSampler.h"
-#include "BowTexture2DDescription.h"
 
 #include "BowOGLTypeConverter.h"
 #include "BowOGLReadPixelBuffer.h"
@@ -172,14 +171,14 @@ namespace Bow {
 			OGLWritePixelBuffer::UnBind();
 			BindToLastTextureUnit();
 
-			glTexImage2D(m_target, 0,
-				OGLTypeConverter::To(description.GetTextureFormat()),
+			glTexImage2D( m_target, 0,
+				OGLTypeConverter::To( description.GetTextureFormat() ),
 				description.GetWidth(),
 				description.GetHeight(),
 				0,
-				OGLTypeConverter::TextureToPixelFormat(description.GetTextureFormat()),
-				OGLTypeConverter::TextureToPixelType(description.GetTextureFormat()),
-				nullptr);
+				OGLTypeConverter::TextureToPixelFormat( description.GetTextureFormat() ),
+				OGLTypeConverter::TextureToPixelType( description.GetTextureFormat() ),
+				nullptr );
 
 			//
 			// Default sampler, compatiable when attaching a non-mimapped 

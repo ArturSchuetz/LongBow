@@ -8,6 +8,8 @@ namespace Bow {
 		class IFramebuffer
 		{
 		public:
+			virtual ~IFramebuffer(){}
+
 			virtual Texture2DPtr	GetColorAttachment(int OutputLocation) const = 0;
 			virtual void			SetColorAttachment(int OutputLocation, Texture2DPtr texture) = 0;
 

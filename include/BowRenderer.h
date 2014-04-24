@@ -45,7 +45,6 @@
 
 #include "IBowTexture2D.h"
 #include "IBowTextureSampler.h"
-#include "BowTexture2DDescription.h"
 
 ////////////////////////////////////////////////////
 // FrameBuffer

@@ -10,7 +10,6 @@
 
 #include "BowOGLTexture2D.h"
 #include "BowOGLTextureSampler.h"
-#include "BowTexture2DDescription.h"
 
 #include "BowBitmap.h"
 

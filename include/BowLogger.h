@@ -6,18 +6,25 @@
 
 // Chose one of this LogLevels to define LOG_LEVEL
 #define LOG_LEVEL_ALL 0
-#define LOG_LEVEL_DEBUG 1
-#define LOG_LEVEL_WARNING 2
-#define LOG_LEVEL_ERROR 3
+#define LOG_LEVEL_TRACE 1
+#define LOG_LEVEL_DEBUG 2
+#define LOG_LEVEL_WARNING 3
+#define LOG_LEVEL_ERROR 4
 #define LOG_LEVEL_OFF 5
 
-// Low Loglevel means that less important logs will be displayed
+// Low Loglevel => Less important logs will be displayed.
 #ifndef LOG_LEVEL
 #ifdef _DEBUG
-#define LOG_LEVEL	LOG_LEVEL_DEBUG
+#define LOG_LEVEL	LOG_LEVEL_TRACE
 #else
 #define LOG_LEVEL	LOG_LEVEL_WARNING
 #endif
+#endif
+
+#if LOG_LEVEL <= LOG_LEVEL_TRACE
+#define LOG_TRACE	Bow::Core::EventLogger::GetInstance().LogTrace
+#else
+#define LOG_TRACE
 #endif
 
 #if LOG_LEVEL <= LOG_LEVEL_DEBUG
@@ -45,55 +52,107 @@ namespace Bow
 {
 	namespace Core
 	{
-		//! \brief EventLogger writes logs into the console and a textfile and handles assertions and error-MessageBoxes.
+		/**
+		* \~german
+		* \brief	EventLogger um Ereignisse innerhalb der Engine aufzuzeichnen
+		*
+		* Der EvnetLogger ermöglicht verschiedene Ereignisse aufzuzeichnen und auf mehreren Ausgabeflächen gleichzeitig auszugeben.
+		* Jeder Logeintrag wird sofort in eine Datei gestreamt und alle Logs sind auch nach einem Absturz verfügbar.
+		**/
 		class EventLogger
 		{
 		public:
 			~EventLogger();
 
-			//! \brief This avoids the creations of a new instance
-			//! If you are using the logger inside a dll, each module will create his own instance of the logger.
-			//! You have to give an instance of the logger into every dll.
-			static void SetInstance(EventLogger&);
+			/**
+			* \~german
+			* \brief	Diese Funktion sollte aufgerufen werden falls die geladene DLL in die selbe Log-Datei schreiben soll.
+			*			Wenn man mit Dynamic Link Libraries arbeitet, dann funktionieren Singletons nicht innerhalb der DLL und
+			*			es werden in jeder DLL eigene instanzen erstellt. Um das zu verhindern muss man die Instanz des Loggers
+			*			aus dem Programm in die DLL einschleusen. Mit dieser Funktion wird die Instanz des Singletons verändert.
+			*
+			* \param newInstance	Die neu zu setzende Instanz der Singleton
+			**/
+			static void SetInstance(EventLogger& newInstance);
 
-			//! \brief Singleton instance.
-			//! \return returns an instance or creates a new one
+			/**
+			* \~german
+			* \brief	Gibt dir die aktuelle instanz der Singleton oder erstellt eine neue Instanz falls diese Funktion zum ersten mal aufgerufen wurde.
+			*
+			* \return	Die Instanz des Singletons
+			**/
 			static EventLogger& GetInstance();
 
-			//! \brief Initialize log file.
-			void InitLogFile();
-
-			//! \brief Load File to stream into.
-			//! \param logName Path to new logfile which will be created
-			//! \return true if initialization succeeded
+			/**
+			* \~german
+			* \brief	Initialisiert den Logger und erstellt dabei eine Log-Datei.
+			*
+			* \param logName	Pfad zu der Logdatei in die geschrieben werden soll.
+			*
+			* \return	'true' wenn der Logger erfolgreich initialisiert wurde.
+			**/
 			bool Init(const char* logName);
 
-			//! \brief Release stream logfile.
+			/**
+			* \~german
+			* \brief	Befreit die Logdatei.
+			**/
 			void Release();
 
-			//! \brief Is the event logging system initialized.
-			//! \return true if the logfile is initialized
+			/**
+			* \~german
+			* \brief	Gibt auskunft darüber ob der Logger bereit ist.
+			*
+			* \return	'true' wenn die Logdatei initialisiert wurde.
+			**/
 			bool IsInitialized() { return m_initialized; }
 
-			//! \brief writes debug log into console and into the Logfile.
-			//! You should use debug log if you want to present informations for debugging purposes.
-			//! \param text logtext
-			void LogDebug(const char* text, ...);
+			/**
+			* \~german
+			* \brief	Schreibt etwas in die Log Datei und in jeden verfügbaren Output.
+			*
+			* \param text	Der Logtext der in die Die Datei und in die Konsole ausgegeben werden soll.
+			**/
+			inline void LogTrace(const char* text, ...);
 
-			//! \brief Informations which are not lead into a crash but maybe result in semantic errors.
-			//! \param text logtext
-			void LogWarning(const char* text, ...);
+			/**
+			* \~german
+			* \brief	Schreibt etwas in die Log Datei und in jeden verfügbaren Output.
+			*
+			* \param text	Der Logtext der in die Die Datei und in die Konsole ausgegeben werden soll.
+			**/
+			inline void LogDebug(const char* text, ...);
 
-			//! \brief An errormessage will be written into the log and into the console and also will be shown in a messagebox
-			//! \param text logtext
-			void LogError(const char* text, ...);
+			/**
+			* \~german
+			* \brief	Schreibt etwas in die Log Datei und in jeden verfügbaren Output.
+			*
+			* \param text	Der Logtext der in die Die Datei und in die Konsole ausgegeben werden soll.
+			**/
+			inline void LogWarning(const char* text, ...);
 
-			//! \brief An error which will do the same actions as logError but also triggers an assertion in debug.
-			//! \param contidion The assert will be triggered if the condition is false
-			//! \param file Filename where the assert is triggered
-			//! \param line	Line of code where the assert is triggered
-			//! \param description Brief descriptopn of the error
-			void LogAssert(bool contidion, const char* file, long line, const char* description);
+			/**
+			* \~german
+			* \brief	Schreibt etwas in die Log Datei und in jeden verfügbaren Output und zeigt zudem noch eine Fehler Messagebox an um den Nutzer über den Fehler zu informieren.
+			*
+			* \param text	Der Logtext der in die Die Datei und in die Konsole ausgegeben werden soll.
+			**/
+			inline void LogError(const char* text, ...);
+
+			/**
+			* \~german
+			* \brief	Schreibt etwas in die Log Datei und in jeden verfügbaren Output und zeigt zudem noch eine Fehler Messagebox an um den Nutzer über den Fehler zu informieren. 
+			*			Außerdem wird ein Assert ausgelöst und der Code stoppt an der Stelle.
+			*
+			* \param contidion	Bedingung unter der der Assert ausgelöst wurd: 'true' = Assert wird ausgelöst.
+			*
+			* \param file	Dateiname der Quellcode-Datei indem der Assert ausgelöst wurde
+			*
+			* \param line	Zeile des Quellcodes an dem der Assert ausgelöst wurde
+			*
+			* \param description	Beschreibung des Fehlers
+			**/
+			inline void LogAssert(bool contidion, const char* file, long line, const char* description);
 
 		protected:
 			EventLogger();
@@ -102,15 +161,34 @@ namespace Bow
 			EventLogger(const EventLogger&){}; // You shall not copy
 			EventLogger& operator=(const EventLogger&) { return *this; }
 
-			//! \brief Write an text into the console and into a logfile.
-			//! \param buffer text to log
-			//! \param flags flags
+			/**
+			* \~german
+			* \brief Initialisiert die Log Datei in die geschrieben wird.
+			*
+			* \~english
+			* \brief Initialize log file.
+			**/
+			void InitLogFile();
+
+			/**
+			* \~german
+			* \brief	Schreibt Text in die Textdatei und in die Konsole.
+			*
+			* \param buffer	Text der ausgegeben wird.
+			**/
 			void LogOutput(char* buffer);
 
-			//! \brief Outputs a text into the output
+#ifdef _DEBUG
+			/**
+			* \~german
+			* \brief	Schreibt Text in den Debug-Output von Visual Studio.
+			*
+			* \param buffer	Text der ausgegeben wird.
+			**/
 			void DebugOutput(const char* buffer);
+#endif
 
-			bool            m_initialized;	//!< True if the logger is ready		
+			bool            m_initialized;	//!< 'true' if the logger is ready		
 			std::ofstream   m_logStream;	//!< Logfile stream on Harddisk
 		};
 	}
