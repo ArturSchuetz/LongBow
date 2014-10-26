@@ -63,14 +63,16 @@ namespace Bow {
 				w = 1.0f;
 			}
 
-			inline Vector4 Normalize() const
+			inline void Normalize()
 			{
-				return (*this) / Length();
+				(*this) /= Length();
 			}
 
-			inline Vector4 Negate() const
+			inline void Negate() const
 			{
-				return Vector4(-x, -y, -z);
+				x = -x;
+				y = -y;
+				z = -z;
 			}
 
 			void operator += (const Vector4& other)
@@ -130,6 +132,12 @@ namespace Bow {
 			{
 				return x != other.x || y != other.y || z != other.z || w != other.w;
 			}
+
+			template <typename C>
+			inline operator Vector4<C>()
+			{
+				return Vector4<C>((C)x, (C)y, (C)z, (C)w);
+			}
 		};
 		/*----------------------------------------------------------------*/
 
@@ -147,6 +155,12 @@ namespace Bow {
 			FloatVector4(float _x, float _y, float _z, float _w = 1.0f)
 			{
 				x = _x, y = _y, z = _z, w = _w;
+			}
+
+			template <typename C>
+			FloatVector4(const Vector4<C>& other)
+			{
+				Set(other.x, other.y, other.z, other.w);
 			}
 		};
 		/*----------------------------------------------------------------*/

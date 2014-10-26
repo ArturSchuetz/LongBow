@@ -136,5 +136,8 @@
     <ClInclude Include="..\..\..\include\BowBasicTimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\BowRay.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

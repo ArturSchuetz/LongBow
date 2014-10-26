@@ -113,7 +113,7 @@ namespace Bow
 			*
 			* \param text	Der Logtext der in die Die Datei und in die Konsole ausgegeben werden soll.
 			**/
-			inline void LogTrace(const char* text, ...);
+			void LogTrace(const char* text, ...);
 
 			/**
 			* \~german
@@ -121,7 +121,7 @@ namespace Bow
 			*
 			* \param text	Der Logtext der in die Die Datei und in die Konsole ausgegeben werden soll.
 			**/
-			inline void LogDebug(const char* text, ...);
+			void LogDebug(const char* text, ...);
 
 			/**
 			* \~german
@@ -129,7 +129,7 @@ namespace Bow
 			*
 			* \param text	Der Logtext der in die Die Datei und in die Konsole ausgegeben werden soll.
 			**/
-			inline void LogWarning(const char* text, ...);
+			void LogWarning(const char* text, ...);
 
 			/**
 			* \~german
@@ -137,7 +137,7 @@ namespace Bow
 			*
 			* \param text	Der Logtext der in die Die Datei und in die Konsole ausgegeben werden soll.
 			**/
-			inline void LogError(const char* text, ...);
+			void LogError(const char* text, ...);
 
 			/**
 			* \~german
@@ -152,7 +152,7 @@ namespace Bow
 			*
 			* \param description	Beschreibung des Fehlers
 			**/
-			inline void LogAssert(bool contidion, const char* file, long line, const char* description);
+			void LogAssert(bool contidion, const char* file, long line, const char* description);
 
 		protected:
 			EventLogger();

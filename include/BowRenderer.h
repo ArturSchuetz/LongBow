@@ -60,3 +60,4 @@
 #include "IBowRenderContext.h"
 
 #include "BowRenderDeviceManager.h"
+#include "BowCamera.h"

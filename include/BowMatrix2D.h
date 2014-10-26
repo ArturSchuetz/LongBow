@@ -3,6 +3,7 @@
 #include "BowCorePredeclares.h"
 
 #include "BowVector2.h"
+#include "BowVector3.h"
 
 namespace Bow {
 	namespace Core {

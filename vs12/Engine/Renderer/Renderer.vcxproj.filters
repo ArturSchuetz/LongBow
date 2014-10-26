@@ -143,9 +143,15 @@
     <ClInclude Include="..\..\..\include\IBowRenderDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\BowCamera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\Engine\Renderer\BowRenderDeviceManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Renderer\BowCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

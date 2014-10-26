@@ -8,7 +8,7 @@
 using namespace Bow;
 using namespace Renderer;
 
-std::string LoadShader(int name)
+std::string LoadShaderFromResouce(int name)
 {
 	HMODULE handle	= GetModuleHandle(NULL);
 	HRSRC rc		= FindResource(handle, MAKEINTRESOURCE(name), MAKEINTRESOURCE(SHADER));
@@ -26,14 +26,14 @@ int main()
 	}
 
 	// Creating Window
-	GraphicsWindowPtr WindowOGL		= DeviceOGL->VCreateWindow(800, 600, "Textures Sample", WindowType::Windowed);
+	GraphicsWindowPtr WindowOGL		= DeviceOGL->VCreateWindow(800, 600, "Mesh Rendering Sample", WindowType::Windowed);
 	if (WindowOGL == nullptr)
 	{
 		return 0;
 	}
 
 	RenderContextPtr ContextOGL		= WindowOGL->VGetContext();
-	ShaderProgramPtr shaderProgram	= DeviceOGL->VCreateShaderProgram(LoadShader(IDS_VERTEXSHADER), LoadShader(IDS_FRAGMENTSHADER));
+	ShaderProgramPtr shaderProgram = DeviceOGL->VCreateShaderProgram(LoadShaderFromResouce(IDS_VERTEXSHADER), LoadShaderFromResouce(IDS_FRAGMENTSHADER));
 
 	///////////////////////////////////////////////////////////////////
 	// ClearState and Color
@@ -45,20 +45,32 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Vertex Array
 
-	Vector2<float> vertices[3];
-	vertices[1] = Vector2<float>(0.0f, 1.0f);
-	vertices[2] = Vector2<float>(-1.0f, -1.0f);
-	vertices[0] = Vector2<float>(1.0f, -1.0f);
+	Vector3<float> vertices[3];
+	vertices[1] = Vector3<float>(0.0f, 1.0f, 0.0f);
+	vertices[2] = Vector3<float>(-1.0f, -1.0f, 0.0f);
+	vertices[0] = Vector3<float>(1.0f, -1.0f, 0.0f);
 
 	// fill buffer with informations
-	VertexBufferPtr buffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector2<float>) * 3);
-					buffer->CopyFromSystemMemory(vertices, 0, sizeof(Vector2<float>) * 3);
+	VertexBufferPtr buffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector3<float>) * 3);
+					buffer->CopyFromSystemMemory(vertices, sizeof(Vector3<float>) * 3);
 
-	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(buffer, ComponentDatatype::Float, 2));
+	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(buffer, ComponentDatatype::Float, 3));
 
 	// create VertexArray and connect buffer with location
 	VertexArrayPtr	vertexArray = ContextOGL->CreateVertexArray();
 					vertexArray->SetAttribute(shaderProgram->GetVertexAttribute("in_Position")->Location, PositionAttribute);
+	
+	///////////////////////////////////////////////////////////////////
+	// Uniforms
+
+	float rosa[] = { 1.0f, 0.0f, 1.0f };
+	shaderProgram->SetUniformVector("u_color", rosa, 3);
+
+	Camera camera(WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
+	camera.SetViewLookAt(Vector3<float>(0.0f, 0.0f, 1.0f), Vector3<float>(0.0f, 0.0f, 0.0f), Vector3<float>(0.0f, 1.0f, 0.0f));
+
+	Core::Matrix3D<float> mat = camera.CalculateWorldViewProjection(nullptr);
+	shaderProgram->SetUniformMatrix("u_ModelViewProj", mat.a, 16);
 
 	///////////////////////////////////////////////////////////////////
 	// RenderState

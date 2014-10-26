@@ -121,7 +121,7 @@ namespace Bow {
 				}
 				else if (m_arrayLength > arrayLength)
 				{
-					LOG_ERROR("Übergebene Uniformsize ist als der reservierte Speicher. Der Rest wird mit Nullen aufgefüllt!");
+					LOG_ERROR("Übergebene Uniformsize ist kleiner als der reservierte Speicher. Der Rest wird mit Nullen aufgefüllt!");
 				}
 
 				if (!m_dirty)

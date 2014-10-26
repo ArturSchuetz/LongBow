@@ -54,14 +54,15 @@ namespace Bow {
 				return x * other.x + y * other.y;
 			}
 
-			inline Vector2 Normalize() const
+			inline void Normalize()
 			{
-				return (*this) / Length();
+				(*this) /= Length();
 			}
 
-			inline Vector2 Negate() const
+			inline void Negate()
 			{
-				return Vector2(-x, -y);
+				x = -x;
+				y = -y;
 			}
 
 			inline void operator += (const Vector2& other)
@@ -140,6 +141,11 @@ namespace Bow {
 				x = _x, y = _y;
 			}
 
+			template <typename C>
+			FloatVector2(const Vector2<C>& other)
+			{
+				Set(other.x, other.y);
+			}
 		};
 		/*----------------------------------------------------------------*/
 	}

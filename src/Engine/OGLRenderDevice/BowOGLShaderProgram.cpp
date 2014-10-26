@@ -356,19 +356,19 @@ namespace Bow {
 				case(UniformType::FloatMatrix33) :
 				case(UniformType::FloatMatrix34) :
 				case(UniformType::FloatMatrix44) :
-												 switch (type)
-				{
-												 case(OGLShaderProgram::PrimitiveDatatype::Float) :
-													 (std::dynamic_pointer_cast<OGLUniformF>(m_uniforms[name]))->SetValue(static_cast<float*>(val), arrayLength);
-													 break;
-												 case(OGLShaderProgram::PrimitiveDatatype::Int) :
-													 (std::dynamic_pointer_cast<OGLUniformF>(m_uniforms[name]))->SetValue(static_cast<int*>(val), arrayLength);
-													 break;
-												 case(OGLShaderProgram::PrimitiveDatatype::Uint) :
-													 (std::dynamic_pointer_cast<OGLUniformF>(m_uniforms[name]))->SetValue(static_cast<unsigned int*>(val), arrayLength);
-													 break;
-				}
-										 break;
+				switch (type)
+					{
+						case(OGLShaderProgram::PrimitiveDatatype::Float) :
+							(std::dynamic_pointer_cast<OGLUniformF>(m_uniforms[name]))->SetValue(static_cast<float*>(val), arrayLength);
+							break;
+						case(OGLShaderProgram::PrimitiveDatatype::Int) :
+							(std::dynamic_pointer_cast<OGLUniformF>(m_uniforms[name]))->SetValue(static_cast<int*>(val), arrayLength);
+							break;
+						case(OGLShaderProgram::PrimitiveDatatype::Uint) :
+							(std::dynamic_pointer_cast<OGLUniformF>(m_uniforms[name]))->SetValue(static_cast<unsigned int*>(val), arrayLength);
+							break;
+					}
+					break;
 				case(UniformType::Int) :
 				case(UniformType::IntVector2) :
 				case(UniformType::IntVector3) :
@@ -390,19 +390,19 @@ namespace Bow {
 				case(UniformType::UnsignedIntVector2) :
 				case(UniformType::UnsignedIntVector3) :
 				case(UniformType::UnsignedIntVector4) :
-													  switch (type)
-				{
-													  case(OGLShaderProgram::PrimitiveDatatype::Float) :
-														  (std::dynamic_pointer_cast<OGLUniformUI>(m_uniforms[name]))->SetValue(static_cast<float*>(val), arrayLength);
-														  break;
-													  case(OGLShaderProgram::PrimitiveDatatype::Int) :
-														  (std::dynamic_pointer_cast<OGLUniformUI>(m_uniforms[name]))->SetValue(static_cast<int*>(val), arrayLength);
-														  break;
-													  case(OGLShaderProgram::PrimitiveDatatype::Uint) :
-														  (std::dynamic_pointer_cast<OGLUniformUI>(m_uniforms[name]))->SetValue(static_cast<unsigned int*>(val), arrayLength);
-														  break;
-				}
-											   break;
+				switch (type)
+					{
+						case(OGLShaderProgram::PrimitiveDatatype::Float) :
+							(std::dynamic_pointer_cast<OGLUniformUI>(m_uniforms[name]))->SetValue(static_cast<float*>(val), arrayLength);
+							break;
+						case(OGLShaderProgram::PrimitiveDatatype::Int) :
+							(std::dynamic_pointer_cast<OGLUniformUI>(m_uniforms[name]))->SetValue(static_cast<int*>(val), arrayLength);
+							break;
+						case(OGLShaderProgram::PrimitiveDatatype::Uint) :
+							(std::dynamic_pointer_cast<OGLUniformUI>(m_uniforms[name]))->SetValue(static_cast<unsigned int*>(val), arrayLength);
+							break;
+					}
+					break;
 				default:
 					LOG_FATAL("UniformType does not exist!");
 					break;

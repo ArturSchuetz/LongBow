@@ -179,6 +179,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\include\BowBlending.h" />
     <ClInclude Include="..\..\..\include\BowBufferHint.h" />
+    <ClInclude Include="..\..\..\include\BowCamera.h" />
     <ClInclude Include="..\..\..\include\BowClearState.h" />
     <ClInclude Include="..\..\..\include\BowColorMask.h" />
     <ClInclude Include="..\..\..\include\BowComponentDatatype.h" />
@@ -215,6 +216,7 @@
     <ClInclude Include="..\..\..\include\IBowWritePixelBuffer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\Engine\Renderer\BowCamera.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Renderer\BowRenderDeviceManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

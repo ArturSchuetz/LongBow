@@ -8,7 +8,7 @@
 using namespace Bow;
 using namespace Renderer;
 
-std::string LoadShader(int name)
+std::string LoadShaderFromResouce(int name)
 {
 	HMODULE handle = GetModuleHandle(NULL);
 	HRSRC rc = FindResource(handle, MAKEINTRESOURCE(name), MAKEINTRESOURCE(SHADER));
@@ -26,14 +26,14 @@ int main()
 	}
 
 	// Creating Window
-	GraphicsWindowPtr WindowOGL = DeviceOGL->VCreateWindow(800, 600, "Textures Sample", WindowType::Windowed);
+	GraphicsWindowPtr WindowOGL = DeviceOGL->VCreateWindow(800, 600, "Framebuffer Sample", WindowType::Windowed);
 	if (WindowOGL == nullptr)
 	{
 		return 0;
 	}
 
 	RenderContextPtr ContextOGL = WindowOGL->VGetContext();
-	ShaderProgramPtr ShaderProgram = DeviceOGL->VCreateShaderProgram(LoadShader(IDS_VERTEXSHADER), LoadShader(IDS_FRAGMENTSHADER));
+	ShaderProgramPtr ShaderProgram = DeviceOGL->VCreateShaderProgram(LoadShaderFromResouce(IDS_VERTEXSHADER), LoadShaderFromResouce(IDS_FRAGMENTSHADER));
 
 	///////////////////////////////////////////////////////////////////
 	// ClearState and Color
@@ -55,8 +55,8 @@ int main()
 	vert[6] = 1.0f; vert[7] = 1.0f; vert[8] = 1.0f;
 
 	// fill buffer with informations
-	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float)* 9), ComponentDatatype::Float, 3));
-	PositionAttribute->GetVertexBuffer()->CopyFromSystemMemory(vert, 0, sizeof(float)* 9);
+	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float) * 9), ComponentDatatype::Float, 3));
+	PositionAttribute->GetVertexBuffer()->CopyFromSystemMemory(vert, 0, sizeof(float) * 9);
 	delete[] vert;
 
 	float* texcoor = new float[6];
@@ -64,8 +64,8 @@ int main()
 	texcoor[2] = 0.5f; texcoor[3] = 0.0f;
 	texcoor[4] = 1.0f; texcoor[5] = 1.0f;
 
-	VertexBufferAttributePtr TextureCoordAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float)* 6), ComponentDatatype::Float, 2));
-	TextureCoordAttribute->GetVertexBuffer()->CopyFromSystemMemory(texcoor, 0, sizeof(float)* 6);
+	VertexBufferAttributePtr TextureCoordAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float) * 6), ComponentDatatype::Float, 2));
+	TextureCoordAttribute->GetVertexBuffer()->CopyFromSystemMemory(texcoor, 0, sizeof(float) * 6);
 	delete[] texcoor;
 
 	// create VertexArray and connect buffer with location

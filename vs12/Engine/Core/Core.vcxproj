@@ -197,6 +197,7 @@
     <ClInclude Include="..\..\..\include\BowMatrix2D.h" />
     <ClInclude Include="..\..\..\include\BowMatrix2x2.h" />
     <ClInclude Include="..\..\..\include\BowMatrix3D.h" />
+    <ClInclude Include="..\..\..\include\BowRay.h" />
     <ClInclude Include="..\..\..\include\BowVector2.h" />
     <ClInclude Include="..\..\..\include\BowPrerequisites.h" />
     <ClInclude Include="..\..\..\include\BowVector3.h" />

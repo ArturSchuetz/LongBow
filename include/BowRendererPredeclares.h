@@ -4,6 +4,7 @@
 namespace Bow {
 	namespace Renderer{
 
+		class Camera;
 		class RenderDeviceManager;
 			enum class API : char;
 

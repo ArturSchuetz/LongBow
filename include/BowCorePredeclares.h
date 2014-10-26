@@ -11,6 +11,8 @@ namespace Bow {
 		class FloatVector3;
 		class FloatVector4;
 
+		class FloatRay3;
+
 		class FloatMatrix2x2;
 
 		class FloatMatrix2D;

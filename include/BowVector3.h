@@ -56,19 +56,21 @@ namespace Bow {
 
 			inline Vector3 CrossP(const Vector3& other) const
 			{
-				x = y * other.z - z * other.y;
-				y = z * other.x - x * other.z;
-				z = x * other.y - y * other.x;
+				return Vector3(	y * other.z - z * other.y,	// x
+								z * other.x - x * other.z,	// y
+								x * other.y - y * other.x); // z
 			}
 
-			inline Vector3 Normalize() const
+			inline void Normalize()
 			{
-				return (*this) / Length();
+				return (*this) /= Length();
 			}
 
-			inline Vector3 Negate() const
+			inline void Negate()
 			{
-				return Vector3(-x, -y, -z);
+				x = -x;
+				y = -y;
+				z = -z;
 			}
 
 			void operator += (const Vector3& other)
@@ -128,6 +130,12 @@ namespace Bow {
 			{
 				return x != other.x || y != other.y || z != other.z;
 			}
+
+			template <typename C>
+			inline operator Vector3<C>()
+			{
+				return Vector3<C>((C)x, (C)y, (C)z);
+			}
 		};
 		/*----------------------------------------------------------------*/
 
@@ -144,6 +152,12 @@ namespace Bow {
 			FloatVector3(float _x, float _y, float _z)
 			{
 				x = _x, y = _y, z = _z;
+			}
+
+			template <typename C>
+			FloatVector3(const Vector3<C>& other)
+			{
+				Set(other.x, other.y, other.z);
 			}
 		};
 		/*----------------------------------------------------------------*/

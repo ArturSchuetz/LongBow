@@ -188,7 +188,6 @@ namespace Bow
 #endif
 		}
 
-
 		void EventLogger::LogAssert(bool contidion, const char* file, long line, const char* description)
 		{
 			if (!contidion)
