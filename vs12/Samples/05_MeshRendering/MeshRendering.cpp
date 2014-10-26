@@ -26,7 +26,7 @@ int main()
 	}
 
 	// Creating Window
-	GraphicsWindowPtr WindowOGL		= DeviceOGL->VCreateWindow(800, 600, "Mesh Rendering Sample", WindowType::Windowed);
+	GraphicsWindowPtr WindowOGL		= DeviceOGL->VCreateWindow(400, 768, "Mesh Rendering Sample", WindowType::Windowed);
 	if (WindowOGL == nullptr)
 	{
 		return 0;
@@ -67,10 +67,7 @@ int main()
 	shaderProgram->SetUniformVector("u_color", rosa, 3);
 
 	Camera camera(WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
-	camera.SetViewLookAt(Vector3<float>(0.0f, 0.0f, 1.0f), Vector3<float>(0.0f, 0.0f, 0.0f), Vector3<float>(0.0f, 1.0f, 0.0f));
-
-	Core::Matrix3D<float> mat = camera.CalculateWorldViewProjection(nullptr);
-	shaderProgram->SetUniformMatrix("u_ModelViewProj", mat.a, 16);
+	camera.SetViewLookAt(Vector3<float>(0.0f, 0.0f, 5.0f), Vector3<float>(0.0f, 0.0f, 0.0f), Vector3<float>(0.0f, 1.0f, 0.0f));
 
 	///////////////////////////////////////////////////////////////////
 	// RenderState
@@ -85,6 +82,12 @@ int main()
 	while (!WindowOGL->VShouldClose())
 	{
 		ContextOGL->VClear(clearBlue);
+		
+		ContextOGL->VSetViewport(Viewport(0, 0, WindowOGL->VGetWidth(), WindowOGL->VGetHeight()));
+
+		camera.SetResolution(WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
+		Core::Matrix3D<float> mat = camera.CalculateWorldViewProjection(nullptr);
+		shaderProgram->SetUniformMatrix("u_ModelViewProj", mat.a, 16);
 
 		ContextOGL->VDraw(PrimitiveType::Triangles, vertexArray, shaderProgram, renderState);
 

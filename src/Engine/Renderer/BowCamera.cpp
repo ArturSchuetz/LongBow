@@ -5,48 +5,18 @@ namespace Bow
 {
 	namespace Renderer
 	{
-		Camera::Camera(unsigned int width, unsigned int height, double FOV)
+		Camera::Camera(unsigned int width, unsigned int height)
 		{
 			m_Width = width;
 			m_Height = height;
-			m_FOV = FOV;
+			m_FOV = 1.5707963267949f;
 			m_Mode = ProjectionMode::Perspective;
 
 			m_Near = 0.1f;
 			m_Far = 1000.0f;
 
+			dirty = true;
 			m_View.SetIdentity();
-			CalcPerspProjMatrix();
-		}
-		/*----------------------------------------------------------------*/
-
-		bool Camera::SetView(	const Core::Vector3<double>& right,
-								const Core::Vector3<double>& up,
-								const Core::Vector3<double>& direction,
-								const Core::Vector3<double>& position)
-		{
-
-			memset(&m_View, 0, sizeof(Core::Matrix3D<double>));
-			m_View._44 = 1.0f;
-
-			m_View._11 = right.x;
-			m_View._12 = right.y;
-			m_View._13 = right.z;
-			m_View._14 = -(right.DotP(position));
-
-			m_View._21 = up.x;
-			m_View._22 = up.y;
-			m_View._23 = up.z;
-			m_View._24 = -(up.DotP(position));
-
-			m_View._31 = direction.x;
-			m_View._32 = direction.y;
-			m_View._33 = direction.z;
-			m_View._34 = -(direction.DotP(position));
-
-			// view changed so recalculate combomatrix
-			CalcViewProjMatrix();
-			return  true;
 		}
 		/*----------------------------------------------------------------*/
 
@@ -101,6 +71,44 @@ namespace Bow
 		}
 		/*----------------------------------------------------------------*/
 
+		bool Camera::SetView(const Core::Vector3<double>& right,
+			const Core::Vector3<double>& up,
+			const Core::Vector3<double>& direction,
+			const Core::Vector3<double>& position)
+		{
+			memset(&m_View, 0, sizeof(Core::Matrix3D<double>));
+			m_View._44 = 1.0f;
+
+			m_View._11 = right.x;
+			m_View._12 = right.y;
+			m_View._13 = right.z;
+			m_View._14 = -(right.DotP(position));
+
+			m_View._21 = up.x;
+			m_View._22 = up.y;
+			m_View._23 = up.z;
+			m_View._24 = -(up.DotP(position));
+
+			m_View._31 = direction.x;
+			m_View._32 = direction.y;
+			m_View._33 = direction.z;
+			m_View._34 = -(direction.DotP(position));
+			return  true;
+		}
+		/*----------------------------------------------------------------*/
+
+		void Camera::SetResolution(unsigned int width, unsigned int height)
+		{
+			if (m_Width != width || m_Height != height)
+			{
+				m_Width = width;
+				m_Height = height;
+
+				dirty = true;
+			}
+		}
+		/*----------------------------------------------------------------*/
+
 		void Camera::SetClippingPlanes(double near, double far)
 		{
 			if (m_Near != near || m_Far != far)
@@ -120,38 +128,19 @@ namespace Bow
 					m_Far = m_Near + 1.0f;
 				}
 
-				// change orthogonal projection
-				double Q = 1.0f / (m_Far - m_Near);
-				double X = m_Near / (m_Near - m_Far);
-				m_OrthographicProjection._33 = Q;
-				m_OrthographicProjection._34 = X;
-
-				// change perspective projection
-				Q *= m_Far;
-				X = -Q * m_Near;
-				m_PerspectiveProjection._33 = Q;
-				m_PerspectiveProjection._34 = X;
+				dirty = true;
 			}
 		}
 		/*----------------------------------------------------------------*/
 
-		bool Camera::SetFOV(double FOV)
+		void Camera::SetFOV(double FOV)
 		{
-			if (FOV != m_FOV)
+			if (m_FOV != FOV)
 			{
 				m_FOV = FOV;
-				double sinFOV2 = sinf(m_FOV / 2);
 
-				if (fabs(sinFOV2) < 0.01f)
-					return false;
-
-				double cosFOV2 = cosf(m_FOV / 2);
-				double w = (m_Height / m_Width) * (cosFOV2 / sinFOV2);
-				double h = 1.0f  * (cosFOV2 / sinFOV2);
-				m_PerspectiveProjection._11 = w;
-				m_PerspectiveProjection._22 = h;
+				dirty = true;
 			}
-			return true;
 		}
 
 		void Camera::SetMode(ProjectionMode mode)
@@ -159,7 +148,8 @@ namespace Bow
 			if (m_Mode != mode)
 			{
 				m_Mode = mode;
-				CalcViewProjMatrix();
+
+				dirty = true;
 			}
 		}
 		/*----------------------------------------------------------------*/
@@ -247,23 +237,10 @@ namespace Bow
 			else
 				memcpy(&m_World, world, sizeof(Core::Matrix3D<double>));
 
-			// recalculate connected values
-			CalcViewProjMatrix();
+			if (dirty)
+				CalcPerspProjMatrix();
 
-			return m_ViewProjection * m_World;
-		}
-		/*----------------------------------------------------------------*/
-
-		void Camera::CalcViewProjMatrix()
-		{
-			Core::Matrix3D<double>* pProj;
-
-			if (m_Mode == ProjectionMode::Perspective)
-				pProj = &m_PerspectiveProjection;
-			else
-				pProj = &m_OrthographicProjection;
-
-			m_ViewProjection = (*pProj) * m_View;
+			return m_PerspectiveProjection * m_View * m_World;
 		}
 		/*----------------------------------------------------------------*/
 		
@@ -279,8 +256,8 @@ namespace Bow
 
 			double cosFOV2 = cosf(m_FOV / 2);
 
-			double w = ((float)m_Height / (float)m_Width) * (cosFOV2 / sinFOV2);
-			double h = 1.0f * (cosFOV2 / sinFOV2);
+			double w = ((double)m_Height / (double)m_Width) * (cosFOV2 / sinFOV2);
+			double h = 1.0f  * (cosFOV2 / sinFOV2);
 			double Q = m_Far / (m_Far - m_Near);
 
 			memset(&m_PerspectiveProjection, 0, sizeof(Core::Matrix3D<double>));
@@ -288,22 +265,9 @@ namespace Bow
 			m_PerspectiveProjection._22 = h;
 			m_PerspectiveProjection._33 = Q;
 			m_PerspectiveProjection._43 = 1.0f;
-			m_PerspectiveProjection._34 = -Q*m_Near;
+			m_PerspectiveProjection._34 = -Q * m_Near;
+			dirty = false;
 			return true;
-		}
-		/*----------------------------------------------------------------*/
-
-		/*
-		void Camera::CalcOrthoProjMatrix(double left, double right, double bottom, double top, double nearPlane, double farPlane)
-		{
-			memset(&m_OrthographicProjection, 0, sizeof(Core::Matrix3D<double>));
-			m_OrthographicProjection._11 = 2.0f / (right - left);
-			m_OrthographicProjection._22 = 2.0f / (top - bottom);
-			m_OrthographicProjection._33 = 2.0f / (farPlane - nearPlane);
-			m_OrthographicProjection._14 = -((left + right) / (right - left));
-			m_OrthographicProjection._24 = -((bottom + top) / (top - bottom));
-			m_OrthographicProjection._34 = -((farPlane + nearPlane) / (farPlane - nearPlane));
-			m_OrthographicProjection._44 = 1.0f;
 		}
 		/*----------------------------------------------------------------*/
 	}

@@ -16,20 +16,23 @@ namespace Bow {
 		class Camera
 		{
 		public:
-			Camera(unsigned int width, unsigned int height, double FOV = 90);
+			Camera(unsigned int width, unsigned int height);
 			~Camera(){}
+
+			// set look at matrix: from, at, world up
+			bool SetViewLookAt(const Core::Vector3<double>& cameraPosition, const Core::Vector3<double>& lookAtPoint, const Core::Vector3<double>& worldUp);
 
 			// set view matrix from cam's vRight, vUp, vDirection, vPosition
 			bool SetView(const Core::Vector3<double>& right, const Core::Vector3<double>& up, const Core::Vector3<double>& direction, const Core::Vector3<double>& position);
 
-			// set look at matrix: from, at, world up
-			bool SetViewLookAt(const Core::Vector3<double>& cameraPosition, const Core::Vector3<double>& lookAtPoint, const Core::Vector3<double>& worldUp);
+			// set width and height for projection
+			void SetResolution(unsigned int width, unsigned int height);
 
 			// set near and far clipping plane
 			void SetClippingPlanes(double near, double far);
 
 			// set field of view
-			bool SetFOV(double FOV);
+			void SetFOV(double FOV);
 
 			// set mode for stage n, 0:=3D(perspective), 1:=2D(orthogonal)
 			void SetMode(ProjectionMode mode);
@@ -44,9 +47,7 @@ namespace Bow {
 			Core::Matrix3D<double> CalculateWorldViewProjection(const Core::Matrix3D<double>* world);
 
 		private:
-			void    CalcViewProjMatrix();
 			bool	CalcPerspProjMatrix();
-			//void	CalcOrthoProjMatrix(double left, double right, double bottom, double top, double nearPlane, double farPlane);
 
 			unsigned int	m_Width,	// Screenwidth (or Viewport width)
 							m_Height;	// Screenheight (or Viewport height)
@@ -62,6 +63,8 @@ namespace Bow {
 									m_PerspectiveProjection,
 									m_OrthographicProjection,
 									m_ViewProjection;
+
+			bool dirty;
 		};
 	}
 }

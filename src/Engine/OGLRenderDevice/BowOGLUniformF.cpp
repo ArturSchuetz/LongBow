@@ -103,6 +103,7 @@ namespace Bow {
 				LOG_FATAL("UniformType does not exist!");
 				break;
 			}
+			m_dirty = false;
 		}
 
 	}
