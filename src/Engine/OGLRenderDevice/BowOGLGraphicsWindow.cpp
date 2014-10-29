@@ -7,13 +7,16 @@
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 
+#include <hash_map>
+
 namespace Bow {
 	namespace Renderer {
-
+		std::hash_map<GLFWwindow*, OGLGraphicsWindow*> g_Windows;
 
 		OGLGraphicsWindow::OGLGraphicsWindow() :
 			m_Context(nullptr)
 		{
+
 		}
 
 
@@ -27,12 +30,21 @@ namespace Bow {
 			// Creating Window with a cool custom deleter
 			m_Window = glfwCreateWindow(width, height, title.c_str(), monitor, NULL);
 
+			if (g_Windows.find(m_Window) == g_Windows.end())
+			{
+				g_Windows.insert(std::pair<GLFWwindow*, OGLGraphicsWindow*>(m_Window, this));
+			}
+
 			if (!m_Window)
 			{
 				glfwTerminate();
 				LOG_ERROR("Error while creating OpenGL-Window with glfw!");
 				return false;
 			}
+
+			glfwGetWindowSize(m_Window, &m_Width, &m_Height);
+
+			glfwSetWindowSizeCallback(m_Window, OGLGraphicsWindow::ResizeCallback);
 
 			m_Context = OGLRenderContextPtr(new OGLRenderContext(m_Window));
 
@@ -55,6 +67,10 @@ namespace Bow {
 				m_Context.reset();
 			}
 			glfwDestroyWindow(m_Window);
+			if (g_Windows.find(m_Window) != g_Windows.end())
+			{
+				g_Windows.erase(m_Window);
+			}
 			m_Window = nullptr;
 
 			LOG_DEBUG("OGLGraphicsWindow released");
@@ -69,17 +85,13 @@ namespace Bow {
 
 		int OGLGraphicsWindow::VGetWidth() const
 		{
-			int width, height;
-			glfwGetWindowSize(m_Window, &width, &height);
-			return width;
+			return m_Width;
 		}
 
 
 		int OGLGraphicsWindow::VGetHeight() const
 		{
-			int width, height;
-			glfwGetWindowSize(m_Window, &width, &height);
-			return height;
+			return m_Height;
 		}
 
 
@@ -88,5 +100,13 @@ namespace Bow {
 			return glfwWindowShouldClose(m_Window) != 0;
 		}
 
+		void OGLGraphicsWindow::ResizeCallback(GLFWwindow* window, int width, int height)
+		{
+			if (g_Windows.find(window) != g_Windows.end())
+			{
+				g_Windows[window]->m_Width = width;
+				g_Windows[window]->m_Height = height;
+			}
+		}
 	}
 }

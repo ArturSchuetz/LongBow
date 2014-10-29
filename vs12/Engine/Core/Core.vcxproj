@@ -182,6 +182,7 @@
     <ClCompile Include="..\..\..\src\Engine\Core\BowIndicesUnsignedInt.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core\BowIndicesUnsignedShort.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core\BowLogger.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Core\BowMesh.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core\BowVertexAttributeFloat.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core\BowVertexAttributeFloatVec3.cpp" />
   </ItemGroup>
@@ -197,6 +198,7 @@
     <ClInclude Include="..\..\..\include\BowMatrix2D.h" />
     <ClInclude Include="..\..\..\include\BowMatrix2x2.h" />
     <ClInclude Include="..\..\..\include\BowMatrix3D.h" />
+    <ClInclude Include="..\..\..\include\BowMesh.h" />
     <ClInclude Include="..\..\..\include\BowRay.h" />
     <ClInclude Include="..\..\..\include\BowVector2.h" />
     <ClInclude Include="..\..\..\include\BowPrerequisites.h" />

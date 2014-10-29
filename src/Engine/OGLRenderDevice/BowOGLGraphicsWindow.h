@@ -2,7 +2,6 @@
 #include "BowPrerequisites.h"
 
 #include "IBowGraphicsWindow.h"
-
 struct GLFWwindow;
 
 namespace Bow {
@@ -29,12 +28,17 @@ namespace Bow {
 			bool VShouldClose() const;
 
 		private:
+			static void ResizeCallback(GLFWwindow* window, int width, int height);
+
 			//you shall not copy
 			OGLGraphicsWindow(OGLGraphicsWindow&) : m_Context(nullptr){}
 			OGLGraphicsWindow& operator=(const OGLGraphicsWindow&) { return *this; }
 
 			OGLRenderContextPtr m_Context;
 			GLFWwindow			*m_Window;
+
+			int m_Width;
+			int m_Height;
 		};
 
 		typedef std::shared_ptr<OGLGraphicsWindow> OGLGraphicsWindowPtr;

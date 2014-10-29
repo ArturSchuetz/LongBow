@@ -240,6 +240,7 @@ namespace Bow
 			if (dirty)
 				CalcPerspProjMatrix();
 
+			// ToDo: calculate ViewProjection once and chache until next change
 			return m_PerspectiveProjection * m_View * m_World;
 		}
 		/*----------------------------------------------------------------*/
@@ -255,14 +256,11 @@ namespace Bow
 				return false;
 
 			double cosFOV2 = cosf(m_FOV / 2);
-
-			double w = ((double)m_Height / (double)m_Width) * (cosFOV2 / sinFOV2);
-			double h = 1.0f  * (cosFOV2 / sinFOV2);
 			double Q = m_Far / (m_Far - m_Near);
 
 			memset(&m_PerspectiveProjection, 0, sizeof(Core::Matrix3D<double>));
-			m_PerspectiveProjection._11 = w;
-			m_PerspectiveProjection._22 = h;
+			m_PerspectiveProjection._11 = ((double)m_Height / (double)m_Width) * (cosFOV2 / sinFOV2);
+			m_PerspectiveProjection._22 = 1.0f  * (cosFOV2 / sinFOV2);
 			m_PerspectiveProjection._33 = Q;
 			m_PerspectiveProjection._43 = 1.0f;
 			m_PerspectiveProjection._34 = -Q * m_Near;

@@ -225,7 +225,7 @@ namespace Bow {
 
 			LOG_ASSERT(!(viewport.width < 0 || viewport.height < 0), "The viewport width and height must be greater than or equal to zero.");
 
-			if (m_viewport.x != viewport.x || m_viewport.x != viewport.x || m_viewport.width != viewport.width || m_viewport.height != viewport.height)
+			if (m_viewport != viewport)
 			{
 				m_viewport = viewport;
 				glViewport(m_viewport.x, m_viewport.y, m_viewport.width, m_viewport.height);

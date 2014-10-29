@@ -4,13 +4,11 @@ namespace Bow
 {
 	namespace Core
 	{
-
 		BasicTimer::BasicTimer()
 		{
 			QueryPerformanceFrequency(&m_frequency);
 			Reset();
 		}
-
 
 		void BasicTimer::Reset()
 		{
@@ -19,7 +17,6 @@ namespace Bow
 			m_total = 0.0f;
 			m_delta = 1.0f / 60.0f;
 		}
-
 
 		void BasicTimer::Update()
 		{
@@ -46,17 +43,14 @@ namespace Bow
 			m_lastTime = m_currentTime;
 		}
 
-
 		float BasicTimer::GetTotal()
 		{
 			return m_total;
 		}
 
-
 		float BasicTimer::GetDelta()
 		{
 			return m_delta;
 		}
-
 	}
 }
