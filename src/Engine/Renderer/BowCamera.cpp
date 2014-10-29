@@ -9,13 +9,13 @@ namespace Bow
 		{
 			m_Width = width;
 			m_Height = height;
-			m_FOV = 1.5707963267949f;
+			m_FOV = 90.0f * M_PI / 360.0f;
 			m_Mode = ProjectionMode::Perspective;
 
 			m_Near = 0.1f;
 			m_Far = 1000.0f;
 
-			dirty = true;
+			CalcPerspProjMatrix();
 			m_View.SetIdentity();
 		}
 		/*----------------------------------------------------------------*/
@@ -93,6 +93,8 @@ namespace Bow
 			m_View._32 = direction.y;
 			m_View._33 = direction.z;
 			m_View._34 = -(direction.DotP(position));
+
+			m_ViewProjection = m_PerspectiveProjection * m_View;
 			return  true;
 		}
 		/*----------------------------------------------------------------*/
@@ -135,6 +137,7 @@ namespace Bow
 
 		void Camera::SetFOV(double FOV)
 		{
+			FOV *= M_PI / 360.0f; // degree to radian
 			if (m_FOV != FOV)
 			{
 				m_FOV = FOV;
@@ -154,22 +157,17 @@ namespace Bow
 		}
 		/*----------------------------------------------------------------*/
 
-		/*
-		Core::Ray<double> Camera::Transform2Dto3D(const Core::Vector2<double>& screenPosition) const
+		Core::Ray<double> Camera::Transform2Dto3D(const unsigned int screenX, const unsigned int screenY)
 		{
-			const Core::Matrix3D<double> *pView = NULL, *pProj = NULL;
+			if (dirty)
+				CalcPerspProjMatrix();
+
 			Core::Matrix3D<double> InvView;
 			Core::Vector3<double> vcS;
-			pView = &m_View;
-
-			if (m_Mode == ProjectionMode::Perspective)
-				pProj = &m_PerspectiveProjection;
-			else
-				pProj = &m_OrthographicProjection;
 
 			// resize to viewportspace [-1,1] -> projection
-			vcS.x = (((screenPosition.x * 2.0f) / m_Width) - 1.0f) / m_PerspectiveProjection._11;
-			vcS.y = -(((screenPosition.y * 2.0f) / m_Height) - 1.0f) / m_PerspectiveProjection._22;
+			vcS.x = ((((double)screenX * 2.0f) / m_Width) - 1.0f) / m_PerspectiveProjection._11;
+			vcS.y = -((((double)screenY * 2.0f) / m_Height) - 1.0f) / m_PerspectiveProjection._22;
 			vcS.z = 1.0f;
 
 			// invert view matrix
@@ -177,29 +175,22 @@ namespace Bow
 
 			// ray from screen to worldspace
 			Core::Ray<double> result;
-			result.Direction.x = (vcS.x * InvView._11)
-								+ (vcS.y * InvView._21)
-								+ (vcS.z * InvView._31);
-			result.Direction.y = (vcS.x * InvView._12)
-								+ (vcS.y * InvView._22)
-								+ (vcS.z * InvView._32);
-			result.Direction.z = (vcS.x * InvView._13)
-								+ (vcS.y * InvView._23)
-								+ (vcS.z * InvView._33);
+			result.Direction.x = (vcS.x * InvView._11) + (vcS.y * InvView._12) + (vcS.z * InvView._13);
+			result.Direction.y = (vcS.x * InvView._21) + (vcS.y * InvView._22) + (vcS.z * InvView._23);
+			result.Direction.z = (vcS.x * InvView._31) + (vcS.y * InvView._32) + (vcS.z * InvView._33);
 
 			// inverse translation.
-			result.Origin.x = InvView._41;
-			result.Origin.y = InvView._42;
-			result.Origin.z = InvView._43;
+			result.Origin.x = InvView._14;
+			result.Origin.y = InvView._24;
+			result.Origin.z = InvView._34;
 
 			// normalize
-			result.Origin.Normalize();
+			result.Direction.Normalize();
 			return result;
 		}
 		/*----------------------------------------------------------------*/
 
-		/*
-		Core::Vector2<double> Camera::Transform3Dto2D(const Core::Vector3<double> &worldPosition) const
+		Core::Vector2<double> Camera::Transform3Dto2D(const Core::Vector3<double> &worldPosition)
 		{
 			Core::Vector2<double> pt;
 			double fClip_x, fClip_y;
@@ -208,12 +199,12 @@ namespace Bow
 			fClip_x = (double)(m_Width >> 1);
 			fClip_y = (double)(m_Height >> 1);
 
-			fXp = (m_ViewProjection._11*worldPosition.x) + (m_ViewProjection._21*worldPosition.y)
-				+ (m_ViewProjection._31*worldPosition.z) + m_ViewProjection._41;
-			fYp = (m_ViewProjection._12*worldPosition.x) + (m_ViewProjection._22*worldPosition.y)
-				+ (m_ViewProjection._32*worldPosition.z) + m_ViewProjection._42;
-			fWp = (m_ViewProjection._14*worldPosition.x) + (m_ViewProjection._24*worldPosition.y)
-				+ (m_ViewProjection._34*worldPosition.z) + m_ViewProjection._44;
+			if (dirty)
+				CalcPerspProjMatrix();
+
+			fXp = (m_ViewProjection._11*worldPosition.x) + (m_ViewProjection._12*worldPosition.y) + (m_ViewProjection._13*worldPosition.z) + m_ViewProjection._14;
+			fYp = (m_ViewProjection._21*worldPosition.x) + (m_ViewProjection._22*worldPosition.y) + (m_ViewProjection._23*worldPosition.z) + m_ViewProjection._24;
+			fWp = (m_ViewProjection._41*worldPosition.x) + (m_ViewProjection._42*worldPosition.y) + (m_ViewProjection._43*worldPosition.z) + m_ViewProjection._44;
 
 			double fWpInv = 1.0f / fWp;
 
@@ -250,12 +241,12 @@ namespace Bow
 			if (fabs(m_Far - m_Near) < 0.01f)
 				return false;
 
-			double sinFOV2 = sinf(m_FOV / 2);
+			double sinFOV2 = (double)sinf(m_FOV / 2);
 
 			if (fabs(sinFOV2) < 0.01f)
 				return false;
 
-			double cosFOV2 = cosf(m_FOV / 2);
+			double cosFOV2 = (double)cosf(m_FOV / 2);
 			double Q = m_Far / (m_Far - m_Near);
 
 			memset(&m_PerspectiveProjection, 0, sizeof(Core::Matrix3D<double>));
@@ -264,6 +255,9 @@ namespace Bow
 			m_PerspectiveProjection._33 = Q;
 			m_PerspectiveProjection._43 = 1.0f;
 			m_PerspectiveProjection._34 = -Q * m_Near;
+
+			m_ViewProjection = m_PerspectiveProjection * m_View;
+
 			dirty = false;
 			return true;
 		}

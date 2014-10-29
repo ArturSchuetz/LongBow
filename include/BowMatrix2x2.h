@@ -35,8 +35,8 @@ namespace Bow {
 
 			inline void SetIdentity(void)
 			{
-				memset(this, 0, sizeof(Matrix2x2<T>));
-				_11 = _22 = 1;
+				memset(this, 0, sizeof(Matrix2x2));
+				_11 = _22 = (T)1;
 			}
 
 			inline void Set(T __11, T __12, T __21, T __22)
@@ -57,7 +57,7 @@ namespace Bow {
 
 			inline Matrix2x2 Inverse(void) const
 			{
-				return Adjugate() * (1.0 / Determinant());
+				return Adjugate() * ((T)1 / Determinant());
 			}
 
 			inline void Transpose(void)
@@ -87,8 +87,7 @@ namespace Bow {
 				return (*this) *= Matrix2x2(a, 0, 0, a);
 			}
 
-			template <typename C>
-			inline Matrix2x2 operator * (const Matrix2x2<C>& other) const
+			inline Matrix2x2 operator * (const Matrix2x2& other) const
 			{
 				return Matrix2x2(
 					_11 * other._11 + _12 * other._21,
@@ -98,8 +97,7 @@ namespace Bow {
 					);
 			}
 
-			template <typename C>
-			inline Vector2<T> operator * (const Vector2<C>& vector) const
+			inline Vector2<T> operator * (const Vector2<T>& vector) const
 			{
 				return Vector2<T>(
 					_11 * vector.x + _12 * vector.y,
@@ -107,8 +105,7 @@ namespace Bow {
 					);
 			}
 
-			template <typename C>
-			inline Matrix2x2 operator * (const C& scalar) const
+			inline Matrix2x2 operator * (const T& scalar) const
 			{
 				return Matrix2x2(
 					_11 * scalar, _12 * scalar,
@@ -116,8 +113,7 @@ namespace Bow {
 					);
 			}
 
-			template <typename C>
-			inline Matrix2x2 operator / (const C& scalar) const
+			inline Matrix2x2 operator / (const T& scalar) const
 			{
 				return Matrix2x2(
 					_11 / scalar, _12 / scalar,
@@ -125,8 +121,7 @@ namespace Bow {
 					);
 			}
 
-			template <typename C>
-			inline void operator *= (const Matrix2x2<C>& other)
+			inline void operator *= (const Matrix2x2& other)
 			{
 				Set(
 					_11 * other._11 + _12 * other._21,
@@ -136,8 +131,7 @@ namespace Bow {
 					);
 			}
 			
-			template <typename C>
-			inline void operator *= (const C& scalar)
+			inline void operator *= (const T& scalar)
 			{
 				Set(
 					_11 * scalar, _12 * scalar,
@@ -145,8 +139,7 @@ namespace Bow {
 					);
 			}
 
-			template <typename C>
-			inline void operator /= (const C& scalar)
+			inline void operator /= (const T& scalar)
 			{
 				Set(
 					_11 / scalar, _12 / scalar,
@@ -154,47 +147,20 @@ namespace Bow {
 					);
 			}
 
-			template <typename C>
-			inline bool operator == (const Matrix2x2<C>& other) const
+			inline bool operator == (const Matrix2x2& other) const
 			{
 				return _11 == other._11 && _12 == other._12 && _21 == other._21 && _22 == other._22;
 			}
 
-			template <typename C>
-			inline bool operator != (const Matrix2x2<C>& other) const
+			inline bool operator != (const Matrix2x2& other) const
 			{
 				return _11 != other._11 || _12 != other._12 || _21 != other._21 || _22 != other._22;
 			}
 
-			template <typename C>
+			template<typename C>
 			inline operator Matrix2x2<C>()
 			{
 				return Matrix2x2<C>((C)_11, (C)_12, (C)_21, (C)_22);
-			}
-		};
-		/*----------------------------------------------------------------*/
-
-		class FloatMatrix2x2 : public Matrix2x2<float>
-		{
-		public:
-			FloatMatrix2x2()
-			{
-				_11 = _22 = 1.0f;
-				_12 = _21 = 0.0f;
-			}
-
-			FloatMatrix2x2(float __11, float __12, float __21, float __22)
-			{
-				_11 = __11; _12 = __12;
-				_21 = __21;	_22 = __22;
-			}
-
-			FloatVector2 operator * (const FloatVector2& vector) const
-			{
-				return FloatVector2(
-					_11 * vector.x + _12 * vector.y,
-					_21 * vector.x + _22 * vector.y
-					);
 			}
 		};
 		/*----------------------------------------------------------------*/

@@ -4,6 +4,10 @@
 #include "BowCorePredeclares.h"
 #include "BowMath.h"
 
+#ifndef M_PI
+#define M_PI 3.1415926535f
+#endif
+
 namespace Bow {
 	namespace Renderer {
 
@@ -37,11 +41,11 @@ namespace Bow {
 			// set mode for stage n, 0:=3D(perspective), 1:=2D(orthogonal)
 			void SetMode(ProjectionMode mode);
 
-			// screen to worldray, give 2 vectors for output
-			//Core::Ray<double> Transform2Dto3D(const Core::Vector2<double>& screenPosition) const;
+			// screen to worldray, give ray for output
+			Core::Ray<double> Transform2Dto3D(const unsigned int screenX, const unsigned int screenY);
 
 			// cast world position to screen coordinates
-			//Core::Vector2<double> Transform3Dto2D(const Core::Vector3<double>& worldPosition) const;
+			Core::Vector2<double> Transform3Dto2D(const Core::Vector3<double>& worldPosition);
 
 			// get world view projection matrix or NULL
 			Core::Matrix3D<double> CalculateWorldViewProjection(const Core::Matrix3D<double>* world);

@@ -1,4 +1,5 @@
 #include "BowRenderer.h"
+#include "BowMath.h"
 
 #include <cstdint>
 #include <windows.h>
@@ -46,9 +47,9 @@ int main()
 	// Vertex Array
 
 	Vector3<float> vertices[3];
+	vertices[0] = Vector3<float>(1.0f, -1.0f, 0.0f);
 	vertices[1] = Vector3<float>(0.0f, 1.0f, 0.0f);
 	vertices[2] = Vector3<float>(-1.0f, -1.0f, 0.0f);
-	vertices[0] = Vector3<float>(1.0f, -1.0f, 0.0f);
 
 	// fill buffer with informations
 	VertexBufferPtr buffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector3<float>) * 3);
@@ -66,7 +67,8 @@ int main()
 	shaderProgram->SetUniform("u_color", Vector3<float>(1.0f, 0.0f, 1.0f));
 
 	Camera camera(WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
-	camera.SetViewLookAt(Vector3<float>(0.0f, 0.0f, 2.0f), Vector3<float>(0.0f, 0.0f, 0.0f), Vector3<float>(0.0f, 1.0f, 0.0f));
+	camera.SetViewLookAt(Vector3<float>(0.0f, 0.0f, 5.0f), Vector3<float>(0.0f, 0.0f, 0.0f), Vector3<float>(0.0f, 1.0f, 0.0f));
+	Vector2<double> screenPos = camera.Transform3Dto2D(Vector3<float>(0.0f, 1.0f, 0.0f));
 
 	///////////////////////////////////////////////////////////////////
 	// RenderState

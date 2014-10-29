@@ -76,7 +76,7 @@ namespace Bow {
 			inline Matrix2D Inverse(void) const
 			{
 				// http://negativeprobability.blogspot.de/2011/11/affine-transformations-and-their.html
-				Matrix2D inv = Adjugate() * (1.0 / Determinant());
+				Matrix2D inv = Adjugate() * ((T)1 / Determinant());
 				Vector2<T> Translation = inv * Vector2<T>(_13, _23);
 				inv._13 = -Translation.x;
 				inv._23 = -Translation.y;
@@ -88,13 +88,12 @@ namespace Bow {
 				Set(_11, _21, _31, _12, _22, _32, _13, _32, _33);
 			}
 
-			template <typename C>
-			inline void Translate(const Vector2<C>& vector)
+			inline void Translate(const Vector2<T>& vector)
 			{
 				(*this) *= Matrix2D(	
-					1, 0, vector.x,
-					0, 1, vector.y,
-					0, 0, 1
+					(T)1, (T)0, (T)vector.x,
+					(T)0, (T)1, (T)vector.y,
+					(T)0, (T)0, (T)1
 					);
 			}
 
@@ -106,20 +105,17 @@ namespace Bow {
 				return (*this) *= Matrix2D(Cos, -Sin, Sin, Cos);
 			}
 
-			template <typename C>
-			inline void Scale(const Vector2<C>& vector)
+			inline void Scale(const Vector2<T>& vector)
 			{
-				(*this) *= Matrix2D(vector.x, 0, 0, vector.y);
+				(*this) *= Matrix2D(vector.x, (T)0, (T)0, vector.y);
 			}
 
-			template <typename C>
-			inline void Scale(C a)
+			inline void Scale(T a)
 			{
-				(*this) *= Matrix2D(a, 0, 0, a);
+				(*this) *= Matrix2D(a, (T)0, (T)0, a);
 			}
 
-			template <typename C>
-			inline Matrix2D operator * (const Matrix2D<C>& other) const
+			inline Matrix2D operator * (const Matrix2D& other) const
 			{
 				return Matrix2D(
 					_11 * other._11 + _12 * other._21 + _13 * other._31,
@@ -137,8 +133,7 @@ namespace Bow {
 					);
 			}
 
-			template <typename C>
-			inline Vector2<T> operator * (const Vector2<C>& vector) const
+			inline Vector2<T> operator * (const Vector2<T>& vector) const
 			{
 				return Vector2<T>(
 					_11 * vector.x + _12 * vector.y + _13,
@@ -146,8 +141,7 @@ namespace Bow {
 				);
 			}
 
-			template <typename C>
-			inline Vector3<T> operator * (const Vector3<C>& vector) const
+			inline Vector3<T> operator * (const Vector3<T>& vector) const
 			{
 				return Vector3<T>(
 					_11 * vector.x + _12 * vector.y + _13 * vector.z,
@@ -156,8 +150,7 @@ namespace Bow {
 					);
 			}
 
-			template <typename C>
-			inline Matrix2D operator * (const C& scalar) const
+			inline Matrix2D operator * (const T& scalar) const
 			{
 				return Matrix2D(
 					_11 * scalar, _12 * scalar, _13 * scalar,
@@ -166,8 +159,7 @@ namespace Bow {
 					);
 			}
 
-			template <typename C>
-			inline Matrix2D operator / (const C& scalar) const
+			inline Matrix2D operator / (const T& scalar) const
 			{
 				return Matrix2D(
 					_11 / scalar, _12 / scalar, _13 / scalar,
@@ -176,8 +168,7 @@ namespace Bow {
 					);
 			}
 
-			template <typename C>
-			inline void operator *= (const Matrix2D<C>& other)
+			inline void operator *= (const Matrix2D& other)
 			{
 				Set(
 					_11 * other._11 + _12 * other._21 + _13 * other._31,
@@ -195,8 +186,7 @@ namespace Bow {
 					);
 			}
 			
-			template <typename C>
-			inline void operator *= (const C& scalar)
+			inline void operator *= (const T& scalar)
 			{
 				Set(
 					_11 * scalar, _12 * scalar, _13 * scalar,
@@ -205,8 +195,7 @@ namespace Bow {
 					);
 			}
 
-			template <typename C>
-			inline void operator /= (const C& scalar)
+			inline void operator /= (const T& scalar)
 			{
 				Set(
 					_11 / scalar, _12 / scalar, _13 / scalar,
@@ -215,47 +204,20 @@ namespace Bow {
 					);
 			}
 
-			template <typename C>
-			inline bool operator == (const Matrix2D<C>& other) const
+			inline bool operator == (const Matrix2D& other) const
 			{
 				return _11 == other._11 && _12 == other._12&& _13 == other._13 && _21 == other._21 && _22 == other._22 && _23 == other._23 && _31 == other._31 && _32 == other._32 && _33 == other._33;
 			}
 
-			template <typename C>
-			inline bool operator != (const Matrix2D<C>& other) const
+			inline bool operator != (const Matrix2D& other) const
 			{
 				return _11 != other._11 || _12 != other._12|| _13 != other._13 || _21 != other._21 || _22 != other._22 || _23 != other._23 || _31 != other._31 || _32 != other._32 || _33 != other._33;
 			}
 
-			template <typename C>
+			template<typename C>
 			inline operator Matrix2D<C>()
 			{
 				return Matrix2D<C>((C)_11, (C)_12, (C)_13, (C)_21, (C)_22, (C)_23, (C)_31, (C)_32, (C)_33);
-			}
-		};
-		/*----------------------------------------------------------------*/
-
-		class FloatMatrix2D : public Matrix2D<float>
-		{
-		public:
-			FloatMatrix2D()
-			{
-				_11 = _22 = 1.0f;
-				_12 = _21 = 0.0f;
-			}
-
-			FloatMatrix2D(float __11, float __12, float __21, float __22)
-			{
-				_11 = __11; _12 = __12;
-				_21 = __21;	_22 = __22;
-			}
-
-			inline FloatVector2 operator * (const FloatVector2& vector) const
-			{
-				return FloatVector2(
-					_11 * vector.x + _12 * vector.y,
-					_21 * vector.x + _22 * vector.y
-					);
 			}
 		};
 		/*----------------------------------------------------------------*/
