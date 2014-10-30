@@ -7,11 +7,11 @@
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 
-#include <hash_map>
+#include <unordered_map>
 
 namespace Bow {
 	namespace Renderer {
-		std::hash_map<GLFWwindow*, OGLGraphicsWindow*> g_Windows;
+		std::unordered_map<GLFWwindow*, OGLGraphicsWindow*> g_Windows;
 
 		OGLGraphicsWindow::OGLGraphicsWindow() :
 			m_Context(nullptr)

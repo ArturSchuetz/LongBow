@@ -42,6 +42,6 @@ namespace Bow {
 		};
 
 		typedef std::shared_ptr<OGLGraphicsWindow> OGLGraphicsWindowPtr;
-		typedef std::hash_map<int, OGLGraphicsWindowPtr> OGLGraphicsWindowMap;
+		typedef std::unordered_map<int, OGLGraphicsWindowPtr> OGLGraphicsWindowMap;
 	}
 }

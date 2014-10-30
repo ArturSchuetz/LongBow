@@ -15,8 +15,8 @@ namespace Bow
 			m_Near = 0.1f;
 			m_Far = 1000.0f;
 
-			CalcPerspProjMatrix();
 			m_View.SetIdentity();
+			CalcPerspProjMatrix();
 		}
 		/*----------------------------------------------------------------*/
 
@@ -77,7 +77,6 @@ namespace Bow
 			const Core::Vector3<double>& position)
 		{
 			memset(&m_View, 0, sizeof(Core::Matrix3D<double>));
-			m_View._44 = 1.0f;
 
 			m_View._11 = right.x;
 			m_View._12 = right.y;
@@ -89,10 +88,12 @@ namespace Bow
 			m_View._23 = up.z;
 			m_View._24 = -(up.DotP(position));
 
-			m_View._31 = direction.x;
+			m_View._34 = direction.x;
 			m_View._32 = direction.y;
 			m_View._33 = direction.z;
 			m_View._34 = -(direction.DotP(position));
+
+			m_View._44 = 1.0f;
 
 			m_ViewProjection = m_PerspectiveProjection * m_View;
 			return  true;
@@ -156,7 +157,7 @@ namespace Bow
 			}
 		}
 		/*----------------------------------------------------------------*/
-
+		
 		Core::Ray<double> Camera::Transform2Dto3D(const unsigned int screenX, const unsigned int screenY)
 		{
 			if (dirty)
@@ -192,15 +193,15 @@ namespace Bow
 
 		Core::Vector2<double> Camera::Transform3Dto2D(const Core::Vector3<double> &worldPosition)
 		{
+			if (dirty)
+				CalcPerspProjMatrix();
+
 			Core::Vector2<double> pt;
 			double fClip_x, fClip_y;
 			double fXp, fYp, fWp;
 
 			fClip_x = (double)(m_Width >> 1);
 			fClip_y = (double)(m_Height >> 1);
-
-			if (dirty)
-				CalcPerspProjMatrix();
 
 			fXp = (m_ViewProjection._11*worldPosition.x) + (m_ViewProjection._12*worldPosition.y) + (m_ViewProjection._13*worldPosition.z) + m_ViewProjection._14;
 			fYp = (m_ViewProjection._21*worldPosition.x) + (m_ViewProjection._22*worldPosition.y) + (m_ViewProjection._23*worldPosition.z) + m_ViewProjection._24;
@@ -216,23 +217,20 @@ namespace Bow
 		}
 		/*----------------------------------------------------------------*/
 
-		Core::Matrix3D<double> Camera::CalculateWorldViewProjection(const Core::Matrix3D<double>* world)
+		Core::Matrix3D<double> Camera::CalculateWorldViewProjection()
 		{
-			// set class attribute 'world matrix'
-			if (!world)
-			{
-				Core::Matrix3D<double> m;
-				m.SetIdentity();
-				memcpy(&m_World, &m, sizeof(Core::Matrix3D<double>));
-			}
-			else
-				memcpy(&m_World, world, sizeof(Core::Matrix3D<double>));
-
 			if (dirty)
 				CalcPerspProjMatrix();
 
-			// ToDo: calculate ViewProjection once and chache until next change
-			return m_PerspectiveProjection * m_View * m_World;
+			return m_ViewProjection;
+		}
+		
+		Core::Matrix3D<double> Camera::CalculateWorldViewProjection(const Core::Matrix3D<double>& world)
+		{
+			if (dirty)
+				CalcPerspProjMatrix();
+
+			return m_ViewProjection * world.Inverse();
 		}
 		/*----------------------------------------------------------------*/
 		
@@ -247,14 +245,18 @@ namespace Bow
 				return false;
 
 			double cosFOV2 = (double)cosf(m_FOV / 2);
+
+			double Aspect = (double)m_Height / (double)m_Width;
+			double w = Aspect * (cosFOV2 / sinFOV2);
+			double h = 1.0f  * (cosFOV2 / sinFOV2);
 			double Q = m_Far / (m_Far - m_Near);
 
 			memset(&m_PerspectiveProjection, 0, sizeof(Core::Matrix3D<double>));
-			m_PerspectiveProjection._11 = ((double)m_Height / (double)m_Width) * (cosFOV2 / sinFOV2);
-			m_PerspectiveProjection._22 = 1.0f  * (cosFOV2 / sinFOV2);
+			m_PerspectiveProjection._11 = w;
+			m_PerspectiveProjection._22 = h;
 			m_PerspectiveProjection._33 = Q;
 			m_PerspectiveProjection._43 = 1.0f;
-			m_PerspectiveProjection._34 = -Q * m_Near;
+			m_PerspectiveProjection._34 = -Q*m_Near;
 
 			m_ViewProjection = m_PerspectiveProjection * m_View;
 

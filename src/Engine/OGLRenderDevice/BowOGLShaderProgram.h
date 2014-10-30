@@ -17,7 +17,7 @@ namespace Bow {
 		class IOGLUniform;
 			enum class UniformType : char;
 		typedef std::shared_ptr<class IOGLUniform> OGLUniformPtr;
-		typedef std::hash_map<std::string, OGLUniformPtr> UniformMap;
+		typedef std::unordered_map<std::string, OGLUniformPtr> UniformMap;
 
 		class OGLShaderProgram : public IShaderProgram, public ICleanableObserver
 		{

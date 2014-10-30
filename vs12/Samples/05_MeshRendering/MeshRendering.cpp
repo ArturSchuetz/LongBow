@@ -67,8 +67,10 @@ int main()
 	shaderProgram->SetUniform("u_color", Vector3<float>(1.0f, 0.0f, 1.0f));
 
 	Camera camera(WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
-	camera.SetViewLookAt(Vector3<float>(0.0f, 0.0f, 5.0f), Vector3<float>(0.0f, 0.0f, 0.0f), Vector3<float>(0.0f, 1.0f, 0.0f));
-	Vector2<double> screenPos = camera.Transform3Dto2D(Vector3<float>(0.0f, 1.0f, 0.0f));
+	Vector3<float> Position = Vector3<float>(0.0f, 0.0f, -5.0f);
+	Vector3<float> LookAt = Vector3<float>(0.0f, 0.0f, 0.0f);
+	Vector3<float> UpVector = Vector3<float>(0.0f, 1.0f, 0.0f);
+	camera.SetViewLookAt(Position, LookAt, UpVector);
 
 	///////////////////////////////////////////////////////////////////
 	// RenderState
@@ -87,7 +89,8 @@ int main()
 		ContextOGL->VSetViewport(Viewport(0, 0, WindowOGL->VGetWidth(), WindowOGL->VGetHeight()));
 
 		camera.SetResolution(WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
-		shaderProgram->SetUniform("u_ModelViewProj", (Core::Matrix3D<float>)camera.CalculateWorldViewProjection(nullptr));
+
+		shaderProgram->SetUniform("u_ModelViewProj", (Core::Matrix3D<float>)camera.CalculateWorldViewProjection());
 
 		ContextOGL->VDraw(PrimitiveType::Triangles, vertexArray, shaderProgram, renderState);
 

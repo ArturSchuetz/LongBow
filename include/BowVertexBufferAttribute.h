@@ -7,7 +7,7 @@
 #include "BowComponentDatatype.h"
 #include "BowVertexArraySizes.h"
 
-#include <hash_map>
+#include <unordered_map>
 
 namespace Bow {
 	namespace Renderer{
@@ -75,6 +75,6 @@ namespace Bow {
 		};
 
 		typedef std::shared_ptr<VertexBufferAttribute> VertexBufferAttributePtr;
-		typedef std::hash_map<int, VertexBufferAttributePtr> VertexBufferAttributeMap;
+		typedef std::unordered_map<int, VertexBufferAttributePtr> VertexBufferAttributeMap;
 	}
 }

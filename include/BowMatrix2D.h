@@ -52,6 +52,7 @@ namespace Bow {
 
 			inline void Set(T __11, T __12, T __21, T __22)
 			{
+				memset(this, 0, sizeof(Matrix2D));
 				_11 = __11; _12 = __12;
 				_21 = __21;	_22 = __22;
 			}
@@ -78,8 +79,9 @@ namespace Bow {
 				// http://negativeprobability.blogspot.de/2011/11/affine-transformations-and-their.html
 				Matrix2D inv = Adjugate() * ((T)1 / Determinant());
 				Vector2<T> Translation = inv * Vector2<T>(_13, _23);
-				inv._13 = -Translation.x;
-				inv._23 = -Translation.y;
+				inv._13 = Translation.x;
+				inv._23 = Translation.y;
+				inv._33 = (T)1;
 				return inv;
 			}
 
@@ -97,8 +99,7 @@ namespace Bow {
 					);
 			}
 
-			template <typename C>
-			inline void Rotate(C a)
+			inline void Rotate(T a)
 			{
 				T Cos = (T)cos(a);
 				T Sin = (T)sin(a);
