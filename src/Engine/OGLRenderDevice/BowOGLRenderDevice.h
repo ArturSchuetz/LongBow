@@ -7,7 +7,7 @@ namespace Bow {
 	namespace Renderer {
 
 		typedef std::shared_ptr<class OGLGraphicsWindow> OGLGraphicsWindowPtr;
-		typedef std::hash_map<int, OGLGraphicsWindowPtr> OGLGraphicsWindowMap;
+		typedef std::unordered_map<int, OGLGraphicsWindowPtr> OGLGraphicsWindowMap;
 
 		class OGLRenderDevice : public IRenderDevice
 		{
@@ -52,7 +52,7 @@ namespace Bow {
 		};
 
 		typedef std::shared_ptr<OGLRenderDevice> OGLRenderDevicePtr;
-		typedef std::hash_map<int, OGLRenderDevice> OGLRenderDeviceMap;
+		typedef std::unordered_map<int, OGLRenderDevice> OGLRenderDeviceMap;
 
 	}
 }

@@ -73,6 +73,11 @@ namespace Bow {
 				z = -z;
 			}
 
+			inline Vector3 Negative() const
+			{
+				return Vector3(-x,-y,-z);
+			}
+
 			void operator += (const Vector3& other)
 			{
 				x += other.x;

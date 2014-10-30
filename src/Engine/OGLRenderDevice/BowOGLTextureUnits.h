@@ -25,7 +25,7 @@ namespace Bow {
 			void	SetSampler(int index, OGLTextureSamplerPtr sampler);
 
 		private:
-			std::hash_map<int, OGLTextureUnitPtr>	m_textureUnits;
+			std::unordered_map<int, OGLTextureUnitPtr>	m_textureUnits;
 			std::list<ICleanable*>					m_dirtyTextureUnits;
 			OGLTextureUnitPtr						m_lastTextureUnit;
 			int										m_numberOfTextureUnits;

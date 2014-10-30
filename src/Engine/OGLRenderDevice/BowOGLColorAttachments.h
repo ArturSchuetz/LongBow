@@ -15,7 +15,7 @@ namespace Bow {
 			bool				Dirty;
 		};
 
-		typedef std::hash_map<unsigned int, OGLColorAttachment> OGLColorAttachmentMap;
+		typedef std::unordered_map<unsigned int, OGLColorAttachment> OGLColorAttachmentMap;
 
 		class OGLColorAttachments : public IColorAttachments
 		{

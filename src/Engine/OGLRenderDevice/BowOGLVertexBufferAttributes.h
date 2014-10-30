@@ -12,7 +12,7 @@ namespace Bow {
 			bool Dirty;
 		};
 
-		typedef std::hash_map<int, OGLVertexBufferAttribute> OGLVertexBufferAttributeMap;
+		typedef std::unordered_map<int, OGLVertexBufferAttribute> OGLVertexBufferAttributeMap;
 
 		class OGLVertexBufferAttributes
 		{

@@ -13,7 +13,7 @@ namespace Bow
 	{
 		using namespace Core;
 
-		static std::hash_map<API, RenderDevicePtr> DeviceMap;
+		static std::unordered_map<API, RenderDevicePtr> DeviceMap;
 
 		// Function inside the DLL we want to call to create our Device-Object
 		extern "C"

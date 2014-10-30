@@ -92,7 +92,7 @@ namespace Bow {
 		};
 
 		typedef std::shared_ptr<IOGLUniform> OGLUniformPtr;
-		typedef std::hash_map<std::string, OGLUniformPtr> UniformMap;
+		typedef std::unordered_map<std::string, OGLUniformPtr> UniformMap;
 
 		template<class T>
 		class OGLUniform : public IOGLUniform
