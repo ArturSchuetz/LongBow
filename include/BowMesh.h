@@ -5,6 +5,8 @@
 #include "IBowIndicesBase.h"
 #include "IBowVertexAttribute.h"
 
+#include "BowMath.h"
+
 namespace Bow {
 	namespace Core {
 
@@ -13,14 +15,26 @@ namespace Bow {
 			friend class ResourceManager;
 
 		public:
+			struct Material
+			{
+				Vector4<float> ambient;
+				Vector4<float> diffuse;
+				Vector4<float> specular;
+				float shininess;        // [0 = min shininess, 1 = max shininess]
+				float alpha;            // [0 = fully transparent, 1 = fully opaque]
+			};
+
 			Mesh();
 			~Mesh();
 
 			IIndicesBase *Indices;
 			Vector3<float> *Positions;
 			Vector3<float> *Normals;
-			Vector3<float> *Tangents;
 			Vector2<float> *TextureCoords;
+			Vector4<float> *Tangents;
+
+			std::vector<SubMesh> SubMeshes;
+			std::vector<Material> Materials;
 
 			bool HasIndices() const { return m_HasIndices; }
 			bool HasPositions() const { return m_HasPositions; }
@@ -30,6 +44,7 @@ namespace Bow {
 
 			unsigned int GetNumberOfIndices(){ return m_NumberOfIndices; }
 			unsigned int GetNumberOfVertices(){ return m_NumberOfVertices; }
+			unsigned int GetNumberOfSubmeshes(){ return m_NumberOfSubMeshes; }
 
 		private:
 			bool m_HasIndices;
@@ -40,6 +55,7 @@ namespace Bow {
 
 			unsigned int m_NumberOfIndices;
 			unsigned int m_NumberOfVertices;
+			unsigned int m_NumberOfSubMeshes;
 
 			float m_Center[3];
 			float m_Width;

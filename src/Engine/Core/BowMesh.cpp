@@ -17,6 +17,12 @@ namespace Bow {
 
 			m_Center[0] = m_Center[1] = m_Center[2] = 0.0f;
 			m_Width = m_Height = m_Length = m_Radius = 0.0f;
+
+			Indices = nullptr;
+			Positions = nullptr;
+			Normals = nullptr;
+			Tangents = nullptr;
+			TextureCoords = nullptr;
 		}
 
 		Mesh::~Mesh()
@@ -25,8 +31,11 @@ namespace Bow {
 
 			delete[] Positions;
 			delete[] Normals;
-			delete[] Tangents;
 			delete[] TextureCoords;
+			delete[] Tangents;
+
+			SubMeshes.clear();
+			Materials.clear();
 		}
 	}
 }

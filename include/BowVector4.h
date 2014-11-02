@@ -30,6 +30,14 @@ namespace Bow {
 				x = _x, y = _y, z = _z, w = _w;
 			}
 
+			Vector4(const T* _a)
+			{
+				x = _a[0];
+				y = _a[1];
+				z = _a[2];
+				w = _a[3];
+			}
+
 			inline void Set(T _x, T _y, T _z, T _w = 1)
 			{
 				x = _x, y = _y, z = _z, w = _w;

@@ -37,6 +37,7 @@ namespace Bow {
 
 		MeshPtr ResourceManager::LoadOBJ(const std::string& path)
 		{
+			// OBJ is just for test and performance is not important
 			ModelLoaderOBJ loader;
 			if (loader.import(path.c_str(), false))
 			{
@@ -101,11 +102,26 @@ namespace Bow {
 				if (loader.hasTangents())
 				{
 					mesh->m_HasTangents = true;
-					mesh->Tangents = new Vector3<float>[loader.getNumberOfVertices()];
+					mesh->Tangents = new Vector4<float>[loader.getNumberOfVertices()];
 					for (int i = 0; i < loader.getNumberOfVertices(); ++i)
 					{
-						mesh->Tangents[i] = Vector3<float>((loader.getVertexBuffer())[i].tangent);
+						mesh->Tangents[i] = Vector4<float>((loader.getVertexBuffer())[i].tangent);
 					}
+				}
+
+				// Submeshes and Materials
+				mesh->m_NumberOfSubMeshes = loader.getNumberOfMeshes();
+				for (int i = 0; i < loader.getNumberOfMeshes(); ++i)
+				{
+					Mesh::Material Material = Mesh::Material();
+					Material.ambient = loader.getMesh(i).pMaterial->ambient;
+					Material.diffuse = loader.getMesh(i).pMaterial->diffuse;
+					Material.specular = loader.getMesh(i).pMaterial->specular;
+					Material.shininess = loader.getMesh(i).pMaterial->shininess;
+					Material.alpha = loader.getMesh(i).pMaterial->alpha;
+
+					mesh->SubMeshes.push_back(SubMesh(mesh, loader.getMesh(i).startIndex, loader.getMesh(i).triangleCount, mesh->Materials.size()));
+					mesh->Materials.push_back(Material);
 				}
 
 				return MeshPtr(mesh);

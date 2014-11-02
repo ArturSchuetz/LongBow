@@ -185,7 +185,14 @@ namespace Bow {
 
 			if (oglIndexBuffer != nullptr)
 			{
-				glDrawRangeElements(OGLTypeConverter::To(primitiveType), 0, oglVertexArray->MaximumArrayIndex(), oglIndexBuffer->GetCount(), OGLTypeConverter::To(oglIndexBuffer->GetDatatype()), 0);
+				if (offset == 0 && count == oglVertexArray->MaximumArrayIndex() + 1)
+				{
+					glDrawRangeElements(OGLTypeConverter::To(primitiveType), 0, oglVertexArray->MaximumArrayIndex(), oglIndexBuffer->GetCount(), OGLTypeConverter::To(oglIndexBuffer->GetDatatype()), 0);
+				}
+				else
+				{
+					glDrawRangeElements(OGLTypeConverter::To(primitiveType), 0, oglVertexArray->MaximumArrayIndex(), count, OGLTypeConverter::To(oglIndexBuffer->GetDatatype()), (void*)(offset*sizeof(unsigned int)));
+				}
 			}
 			else
 			{

@@ -9,16 +9,24 @@ namespace Bow
 
 		class SubMesh
 		{
-			friend class Model;
-			friend class ModelLoaderOBJ;
+			friend class ResourceManager;
+
 		public:
 			~SubMesh();
 
-		private:
-			SubMesh(){}				// I don't want anybody to create submeshes without parents
-			SubMesh(Mesh* parent);	// also I don't want anybody to add a single submesh to multiple parent meshes
+			const int StartIndex;
+			const int TriangleCount;
 
-			Mesh* m_Parent;
+			const int MaterialID;
+			const Mesh* Parent;
+
+		private:
+			SubMesh(Mesh* parent, int startIndex, int triangleCount, int material) :
+				Parent(parent),
+				StartIndex(startIndex),
+				TriangleCount(triangleCount),
+				MaterialID(material)
+			{} // I don't want anybody to create submeshes without parents
 		};
 
 	}
