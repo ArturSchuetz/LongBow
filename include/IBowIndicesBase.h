@@ -13,18 +13,16 @@ namespace Bow {
 
 		class IIndicesBase
 		{
-		public:
-			IIndicesBase(IndicesType type) : m_type(type) {}
-			virtual ~IIndicesBase() = 0;
-
-
-			virtual IndicesType GetDatatype()
+		protected:
+			IIndicesBase(IndicesType type) : Type(type)
 			{
-				return m_type;
 			}
 
-		private:
-			const IndicesType m_type;
+		public:
+			virtual ~IIndicesBase(){}
+
+		public:
+			const IndicesType Type;
 		};
 
 	}

@@ -44,7 +44,7 @@ namespace Bow {
 			}
 			else
 			{
-				LOG_DEBUG("GLEW sucessfully initialized!");
+				LOG_TRACE("GLEW sucessfully initialized!");
 			}
 
 			float clearColor[4];
@@ -68,11 +68,11 @@ namespace Bow {
 			glfwGetFramebufferSize(m_window, &width, &height);
 			VSetViewport(Viewport(0, 0, width, height));
 
-			LOG_DEBUG("OpenGL-Context sucessfully initialized!");
+			LOG_TRACE("OpenGL-Context sucessfully initialized!");
 
 			//Checking GL version
 			const GLubyte *GLVersionString = glGetString(GL_VERSION);
-			LOG_DEBUG("Using GL_VERSION: %s", GLVersionString);
+			LOG_TRACE("Using GL_VERSION: %s", GLVersionString);
 
 			m_initialized = true;
 			return m_initialized;
@@ -89,17 +89,17 @@ namespace Bow {
 		{
 			m_initialized = false;
 			m_window = nullptr;
-			LOG_DEBUG("OGLRenderContext released");
+			LOG_TRACE("OGLRenderContext released");
 		}
 
 
-		VertexArrayPtr OGLRenderContext::CreateVertexArray()
+		VertexArrayPtr OGLRenderContext::VCreateVertexArray()
 		{
 			return VertexArrayPtr(new OGLVertexArray());
 		}
 
 
-		FramebufferPtr OGLRenderContext::CreateFramebuffer()
+		FramebufferPtr OGLRenderContext::VCreateFramebuffer()
 		{
 			return OGLFramebufferPtr(new OGLFramebuffer());
 		}
@@ -185,8 +185,7 @@ namespace Bow {
 
 			if (oglIndexBuffer != nullptr)
 			{
-				LOG_FATAL("Not Implementet");
-				//glDrawRangeElements(OGLTypeConverter::To(primitiveType), 0, oglVertexArray->MaximumArrayIndex(), count, OGLTypeConverter::To(oglIndexBuffer->GetDatatype()), offset * VertexArraySizes::SizeOf(oglIndexBuffer->GetDatatype()));
+				glDrawRangeElements(OGLTypeConverter::To(primitiveType), 0, oglVertexArray->MaximumArrayIndex(), oglIndexBuffer->GetCount(), OGLTypeConverter::To(oglIndexBuffer->GetDatatype()), 0);
 			}
 			else
 			{

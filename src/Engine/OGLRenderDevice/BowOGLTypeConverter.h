@@ -1,5 +1,6 @@
 #pragma once
 #include "BowPrerequisites.h"
+#include "BowCorePredeclares.h"
 #include "BowRendererPredeclares.h"
 
 namespace Bow {
@@ -18,6 +19,7 @@ namespace Bow {
 			static UniformType					ToActiveUniformType(GLenum type);
 
 			// Index and Vertex Buffer
+			static GLenum						To(IndexBufferDatatype type);
 			static BufferHint					ToBufferHint(GLenum hint);
 			static GLenum						To(BufferHint hint);
 			static GLenum						To(ComponentDatatype type);

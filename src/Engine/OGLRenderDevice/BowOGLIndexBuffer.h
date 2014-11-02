@@ -3,6 +3,7 @@
 
 #include "IBowIndexBuffer.h"
 #include "BowOGLBuffer.h"
+#include "BowIndexBufferDatatype.h"
 
 namespace Bow {
 	namespace Renderer {
@@ -10,7 +11,7 @@ namespace Bow {
 		class OGLIndexBuffer : public IIndexBuffer
 		{
 		public:
-			OGLIndexBuffer(BufferHint usageHint, int sizeInBytes);
+			OGLIndexBuffer(BufferHint usageHint, IndexBufferDatatype dataType, int sizeInBytes);
 			~OGLIndexBuffer();
 
 			void Bind();
@@ -22,9 +23,11 @@ namespace Bow {
 
 			int GetSizeInBytes();
 			BufferHint GetUsageHint();
+			IndexBufferDatatype GetDatatype() { return m_Datatype; }
 
 		private:
 			OGLBuffer	m_bufferObject;
+			IndexBufferDatatype m_Datatype;
 		};
 
 		typedef std::shared_ptr<OGLIndexBuffer> OGLIndexBufferPtr;

@@ -1,5 +1,6 @@
 #pragma once
 #include "BowPrerequisites.h"
+#include "IBowRenderContext.h" // For WindingOrder
 
 namespace Bow {
 	namespace Renderer{
@@ -9,12 +10,6 @@ namespace Bow {
 			Front,
 			Back,
 			FrontAndBack
-		};
-
-		enum class WindingOrder : char
-		{
-			Clockwise,
-			Counterclockwise
 		};
 
 		struct FaceCulling

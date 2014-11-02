@@ -70,7 +70,7 @@ int main()
 	VertexBufferAttributePtr	TextureCoordAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(TextureCoordBuffer, ComponentDatatype::Float, 2));
 
 	// create VertexArray and connect attributeBuffers with location
-	VertexArrayPtr VertexArray = ContextOGL->CreateVertexArray();
+	VertexArrayPtr VertexArray = ContextOGL->VCreateVertexArray();
 	VertexArray->SetAttribute(ShaderProgram->GetVertexAttribute("in_Position")->Location, PositionAttribute);
 	VertexArray->SetAttribute(ShaderProgram->GetVertexAttribute("in_TexCoord")->Location, TextureCoordAttribute);
 

@@ -4,20 +4,22 @@ namespace Bow {
 	namespace Core {
 		
 		class Bitmap;
+		class Mesh;
+			typedef std::shared_ptr<Mesh> MeshPtr;
+		class SubMesh;
+			typedef std::shared_ptr<SubMesh> SubMeshPtr;
+		class ResourceManager;
+
+		template<class T>
+		class Vector2;
+		template<class T>
+		class Vector3;
+		template<class T>
+		class Vector4;
+
 		class EventLogger;
 
-		// MATH
-		class FloatVector2;
-		class FloatVector3;
-		class FloatVector4;
-
-		class FloatRay3;
-
-		class FloatMatrix2x2;
-
-		class FloatMatrix2D;
-		class FloatMatrix3D;
-
+		enum class IndicesType : char;
 		struct IndicesUnsignedInt;
 		struct IndicesUnsignedShort;
 		struct VertexAttributeFloat;

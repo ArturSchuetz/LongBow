@@ -60,6 +60,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "05_MeshRendering", "Samples
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "06_RayTracing", "Samples\06_RayTracing\06_RayTracing.vcxproj", "{04ECEA22-9CB4-4E34-B90A-DC4A962C6708}"
+	ProjectSection(ProjectDependencies) = postProject
+		{88880C42-EC11-4BCA-B4FA-732BFB0CFBEF} = {88880C42-EC11-4BCA-B4FA-732BFB0CFBEF}
+		{D1B3D672-1304-4EA4-8DEB-095D0656E932} = {D1B3D672-1304-4EA4-8DEB-095D0656E932}
+		{CD04AAD2-418F-4F66-9F61-9766DF21B1B9} = {CD04AAD2-418F-4F66-9F61-9766DF21B1B9}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

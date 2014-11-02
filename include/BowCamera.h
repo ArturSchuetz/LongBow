@@ -36,7 +36,7 @@ namespace Bow {
 			void SetClippingPlanes(double near, double far);
 
 			// set field of view
-			void SetFOV(double FOV);
+			void SetFOV(float FOV);
 
 			// set mode for stage n, 0:=3D(perspective), 1:=2D(orthogonal)
 			void SetMode(ProjectionMode mode);
@@ -58,8 +58,8 @@ namespace Bow {
 							m_Height;	// Screenheight (or Viewport height)
 
 			double			m_Near,		// Near-Plane
-							m_Far,		// Far-Plane
-							m_FOV;		// Field of View
+							m_Far;		// Far-Plane
+			float			m_FOV;		// Field of View
 			
 			ProjectionMode	m_Mode;		// persp., ortho or 2d
 

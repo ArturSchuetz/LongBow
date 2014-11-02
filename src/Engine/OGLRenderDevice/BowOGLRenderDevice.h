@@ -31,7 +31,7 @@ namespace Bow {
 			ShaderProgramPtr		VCreateShaderProgram(const std::string& VertexShaderSource, const std::string& GeometryShaderSource, const std::string& FragementShaderSource);
 
 			VertexBufferPtr			VCreateVertexBuffer(BufferHint usageHint, int sizeInBytes);
-			IndexBufferPtr			VCreateIndexBuffer(BufferHint usageHint, int sizeInBytes);
+			IndexBufferPtr			VCreateIndexBuffer(BufferHint usageHint, IndexBufferDatatype dataType, int sizeInBytes);
 
 			WritePixelBufferPtr		VCreateWritePixelBuffer(PixelBufferHint usageHint, int sizeInBytes);
 

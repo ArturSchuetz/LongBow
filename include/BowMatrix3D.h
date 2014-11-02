@@ -57,7 +57,7 @@ namespace Bow {
 				_11 = _22 = _33 = _44 = (T)1;
 			}
 
-			void Set(T __11, T __12, T __13, T __21, T __22, T __23, T __31, T __32, T __33)
+			inline void Set(T __11, T __12, T __13, T __21, T __22, T __23, T __31, T __32, T __33)
 			{
 				memset(this, 0, sizeof(Matrix3D));
 				_11 = __11;
@@ -71,7 +71,7 @@ namespace Bow {
 				_33 = __33;
 			}
 
-			void Set(T __11, T __12, T __13, T __14, T __21, T __22, T __23, T __24, T __31, T __32, T __33, T __34, T __41, T __42, T __43, T __44)
+			inline void Set(T __11, T __12, T __13, T __14, T __21, T __22, T __23, T __24, T __31, T __32, T __33, T __34, T __41, T __42, T __43, T __44)
 			{
 				_11 = __11;
 				_12 = __12;
@@ -124,9 +124,9 @@ namespace Bow {
 			{
 				Matrix3D inv = Adjugate() * ((T)1 / Determinant());
 				Vector3<T> Translation = inv * Vector3<T>(_14, _24, _34);
-				inv._14 = Translation.x;
-				inv._24 = Translation.y;
-				inv._34 = Translation.z;
+				inv._14 = -Translation.x;
+				inv._24 = -Translation.y;
+				inv._34 = -Translation.z;
 				inv._44 = (T)1;
 				return inv;
 			}
@@ -210,7 +210,27 @@ namespace Bow {
 
 			inline void operator *= (const Matrix3D& other)
 			{
-				(*this) = (*this) * other;
+				Set(
+					_11 * other._11 + _12 * other._21 + _13 * other._31 + _14 * other._41,
+					_11 * other._12 + _12 * other._22 + _13 * other._32 + _14 * other._42,
+					_11 * other._13 + _12 * other._23 + _13 * other._33 + _14 * other._43,
+					_11 * other._14 + _12 * other._24 + _13 * other._34 + _14 * other._44,
+
+					_21 * other._11 + _22 * other._21 + _23 * other._31 + _24 * other._41,
+					_21 * other._12 + _22 * other._22 + _23 * other._32 + _24 * other._42,
+					_21 * other._13 + _22 * other._23 + _23 * other._33 + _24 * other._43,
+					_21 * other._14 + _22 * other._24 + _23 * other._34 + _24 * other._44,
+
+					_31 * other._11 + _32 * other._21 + _33 * other._31 + _34 * other._41,
+					_31 * other._12 + _32 * other._22 + _33 * other._32 + _34 * other._42,
+					_31 * other._13 + _32 * other._23 + _33 * other._33 + _34 * other._43,
+					_31 * other._14 + _32 * other._24 + _33 * other._34 + _34 * other._44,
+
+					_41 * other._11 + _42 * other._21 + _43 * other._31 + _44 * other._41,
+					_41 * other._12 + _42 * other._22 + _43 * other._32 + _44 * other._42,
+					_41 * other._13 + _42 * other._23 + _43 * other._33 + _44 * other._43,
+					_41 * other._14 + _42 * other._24 + _43 * other._34 + _44 * other._44
+					)
 			}
 
 			inline void operator *= (const T& scalar) const

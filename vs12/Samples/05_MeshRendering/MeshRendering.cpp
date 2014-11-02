@@ -1,5 +1,5 @@
 #include "BowRenderer.h"
-#include "BowMath.h"
+#include "BowCore.h"
 
 #include <cstdint>
 #include <windows.h>
@@ -34,7 +34,7 @@ int main()
 	}
 
 	RenderContextPtr ContextOGL		= WindowOGL->VGetContext();
-	ShaderProgramPtr shaderProgram = DeviceOGL->VCreateShaderProgram(LoadShaderFromResouce(IDS_VERTEXSHADER), LoadShaderFromResouce(IDS_FRAGMENTSHADER));
+	ShaderProgramPtr ShaderProgram = DeviceOGL->VCreateShaderProgram(LoadShaderFromResouce(IDS_VERTEXSHADER), LoadShaderFromResouce(IDS_FRAGMENTSHADER));
 
 	///////////////////////////////////////////////////////////////////
 	// ClearState and Color
@@ -44,31 +44,43 @@ int main()
 	memcpy(&clearBlue.Color, &cornflowerBlue, sizeof(float)* 4);
 
 	///////////////////////////////////////////////////////////////////
-	// Vertex Array
+	// Load MEsh
 
-	Vector3<float> vertices[3];
-	vertices[0] = Vector3<float>(1.0f, -1.0f, 0.0f);
-	vertices[1] = Vector3<float>(0.0f, 1.0f, 0.0f);
-	vertices[2] = Vector3<float>(-1.0f, -1.0f, 0.0f);
-
-	// fill buffer with informations
-	VertexBufferPtr buffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector3<float>) * 3);
-					buffer->CopyFromSystemMemory(vertices, sizeof(Vector3<float>) * 3);
-
-	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(buffer, ComponentDatatype::Float, 3));
-
-	// create VertexArray and connect buffer with location
-	VertexArrayPtr	vertexArray = ContextOGL->CreateVertexArray();
-					vertexArray->SetAttribute(shaderProgram->GetVertexAttribute("in_Position")->Location, PositionAttribute);
+	MeshPtr mesh = ResourceManager::GetInstance().LoadOBJ("./IronMan.obj");
 	
+	// fill buffer with informations
+	IndexBufferPtr indexBuffer; 
+	if (mesh->Indices->Type == IndicesType::UnsignedInt)
+	{
+		indexBuffer = DeviceOGL->VCreateIndexBuffer(BufferHint::StaticDraw, IndexBufferDatatype::UnsignedInt, sizeof(unsigned int) * mesh->GetNumberOfIndices());
+		indexBuffer->CopyFromSystemMemory(&(((IndicesUnsignedInt*)(mesh->Indices))->Values[0]), sizeof(unsigned int) * mesh->GetNumberOfIndices());
+	}
+	else if (mesh->Indices->Type == IndicesType::UnsignedShort)
+	{
+		indexBuffer = DeviceOGL->VCreateIndexBuffer(BufferHint::StaticDraw, IndexBufferDatatype::UnsignedShort, sizeof(unsigned short) * mesh->GetNumberOfIndices());
+		indexBuffer->CopyFromSystemMemory(&(((IndicesUnsignedShort*)(mesh->Indices))->Values[0]), sizeof(unsigned short) * mesh->GetNumberOfIndices());
+	}
+
+	VertexBufferPtr VertexBuffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector3<float>) * mesh->GetNumberOfVertices());
+	VertexBuffer->CopyFromSystemMemory(mesh->Positions, 0, sizeof(Vector3<float>) * mesh->GetNumberOfVertices());
+
+	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(VertexBuffer, ComponentDatatype::Float, 3));
+
+	// create VertexArray
+	VertexArrayPtr VertexArray = ContextOGL->VCreateVertexArray();
+
+	// connect buffer with location in shader
+	VertexArray->SetIndexBuffer(indexBuffer);
+	VertexArray->SetAttribute(ShaderProgram->GetVertexAttribute("in_Position")->Location, PositionAttribute);
+
 	///////////////////////////////////////////////////////////////////
 	// Uniforms
 
-	shaderProgram->SetUniform("u_color", Vector3<float>(1.0f, 0.0f, 1.0f));
+	ShaderProgram->SetUniform("u_color", Vector3<float>(1.0f, 0.0f, 1.0f));
 
 	Camera camera(WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
-	Vector3<float> Position = Vector3<float>(0.0f, 0.0f, -5.0f);
-	Vector3<float> LookAt = Vector3<float>(0.0f, 0.0f, 0.0f);
+	Vector3<float> Position = Vector3<float>(258.634399f, 126.081482f, 258.634399f);
+	Vector3<float> LookAt = Vector3<float>(-0.873367310f, 126.081482f, 0.599601746f);
 	Vector3<float> UpVector = Vector3<float>(0.0f, 1.0f, 0.0f);
 	camera.SetViewLookAt(Position, LookAt, UpVector);
 
@@ -82,6 +94,7 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Gameloop
 
+	Core::Matrix3D<float> worldMat;
 	while (!WindowOGL->VShouldClose())
 	{
 		ContextOGL->VClear(clearBlue);
@@ -90,9 +103,10 @@ int main()
 
 		camera.SetResolution(WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
 
-		shaderProgram->SetUniform("u_ModelViewProj", (Core::Matrix3D<float>)camera.CalculateWorldViewProjection());
+		Position += Vector3<float>(0.0f, 0.01f, 0.01f);
+		ShaderProgram->SetUniform("u_ModelViewProj", (Core::Matrix3D<float>)camera.CalculateWorldViewProjection(worldMat));
 
-		ContextOGL->VDraw(PrimitiveType::Triangles, vertexArray, shaderProgram, renderState);
+		ContextOGL->VDraw(PrimitiveType::Triangles, VertexArray, ShaderProgram, renderState);
 
 		ContextOGL->VSwapBuffers();
 	}

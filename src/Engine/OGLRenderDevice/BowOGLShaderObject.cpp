@@ -24,7 +24,7 @@ namespace Bow {
 			/* make sure the compilation was successful */
 			glGetShaderiv(m_shaderObject, GL_COMPILE_STATUS, &m_result);
 			if (m_result != GL_FALSE)
-				LOG_DEBUG("Shader successfully loaded!");
+				LOG_TRACE("Shader successfully loaded!");
 			else
 				LOG_ERROR(GetCompileLog().c_str());
 		}

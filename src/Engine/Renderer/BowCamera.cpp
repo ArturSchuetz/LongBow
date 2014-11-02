@@ -88,7 +88,7 @@ namespace Bow
 			m_View._23 = up.z;
 			m_View._24 = -(up.DotP(position));
 
-			m_View._34 = direction.x;
+			m_View._31 = direction.x;
 			m_View._32 = direction.y;
 			m_View._33 = direction.z;
 			m_View._34 = -(direction.DotP(position));
@@ -136,7 +136,7 @@ namespace Bow
 		}
 		/*----------------------------------------------------------------*/
 
-		void Camera::SetFOV(double FOV)
+		void Camera::SetFOV(float FOV)
 		{
 			FOV *= M_PI / 360.0f; // degree to radian
 			if (m_FOV != FOV)
@@ -230,7 +230,7 @@ namespace Bow
 			if (dirty)
 				CalcPerspProjMatrix();
 
-			return m_ViewProjection * world.Inverse();
+			return m_ViewProjection * world;
 		}
 		/*----------------------------------------------------------------*/
 		
@@ -239,16 +239,16 @@ namespace Bow
 			if (fabs(m_Far - m_Near) < 0.01f)
 				return false;
 
-			double sinFOV2 = (double)sinf(m_FOV / 2);
+			float sinFOV2 = sinf(m_FOV / 2.0f);
 
 			if (fabs(sinFOV2) < 0.01f)
 				return false;
 
-			double cosFOV2 = (double)cosf(m_FOV / 2);
+			float cosFOV2 = cosf(m_FOV / 2.0f);
 
-			double Aspect = (double)m_Height / (double)m_Width;
-			double w = Aspect * (cosFOV2 / sinFOV2);
-			double h = 1.0f  * (cosFOV2 / sinFOV2);
+			float Aspect = (float)m_Height / (float)m_Width;
+			float w = Aspect * (cosFOV2 / sinFOV2);
+			float h = 1.0f  * (cosFOV2 / sinFOV2);
 			double Q = m_Far / (m_Far - m_Near);
 
 			memset(&m_PerspectiveProjection, 0, sizeof(Core::Matrix3D<double>));

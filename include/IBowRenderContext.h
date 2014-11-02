@@ -1,9 +1,16 @@
 #pragma once
 #include "BowPrerequisites.h"
+#include "BowCorePredeclares.h"
 #include "BowRendererPredeclares.h"
 
 namespace Bow {
 	namespace Renderer{
+
+		enum class WindingOrder : char
+		{
+			Clockwise,
+			Counterclockwise
+		};
 
 		enum class PrimitiveType : char
 		{
@@ -54,8 +61,8 @@ namespace Bow {
 			// =========================================================================
 			// RENDERING STUFF:
 			// =========================================================================
-			virtual VertexArrayPtr CreateVertexArray() = 0;
-			virtual FramebufferPtr CreateFramebuffer() = 0;
+			virtual VertexArrayPtr VCreateVertexArray() = 0;
+			virtual FramebufferPtr VCreateFramebuffer() = 0;
 
 			virtual void VClear(ClearState clearState) = 0;
 			virtual void VDraw(PrimitiveType primitiveType, VertexArrayPtr vertexArray, ShaderProgramPtr shaderProgram, RenderState renderState) = 0;

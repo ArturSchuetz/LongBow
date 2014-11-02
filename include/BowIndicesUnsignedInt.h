@@ -16,7 +16,7 @@ namespace Bow {
 			IndicesUnsignedInt(int capacity);
 			~IndicesUnsignedInt();
 
-			const std::list<unsigned int> Values;
+			std::vector<unsigned int> Values;
 		};
 
 	}

@@ -28,7 +28,7 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -41,7 +41,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -93,6 +93,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\..\include;..\..\..\dependencies\FreeImage\include;</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -137,6 +138,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\..\include;..\..\..\dependencies\FreeImage\include;</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -183,7 +185,10 @@
     <ClCompile Include="..\..\..\src\Engine\Core\BowIndicesUnsignedShort.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core\BowLogger.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core\BowMesh.cpp" />
-    <ClCompile Include="..\..\..\src\Engine\Core\BowVertexAttributeFloat.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Core\BowModelLoaderOBJ.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Core\BowResourceManager.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Core\BowSubMesh.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Core\BowVertexAttributeFloatVec2.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core\BowVertexAttributeFloatVec3.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -193,6 +198,7 @@
     <ClInclude Include="..\..\..\include\BowCorePredeclares.h" />
     <ClInclude Include="..\..\..\include\BowIndicesUnsignedInt.h" />
     <ClInclude Include="..\..\..\include\BowIndicesUnsignedShort.h" />
+    <ClInclude Include="..\..\..\include\BowResourceManager.h" />
     <ClInclude Include="..\..\..\include\BowLogger.h" />
     <ClInclude Include="..\..\..\include\BowMath.h" />
     <ClInclude Include="..\..\..\include\BowMatrix2D.h" />
@@ -200,15 +206,17 @@
     <ClInclude Include="..\..\..\include\BowMatrix3D.h" />
     <ClInclude Include="..\..\..\include\BowMesh.h" />
     <ClInclude Include="..\..\..\include\BowRay.h" />
+    <ClInclude Include="..\..\..\include\BowSubMesh.h" />
     <ClInclude Include="..\..\..\include\BowVector2.h" />
     <ClInclude Include="..\..\..\include\BowPrerequisites.h" />
     <ClInclude Include="..\..\..\include\BowVector3.h" />
     <ClInclude Include="..\..\..\include\BowVector4.h" />
-    <ClInclude Include="..\..\..\include\BowVertexAttributeFloat.h" />
+    <ClInclude Include="..\..\..\include\BowVertexAttributeFloatVec2.h" />
     <ClInclude Include="..\..\..\include\BowVertexAttributeFloatVec3.h" />
     <ClInclude Include="..\..\..\include\IBowCleanableObserver.h" />
     <ClInclude Include="..\..\..\include\IBowIndicesBase.h" />
     <ClInclude Include="..\..\..\include\IBowVertexAttribute.h" />
+    <ClInclude Include="..\..\..\src\Engine\Core\BowModelLoaderOBJ.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

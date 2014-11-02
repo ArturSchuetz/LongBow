@@ -29,6 +29,12 @@ namespace Bow {
 				x = _x, y = _y;
 			}
 
+			Vector2(const T* _a)
+			{
+				x = _a[0];
+				y = _a[1];
+			}
+
 			inline void Set(T _x, T _y)
 			{
 				x = _x, y = _y;
@@ -123,28 +129,6 @@ namespace Bow {
 			inline operator Vector2<C>()
 			{
 				return Vector2<C>((C)x, (C)y);
-			}
-		};
-		/*----------------------------------------------------------------*/
-
-		class FloatVector2 : public Vector2<float>
-		{
-		public:
-			FloatVector2()
-			{
-				x = 0.0;
-				y = 0.0;
-			}
-
-			FloatVector2(float _x, float _y)
-			{
-				x = _x, y = _y;
-			}
-
-			template <typename C>
-			FloatVector2(const Vector2<C>& other)
-			{
-				Set(other.x, other.y);
 			}
 		};
 		/*----------------------------------------------------------------*/

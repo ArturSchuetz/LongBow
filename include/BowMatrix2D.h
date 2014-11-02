@@ -79,8 +79,8 @@ namespace Bow {
 				// http://negativeprobability.blogspot.de/2011/11/affine-transformations-and-their.html
 				Matrix2D inv = Adjugate() * ((T)1 / Determinant());
 				Vector2<T> Translation = inv * Vector2<T>(_13, _23);
-				inv._13 = Translation.x;
-				inv._23 = Translation.y;
+				inv._13 = -Translation.x;
+				inv._23 = -Translation.y;
 				inv._33 = (T)1;
 				return inv;
 			}

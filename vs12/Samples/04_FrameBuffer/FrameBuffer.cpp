@@ -69,7 +69,7 @@ int main()
 	delete[] texcoor;
 
 	// create VertexArray and connect buffer with location
-	VertexArrayPtr VertexArray = ContextOGL->CreateVertexArray();
+	VertexArrayPtr VertexArray = ContextOGL->VCreateVertexArray();
 	VertexArray->SetAttribute(ShaderProgram->GetVertexAttribute("in_Position")->Location, PositionAttribute);
 	VertexArray->SetAttribute(ShaderProgram->GetVertexAttribute("in_TexCoord")->Location, TextureCoordAttribute);
 
@@ -98,7 +98,7 @@ int main()
 	delete[] QuadTexcoor;
 
 	// connect buffer with location
-	auto QuadVertexArray = ContextOGL->CreateVertexArray();
+	auto QuadVertexArray = ContextOGL->VCreateVertexArray();
 	QuadVertexArray->SetAttribute(ShaderProgram->GetVertexAttribute("in_Position")->Location, QuadPositionAttribute);
 	QuadVertexArray->SetAttribute(ShaderProgram->GetVertexAttribute("in_TexCoord")->Location, QuadTextureCoordAttribute);
 
@@ -111,7 +111,7 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// FrameBuffer
 
-	FramebufferPtr FrameBuffer = ContextOGL->CreateFramebuffer();
+	FramebufferPtr FrameBuffer = ContextOGL->VCreateFramebuffer();
 
 	Viewport viewport		= ContextOGL->VGetViewport();
 	int out_Color_Location	= ShaderProgram->GetFragmentOutputLocation("out_Color");

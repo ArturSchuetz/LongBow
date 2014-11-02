@@ -11,6 +11,7 @@
 #include "BowShaderVertexAttribute.h"
 
 // Buffer
+#include "BowIndexBufferDatatype.h"
 #include "BowComponentDatatype.h"
 #include "BowBufferHint.h"
 
@@ -185,6 +186,21 @@ namespace Bow{
 		}
 
 		// Index and Vertex Buffer
+
+		GLenum OGLTypeConverter::To(IndexBufferDatatype type)
+		{
+			switch (type)
+			{
+			case IndexBufferDatatype::UnsignedShort:
+				return GL_UNSIGNED_SHORT;
+			case IndexBufferDatatype::UnsignedInt:
+				return GL_UNSIGNED_INT;
+			}
+
+			LOG_FATAL("IndexBufferDatatype does not exist.");
+			return GL_INVALID_ENUM;
+		}
+
 		BufferHint OGLTypeConverter::ToBufferHint(GLenum hint)
 		{
 			switch (hint)

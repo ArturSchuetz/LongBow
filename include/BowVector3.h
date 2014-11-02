@@ -29,6 +29,13 @@ namespace Bow {
 				x = _x, y = _y, z = _z;
 			}
 
+			Vector3(const T* _a)
+			{
+				x = _a[0];
+				y = _a[1];
+				z = _a[2];
+			}
+
 			inline void Set(T _x, T _y, T _z)
 			{
 				x = _x, y = _y, z = _z;
@@ -140,29 +147,6 @@ namespace Bow {
 			inline operator Vector3<C>()
 			{
 				return Vector3<C>((C)x, (C)y, (C)z);
-			}
-		};
-		/*----------------------------------------------------------------*/
-
-		class FloatVector3 : public Vector3<float>
-		{
-		public:
-			FloatVector3()
-			{
-				x = 0.0;
-				y = 0.0;
-				z = 0.0;
-			}
-
-			FloatVector3(float _x, float _y, float _z)
-			{
-				x = _x, y = _y, z = _z;
-			}
-
-			template <typename C>
-			FloatVector3(const Vector3<C>& other)
-			{
-				Set(other.x, other.y, other.z);
 			}
 		};
 		/*----------------------------------------------------------------*/

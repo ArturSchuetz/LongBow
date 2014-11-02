@@ -1,5 +1,7 @@
 #pragma once
 #include "BowPrerequisites.h"
+#include "BowCorePredeclares.h"
+#include "BowRendererPredeclares.h"
 
 #include "IBowRenderContext.h"
 #include "BowRenderState.h"
@@ -31,8 +33,8 @@ namespace Bow {
 			// =========================================================================
 			// RENDERING STUFF:
 			// =========================================================================
-			VertexArrayPtr	CreateVertexArray();
-			FramebufferPtr	CreateFramebuffer();
+			VertexArrayPtr	VCreateVertexArray();
+			FramebufferPtr	VCreateFramebuffer();
 
 			void	VClear(struct ClearState clearState);
 			void	VDraw(PrimitiveType primitiveType, VertexArrayPtr vertexArray, ShaderProgramPtr shaderProgram, RenderState renderState);

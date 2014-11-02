@@ -5,7 +5,7 @@
 namespace Bow {
 	namespace Renderer {
 
-		OGLIndexBuffer::OGLIndexBuffer(BufferHint usageHint, int sizeInBytes) : m_bufferObject(GL_ELEMENT_ARRAY_BUFFER, usageHint, sizeInBytes) { }
+		OGLIndexBuffer::OGLIndexBuffer(BufferHint usageHint, IndexBufferDatatype dataType, int sizeInBytes) : m_bufferObject(GL_ELEMENT_ARRAY_BUFFER, usageHint, sizeInBytes), m_Datatype(dataType) {}
 
 		OGLIndexBuffer::~OGLIndexBuffer() { }
 
@@ -27,6 +27,12 @@ namespace Bow {
 		std::shared_ptr<void> OGLIndexBuffer::CopyToSystemMemory(int offsetInBytes, int sizeInBytes)
 		{
 			return m_bufferObject.CopyToSystemMemory(offsetInBytes, sizeInBytes);
+		}
+
+		int OGLIndexBuffer::GetCount()
+		{
+			size_t elementsize = m_Datatype == IndexBufferDatatype::UnsignedInt ? sizeof(unsigned int) : sizeof(unsigned short);
+			return (m_bufferObject.GetSizeInBytes() / elementsize);
 		}
 
 		int OGLIndexBuffer::GetSizeInBytes()

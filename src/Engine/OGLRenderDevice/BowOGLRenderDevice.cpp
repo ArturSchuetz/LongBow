@@ -4,7 +4,9 @@
 #include "BowOGLGraphicsWindow.h"
 #include "BowOGLShaderProgram.h"
 
+#include "IBowIndicesBase.h"
 #include "BowOGLIndexBuffer.h"
+
 #include "BowOGLVertexBuffer.h"
 #include "BowOGLWritePixelBuffer.h"
 
@@ -36,7 +38,7 @@ namespace Bow {
 			}
 			else
 			{
-				LOG_DEBUG("GLFW sucessfully initialized!");
+				LOG_TRACE("GLFW sucessfully initialized!");
 			}
 		}
 
@@ -50,7 +52,7 @@ namespace Bow {
 		void OGLRenderDevice::VRelease(void)
 		{
 			glfwTerminate();
-			LOG_DEBUG("RenderDeviceOGL3x released.");
+			LOG_TRACE("RenderDeviceOGL3x released.");
 		}
 
 
@@ -60,13 +62,13 @@ namespace Bow {
 			if (pGraphicsWindow->Initialize(width, height, title, type))
 			{
 				glGetIntegerv(GL_MAX_VERTEX_ATOMIC_COUNTERS, &m_maximumNumberOfVertexAttributes);
-				LOG_DEBUG("\tMaximum number of Vertex Attributes: %i", m_maximumNumberOfVertexAttributes);
+				LOG_TRACE("\tMaximum number of Vertex Attributes: %i", m_maximumNumberOfVertexAttributes);
 
 				glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &m_numberOfTextureUnits);
-				LOG_DEBUG("\tMaximum number of Texture Units: %i", m_numberOfTextureUnits);
+				LOG_TRACE("\tMaximum number of Texture Units: %i", m_numberOfTextureUnits);
 
 				glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &m_maximumNumberOfColorAttachments);
-				LOG_DEBUG("\tMaximum number of Color Attachments: %i", m_maximumNumberOfColorAttachments);
+				LOG_TRACE("\tMaximum number of Color Attachments: %i", m_maximumNumberOfColorAttachments);
 
 				return pGraphicsWindow;
 			}
@@ -181,9 +183,9 @@ namespace Bow {
 			return OGLVertexBufferPtr(new OGLVertexBuffer(usageHint, sizeInBytes));
 		}
 
-		IndexBufferPtr OGLRenderDevice::VCreateIndexBuffer(BufferHint usageHint, int sizeInBytes)
+		IndexBufferPtr OGLRenderDevice::VCreateIndexBuffer(BufferHint usageHint, IndexBufferDatatype dataType, int sizeInBytes)
 		{
-			return OGLIndexBufferPtr(new OGLIndexBuffer(usageHint, sizeInBytes));
+			return OGLIndexBufferPtr(new OGLIndexBuffer(usageHint, dataType, sizeInBytes));
 		}
 
 		WritePixelBufferPtr OGLRenderDevice::VCreateWritePixelBuffer(PixelBufferHint usageHint, int sizeInBytes)

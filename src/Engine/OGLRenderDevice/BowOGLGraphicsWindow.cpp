@@ -11,7 +11,7 @@
 
 namespace Bow {
 	namespace Renderer {
-		std::unordered_map<GLFWwindow*, OGLGraphicsWindow*> g_Windows;
+		std::map<GLFWwindow*, OGLGraphicsWindow*> g_Windows;
 
 		OGLGraphicsWindow::OGLGraphicsWindow() :
 			m_Context(nullptr)
@@ -48,7 +48,7 @@ namespace Bow {
 
 			m_Context = OGLRenderContextPtr(new OGLRenderContext(m_Window));
 
-			LOG_DEBUG("OpenGL-Window sucessfully initialized!");
+			LOG_TRACE("OpenGL-Window sucessfully initialized!");
 			return m_Context->Initialize();
 		}
 
@@ -73,7 +73,7 @@ namespace Bow {
 			}
 			m_Window = nullptr;
 
-			LOG_DEBUG("OGLGraphicsWindow released");
+			LOG_TRACE("OGLGraphicsWindow released");
 		}
 
 

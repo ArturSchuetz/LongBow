@@ -16,7 +16,7 @@ namespace Bow {
 			IndicesUnsignedShort(int capacity);
 			~IndicesUnsignedShort();
 
-			const std::list<unsigned short> Values;
+			std::vector<unsigned short> Values;
 		};
 
 	}

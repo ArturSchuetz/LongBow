@@ -31,21 +31,5 @@ namespace Bow {
 			}
 		};
 		/*----------------------------------------------------------------*/
-
-		class FloatRay : public Ray<float>
-		{
-		public:
-			FloatRay()
-			{
-				Origin = FloatVector3();
-				Direction = FloatVector3();
-			}
-
-			FloatRay(FloatVector3 _origin, FloatVector3 _direction)
-			{
-				Origin = _origin, Direction = _direction;
-			}
-		};
-		/*----------------------------------------------------------------*/
 	}
 }

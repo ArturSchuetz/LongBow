@@ -44,19 +44,19 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Vertex Array
 
-	FloatVector2 vertices[3];
-	vertices[0] = FloatVector2(-1.0f, 1.0f);
-	vertices[1] = FloatVector2(0.0f, -1.0f);
-	vertices[2] = FloatVector2(1.0f, 1.0f);
+	Vector2<float> vertices[3];
+	vertices[0] = Vector2<float>(-1.0f, 1.0f);
+	vertices[1] = Vector2<float>(0.0f, -1.0f);
+	vertices[2] = Vector2<float>(1.0f, 1.0f);
 
 	// fill buffer with informations
-	VertexBufferPtr buffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(FloatVector2)* 3);
-	buffer->CopyFromSystemMemory(vertices, 0, sizeof(FloatVector2)* 3);
+	VertexBufferPtr buffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector2<float>) * 3);
+	buffer->CopyFromSystemMemory(vertices, 0, sizeof(Vector2<float>) * 3);
 
 	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(buffer, ComponentDatatype::Float, 2));
 	
 	// create VertexArray
-	VertexArrayPtr VertexArray = ContextOGL->CreateVertexArray();
+	VertexArrayPtr VertexArray = ContextOGL->VCreateVertexArray();
 
 	// connect buffer with location in shader
 	VertexArray->SetAttribute(ShaderProgram->GetVertexAttribute("in_Position")->Location, PositionAttribute);

@@ -140,29 +140,5 @@ namespace Bow {
 			}
 		};
 		/*----------------------------------------------------------------*/
-
-		class FloatVector4 : public Vector4<float>
-		{
-		public:
-			FloatVector4()
-			{
-				x = 0.0;
-				y = 0.0;
-				z = 0.0;
-				w = 1.0;
-			}
-
-			FloatVector4(float _x, float _y, float _z, float _w = 1.0f)
-			{
-				x = _x, y = _y, z = _z, w = _w;
-			}
-
-			template <typename C>
-			FloatVector4(const Vector4<C>& other)
-			{
-				Set(other.x, other.y, other.z, other.w);
-			}
-		};
-		/*----------------------------------------------------------------*/
 	}
 }
