@@ -14,33 +14,33 @@ namespace Bow {
 		};
 
 
-		OGLReadPixelBuffer::OGLReadPixelBuffer(PixelBufferHint usageHint, int sizeInBytes) : m_usageHint(usageHint), m_bufferObject(GL_PIXEL_PACK_BUFFER, rbp_bufferHints[(int)usageHint], sizeInBytes)
+		OGLReadPixelBuffer::OGLReadPixelBuffer(PixelBufferHint usageHint, int sizeInBytes) : m_UsageHint(usageHint), m_BufferObject(GL_PIXEL_PACK_BUFFER, rbp_bufferHints[(int)usageHint], sizeInBytes)
 		{
 		}
 
 		void OGLReadPixelBuffer::Bind()
 		{
-			m_bufferObject.Bind();
+			m_BufferObject.Bind();
 		}
 
-		void OGLReadPixelBuffer::CopyFromSystemMemory(void* bufferInSystemMemory, int destinationOffsetInBytes, int lengthInBytes)
+		void OGLReadPixelBuffer::VCopyFromSystemMemory(void* bufferInSystemMemory, int destinationOffsetInBytes, int lengthInBytes)
 		{
-			m_bufferObject.CopyFromSystemMemory(bufferInSystemMemory, destinationOffsetInBytes, lengthInBytes);
+			m_BufferObject.CopyFromSystemMemory(bufferInSystemMemory, destinationOffsetInBytes, lengthInBytes);
 		}
 
-		std::shared_ptr<void> OGLReadPixelBuffer::CopyToSystemMemory(int offsetInBytes, int sizeInBytes)
+		std::shared_ptr<void> OGLReadPixelBuffer::VCopyToSystemMemory(int offsetInBytes, int sizeInBytes)
 		{
-			return m_bufferObject.CopyToSystemMemory(offsetInBytes, sizeInBytes);
+			return m_BufferObject.CopyToSystemMemory(offsetInBytes, sizeInBytes);
 		}
 
-		int	OGLReadPixelBuffer::GetSizeInBytes() const
+		int	OGLReadPixelBuffer::VGetSizeInBytes() const
 		{
-			return m_bufferObject.GetSizeInBytes();
+			return m_BufferObject.GetSizeInBytes();
 		}
 
-		PixelBufferHint	OGLReadPixelBuffer::GetUsageHint() const
+		PixelBufferHint	OGLReadPixelBuffer::VGetUsageHint() const
 		{
-			return m_usageHint;
+			return m_UsageHint;
 		}
 
 	}

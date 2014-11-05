@@ -15,15 +15,15 @@ namespace Bow {
 			void Bind();
 			static void UnBind();
 
-			void CopyFromSystemMemory(void* bufferInSystemMemory, int destinationOffsetInBytes, int lengthInBytes);
-			std::shared_ptr<void> CopyToSystemMemory(int offsetInBytes, int sizeInBytes);
+			void VCopyFromSystemMemory(void* bufferInSystemMemory, int destinationOffsetInBytes, int lengthInBytes);
+			std::shared_ptr<void> VCopyToSystemMemory(int offsetInBytes, int sizeInBytes);
 
-			int				GetSizeInBytes() const;
-			PixelBufferHint	GetUsageHint() const;
+			int				VGetSizeInBytes() const;
+			PixelBufferHint	VGetUsageHint() const;
 
 		private:
-			const PixelBufferHint m_usageHint;
-			OGLPixelBuffer m_bufferObject;
+			const PixelBufferHint m_UsageHint;
+			OGLPixelBuffer m_BufferObject;
 		};
 
 		typedef std::shared_ptr<OGLWritePixelBuffer> OGLWritePixelBufferPtr;

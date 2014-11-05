@@ -18,15 +18,15 @@ namespace Bow {
 			static void UnBind();
 			int GetCount();
 
-			void CopyFromSystemMemory(void* bufferInSystemMemory, int destinationOffsetInBytes, int lengthInBytes);
-			std::shared_ptr<void> CopyToSystemMemory(int offsetInBytes, int sizeInBytes);
+			void VCopyFromSystemMemory(void* bufferInSystemMemory, int destinationOffsetInBytes, int lengthInBytes);
+			std::shared_ptr<void> VCopyToSystemMemory(int offsetInBytes, int sizeInBytes);
 
-			int GetSizeInBytes();
-			BufferHint GetUsageHint();
+			int VGetSizeInBytes();
+			BufferHint VGetUsageHint();
 			IndexBufferDatatype GetDatatype() { return m_Datatype; }
 
 		private:
-			OGLBuffer	m_bufferObject;
+			OGLBuffer	m_BufferObject;
 			IndexBufferDatatype m_Datatype;
 		};
 

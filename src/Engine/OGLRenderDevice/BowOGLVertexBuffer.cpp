@@ -5,13 +5,13 @@
 namespace Bow {
 	namespace Renderer {
 
-		OGLVertexBuffer::OGLVertexBuffer(BufferHint usageHint, int sizeInBytes) : m_bufferObject(GL_ARRAY_BUFFER, usageHint, sizeInBytes) { }
+		OGLVertexBuffer::OGLVertexBuffer(BufferHint usageHint, int sizeInBytes) : m_BufferObject(GL_ARRAY_BUFFER, usageHint, sizeInBytes) { }
 
 		OGLVertexBuffer::~OGLVertexBuffer() { }
 
 		void OGLVertexBuffer::Bind()
 		{
-			m_bufferObject.Bind();
+			m_BufferObject.Bind();
 		}
 
 		void OGLVertexBuffer::UnBind()
@@ -19,24 +19,24 @@ namespace Bow {
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
 
-		void OGLVertexBuffer::CopyFromSystemMemory(void* bufferInSystemMemory, int destinationOffsetInBytes, int lengthInBytes)
+		void OGLVertexBuffer::VCopyFromSystemMemory(void* bufferInSystemMemory, int destinationOffsetInBytes, int lengthInBytes)
 		{
-			m_bufferObject.CopyFromSystemMemory(bufferInSystemMemory, destinationOffsetInBytes, lengthInBytes);
+			m_BufferObject.CopyFromSystemMemory(bufferInSystemMemory, destinationOffsetInBytes, lengthInBytes);
 		}
 
-		std::shared_ptr<void> OGLVertexBuffer::CopyToSystemMemory(int offsetInBytes, int sizeInBytes)
+		std::shared_ptr<void> OGLVertexBuffer::VCopyToSystemMemory(int offsetInBytes, int sizeInBytes)
 		{
-			return m_bufferObject.CopyToSystemMemory(offsetInBytes, sizeInBytes);
+			return m_BufferObject.CopyToSystemMemory(offsetInBytes, sizeInBytes);
 		}
 
-		int OGLVertexBuffer::GetSizeInBytes()
+		int OGLVertexBuffer::VGetSizeInBytes()
 		{
-			return m_bufferObject.GetSizeInBytes();
+			return m_BufferObject.GetSizeInBytes();
 		}
 
-		BufferHint OGLVertexBuffer::GetUsageHint()
+		BufferHint OGLVertexBuffer::VGetUsageHint()
 		{
-			return m_bufferObject.GetUsageHint();
+			return m_BufferObject.GetUsageHint();
 		}
 
 	}

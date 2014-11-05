@@ -10,7 +10,7 @@ namespace Bow {
 	namespace Renderer {
 
 
-		OGLTextureUnit::OGLTextureUnit(unsigned int index, ICleanableObserver* observer) : m_dirtyFlags(DirtyFlags::None), m_textureUnitIndex(index), m_observer(observer), m_textureUnit(GL_TEXTURE0 + index)
+		OGLTextureUnit::OGLTextureUnit(unsigned int index, ICleanableObserver* observer) : m_DirtyFlags(DirtyFlags::None), m_textureUnitIndex(index), m_observer(observer), m_textureUnit(GL_TEXTURE0 + index)
 		{
 			m_texture = OGLTexture2DPtr(nullptr);
 			m_textureSampler = OGLTextureSamplerPtr(nullptr);
@@ -25,12 +25,12 @@ namespace Bow {
 		{
 			if (m_texture != texture)
 			{
-				if (m_dirtyFlags == DirtyFlags::None)
+				if (m_DirtyFlags == DirtyFlags::None)
 				{
 					m_observer->NotifyDirty(this);
 				}
 
-				m_dirtyFlags = (DirtyFlags)(m_dirtyFlags | DirtyFlags::Texture);
+				m_DirtyFlags = (DirtyFlags)(m_DirtyFlags | DirtyFlags::Texture);
 				m_texture = texture;
 			}
 		}
@@ -44,11 +44,11 @@ namespace Bow {
 		{
 			if (m_textureSampler != sampler)
 			{
-				if (m_dirtyFlags == DirtyFlags::None)
+				if (m_DirtyFlags == DirtyFlags::None)
 				{
 					m_observer->NotifyDirty(this);
 				}
-				m_dirtyFlags = (DirtyFlags)(m_dirtyFlags | DirtyFlags::TextureSampler);
+				m_DirtyFlags = (DirtyFlags)(m_DirtyFlags | DirtyFlags::TextureSampler);
 				m_textureSampler = sampler;
 			}
 		}
@@ -64,7 +64,7 @@ namespace Bow {
 			//
 			if (m_texture != nullptr)
 			{
-				m_dirtyFlags = (DirtyFlags)(m_dirtyFlags | DirtyFlags::Texture);
+				m_DirtyFlags = (DirtyFlags)(m_DirtyFlags | DirtyFlags::Texture);
 			}
 
 			Clean();
@@ -72,13 +72,13 @@ namespace Bow {
 
 		void OGLTextureUnit::Clean()
 		{
-			if (m_dirtyFlags != DirtyFlags::None)
+			if (m_DirtyFlags != DirtyFlags::None)
 			{
 				Validate();
 
 				glActiveTexture(m_textureUnit);
 
-				if ((m_dirtyFlags & DirtyFlags::Texture) == DirtyFlags::Texture)
+				if ((m_DirtyFlags & DirtyFlags::Texture) == DirtyFlags::Texture)
 				{
 					if (m_texture != nullptr)
 					{
@@ -91,7 +91,7 @@ namespace Bow {
 					}
 				}
 
-				if ((m_dirtyFlags & DirtyFlags::TextureSampler) == DirtyFlags::TextureSampler)
+				if ((m_DirtyFlags & DirtyFlags::TextureSampler) == DirtyFlags::TextureSampler)
 				{
 					if (m_textureSampler != nullptr)
 					{
@@ -103,7 +103,7 @@ namespace Bow {
 					}
 				}
 
-				m_dirtyFlags = DirtyFlags::None;
+				m_DirtyFlags = DirtyFlags::None;
 			}
 		}
 

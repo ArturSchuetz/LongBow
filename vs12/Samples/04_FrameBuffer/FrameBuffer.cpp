@@ -56,7 +56,7 @@ int main()
 
 	// fill buffer with informations
 	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float) * 9), ComponentDatatype::Float, 3));
-	PositionAttribute->GetVertexBuffer()->CopyFromSystemMemory(vert, 0, sizeof(float) * 9);
+	PositionAttribute->GetVertexBuffer()->VCopyFromSystemMemory(vert, 0, sizeof(float) * 9);
 	delete[] vert;
 
 	float* texcoor = new float[6];
@@ -65,13 +65,13 @@ int main()
 	texcoor[4] = 1.0f; texcoor[5] = 1.0f;
 
 	VertexBufferAttributePtr TextureCoordAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float) * 6), ComponentDatatype::Float, 2));
-	TextureCoordAttribute->GetVertexBuffer()->CopyFromSystemMemory(texcoor, 0, sizeof(float) * 6);
+	TextureCoordAttribute->GetVertexBuffer()->VCopyFromSystemMemory(texcoor, 0, sizeof(float) * 6);
 	delete[] texcoor;
 
 	// create VertexArray and connect buffer with location
 	VertexArrayPtr VertexArray = ContextOGL->VCreateVertexArray();
-	VertexArray->SetAttribute(ShaderProgram->GetVertexAttribute("in_Position")->Location, PositionAttribute);
-	VertexArray->SetAttribute(ShaderProgram->GetVertexAttribute("in_TexCoord")->Location, TextureCoordAttribute);
+	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_Position")->Location, PositionAttribute);
+	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_TexCoord")->Location, TextureCoordAttribute);
 
 	///////////////////////////////////////////////////////////////////
 	// Screenfilling Quad Preperations
@@ -90,17 +90,17 @@ int main()
 
 	// fill buffer with informations
 	auto QuadPositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float)* 8), ComponentDatatype::Float, 2));
-	QuadPositionAttribute->GetVertexBuffer()->CopyFromSystemMemory(QuadVert, 0, sizeof(float)* 8);
+	QuadPositionAttribute->GetVertexBuffer()->VCopyFromSystemMemory(QuadVert, 0, sizeof(float) * 8);
 	delete[] QuadVert;
 
 	auto QuadTextureCoordAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(float)* 8), ComponentDatatype::Float, 2));
-	QuadTextureCoordAttribute->GetVertexBuffer()->CopyFromSystemMemory(QuadTexcoor, 0, sizeof(float)* 8);
+	QuadTextureCoordAttribute->GetVertexBuffer()->VCopyFromSystemMemory(QuadTexcoor, 0, sizeof(float) * 8);
 	delete[] QuadTexcoor;
 
 	// connect buffer with location
 	auto QuadVertexArray = ContextOGL->VCreateVertexArray();
-	QuadVertexArray->SetAttribute(ShaderProgram->GetVertexAttribute("in_Position")->Location, QuadPositionAttribute);
-	QuadVertexArray->SetAttribute(ShaderProgram->GetVertexAttribute("in_TexCoord")->Location, QuadTextureCoordAttribute);
+	QuadVertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_Position")->Location, QuadPositionAttribute);
+	QuadVertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_TexCoord")->Location, QuadTextureCoordAttribute);
 
 	///////////////////////////////////////////////////////////////////
 	// Textures
@@ -114,9 +114,9 @@ int main()
 	FramebufferPtr FrameBuffer = ContextOGL->VCreateFramebuffer();
 
 	Viewport viewport		= ContextOGL->VGetViewport();
-	int out_Color_Location	= ShaderProgram->GetFragmentOutputLocation("out_Color");
+	int out_Color_Location = ShaderProgram->VGetFragmentOutputLocation("out_Color");
 
-	FrameBuffer->SetColorAttachment(out_Color_Location, DeviceOGL->VCreateTexture2D(Texture2DDescription(viewport.width, viewport.height, TextureFormat::RedGreenBlue8)));
+	FrameBuffer->VSetColorAttachment(out_Color_Location, DeviceOGL->VCreateTexture2D(Texture2DDescription(viewport.width, viewport.height, TextureFormat::RedGreenBlue8)));
 
 	///////////////////////////////////////////////////////////////////
 	// RenderState
@@ -131,7 +131,7 @@ int main()
 
 	int diffuseTex = 0;
 	ContextOGL->VSetTextureSampler(diffuseTex, sampler);
-	ShaderProgram->SetUniform("diffuseTex", diffuseTex);
+	ShaderProgram->VSetUniform("diffuseTex", diffuseTex);
 
 	while (!WindowOGL->VShouldClose())
 	{
@@ -147,7 +147,7 @@ int main()
 		ContextOGL->VSetFramebuffer(nullptr);
 
 		ContextOGL->VClear(clearBlack);
-		ContextOGL->VSetTexture(diffuseTex, FrameBuffer->GetColorAttachment(out_Color_Location));
+		ContextOGL->VSetTexture(diffuseTex, FrameBuffer->VGetColorAttachment(out_Color_Location));
 		ContextOGL->VSetViewport(Viewport(0, 0, WindowOGL->VGetWidth(), WindowOGL->VGetHeight()));
 		ContextOGL->VDraw(PrimitiveType::TriangleStrip, QuadVertexArray, ShaderProgram, renderState);
 

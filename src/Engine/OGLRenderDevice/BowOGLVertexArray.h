@@ -21,14 +21,14 @@ namespace Bow {
 
 			int	MaximumArrayIndex();
 
-			VertexBufferAttributeMap	GetAttributes();
-			void						SetAttribute(int Location, VertexBufferAttributePtr pointer);
+			VertexBufferAttributeMap	VGetAttributes();
+			void						VSetAttribute(int Location, VertexBufferAttributePtr pointer);
 
-			IndexBufferPtr				GetIndexBuffer();
-			void						SetIndexBuffer(IndexBufferPtr pointer);
+			IndexBufferPtr				VGetIndexBuffer();
+			void						VSetIndexBuffer(IndexBufferPtr pointer);
 
 		private:
-			OGLVertexBufferAttributes	m_attributes;
+			OGLVertexBufferAttributes	m_Attributes;
 			OGLIndexBufferPtr			m_indexBuffer;
 			bool						m_dirtyIndexBuffer;
 

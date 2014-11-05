@@ -295,23 +295,23 @@ namespace Bow {
 		public:
 			virtual ~ITexture2D(){}
 
-			virtual void CopyFromBuffer(WritePixelBufferPtr pixelBuffer, ImageFormat format, ImageDatatype dataType, int rowAlignment = 4)
+			virtual void VCopyFromBuffer(WritePixelBufferPtr pixelBuffer, ImageFormat format, ImageDatatype dataType, int rowAlignment = 4)
 			{
-				CopyFromBuffer(pixelBuffer, 0, 0, GetDescription().GetWidth(), GetDescription().GetHeight(), format, dataType, rowAlignment);
+				VCopyFromBuffer(pixelBuffer, 0, 0, VGetDescription().GetWidth(), VGetDescription().GetHeight(), format, dataType, rowAlignment);
 			}
 
-			virtual void CopyFromBuffer(WritePixelBufferPtr pixelBuffer, int xOffset, int yOffset, int width, int height, ImageFormat format, ImageDatatype dataType, int rowAlignment) = 0;
+			virtual void VCopyFromBuffer(WritePixelBufferPtr pixelBuffer, int xOffset, int yOffset, int width, int height, ImageFormat format, ImageDatatype dataType, int rowAlignment) = 0;
 
-			virtual void CopyFromSystemMemory(void* bitmapInSystemMemory, ImageFormat format, ImageDatatype dataType, int rowAlignment = 4)
+			virtual void VCopyFromSystemMemory(void* bitmapInSystemMemory, ImageFormat format, ImageDatatype dataType, int rowAlignment = 4)
 			{
-				CopyFromSystemMemory(bitmapInSystemMemory, 0, 0, GetDescription().GetWidth(), GetDescription().GetHeight(), format, dataType, rowAlignment);
+				VCopyFromSystemMemory(bitmapInSystemMemory, 0, 0, VGetDescription().GetWidth(), VGetDescription().GetHeight(), format, dataType, rowAlignment);
 			}
 
-			virtual void CopyFromSystemMemory(void* bitmapInSystemMemory, int xOffset, int yOffset, int width, int height, ImageFormat format, ImageDatatype dataType, int rowAlignment) = 0;
+			virtual void VCopyFromSystemMemory(void* bitmapInSystemMemory, int xOffset, int yOffset, int width, int height, ImageFormat format, ImageDatatype dataType, int rowAlignment) = 0;
 
-			virtual std::shared_ptr<void> CopyToSystemMemory(ImageFormat format, ImageDatatype dataType, int rowAlignment = 4) = 0;
+			virtual std::shared_ptr<void> VCopyToSystemMemory(ImageFormat format, ImageDatatype dataType, int rowAlignment = 4) = 0;
 
-			virtual Texture2DDescription GetDescription() = 0;
+			virtual Texture2DDescription VGetDescription() = 0;
 		};
 
 	}

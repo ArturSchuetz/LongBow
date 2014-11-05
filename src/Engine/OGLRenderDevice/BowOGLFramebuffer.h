@@ -20,14 +20,14 @@ namespace Bow {
 			static void UnBind();
 			void		Clean();
 
-			Texture2DPtr	GetColorAttachment(int index) const;
-			void			SetColorAttachment(int index, Texture2DPtr texture);
+			Texture2DPtr	VGetColorAttachment(int index) const;
+			void			VSetColorAttachment(int index, Texture2DPtr texture);
 
-			Texture2DPtr	GetDepthAttachment(void) const;
-			void			SetDepthAttachment(Texture2DPtr texture);
+			Texture2DPtr	VGetDepthAttachment(void) const;
+			void			VSetDepthAttachment(Texture2DPtr texture);
 
-			Texture2DPtr	GetDepthStencilAttachment(void) const;
-			void			SetDepthStencilAttachment(Texture2DPtr texture);
+			Texture2DPtr	VGetDepthStencilAttachment(void) const;
+			void			VSetDepthStencilAttachment(Texture2DPtr texture);
 
 			static void Attach(unsigned int attachPoint, OGLTexture2DPtr texture);
 
@@ -39,10 +39,10 @@ namespace Bow {
 				DepthStencilAttachment = 2
 			};
 
-			OGLColorAttachments		m_colorAttachments;
-			OGLTexture2DPtr			m_depthAttachment;
-			OGLTexture2DPtr			m_depthStencilAttachment;
-			DirtyFlags				m_dirtyFlags;
+			OGLColorAttachments		m_ColorAttachments;
+			OGLTexture2DPtr			m_DepthAttachment;
+			OGLTexture2DPtr			m_DepthStencilAttachment;
+			DirtyFlags				m_DirtyFlags;
 
 			unsigned int			m_FramebufferHandle; // Name
 		};

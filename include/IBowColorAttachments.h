@@ -10,8 +10,8 @@ namespace Bow {
 		public:
 			virtual ~IColorAttachments(){}
 
-			virtual Texture2DPtr	GetAttachment(unsigned int index) const = 0;
-			virtual void			SetAttachment(unsigned int index, Texture2DPtr texture) = 0;
+			virtual Texture2DPtr	VGetAttachment(unsigned int index) const = 0;
+			virtual void			VSetAttachment(unsigned int index, Texture2DPtr texture) = 0;
 		};
 
 	}

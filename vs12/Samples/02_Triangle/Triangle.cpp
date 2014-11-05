@@ -6,6 +6,7 @@
 #include "resource.h"
 
 using namespace Bow;
+using namespace Core;
 using namespace Renderer;
 
 std::string LoadShaderFromResouce(int name)
@@ -51,7 +52,7 @@ int main()
 
 	// fill buffer with informations
 	VertexBufferPtr buffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector2<float>) * 3);
-	buffer->CopyFromSystemMemory(vertices, 0, sizeof(Vector2<float>) * 3);
+	buffer->VCopyFromSystemMemory(vertices, 0, sizeof(Vector2<float>) * 3);
 
 	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(buffer, ComponentDatatype::Float, 2));
 	
@@ -59,13 +60,13 @@ int main()
 	VertexArrayPtr VertexArray = ContextOGL->VCreateVertexArray();
 
 	// connect buffer with location in shader
-	VertexArray->SetAttribute(ShaderProgram->GetVertexAttribute("in_Position")->Location, PositionAttribute);
+	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_Position")->Location, PositionAttribute);
 
 	///////////////////////////////////////////////////////////////////
 	// Uniforms
 
 	float rosa[] = { 1.0f, 0.0f, 1.0f };
-	ShaderProgram->SetUniformVector("u_color", rosa, 3);
+	ShaderProgram->VSetUniformVector("u_color", rosa, 3);
 
 	///////////////////////////////////////////////////////////////////
 	// RenderState

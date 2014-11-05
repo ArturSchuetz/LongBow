@@ -149,7 +149,7 @@ namespace Bow {
 		}
 
 
-		OGLTexture2D::OGLTexture2D(Texture2DDescription description, GLenum textureTarget) : m_description(description), m_target(textureTarget), m_TextureHandle(0)
+		OGLTexture2D::OGLTexture2D(Texture2DDescription description, GLenum textureTarget) : m_Description(description), m_target(textureTarget), m_TextureHandle(0)
 		{
 			m_TextureHandle = 0;
 			glGenTextures(1, &m_TextureHandle);
@@ -229,13 +229,13 @@ namespace Bow {
 		}
 
 
-		void OGLTexture2D::CopyFromBuffer(WritePixelBufferPtr pixelBuffer, int xOffset, int yOffset, int width, int height, ImageFormat format, ImageDatatype dataType, int rowAlignment)
+		void OGLTexture2D::VCopyFromBuffer(WritePixelBufferPtr pixelBuffer, int xOffset, int yOffset, int width, int height, ImageFormat format, ImageDatatype dataType, int rowAlignment)
 		{
-			LOG_ASSERT(!(pixelBuffer->GetSizeInBytes() < RequiredSizeInBytes(width, height, format, dataType, rowAlignment)), "Pixel buffer is not big enough for provided width, height, format, and datatype.");
+			LOG_ASSERT(!(pixelBuffer->VGetSizeInBytes() < RequiredSizeInBytes(width, height, format, dataType, rowAlignment)), "Pixel buffer is not big enough for provided width, height, format, and datatype.");
 			LOG_ASSERT(!(xOffset < 0), "xOffset must be greater than or equal to zero.");
 			LOG_ASSERT(!(yOffset < 0), "yOffset must be greater than or equal to zero.");
-			LOG_ASSERT(!((xOffset + width) > m_description.GetWidth()), "xOffset + width must be less than or equal to Description.Width");
-			LOG_ASSERT(!((yOffset + height) > m_description.GetHeight()), "yOffset + height must be less than or equal to Description.Height");
+			LOG_ASSERT(!((xOffset + width) > m_Description.GetWidth()), "xOffset + width must be less than or equal to Description.Width");
+			LOG_ASSERT(!((yOffset + height) > m_Description.GetHeight()), "yOffset + height must be less than or equal to Description.Height");
 
 			VerifyRowAlignment(rowAlignment);
 
@@ -250,12 +250,12 @@ namespace Bow {
 		}
 
 
-		void OGLTexture2D::CopyFromSystemMemory(void* bitmapInSystemMemory, int xOffset, int yOffset, int width, int height, ImageFormat format, ImageDatatype dataType, int rowAlignment)
+		void OGLTexture2D::VCopyFromSystemMemory(void* bitmapInSystemMemory, int xOffset, int yOffset, int width, int height, ImageFormat format, ImageDatatype dataType, int rowAlignment)
 		{
 			LOG_ASSERT(!(xOffset < 0), "xOffset must be greater than or equal to zero.");
 			LOG_ASSERT(!(yOffset < 0), "yOffset must be greater than or equal to zero.");
-			LOG_ASSERT(!((xOffset + width) > m_description.GetWidth()), "xOffset + width must be less than or equal to Description.Width");
-			LOG_ASSERT(!((yOffset + height) > m_description.GetHeight()), "yOffset + height must be less than or equal to Description.Height");
+			LOG_ASSERT(!((xOffset + width) > m_Description.GetWidth()), "xOffset + width must be less than or equal to Description.Width");
+			LOG_ASSERT(!((yOffset + height) > m_Description.GetHeight()), "yOffset + height must be less than or equal to Description.Height");
 
 			VerifyRowAlignment(rowAlignment);
 
@@ -268,7 +268,7 @@ namespace Bow {
 		}
 
 
-		std::shared_ptr<void> OGLTexture2D::CopyToSystemMemory(ImageFormat format, ImageDatatype dataType, int rowAlignment)
+		std::shared_ptr<void> OGLTexture2D::VCopyToSystemMemory(ImageFormat format, ImageDatatype dataType, int rowAlignment)
 		{
 			LOG_ASSERT(!(format == ImageFormat::StencilIndex), "StencilIndex is not supported by CopyToBuffer, .Try DepthStencil instead");
 
@@ -284,15 +284,15 @@ namespace Bow {
 		}
 
 
-		Texture2DDescription OGLTexture2D::GetDescription()
+		Texture2DDescription OGLTexture2D::VGetDescription()
 		{
-			return m_description;
+			return m_Description;
 		}
 
 
 		void OGLTexture2D::GenerateMipmaps()
 		{
-			if (m_description.GenerateMipmaps())
+			if (m_Description.GenerateMipmaps())
 			{
 				glGenerateMipmap(GL_TEXTURE_2D);
 			}

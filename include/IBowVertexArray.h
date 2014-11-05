@@ -9,11 +9,11 @@ namespace Bow {
 		{
 		public:
 			virtual ~IVertexArray() {}
-			virtual VertexBufferAttributeMap GetAttributes() = 0;
+			virtual VertexBufferAttributeMap VGetAttributes() = 0;
 			virtual void VSetAttribute(int Location, VertexBufferAttributePtr pointer) = 0;
 
-			virtual IndexBufferPtr	GetIndexBuffer() = 0;
-			virtual void			SetIndexBuffer(IndexBufferPtr pointer) = 0;
+			virtual IndexBufferPtr	VGetIndexBuffer() = 0;
+			virtual void			VSetIndexBuffer(IndexBufferPtr pointer) = 0;
 		};
 
 	}

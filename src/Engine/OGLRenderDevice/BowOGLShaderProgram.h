@@ -32,28 +32,28 @@ namespace Bow {
 			OGLShaderProgram(const std::string& vertexShaderSource, const std::string& geometryShaderSource, const std::string& fragmentShaderSource);
 			~OGLShaderProgram();
 
-			std::string					GetLog();
+			std::string					VGetLog();
 
-			ShaderVertexAttributePtr	GetVertexAttribute(std::string name);
-			int							GetFragmentOutputLocation(std::string name);
+			ShaderVertexAttributePtr	VGetVertexAttribute(std::string name);
+			int							VGetFragmentOutputLocation(std::string name);
 
-			void SetUniform(const char* name, int value);
-			void SetUniform(const char* name, float value);
+			void VSetUniform(const char* name, int value);
+			void VSetUniform(const char* name, float value);
 
-			void SetUniform(const char* name, int value1, int value2);
-			void SetUniform(const char* name, float value1, float value2);
+			void VSetUniform(const char* name, int value1, int value2);
+			void VSetUniform(const char* name, float value1, float value2);
 
-			void SetUniform(const char* name, int value1, int value2, int value3);
-			void SetUniform(const char* name, float value1, float value2, float value3);
+			void VSetUniform(const char* name, int value1, int value2, int value3);
+			void VSetUniform(const char* name, float value1, float value2, float value3);
 
-			void SetUniform(const char* name, int value1, int value2, int value3, int value4);
-			void SetUniform(const char* name, float value1, float value2, float value3, float value4);
+			void VSetUniform(const char* name, int value1, int value2, int value3, int value4);
+			void VSetUniform(const char* name, float value1, float value2, float value3, float value4);
 
-			void SetUniformVector(const char* name, int* vector, unsigned int vector_size);
-			void SetUniformVector(const char* name, float* vector, unsigned int vector_size);
+			void VSetUniformVector(const char* name, int* vector, unsigned int vector_size);
+			void VSetUniformVector(const char* name, float* vector, unsigned int vector_size);
 
-			void SetUniformMatrix(const char* name, int* matrix, unsigned int matrix_size);
-			void SetUniformMatrix(const char* name, float* matrix, unsigned int matrix_size);
+			void VSetUniformMatrix(const char* name, int* matrix, unsigned int matrix_size);
+			void VSetUniformMatrix(const char* name, float* matrix, unsigned int matrix_size);
 
 			// ===========================================
 			// New Functions

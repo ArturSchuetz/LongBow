@@ -23,8 +23,8 @@ namespace Bow {
 			OGLColorAttachments();
 			~OGLColorAttachments();
 
-			Texture2DPtr GetAttachment(unsigned int index) const;
-			void SetAttachment(unsigned int index, Texture2DPtr texture);
+			Texture2DPtr VGetAttachment(unsigned int index) const;
+			void VSetAttachment(unsigned int index, Texture2DPtr texture);
 
 			int GetCount() const;
 

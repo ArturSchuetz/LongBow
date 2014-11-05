@@ -29,7 +29,7 @@ namespace Bow {
 
 		void OGLVertexArray::Clean()
 		{
-			m_attributes.Clean();
+			m_Attributes.Clean();
 
 			if (m_dirtyIndexBuffer)
 			{
@@ -48,25 +48,25 @@ namespace Bow {
 
 		int OGLVertexArray::MaximumArrayIndex()
 		{
-			return m_attributes.GetMaximumArrayIndex();
+			return m_Attributes.GetMaximumArrayIndex();
 		}
 
-		VertexBufferAttributeMap OGLVertexArray::GetAttributes()
+		VertexBufferAttributeMap OGLVertexArray::VGetAttributes()
 		{
-			return m_attributes.GetAttributes();
+			return m_Attributes.GetAttributes();
 		}
 
-		void OGLVertexArray::SetAttribute(int Location, VertexBufferAttributePtr pointer)
+		void OGLVertexArray::VSetAttribute(int Location, VertexBufferAttributePtr pointer)
 		{
-			m_attributes.SetAttribute(Location, pointer);
+			m_Attributes.SetAttribute(Location, pointer);
 		}
 
-		IndexBufferPtr OGLVertexArray::GetIndexBuffer()
+		IndexBufferPtr OGLVertexArray::VGetIndexBuffer()
 		{
 			return std::dynamic_pointer_cast<IIndexBuffer>(m_indexBuffer);
 		}
 
-		void OGLVertexArray::SetIndexBuffer(IndexBufferPtr indexBufferPtr)
+		void OGLVertexArray::VSetIndexBuffer(IndexBufferPtr indexBufferPtr)
 		{
 			m_indexBuffer = std::dynamic_pointer_cast<OGLIndexBuffer>(indexBufferPtr);
 			m_dirtyIndexBuffer = true;

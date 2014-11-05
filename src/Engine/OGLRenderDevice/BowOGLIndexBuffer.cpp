@@ -5,13 +5,13 @@
 namespace Bow {
 	namespace Renderer {
 
-		OGLIndexBuffer::OGLIndexBuffer(BufferHint usageHint, IndexBufferDatatype dataType, int sizeInBytes) : m_bufferObject(GL_ELEMENT_ARRAY_BUFFER, usageHint, sizeInBytes), m_Datatype(dataType) {}
+		OGLIndexBuffer::OGLIndexBuffer(BufferHint usageHint, IndexBufferDatatype dataType, int sizeInBytes) : m_BufferObject(GL_ELEMENT_ARRAY_BUFFER, usageHint, sizeInBytes), m_Datatype(dataType) {}
 
 		OGLIndexBuffer::~OGLIndexBuffer() { }
 
 		void OGLIndexBuffer::Bind()
 		{
-			m_bufferObject.Bind();
+			m_BufferObject.Bind();
 		}
 
 		void OGLIndexBuffer::UnBind()
@@ -19,30 +19,30 @@ namespace Bow {
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		}
 
-		void OGLIndexBuffer::CopyFromSystemMemory(void* bufferInSystemMemory, int destinationOffsetInBytes, int lengthInBytes)
+		void OGLIndexBuffer::VCopyFromSystemMemory(void* bufferInSystemMemory, int destinationOffsetInBytes, int lengthInBytes)
 		{
-			m_bufferObject.CopyFromSystemMemory(bufferInSystemMemory, destinationOffsetInBytes, lengthInBytes);
+			m_BufferObject.CopyFromSystemMemory(bufferInSystemMemory, destinationOffsetInBytes, lengthInBytes);
 		}
 
-		std::shared_ptr<void> OGLIndexBuffer::CopyToSystemMemory(int offsetInBytes, int sizeInBytes)
+		std::shared_ptr<void> OGLIndexBuffer::VCopyToSystemMemory(int offsetInBytes, int sizeInBytes)
 		{
-			return m_bufferObject.CopyToSystemMemory(offsetInBytes, sizeInBytes);
+			return m_BufferObject.CopyToSystemMemory(offsetInBytes, sizeInBytes);
 		}
 
 		int OGLIndexBuffer::GetCount()
 		{
 			size_t elementsize = m_Datatype == IndexBufferDatatype::UnsignedInt ? sizeof(unsigned int) : sizeof(unsigned short);
-			return (m_bufferObject.GetSizeInBytes() / elementsize);
+			return (m_BufferObject.GetSizeInBytes() / elementsize);
 		}
 
-		int OGLIndexBuffer::GetSizeInBytes()
+		int OGLIndexBuffer::VGetSizeInBytes()
 		{
-			return m_bufferObject.GetSizeInBytes();
+			return m_BufferObject.GetSizeInBytes();
 		}
 
-		BufferHint OGLIndexBuffer::GetUsageHint()
+		BufferHint OGLIndexBuffer::VGetUsageHint()
 		{
-			return m_bufferObject.GetUsageHint();
+			return m_BufferObject.GetUsageHint();
 		}
 
 	}

@@ -8,22 +8,22 @@ namespace Bow {
 		class IVertexBuffer
 		{
 		public:
-			virtual void CopyFromSystemMemory(void* bufferInSystemMemory, int lengthInBytes)
+			virtual void VCopyFromSystemMemory(void* bufferInSystemMemory, int lengthInBytes)
 			{
-				CopyFromSystemMemory(bufferInSystemMemory, 0, lengthInBytes);
+				VCopyFromSystemMemory(bufferInSystemMemory, 0, lengthInBytes);
 			}
 
-			virtual void CopyFromSystemMemory(void* bufferInSystemMemory, int destinationOffsetInBytes, int lengthInBytes) = 0;
+			virtual void VCopyFromSystemMemory(void* bufferInSystemMemory, int destinationOffsetInBytes, int lengthInBytes) = 0;
 
-			virtual std::shared_ptr<void> CopyToSystemMemory()
+			virtual std::shared_ptr<void> VCopyToSystemMemory()
 			{
-				return CopyToSystemMemory(0, GetSizeInBytes());
+				return VCopyToSystemMemory(0, VGetSizeInBytes());
 			}
 
-			virtual std::shared_ptr<void> CopyToSystemMemory(int offsetInBytes, int sizeInBytes) = 0;
+			virtual std::shared_ptr<void> VCopyToSystemMemory(int offsetInBytes, int sizeInBytes) = 0;
 
-			virtual int			GetSizeInBytes() = 0;
-			virtual BufferHint	GetUsageHint() = 0;
+			virtual int			VGetSizeInBytes() = 0;
+			virtual BufferHint	VGetUsageHint() = 0;
 		};
 
 	}

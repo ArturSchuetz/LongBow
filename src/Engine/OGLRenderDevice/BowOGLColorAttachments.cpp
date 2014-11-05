@@ -16,14 +16,14 @@ namespace Bow {
 		{
 		}
 
-		Texture2DPtr OGLColorAttachments::GetAttachment(unsigned int index) const
+		Texture2DPtr OGLColorAttachments::VGetAttachment(unsigned int index) const
 		{
 			return std::dynamic_pointer_cast<ITexture2D>(Attachments.at(index).Texture);
 		}
 
-		void OGLColorAttachments::SetAttachment(unsigned int index, Texture2DPtr texture)
+		void OGLColorAttachments::VSetAttachment(unsigned int index, Texture2DPtr texture)
 		{
-			LOG_ASSERT(!((texture != nullptr) && (!texture->GetDescription().ColorRenderable())), "Texture must be color renderable but the Description.ColorRenderable property is false.");
+			LOG_ASSERT(!((texture != nullptr) && (!texture->VGetDescription().ColorRenderable())), "Texture must be color renderable but the Description.ColorRenderable property is false.");
 
 			if (Attachments.find(index) == Attachments.end())
 				Attachments.insert(std::pair<int, OGLColorAttachment>(index, OGLColorAttachment()));

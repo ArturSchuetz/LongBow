@@ -15,7 +15,7 @@ namespace Bow {
 		VertexBufferAttributeMap OGLVertexBufferAttributes::GetAttributes()
 		{
 			VertexBufferAttributeMap reslut;
-			for (auto it = m_attributes.begin(); it != m_attributes.end(); it++)
+			for (auto it = m_Attributes.begin(); it != m_Attributes.end(); it++)
 			{
 				reslut.at(it->first) = it->second.VertexBufferAttribute;
 			}
@@ -24,17 +24,17 @@ namespace Bow {
 
 		VertexBufferAttributePtr OGLVertexBufferAttributes::GetAttribute(int index)
 		{
-			return m_attributes[index].VertexBufferAttribute;
+			return m_Attributes[index].VertexBufferAttribute;
 		}
 
 		int OGLVertexBufferAttributes::NumberOfVertices(VertexBufferAttributePtr attribute)
 		{
-			return attribute->GetVertexBuffer()->GetSizeInBytes() / attribute->GetStrideInBytes();
+			return attribute->GetVertexBuffer()->VGetSizeInBytes() / attribute->GetStrideInBytes();
 		}
 
 		void OGLVertexBufferAttributes::SetAttribute(int location, VertexBufferAttributePtr value)
 		{
-			if (m_attributes[location].VertexBufferAttribute != value)
+			if (m_Attributes[location].VertexBufferAttribute != value)
 			{
 				if (value != nullptr)
 				{
@@ -53,17 +53,17 @@ namespace Bow {
 					}
 				}
 
-				if ((m_attributes[location].VertexBufferAttribute != nullptr) && (value == nullptr))
+				if ((m_Attributes[location].VertexBufferAttribute != nullptr) && (value == nullptr))
 				{
 					--m_count;
 				}
-				else if ((m_attributes[location].VertexBufferAttribute == nullptr) && (value != nullptr))
+				else if ((m_Attributes[location].VertexBufferAttribute == nullptr) && (value != nullptr))
 				{
 					++m_count;
 				}
 
-				m_attributes[location].VertexBufferAttribute = value;
-				m_attributes[location].Dirty = true;
+				m_Attributes[location].VertexBufferAttribute = value;
+				m_Attributes[location].Dirty = true;
 				m_dirty = true;
 			}
 		}
@@ -74,11 +74,11 @@ namespace Bow {
 			{
 				int maximumArrayIndex = 0;
 
-				for (auto it = m_attributes.begin(); it != m_attributes.end(); it++)
+				for (auto it = m_Attributes.begin(); it != m_Attributes.end(); it++)
 				{
-					VertexBufferAttributePtr attribute = m_attributes[it->first].VertexBufferAttribute;
+					VertexBufferAttributePtr attribute = m_Attributes[it->first].VertexBufferAttribute;
 
-					if (m_attributes[it->first].Dirty)
+					if (m_Attributes[it->first].Dirty)
 					{
 						if (attribute != nullptr)
 						{
@@ -89,7 +89,7 @@ namespace Bow {
 							Detach(it->first);
 						}
 
-						m_attributes[it->first].Dirty = false;
+						m_Attributes[it->first].Dirty = false;
 					}
 
 					if (attribute != nullptr)
@@ -113,7 +113,7 @@ namespace Bow {
 		{
 			glEnableVertexAttribArray(location);
 
-			VertexBufferAttributePtr attribute = m_attributes[location].VertexBufferAttribute;
+			VertexBufferAttributePtr attribute = m_Attributes[location].VertexBufferAttribute;
 			OGLVertexBufferPtr bufferObjectGL = std::dynamic_pointer_cast<OGLVertexBuffer>(attribute->GetVertexBuffer());
 
 			bufferObjectGL->Bind();

@@ -9,7 +9,7 @@
 namespace Bow {
 	namespace Renderer {
 
-		OGLBuffer::OGLBuffer(unsigned int type, BufferHint usageHint, int sizeInBytes) : m_sizeInBytes(sizeInBytes), m_type(type), m_usageHint(OGLTypeConverter::To(usageHint))
+		OGLBuffer::OGLBuffer(unsigned int type, BufferHint usageHint, int sizeInBytes) : m_sizeInBytes(sizeInBytes), m_type(type), m_UsageHint(OGLTypeConverter::To(usageHint))
 		{
 			m_name = OGLBufferNamePtr(new OGLBufferName());
 
@@ -24,7 +24,7 @@ namespace Bow {
 			//
 			glBindVertexArray(0);
 			Bind();
-			glBufferData(m_type, sizeInBytes, nullptr, m_usageHint);
+			glBufferData(m_type, sizeInBytes, nullptr, m_UsageHint);
 		}
 
 		OGLBuffer::~OGLBuffer() { }
@@ -61,7 +61,7 @@ namespace Bow {
 
 		BufferHint OGLBuffer::GetUsageHint()
 		{
-			return OGLTypeConverter::ToBufferHint(m_usageHint);
+			return OGLTypeConverter::ToBufferHint(m_UsageHint);
 		}
 
 		OGLBufferNamePtr OGLBuffer::GetHandle()

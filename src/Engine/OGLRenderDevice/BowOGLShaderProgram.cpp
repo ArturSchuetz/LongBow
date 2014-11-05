@@ -43,7 +43,7 @@ namespace Bow {
 
 			if (linkStatus == 0)
 			{
-				LOG_ERROR(GetLog().c_str());
+				LOG_ERROR(VGetLog().c_str());
 				m_ready = false;
 			}
 			else
@@ -65,7 +65,7 @@ namespace Bow {
 		}
 
 
-		std::string	OGLShaderProgram::GetLog()
+		std::string	OGLShaderProgram::VGetLog()
 		{
 			char* buffer;
 			GLint length, result;
@@ -80,13 +80,13 @@ namespace Bow {
 		}
 
 
-		ShaderVertexAttributePtr OGLShaderProgram::GetVertexAttribute(std::string name)
+		ShaderVertexAttributePtr OGLShaderProgram::VGetVertexAttribute(std::string name)
 		{
 			return m_shaderVertexAttributes[name];
 		}
 
 
-		int OGLShaderProgram::GetFragmentOutputLocation(std::string name)
+		int OGLShaderProgram::VGetFragmentOutputLocation(std::string name)
 		{
 			return (*m_fragmentOutputs)[name];
 		}
@@ -258,67 +258,67 @@ namespace Bow {
 				(type == UniformType::FloatMatrix43);
 		}
 
-		void OGLShaderProgram::SetUniform(const char* name, int val)
+		void OGLShaderProgram::VSetUniform(const char* name, int val)
 		{
 			SetUniformI(name, &val, 1);
 		}
 
-		void OGLShaderProgram::SetUniform(const char* name, float val)
+		void OGLShaderProgram::VSetUniform(const char* name, float val)
 		{
 			SetUniformF(name, &val, 2);
 		}
 
-		void OGLShaderProgram::SetUniform(const char* name, int val1, int val2)
+		void OGLShaderProgram::VSetUniform(const char* name, int val1, int val2)
 		{
 			int val[2] = { val1, val2 };
 			SetUniformI(name, val, 2);
 		}
 
-		void OGLShaderProgram::SetUniform(const char* name, float val1, float val2)
+		void OGLShaderProgram::VSetUniform(const char* name, float val1, float val2)
 		{
 			float val[2] = { val1, val2 };
 			SetUniformF(name, val, 2);
 		}
 
-		void OGLShaderProgram::SetUniform(const char* name, int val1, int val2, int val3)
+		void OGLShaderProgram::VSetUniform(const char* name, int val1, int val2, int val3)
 		{
 			int val[3] = { val1, val2, val3 };
 			SetUniformI(name, val, 3);
 		}
 
-		void OGLShaderProgram::SetUniform(const char* name, float val1, float val2, float val3)
+		void OGLShaderProgram::VSetUniform(const char* name, float val1, float val2, float val3)
 		{
 			float val[3] = { val1, val2, val3 };
 			SetUniformF(name, val, 3);
 		}
 
-		void OGLShaderProgram::SetUniform(const char* name, int val1, int val2, int val3, int val4)
+		void OGLShaderProgram::VSetUniform(const char* name, int val1, int val2, int val3, int val4)
 		{
 			int val[4] = { val1, val2, val3, val4 };
 			SetUniformI(name, val, 4);
 		}
 
-		void OGLShaderProgram::SetUniform(const char* name, float val1, float val2, float val3, float val4)
+		void OGLShaderProgram::VSetUniform(const char* name, float val1, float val2, float val3, float val4)
 		{
 			float val[4] = { val1, val2, val3, val4 };
 			SetUniformF(name, val, 4);
 		}
 
-		void OGLShaderProgram::SetUniformVector(const char* name, int* val, unsigned int array_count)
+		void OGLShaderProgram::VSetUniformVector(const char* name, int* val, unsigned int array_count)
 		{
 			SetUniformI(name, val, array_count);
 		}
-		void OGLShaderProgram::SetUniformVector(const char* name, float* val, unsigned int array_count)
+		void OGLShaderProgram::VSetUniformVector(const char* name, float* val, unsigned int array_count)
 		{
 			SetUniformF(name, val, array_count);
 		}
 
-		void OGLShaderProgram::SetUniformMatrix(const char* name, int* val, unsigned int array_count)
+		void OGLShaderProgram::VSetUniformMatrix(const char* name, int* val, unsigned int array_count)
 		{
 			SetUniformI(name, val, array_count);
 		}
 
-		void OGLShaderProgram::SetUniformMatrix(const char* name, float* val, unsigned int array_coun)
+		void OGLShaderProgram::VSetUniformMatrix(const char* name, float* val, unsigned int array_coun)
 		{
 			SetUniformF(name, val, array_coun);
 		}

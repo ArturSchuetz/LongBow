@@ -7,6 +7,7 @@
 #include "resource.h"
 
 using namespace Bow;
+using namespace Core;
 using namespace Renderer;
 
 std::string LoadShaderFromResouce(int name)
@@ -63,16 +64,16 @@ int main()
 	if (mesh->Indices->Type == IndicesType::UnsignedInt)
 	{
 		indexBuffer = DeviceOGL->VCreateIndexBuffer(BufferHint::StaticDraw, IndexBufferDatatype::UnsignedInt, sizeof(unsigned int) * mesh->GetNumberOfIndices());
-		indexBuffer->CopyFromSystemMemory(&(((IndicesUnsignedInt*)(mesh->Indices))->Values[0]), sizeof(unsigned int) * mesh->GetNumberOfIndices());
+		indexBuffer->VCopyFromSystemMemory(&(((IndicesUnsignedInt*)(mesh->Indices))->Values[0]), sizeof(unsigned int) * mesh->GetNumberOfIndices());
 	}
 	else if (mesh->Indices->Type == IndicesType::UnsignedShort)
 	{
 		indexBuffer = DeviceOGL->VCreateIndexBuffer(BufferHint::StaticDraw, IndexBufferDatatype::UnsignedShort, sizeof(unsigned short) * mesh->GetNumberOfIndices());
-		indexBuffer->CopyFromSystemMemory(&(((IndicesUnsignedShort*)(mesh->Indices))->Values[0]), sizeof(unsigned short) * mesh->GetNumberOfIndices());
+		indexBuffer->VCopyFromSystemMemory(&(((IndicesUnsignedShort*)(mesh->Indices))->Values[0]), sizeof(unsigned short) * mesh->GetNumberOfIndices());
 	}
 
 	VertexBufferPtr VertexBuffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector3<float>) * mesh->GetNumberOfVertices());
-	VertexBuffer->CopyFromSystemMemory(mesh->Positions, sizeof(Vector3<float>) * mesh->GetNumberOfVertices());
+	VertexBuffer->VCopyFromSystemMemory(mesh->Positions, sizeof(Vector3<float>) * mesh->GetNumberOfVertices());
 
 	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(VertexBuffer, ComponentDatatype::Float, 3));
 
@@ -80,13 +81,13 @@ int main()
 	VertexArrayPtr VertexArray = ContextOGL->VCreateVertexArray();
 
 	// connect buffer with location in shader
-	VertexArray->SetIndexBuffer(indexBuffer);
-	VertexArray->SetAttribute(ShaderProgram->GetVertexAttribute("in_Position")->Location, PositionAttribute);
+	VertexArray->VSetIndexBuffer(indexBuffer);
+	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_Position")->Location, PositionAttribute);
 
 	///////////////////////////////////////////////////////////////////
 	// Uniforms
 
-	ShaderProgram->SetUniform("u_color", Vector4<float>(1.0f, 0.0f, 0.0f, 1.0f));
+	ShaderProgram->VSetUniform("u_color", Vector4<float>(1.0f, 0.0f, 0.0f, 1.0f));
 
 	Camera camera(WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
 	Vector3<float> Position = Vector3<float>(258.634399f, 126.081482f, 258.634399f);
@@ -115,11 +116,11 @@ int main()
 
 		camera.SetResolution(WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
 
-		ShaderProgram->SetUniform("u_ModelViewProj", (Core::Matrix3D<float>)camera.CalculateWorldViewProjection(worldMat));
+		ShaderProgram->VSetUniform("u_ModelViewProj", (Core::Matrix3D<float>)camera.CalculateWorldViewProjection(worldMat));
 
 		for (unsigned int i = 0; i < mesh->GetNumberOfSubmeshes(); ++i)
 		{
-			ShaderProgram->SetUniform("u_color", mesh->Materials[mesh->SubMeshes[i].MaterialID].diffuse);
+			ShaderProgram->VSetUniform("u_color", mesh->Materials[mesh->SubMeshes[i].MaterialID].diffuse);
 			ContextOGL->VDraw(PrimitiveType::Triangles, mesh->SubMeshes[i].StartIndex, mesh->SubMeshes[i].TriangleCount * 3, VertexArray, ShaderProgram, renderState);
 		}
 

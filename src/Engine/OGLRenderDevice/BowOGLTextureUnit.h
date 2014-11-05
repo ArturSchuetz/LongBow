@@ -42,7 +42,7 @@ namespace Bow {
 
 			OGLTexture2DPtr			m_texture;
 			OGLTextureSamplerPtr	m_textureSampler;
-			DirtyFlags				m_dirtyFlags;
+			DirtyFlags				m_DirtyFlags;
 		};
 
 		typedef std::shared_ptr<OGLTextureUnit> OGLTextureUnitPtr;

@@ -23,18 +23,18 @@ namespace Bow {
 			void BindToLastTextureUnit();
 			static void OGLTexture2D::UnBind(GLenum textureTarget);
 
-			void CopyFromBuffer(WritePixelBufferPtr pixelBuffer, int xOffset, int yOffset, int width, int height, ImageFormat format, ImageDatatype dataType, int rowAlignment);
-			void CopyFromSystemMemory(void* bitmapInSystemMemory, int xOffset, int yOffset, int width, int height, ImageFormat format, ImageDatatype dataType, int rowAlignment);
-			std::shared_ptr<void> CopyToSystemMemory(ImageFormat format, ImageDatatype dataType, int rowAlignment);
+			void VCopyFromBuffer(WritePixelBufferPtr pixelBuffer, int xOffset, int yOffset, int width, int height, ImageFormat format, ImageDatatype dataType, int rowAlignment);
+			void VCopyFromSystemMemory(void* bitmapInSystemMemory, int xOffset, int yOffset, int width, int height, ImageFormat format, ImageDatatype dataType, int rowAlignment);
+			std::shared_ptr<void> VCopyToSystemMemory(ImageFormat format, ImageDatatype dataType, int rowAlignment);
 
-			Texture2DDescription GetDescription();
+			Texture2DDescription VGetDescription();
 
 		private:
 			void GenerateMipmaps();
 			void ApplySampler(OGLTextureSampler sampler);
 
 			const GLenum				m_target;
-			const Texture2DDescription	m_description;
+			const Texture2DDescription	m_Description;
 			GLenum						m_lastTextureUnit;
 
 			unsigned int				m_TextureHandle;

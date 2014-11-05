@@ -40,9 +40,9 @@ namespace Bow {
 
 		void OGLFramebuffer::Clean()
 		{
-			if (m_colorAttachments.IsDirty)
+			if (m_ColorAttachments.IsDirty)
 			{
-				OGLColorAttachmentMap colorAttachments = m_colorAttachments.Attachments;
+				OGLColorAttachmentMap colorAttachments = m_ColorAttachments.Attachments;
 
 				GLenum *drawBuffers = new GLenum[colorAttachments.size()];
 				for (auto it = colorAttachments.begin(); it != colorAttachments.end(); it++)
@@ -61,14 +61,14 @@ namespace Bow {
 				glDrawBuffers(colorAttachments.size(), drawBuffers);
 				delete[] drawBuffers;
 
-				m_colorAttachments.IsDirty = false;
+				m_ColorAttachments.IsDirty = false;
 			}
 
-			if (m_dirtyFlags != DirtyFlags::None)
+			if (m_DirtyFlags != DirtyFlags::None)
 			{
-				if ((DirtyFlags)((int)m_dirtyFlags & (int)DirtyFlags::DepthAttachment) == DirtyFlags::DepthAttachment)
+				if ((DirtyFlags)((int)m_DirtyFlags & (int)DirtyFlags::DepthAttachment) == DirtyFlags::DepthAttachment)
 				{
-					Attach(GL_DEPTH_ATTACHMENT, m_depthAttachment);
+					Attach(GL_DEPTH_ATTACHMENT, m_DepthAttachment);
 				}
 
 				//
@@ -82,60 +82,60 @@ namespace Bow {
 				// We do not expose just a stencil attachment because TextureFormat
 				// does not contain a stencil only format.
 				//
-				if ((DirtyFlags)((int)m_dirtyFlags & (int)DirtyFlags::DepthStencilAttachment) == DirtyFlags::DepthStencilAttachment)
+				if ((DirtyFlags)((int)m_DirtyFlags & (int)DirtyFlags::DepthStencilAttachment) == DirtyFlags::DepthStencilAttachment)
 				{
-					Attach(GL_DEPTH_STENCIL_ATTACHMENT, m_depthStencilAttachment);
+					Attach(GL_DEPTH_STENCIL_ATTACHMENT, m_DepthStencilAttachment);
 				}
 
-				m_dirtyFlags = DirtyFlags::None;
+				m_DirtyFlags = DirtyFlags::None;
 			}
 		}
 
 
-		Texture2DPtr OGLFramebuffer::GetColorAttachment(int index) const
+		Texture2DPtr OGLFramebuffer::VGetColorAttachment(int index) const
 		{
-			return m_colorAttachments.GetAttachment(index);
+			return m_ColorAttachments.VGetAttachment(index);
 		}
 
 
-		void OGLFramebuffer::SetColorAttachment(int index, Texture2DPtr texture)
+		void OGLFramebuffer::VSetColorAttachment(int index, Texture2DPtr texture)
 		{
-			m_colorAttachments.SetAttachment(index, texture);
+			m_ColorAttachments.VSetAttachment(index, texture);
 		}
 
 
-		Texture2DPtr OGLFramebuffer::GetDepthAttachment(void) const
+		Texture2DPtr OGLFramebuffer::VGetDepthAttachment(void) const
 		{
-			return m_depthAttachment;
+			return m_DepthAttachment;
 		}
 
 
-		void OGLFramebuffer::SetDepthAttachment(Texture2DPtr texture)
+		void OGLFramebuffer::VSetDepthAttachment(Texture2DPtr texture)
 		{
-			if (m_depthAttachment != texture)
+			if (m_DepthAttachment != texture)
 			{
-				LOG_ASSERT(!((texture != nullptr) && (!texture->GetDescription().DepthRenderable())), "Texture must be depth renderable but the Description.DepthRenderable property is false.");
+				LOG_ASSERT(!((texture != nullptr) && (!texture->VGetDescription().DepthRenderable())), "Texture must be depth renderable but the Description.DepthRenderable property is false.");
 
-				m_depthAttachment = std::dynamic_pointer_cast<OGLTexture2D>(texture);
-				m_dirtyFlags = (DirtyFlags)((int)m_dirtyFlags | (int)DirtyFlags::DepthAttachment);
+				m_DepthAttachment = std::dynamic_pointer_cast<OGLTexture2D>(texture);
+				m_DirtyFlags = (DirtyFlags)((int)m_DirtyFlags | (int)DirtyFlags::DepthAttachment);
 			}
 		}
 
 
-		Texture2DPtr OGLFramebuffer::GetDepthStencilAttachment(void) const
+		Texture2DPtr OGLFramebuffer::VGetDepthStencilAttachment(void) const
 		{
-			return m_depthStencilAttachment;
+			return m_DepthStencilAttachment;
 		}
 
 
-		void OGLFramebuffer::SetDepthStencilAttachment(Texture2DPtr texture)
+		void OGLFramebuffer::VSetDepthStencilAttachment(Texture2DPtr texture)
 		{
-			if (m_depthStencilAttachment != texture)
+			if (m_DepthStencilAttachment != texture)
 			{
-				LOG_ASSERT(!((texture != nullptr) && (!texture->GetDescription().DepthStencilRenderable())), "Texture must be depth/stencil renderable but the Description.DepthStencilRenderable property is false.");
+				LOG_ASSERT(!((texture != nullptr) && (!texture->VGetDescription().DepthStencilRenderable())), "Texture must be depth/stencil renderable but the Description.DepthStencilRenderable property is false.");
 
-				m_depthStencilAttachment = std::dynamic_pointer_cast<OGLTexture2D>(texture);
-				m_dirtyFlags = (DirtyFlags)((int)m_dirtyFlags | (int)DirtyFlags::DepthStencilAttachment);
+				m_DepthStencilAttachment = std::dynamic_pointer_cast<OGLTexture2D>(texture);
+				m_DirtyFlags = (DirtyFlags)((int)m_DirtyFlags | (int)DirtyFlags::DepthStencilAttachment);
 			}
 		}
 

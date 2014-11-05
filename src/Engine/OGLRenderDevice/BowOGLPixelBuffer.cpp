@@ -9,13 +9,13 @@
 namespace Bow {
 	namespace Renderer {
 
-		OGLPixelBuffer::OGLPixelBuffer(GLenum target, BufferHint usageHint, int sizeInBytes) : m_name(new OGLBufferName()), m_sizeInBytes(sizeInBytes), m_target(target), m_usageHint(OGLTypeConverter::To(usageHint))
+		OGLPixelBuffer::OGLPixelBuffer(GLenum target, BufferHint usageHint, int sizeInBytes) : m_name(new OGLBufferName()), m_sizeInBytes(sizeInBytes), m_target(target), m_UsageHint(OGLTypeConverter::To(usageHint))
 		{
 
 			LOG_ASSERT(!(sizeInBytes <= 0), "sizeInBytes must be greater than zero");
 
 			Bind();
-			glBufferData(m_target, sizeInBytes, nullptr, m_usageHint);
+			glBufferData(m_target, sizeInBytes, nullptr, m_UsageHint);
 		}
 
 
@@ -55,7 +55,7 @@ namespace Bow {
 
 		BufferHint OGLPixelBuffer::GetUsageHint() const
 		{
-			return OGLTypeConverter::ToBufferHint(m_usageHint);
+			return OGLTypeConverter::ToBufferHint(m_UsageHint);
 		}
 
 

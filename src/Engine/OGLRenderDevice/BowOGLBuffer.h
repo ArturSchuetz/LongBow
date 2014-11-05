@@ -26,7 +26,7 @@ namespace Bow {
 			OGLBufferNamePtr m_name;
 			const int m_sizeInBytes;
 			const unsigned int m_type;
-			const unsigned int m_usageHint;
+			const unsigned int m_UsageHint;
 		};
 
 		typedef std::shared_ptr<OGLBuffer> OGLBufferPtr;

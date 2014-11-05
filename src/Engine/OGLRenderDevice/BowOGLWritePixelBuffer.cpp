@@ -15,14 +15,14 @@ namespace Bow {
 		};
 
 
-		OGLWritePixelBuffer::OGLWritePixelBuffer(PixelBufferHint usageHint, int sizeInBytes) : m_usageHint(usageHint), m_bufferObject(GL_PIXEL_UNPACK_BUFFER, wpb_bufferHints[(int)usageHint], sizeInBytes)
+		OGLWritePixelBuffer::OGLWritePixelBuffer(PixelBufferHint usageHint, int sizeInBytes) : m_UsageHint(usageHint), m_BufferObject(GL_PIXEL_UNPACK_BUFFER, wpb_bufferHints[(int)usageHint], sizeInBytes)
 		{
 		}
 
 
 		void OGLWritePixelBuffer::Bind()
 		{
-			m_bufferObject.Bind();
+			m_BufferObject.Bind();
 		}
 
 
@@ -32,27 +32,27 @@ namespace Bow {
 		}
 
 
-		void OGLWritePixelBuffer::CopyFromSystemMemory(void* bufferInSystemMemory, int destinationOffsetInBytes, int lengthInBytes)
+		void OGLWritePixelBuffer::VCopyFromSystemMemory(void* bufferInSystemMemory, int destinationOffsetInBytes, int lengthInBytes)
 		{
-			m_bufferObject.CopyFromSystemMemory(bufferInSystemMemory, destinationOffsetInBytes, lengthInBytes);
+			m_BufferObject.CopyFromSystemMemory(bufferInSystemMemory, destinationOffsetInBytes, lengthInBytes);
 		}
 
 
-		std::shared_ptr<void> OGLWritePixelBuffer::CopyToSystemMemory(int offsetInBytes, int sizeInBytes)
+		std::shared_ptr<void> OGLWritePixelBuffer::VCopyToSystemMemory(int offsetInBytes, int sizeInBytes)
 		{
-			return m_bufferObject.CopyToSystemMemory(offsetInBytes, sizeInBytes);
+			return m_BufferObject.CopyToSystemMemory(offsetInBytes, sizeInBytes);
 		}
 
 
-		int	OGLWritePixelBuffer::GetSizeInBytes() const
+		int	OGLWritePixelBuffer::VGetSizeInBytes() const
 		{
-			return m_bufferObject.GetSizeInBytes();
+			return m_BufferObject.GetSizeInBytes();
 		}
 
 
-		PixelBufferHint	OGLWritePixelBuffer::GetUsageHint() const
+		PixelBufferHint	OGLWritePixelBuffer::VGetUsageHint() const
 		{
-			return m_usageHint;
+			return m_UsageHint;
 		}
 
 	}

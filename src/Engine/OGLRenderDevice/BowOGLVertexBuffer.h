@@ -16,14 +16,14 @@ namespace Bow {
 			void Bind();
 			static void UnBind();
 
-			void CopyFromSystemMemory(void* bufferInSystemMemory, int destinationOffsetInBytes, int lengthInBytes);
-			std::shared_ptr<void> CopyToSystemMemory(int offsetInBytes, int sizeInBytes);
+			void VCopyFromSystemMemory(void* bufferInSystemMemory, int destinationOffsetInBytes, int lengthInBytes);
+			std::shared_ptr<void> VCopyToSystemMemory(int offsetInBytes, int sizeInBytes);
 
-			int			GetSizeInBytes();
-			BufferHint	GetUsageHint();
+			int			VGetSizeInBytes();
+			BufferHint	VGetUsageHint();
 
 		private:
-			OGLBuffer	m_bufferObject;
+			OGLBuffer	m_BufferObject;
 		};
 
 		typedef std::shared_ptr<OGLVertexBuffer> OGLVertexBufferPtr;

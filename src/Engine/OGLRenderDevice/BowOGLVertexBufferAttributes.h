@@ -33,7 +33,7 @@ namespace Bow {
 			static inline int NumberOfVertices(VertexBufferAttributePtr attribute);
 
 		private:
-			OGLVertexBufferAttributeMap m_attributes;
+			OGLVertexBufferAttributeMap m_Attributes;
 			int							m_count;
 			int							m_maximumArrayIndex;
 			bool						m_dirty;

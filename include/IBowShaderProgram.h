@@ -12,49 +12,49 @@ namespace Bow {
 		public:
 			virtual ~IShaderProgram(){}
 
-			virtual std::string					GetLog() = 0;
-			virtual ShaderVertexAttributePtr	GetVertexAttribute(std::string name) = 0;
-			virtual int							GetFragmentOutputLocation(std::string name) = 0;
+			virtual std::string					VGetLog() = 0;
+			virtual ShaderVertexAttributePtr	VGetVertexAttribute(std::string name) = 0;
+			virtual int							VGetFragmentOutputLocation(std::string name) = 0;
 
-			void SetUniform(const char* name, Core::Vector2<int> value) {
+			void VSetUniform(const char* name, Core::Vector2<int> value) {
 				VSetUniformVector(name, value.a, 2);
 			}
-			void SetUniform(const char* name, Core::Vector2<float> value) {
+			void VSetUniform(const char* name, Core::Vector2<float> value) {
 				VSetUniformVector(name, value.a, 2);
 			}
 
-			void SetUniform(const char* name, Core::Vector3<int> value) {
+			void VSetUniform(const char* name, Core::Vector3<int> value) {
 				VSetUniformVector(name, value.a, 3);
 			}
-			void SetUniform(const char* name, Core::Vector3<float> value) {
+			void VSetUniform(const char* name, Core::Vector3<float> value) {
 				VSetUniformVector(name, value.a, 3);
 			}
 
-			void SetUniform(const char* name, Core::Vector4<int> value) {
+			void VSetUniform(const char* name, Core::Vector4<int> value) {
 				VSetUniformVector(name, value.a, 4);
 			}
-			void SetUniform(const char* name, Core::Vector4<float> value) {
+			void VSetUniform(const char* name, Core::Vector4<float> value) {
 				VSetUniformVector(name, value.a, 4);
 			}
 
-			void SetUniform(const char* name, Core::Matrix2D<int> value) {
+			void VSetUniform(const char* name, Core::Matrix2D<int> value) {
 				VSetUniformMatrix(name, value.a, 9);
 			}
-			void SetUniform(const char* name, Core::Matrix2D<float> value) {
+			void VSetUniform(const char* name, Core::Matrix2D<float> value) {
 				VSetUniformMatrix(name, value.a, 9);
 			}
 
-			void SetUniform(const char* name, Core::Matrix3D<int> value) {
+			void VSetUniform(const char* name, Core::Matrix3D<int> value) {
 				VSetUniformMatrix(name, value.a, 16);
 			}
-			void SetUniform(const char* name, Core::Matrix3D<float> value) {
+			void VSetUniform(const char* name, Core::Matrix3D<float> value) {
 				VSetUniformMatrix(name, value.a, 16);
 			}
 
-			void SetUniform(const char* name, Core::Matrix2x2<int> value) {
+			void VSetUniform(const char* name, Core::Matrix2x2<int> value) {
 				VSetUniformMatrix(name, value.a, 4);
 			}
-			void SetUniform(const char* name, Core::Matrix2x2<float> value) {
+			void VSetUniform(const char* name, Core::Matrix2x2<float> value) {
 				VSetUniformMatrix(name, value.a, 4);
 			}
 

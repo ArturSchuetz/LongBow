@@ -29,7 +29,7 @@ namespace Bow {
 			OGLBufferNamePtr	m_name;
 			const int			m_sizeInBytes;
 			const GLenum		m_target;
-			const GLenum		m_usageHint;
+			const GLenum		m_UsageHint;
 		};
 
 		typedef std::shared_ptr<OGLPixelBuffer> OGLPixelBufferPtr;
