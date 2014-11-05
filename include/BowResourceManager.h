@@ -18,7 +18,7 @@ namespace Bow
 
 			void Release();
 
-			MeshPtr LoadOBJ(const std::string& path);
+			MeshPtr LoadMesh(const std::string& path);
 
 		private:
 			ResourceManager(const ResourceManager&){}; // You shall not copy

@@ -1,5 +1,6 @@
 #pragma once
 #include "BowPrerequisites.h"
+#include "BowCorePredeclares.h"
 
 #ifdef _WIN32
 #include <wrl.h>

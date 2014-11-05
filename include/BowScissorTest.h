@@ -1,5 +1,6 @@
 #pragma once
 #include "BowPrerequisites.h"
+#include "BowRendererPredeclares.h"
 
 #ifdef _WIN32
 	#include <Windows.h>

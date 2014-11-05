@@ -1,7 +1,6 @@
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"
-#include "BowCorePredeclares.h"
 
 #include "IBowGraphicsWindow.h"
 

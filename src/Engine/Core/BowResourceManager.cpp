@@ -35,7 +35,7 @@ namespace Bow {
 			return *Instance.get();
 		}
 
-		MeshPtr ResourceManager::LoadOBJ(const std::string& path)
+		MeshPtr ResourceManager::LoadMesh(const std::string& path)
 		{
 			// OBJ is just for test and performance is not important
 			ModelLoaderOBJ loader;

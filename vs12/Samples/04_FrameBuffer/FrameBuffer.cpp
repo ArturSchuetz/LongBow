@@ -105,7 +105,7 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Textures
 
-	Texture2DPtr texture = DeviceOGL->VCreateTexture2DFromFile("Data/Textures/Logo_Art_wip_6.jpg");
+	Texture2DPtr texture = DeviceOGL->VCreateTexture2DFromFile("./test.jpg");
 	TextureSamplerPtr sampler = DeviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Repeat, TextureWrap::Repeat);
 
 	///////////////////////////////////////////////////////////////////
@@ -140,6 +140,7 @@ int main()
 
 		ContextOGL->VClear(clearBlue);
 		ContextOGL->VSetTexture(diffuseTex, texture);
+		ContextOGL->VSetViewport(Viewport(0, 0, viewport.width, viewport.height));
 		ContextOGL->VDraw(PrimitiveType::Triangles, VertexArray, ShaderProgram, renderState);
 
 		// Render Fullscreen Quad to Backbuffer
@@ -147,6 +148,7 @@ int main()
 
 		ContextOGL->VClear(clearBlack);
 		ContextOGL->VSetTexture(diffuseTex, FrameBuffer->GetColorAttachment(out_Color_Location));
+		ContextOGL->VSetViewport(Viewport(0, 0, WindowOGL->VGetWidth(), WindowOGL->VGetHeight()));
 		ContextOGL->VDraw(PrimitiveType::TriangleStrip, QuadVertexArray, ShaderProgram, renderState);
 
 		ContextOGL->VSwapBuffers();

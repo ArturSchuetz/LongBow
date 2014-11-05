@@ -195,24 +195,24 @@ namespace Bow {
 
 		Texture2DPtr OGLRenderDevice::VCreateTexture2DFromFile(const std::string& Filename, bool generateMipmaps)
 		{
-			Bitmap dayBitmap;
-			if (!dayBitmap.LoadFile(Filename.c_str()))
+			Bitmap bitmap;
+			if (!bitmap.LoadFile(Filename.c_str()))
 			{
 				LOG_ERROR("Couldn't find Texture: %s", Filename.c_str());
 				return Texture2DPtr(nullptr);
 			}
 
-			return VCreateTexture2D(dayBitmap, TextureFormat::RedGreenBlue8, generateMipmaps);
+			return VCreateTexture2D(bitmap, TextureFormat::RedGreenBlue8, generateMipmaps);
 		}
 
-		Texture2DPtr OGLRenderDevice::VCreateTexture2D(Bitmap dayBitmap, TextureFormat format, bool generateMipmaps)
+		Texture2DPtr OGLRenderDevice::VCreateTexture2D(Bitmap bitmap, TextureFormat format, bool generateMipmaps)
 		{
 			// Create Description
-			Texture2DDescription description(dayBitmap.GetWidth(), dayBitmap.GetHeight(), format, generateMipmaps);
+			Texture2DDescription description(bitmap.GetWidth(), bitmap.GetHeight(), format, generateMipmaps);
 
 			// Create and Fill Texture
 			auto texture = OGLTexture2DPtr(new OGLTexture2D(description, GL_TEXTURE_2D));
-			texture->CopyFromSystemMemory(dayBitmap.GetData(), 0, 0, dayBitmap.GetWidth(), dayBitmap.GetHeight(), ImageFormat::BlueGreenRed, ImageDatatype::UnsignedByte, 4);
+			texture->CopyFromSystemMemory(bitmap.GetData(), 0, 0, bitmap.GetWidth(), bitmap.GetHeight(), ImageFormat::BlueGreenRed, ImageDatatype::UnsignedByte, 4);
 
 			return texture;
 		}

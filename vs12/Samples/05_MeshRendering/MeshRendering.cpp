@@ -18,19 +18,31 @@ std::string LoadShaderFromResouce(int name)
 }
 
 int main()
-{
+{	
+	///////////////////////////////////////////////////////////////////
+	// Load Mesh
+
+	LOG_TRACE("Loading Modeldata...");
+	MeshPtr mesh = ResourceManager::GetInstance().LoadMesh("./IronManNoRig.obj");
+
+	if (mesh == nullptr)
+	{
+		return -1;
+	}
+
+	///////////////////////////////////////////////////////////////////
 	// Creating Render Device
 	RenderDevicePtr DeviceOGL		= RenderDeviceManager::GetInstance().GetOrCreateDevice(API::OpenGL3x);
 	if (DeviceOGL == nullptr)
 	{
-		return 0;
+		return -1;
 	}
 
 	// Creating Window
 	GraphicsWindowPtr WindowOGL		= DeviceOGL->VCreateWindow(450, 600, "Mesh Rendering Sample", WindowType::Windowed);
 	if (WindowOGL == nullptr)
 	{
-		return 0;
+		return -1;
 	}
 
 	RenderContextPtr ContextOGL		= WindowOGL->VGetContext();
@@ -44,10 +56,8 @@ int main()
 	memcpy(&clearBlue.Color, &cornflowerBlue, sizeof(float)* 4);
 
 	///////////////////////////////////////////////////////////////////
-	// Load MEsh
+	// Create Vertexa Array from Mesh
 
-	MeshPtr mesh = ResourceManager::GetInstance().LoadOBJ("./IronMan.obj");
-	
 	// fill buffer with informations
 	IndexBufferPtr indexBuffer; 
 	if (mesh->Indices->Type == IndicesType::UnsignedInt)
@@ -110,7 +120,7 @@ int main()
 		for (unsigned int i = 0; i < mesh->GetNumberOfSubmeshes(); ++i)
 		{
 			ShaderProgram->SetUniform("u_color", mesh->Materials[mesh->SubMeshes[i].MaterialID].diffuse);
-			ContextOGL->VDraw(PrimitiveType::Triangles, mesh->SubMeshes[i].StartIndex, mesh->SubMeshes[i].TriangleCount*3, VertexArray, ShaderProgram, renderState);
+			ContextOGL->VDraw(PrimitiveType::Triangles, mesh->SubMeshes[i].StartIndex, mesh->SubMeshes[i].TriangleCount * 3, VertexArray, ShaderProgram, renderState);
 		}
 
 		ContextOGL->VSwapBuffers();

@@ -1,5 +1,7 @@
 #pragma once
 #include "BowPrerequisites.h"
+#include "BowRendererPredeclares.h"
+
 #include "IBowRenderContext.h" // For WindingOrder
 
 namespace Bow {

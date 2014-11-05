@@ -79,6 +79,7 @@ int main()
 		// Clear Backbuffer to our ClearState
 		ContextOGL->VClear(clearState);
 
+		ContextOGL->VSetViewport(Viewport(0, 0, WindowOGL->VGetWidth(), WindowOGL->VGetHeight()));
 		ContextOGL->VDraw(PrimitiveType::Triangles, 0, 3, VertexArray, ShaderProgram, renderState);
 
 		ContextOGL->VSwapBuffers();

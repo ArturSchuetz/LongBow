@@ -1,5 +1,6 @@
 #pragma once
 #include "BowPrerequisites.h"
+#include "BowRendererPredeclares.h"
 
 #include "BowScissorTest.h"
 #include "BowColorMask.h"

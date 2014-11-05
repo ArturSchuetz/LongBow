@@ -77,7 +77,7 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Textures
 
-	Texture2DPtr texture = DeviceOGL->VCreateTexture2DFromFile("Data/Textures/Logo_Art_wip_6.jpg");
+	Texture2DPtr texture = DeviceOGL->VCreateTexture2DFromFile("./test.jpg");
 	TextureSamplerPtr sampler = DeviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Clamp, TextureWrap::Clamp);
 
 	int TexID = 0;
@@ -97,6 +97,7 @@ int main()
 		// Clear Backbuffer to our ClearState
 		ContextOGL->VClear(clearState);
 
+		ContextOGL->VSetViewport(Viewport(0, 0, WindowOGL->VGetWidth(), WindowOGL->VGetHeight()));
 		ContextOGL->VDraw(PrimitiveType::Triangles, 0, 3, VertexArray, ShaderProgram, renderState);
 
 		ContextOGL->VSwapBuffers();

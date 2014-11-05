@@ -1,7 +1,7 @@
 #pragma once
 #include "BowPrerequisites.h"
+#include "BowRendererPredeclares.h"
 
-#include "BowCorePredeclares.h"
 #include "BowMath.h"
 
 #ifndef M_PI
