@@ -19,7 +19,7 @@ public:
 	virtual ~IObject() { }
 
 	virtual bool closestIntersection(Intersection& hit) = 0; // Prototyp
-	virtual bool anyIntersection(Bow::Core::Ray<double>& ray, double maxLambda) = 0; // Prototyp
+	virtual bool anyIntersection(Bow::Core::Ray<float>& ray, float maxLambda) = 0; // Prototyp
 
 	virtual void calcNormal(Intersection& hit) = 0; // Prototyp2
 

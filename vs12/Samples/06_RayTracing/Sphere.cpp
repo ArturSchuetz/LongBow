@@ -18,7 +18,7 @@
 * \param matIndex Material der Kugel
 * \see Material
 */
-SphereObject::SphereObject(const Bow::Core::Sphere<double>& sphere, int matIndex)
+SphereObject::SphereObject(const Bow::Core::Sphere<float>& sphere, int matIndex)
 	: IObject(matIndex), m_Sphere(sphere)
 {
 	mRadiusSqr = SQR(sphere.Radius);
@@ -35,11 +35,11 @@ SphereObject::SphereObject(const Bow::Core::Sphere<double>& sphere, int matIndex
 bool SphereObject::closestIntersection(Intersection& hit)
 {
 	// Strahl ermitteln
-	Bow::Core::Ray<double>& ray = hit.getRay();
+	Bow::Core::Ray<float>& ray = hit.getRay();
 
 	// Feststellen, ob der Strahl ausserhalb der Kugel beginnt
-	Bow::Core::Vector3<double> originToCenter(m_Sphere.Center - ray.Origin);
-	double lengthOcSqr = originToCenter.LengthSquared();
+	Bow::Core::Vector3<float> originToCenter(m_Sphere.Center - ray.Origin);
+	float lengthOcSqr = originToCenter.LengthSquared();
 	bool  startsOutside = lengthOcSqr > mRadiusSqr + EPSILON;
 
 	// Epsilonumgebung (Huelle) fuer Reflektion und Refraktion
@@ -47,27 +47,27 @@ bool SphereObject::closestIntersection(Intersection& hit)
 		return false;
 
 	// 'Abstand' des Strahl-Ursprunges vom Lotfusspunkt berechnen
-	Bow::Core::Vector3<double>& direction = ray.Direction;
-	double dLen = direction.Length();
-	double   distOF = DotP(originToCenter, direction) / direction.Length();
+	Bow::Core::Vector3<float>& direction = ray.Direction;
+	float dLen = direction.Length();
+	float   distOF = DotP(originToCenter, direction) / direction.Length();
 
 	// Strahl beginnt 'hinter' der Kugel ==> Kein Schnittpunkt
 	if (startsOutside && distOF < EPSILON)
 		return false;
 
 	// 'Abstand' des Lotfusspunktes vom Schnittpunkt bestimmen
-	double distFS = mRadiusSqr - (lengthOcSqr - SQR(distOF));
+	float distFS = mRadiusSqr - (lengthOcSqr - SQR(distOF));
 
 	// Strahl verfehlt die Kugel ==> Kein Schnittpunkt
 	if (distFS < EPSILON)
 		return false;
 
 	// Geradenparameter des Schnittpunktes berechnen
-	double lambda;
+	float lambda;
 	if (startsOutside)
-		lambda = (distOF - (double)sqrt(distFS)) / dLen;
+		lambda = (distOF - (float)sqrt(distFS)) / dLen;
 	else
-		lambda = (distOF + (double)sqrt(distFS)) / dLen;
+		lambda = (distOF + (float)sqrt(distFS)) / dLen;
 
 	// Testen, ob der Schnittpunkt besser ist
 	if (lambda > hit.getLambda())
@@ -87,35 +87,35 @@ bool SphereObject::closestIntersection(Intersection& hit)
 * \param maxLambda Maximale Lambda
 * \return Erfolg
 */
-bool SphereObject::anyIntersection(Bow::Core::Ray<double>& ray, double maxLambda)
+bool SphereObject::anyIntersection(Bow::Core::Ray<float>& ray, float maxLambda)
 {
 	// Feststellen, ob der Strahl ausserhalb der Kugel beginnt
-	Bow::Core::Vector3<double> originToCenter(m_Sphere.Center - ray.Origin);
-	double lengthOcSqr = originToCenter.LengthSquared();
+	Bow::Core::Vector3<float> originToCenter(m_Sphere.Center - ray.Origin);
+	float lengthOcSqr = originToCenter.LengthSquared();
 	bool  startsOutside = lengthOcSqr > mRadiusSqr + EPSILON;
 
 	// 'Abstand' des Strahl-Ursprunges vom Lotfusspunkt berechnen
-	Bow::Core::Vector3<double>& direction = ray.Direction;
-	double dLen = direction.Length();
-	double distOF = DotP(originToCenter, direction) / dLen;
+	Bow::Core::Vector3<float>& direction = ray.Direction;
+	float dLen = direction.Length();
+	float distOF = DotP(originToCenter, direction) / dLen;
 
 	// Strahl beginnt 'hinter' der Kugel ==> Kein Schnittpunkt
 	if (startsOutside && distOF < EPSILON)
 		return false;
 
 	// 'Abstand' des Lotfusspunktes vom Schnittpunkt bestimmen
-	double distFS = mRadiusSqr - (lengthOcSqr - SQR(distOF));
+	float distFS = mRadiusSqr - (lengthOcSqr - SQR(distOF));
 
 	// Strahl verfehlt die Kugel ==> Kein Schnittpunkt
 	if (distFS < EPSILON)
 		return false;
 
 	// Geradenparameter des Schnittpunktes berechnen
-	double lambda;
+	float lambda;
 	if (startsOutside)
-		lambda = (distOF - (double)sqrt(distFS)) / dLen;
+		lambda = (distOF - (float)sqrt(distFS)) / dLen;
 	else
-		lambda = (distOF + (double)sqrt(distFS)) / dLen;
+		lambda = (distOF + (float)sqrt(distFS)) / dLen;
 
 	// Um "Akne" bei der Schattierung zu verhindern Epsilonumgebung einsetzen
 	return (lambda < maxLambda - EPSILON);

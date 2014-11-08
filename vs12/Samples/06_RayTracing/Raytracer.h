@@ -15,9 +15,9 @@ public:
 	Raytracer(); // Basiskonstruktor
 	~Raytracer();
 
-	void init(int maxDepth, Scene* scene, unsigned char *pixels);
-	void renderLine(int lineNum);
-	int writePPM(Scene* scene, char* filename, unsigned char* pixels);
+	void	init(int maxDepth, Scene* scene, unsigned char *pixels);
+	void	renderLine(int lineNum);
+	int		writePPM(Scene* scene, char* filename, unsigned char* pixels);
 
 private:
 	unsigned char *mPixels;
@@ -26,7 +26,7 @@ private:
 	int mMaxDepth; // Maximale Reflektionsverfolgungstiefe
 	Scene* mScene; // Zeiger auf Szene
 
-	Bow::Core::Vector3<double> trace(const Bow::Core::Ray<double>& ray, int depth);	// Strahlverfolgung
-	Bow::Core::ColorRGB shade(Intersection& hit, int depth); // Beleuchtung an Schnittpunkt
-	void setColor(int x, int y, const Bow::Core::ColorRGB& color);
+	Bow::Core::Vector3<float>	trace(const Bow::Core::Ray<float>& ray, int depth);	// Strahlverfolgung
+	Bow::Core::ColorRGB			shade(Intersection& hit, int depth); // Beleuchtung an Schnittpunkt
+	void						setColor(int x, int y, const Bow::Core::ColorRGB& color);
 };

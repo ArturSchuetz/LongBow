@@ -9,7 +9,7 @@
 * \param color Farbe
 * \param intensity Intensitaet
 */
-Lightsource::Lightsource(const Bow::Core::Vector3<double>& location, const Bow::Core::ColorRGB& color, double intensity)
+Lightsource::Lightsource(const Bow::Core::Vector3<float>& location, const Bow::Core::ColorRGB& color, float intensity)
 	:mLocation(location), mColor(color * intensity)
 {
 }
@@ -20,7 +20,7 @@ Lightsource::Lightsource(const Bow::Core::Vector3<double>& location, const Bow::
 * Liefert die Position des Punktlichtes.
 * \return Position
 */
-Bow::Core::Vector3<double>& Lightsource::getLocation()
+Bow::Core::Vector3<float>& Lightsource::getLocation()
 {
 	return mLocation;
 }

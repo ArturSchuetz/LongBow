@@ -46,7 +46,7 @@ void Raytracer::renderLine(int lineNum)
 * \param depth Aktuelle Reflektionstiefe
 * \return Gefundene Farbe
 */
-Bow::Core::Vector3<double> Raytracer::trace(const Bow::Core::Ray<double>& ray, int depth)
+Bow::Core::Vector3<float> Raytracer::trace(const Bow::Core::Ray<float>& ray, int depth)
 {
 	Intersection hit(ray);
 
@@ -75,10 +75,10 @@ Bow::Core::ColorRGB Raytracer::shade(Intersection& hit, int depth)
 
 	// Direkte Beleuchtung und Schattenwurf ...................
 
-	Bow::Core::Vector3<double> color(0, 0, 0);
+	Bow::Core::Vector3<float> color(0, 0, 0);
 	for (LightList::iterator light = mScene->getLights().begin(); light != mScene->getLights().end(); light++)
 	{
-		Bow::Core::Ray<double> lightToHit((*light)->getLocation(), hit.getLocation() - (*light)->getLocation());
+		Bow::Core::Ray<float> lightToHit((*light)->getLocation(), hit.getLocation() - (*light)->getLocation());
 
 		if (DotP(lightToHit.Direction, hit.getNormal()) > 0) // Flaeche zeigt weg von der Lichtquelle
 			continue;
@@ -91,14 +91,14 @@ Bow::Core::ColorRGB Raytracer::shade(Intersection& hit, int depth)
 
 	if ((material->getSpecularReflection()>0) && (depth<mMaxDepth))
 	{
-		Bow::Core::Vector3<double> direction = hit.getRay().Direction;
+		Bow::Core::Vector3<float> direction = hit.getRay().Direction;
 		direction.Normalize();
 
-		Bow::Core::Vector3<double> incomingVector(direction);
-		Bow::Core::Vector3<double> faceNormal(hit.getNormal());
+		Bow::Core::Vector3<float> incomingVector(direction);
+		Bow::Core::Vector3<float> faceNormal(hit.getNormal());
 
 		// Reflexionsvektor Berechnen
-		Bow::Core::Ray<double> reflect(hit.getLocation() + 0.001f * faceNormal, incomingVector - 2.0f * DotP(incomingVector, faceNormal) * faceNormal);
+		Bow::Core::Ray<float> reflect(hit.getLocation() + 0.001f * faceNormal, incomingVector - 2.0f * DotP(incomingVector, faceNormal) * faceNormal);
 
 		color = color + material->getSpecularReflection() * trace(reflect, depth + 1);
 	}

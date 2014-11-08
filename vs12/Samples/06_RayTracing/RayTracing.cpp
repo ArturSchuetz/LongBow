@@ -23,36 +23,13 @@ std::string LoadShaderFromResouce(int name)
 }
 
 // Bildaufloesung
-#define PIC_WIDTH 256
-#define PIC_HEIGHT 256
+#define PIC_WIDTH 512
+#define PIC_HEIGHT 512
 
 int lineNum = 0;			// aktuelle Zeile
 
 Raytracer myRaytracer;		// Raytracer Objekt
 unsigned char *pixels;		// Pixel
-
-// einache Szene aufbauen mit Kugeln auf Flaeche
-void setupScene(Scene *myScene)
-{
-	// Materialien hinzufuegen (Farbe, Diffus, Spekular, Phong Exponent)
-	myScene->addMaterial(new Material(Vector3<double>(1.0f, 0.2f, 0.2f), 0.8f, 0.2f, 10.0f));
-	myScene->addMaterial(new Material(Vector3<double>(0.1f, 0.9f, 0.1f), 0.5f, 0.5f, 50.0f));
-	myScene->addMaterial(new Material(Vector3<double>(0.1f, 0.1f, 0.9f), 0.8f, 0.2f, 100.0f));
-	myScene->addMaterial(new Material(Vector3<double>(1.0f, 1.0f, 0.2f), 0.8f, 0.2f, 20.0f));
-	myScene->addMaterial(new Material(Vector3<double>(0.0f, 1.0f, 0.8f), 0.8f, 0.2f, 30.0f));
-
-	// Punktlichtquellen hinzufuegen (Position, Farbe, Lichtstaerke)
-	myScene->addLight(new Lightsource(Vector3<double>(4.0f, 6.0f, 2.0f), Vector3<double>(1.0f, 1.0f, 1.0f), 50));
-	myScene->addLight(new Lightsource(Vector3<double>(-4.0f, 3.0f, 1.0f), Vector3<double>(1.0f, 1.0f, 1.0f), 50));
-
-	// Objekte hinzufuegen
-	myScene->addObject(new SphereObject(Sphere<double>(Vector3<double>(1.1f, 1.1f, 1.1f), 1.0f), 3));
-	myScene->addObject(new SphereObject(Sphere<double>(Vector3<double>(-1.1f, 1.1f, 1.1f), 1.0f), 0));
-	myScene->addObject(new SphereObject(Sphere<double>(Vector3<double>(0.0f, 1.1f, -1.1f), 1.0f), 2));
-	myScene->addObject(new SphereObject(Sphere<double>(Vector3<double>(0.0f, 2.0f, 0.0f), 1.0f), 4));
-	myScene->addObject(new TriangleObject(Triangle<double>(Vector3<double>(-5.0f, 0.0f, 5.0f), Vector3<double>(5.0f, 0.0f, 5.0f), Vector3<double>(5.0f, 0.0f, -5.0f)), 1));
-	myScene->addObject(new TriangleObject(Triangle<double>(Vector3<double>(-5.0f, 0.0f, 5.0f), Vector3<double>(5.0f, 0.0f, -5.0f), Vector3<double>(-5.0f, 0.0f, -5.0f)), 1));
-}
 
 int main()
 {
@@ -64,31 +41,56 @@ int main()
 	}
 
 	// Creating Window
-	GraphicsWindowPtr WindowOGL = DeviceOGL->VCreateWindow(PIC_WIDTH, PIC_HEIGHT + 10, "Mesh Rendering Sample", WindowType::Windowed);
+	GraphicsWindowPtr WindowOGL = DeviceOGL->VCreateWindow(PIC_WIDTH, PIC_HEIGHT + 10, "Ray Tracing Sample", WindowType::Windowed);
 	if (WindowOGL == nullptr)
 	{
 		return 0;
 	}
 
+	RenderContextPtr ContextOGL = WindowOGL->VGetContext();
+	ShaderProgramPtr ShaderProgram = DeviceOGL->VCreateShaderProgram(LoadShaderFromResouce(IDS_VERTEXSHADER), LoadShaderFromResouce(IDS_FRAGMENTSHADER));
+	
+	if (ShaderProgram == nullptr)
+	{
+		return 0;
+	}
+
+	///////////////////////////////////////////////////////////////////
+	// Initialize raytracer and create scene
+
 	pixels = new unsigned char[PIC_WIDTH * PIC_HEIGHT * 3];
 
 	Scene myScene = Scene(PIC_WIDTH, PIC_HEIGHT);	// Szene anlegen
-	setupScene(&myScene);							// Objekte in Szene einfuegen
+
+	// Materialien hinzufuegen (Farbe, Diffus, Spekular, Phong Exponent)
+	myScene.addMaterial(new Material(Vector3<float>(1.0f, 0.2f, 0.2f), 0.8f, 0.2f, 10.0f));
+	myScene.addMaterial(new Material(Vector3<float>(0.1f, 0.9f, 0.1f), 0.5f, 0.5f, 50.0f));
+	myScene.addMaterial(new Material(Vector3<float>(0.1f, 0.1f, 0.9f), 0.8f, 0.2f, 100.0f));
+	myScene.addMaterial(new Material(Vector3<float>(1.0f, 1.0f, 0.2f), 0.8f, 0.2f, 20.0f));
+	myScene.addMaterial(new Material(Vector3<float>(0.0f, 1.0f, 0.8f), 0.8f, 0.2f, 30.0f));
+
+	// Punktlichtquellen hinzufuegen (Position, Farbe, Lichtstaerke)
+	myScene.addLight(new Lightsource(Vector3<float>(4.0f, 6.0f, 2.0f), Vector3<float>(1.0f, 1.0f, 1.0f), 5));
+	myScene.addLight(new Lightsource(Vector3<float>(-4.0f, 3.0f, 1.0f), Vector3<float>(1.0f, 1.0f, 1.0f), 5));
+
+	// Objekte hinzufuegen
+	myScene.addObject(new SphereObject(Sphere<float>(Vector3<float>(1.1f, 1.1f, 1.1f), 1.0f), 3));
+	myScene.addObject(new SphereObject(Sphere<float>(Vector3<float>(-1.1f, 1.1f, 1.1f), 1.0f), 0));
+	myScene.addObject(new SphereObject(Sphere<float>(Vector3<float>(0.0f, 1.1f, -1.1f), 1.0f), 2));
+	myScene.addObject(new SphereObject(Sphere<float>(Vector3<float>(0.0f, 2.0f, 0.0f), 1.0f), 4));
+	myScene.addObject(new TriangleObject(Triangle<float>(Vector3<float>(-5.0f, 0.0f, 5.0f), Vector3<float>(5.0f, 0.0f, 5.0f), Vector3<float>(5.0f, 0.0f, -5.0f)), 1));
+	myScene.addObject(new TriangleObject(Triangle<float>(Vector3<float>(-5.0f, 0.0f, 5.0f), Vector3<float>(5.0f, 0.0f, -5.0f), Vector3<float>(-5.0f, 0.0f, -5.0f)), 1));
 
 	myRaytracer.init(5, &myScene, pixels);		// init ray tracer mit 5 Reflexionen
 
-
-	RenderContextPtr ContextOGL = WindowOGL->VGetContext();
-	ShaderProgramPtr ShaderProgram = DeviceOGL->VCreateShaderProgram(LoadShaderFromResouce(IDS_VERTEXSHADER), LoadShaderFromResouce(IDS_FRAGMENTSHADER));
-
 	///////////////////////////////////////////////////////////////////
-	// ClearState and Color
+	// Create clear state and color
 
 	ClearState clearState;
 	clearState.Color = ColorRGBA(0.0f, 0.0f, 0.0f, 1.0f);
 
 	///////////////////////////////////////////////////////////////////
-	// RenderState
+	// Create RenderState
 
 	RenderState renderState;
 	renderState.FaceCulling.Enabled = false;

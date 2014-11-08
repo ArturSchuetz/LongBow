@@ -8,7 +8,7 @@
 * Der Strahl wird Kopiert
 * \param ray Strahl fuer Schnittpunktberechnung
 */
-Intersection::Intersection(const Bow::Core::Ray<double>& ray)
+Intersection::Intersection(const Bow::Core::Ray<float>& ray)
 	:mRay(ray)
 {
 	mLambda = FLT_MAX;
@@ -21,7 +21,7 @@ Intersection::Intersection(const Bow::Core::Ray<double>& ray)
 * Auf den Strahl zugreifen
 * \return Referenz auf den Strahl
 */
-Bow::Core::Ray<double>& Intersection::getRay()
+Bow::Core::Ray<float>& Intersection::getRay()
 {
 	return mRay;
 }
@@ -32,7 +32,7 @@ Bow::Core::Ray<double>& Intersection::getRay()
 * Lambda des Schnittpunktes holen.
 * \param Lambda (readonly)
 */
-double Intersection::getLambda() const
+float Intersection::getLambda() const
 {
 	return mLambda;
 }
@@ -54,7 +54,7 @@ IObject* Intersection::getObject() const
 * Koordinaten des Schnittpunktes holen.
 * \return Schnittpunkt
 */
-Bow::Core::Vector3<double>& Intersection::getLocation()
+Bow::Core::Vector3<float>& Intersection::getLocation()
 {
 	return mLocation;
 }
@@ -66,7 +66,7 @@ Bow::Core::Vector3<double>& Intersection::getLocation()
 * \return Normale an getLocation()
 * \see getLocation()
 */
-Bow::Core::Vector3<double>& Intersection::getNormal()
+Bow::Core::Vector3<float>& Intersection::getNormal()
 {
 	return mNormal;
 }
@@ -94,7 +94,7 @@ int Intersection::getMaterialIndex() const
 * \param lambda Lambda des Schnittpunktes auf getRay()
 * \see getRay()
 */
-void Intersection::update(IObject* object, double lambda)
+void Intersection::update(IObject* object, float lambda)
 {
 	mLambda = lambda;
 	mObject = object;

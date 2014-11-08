@@ -11,13 +11,13 @@
 class SphereObject : public IObject
 {
 public:
-	SphereObject(const Bow::Core::Sphere<double>& sphere, int matIndex); // Konstruktor erwartet Zentrum, Radius und Material
+	SphereObject(const Bow::Core::Sphere<float>& sphere, int matIndex); // Konstruktor erwartet Zentrum, Radius und Material
 
 	virtual bool closestIntersection(Intersection& hit); // Am naechsten gelegener Schnittpunkt
-	virtual bool anyIntersection(Bow::Core::Ray<double>& ray, double maxLambda); // Schnittpunkttest mit einem Strahl
+	virtual bool anyIntersection(Bow::Core::Ray<float>& ray, float maxLambda); // Schnittpunkttest mit einem Strahl
 	virtual void calcNormal(Intersection& hit); // Normale am Schnittpunkt berechnen
 
 protected:
-	Bow::Core::Sphere<double> m_Sphere; // Zentrum der Kugel
-	double mRadiusSqr; // Radiusquadrat der Kugel
+	Bow::Core::Sphere<float> m_Sphere; // Zentrum der Kugel
+	float mRadiusSqr; // Radiusquadrat der Kugel
 };

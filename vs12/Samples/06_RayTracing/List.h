@@ -18,7 +18,7 @@ public:
 	virtual ~List(); // Destruktor loescht die Liste.
 
 	bool closestIntersection(Intersection& hit); // Liefert den naheligensten Schnittpunkt
-	bool anyIntersection(Bow::Core::Ray<double>& ray, double maxLambda); // Schnittpunkttest mit einem Strahl
+	bool anyIntersection(Bow::Core::Ray<float>& ray, float maxLambda); // Schnittpunkttest mit einem Strahl
 
 	void addObject(IObject* newChild); // Fuegt ein Objekt der Liste hinzu
 

@@ -18,12 +18,12 @@
 * specular: Spekularer Reflexionsgrad
 * phong: Phong Exponent (Glanzpunkt Grösse)
 */
-Material::Material(const Bow::Core::ColorRGB& color, double diffuse, double specular, double phong)
+Material::Material(const Bow::Core::ColorRGB& color, float diffuse, float specular, float phong)
 {
-	mColor = color;
-	mDiffuse = diffuse;
-	mSpecular = specular;
-	mPhongExponent = phong;
+	m_Color = color;
+	m_Diffuse = diffuse;
+	m_Specular = specular;
+	m_PhongExponent = phong;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -35,27 +35,53 @@ Material::Material(const Bow::Core::ColorRGB& color, double diffuse, double spec
 */
 Bow::Core::ColorRGB Material::shade(Intersection& hit, Lightsource& light)
 {
-	return mColor;      // Alles schwarz im Moment...
+	// ToDo: Implement
+	float attenuation = 1.0 / (hit.getLocation() - light.getLocation()).Length();
+	Bow::Core::ColorRGB LigntColor = attenuation * light.getColor();
+	Bow::Core::ColorRGB Diffuse;
+	Bow::Core::ColorRGB Specular;
+
+	Bow::Core::Vector3<float> lightDir(light.getLocation() - hit.getLocation());
+	lightDir.Normalize();
+
+	float NdotL = DotP(hit.getNormal(), lightDir);
+	if (NdotL > 0.0f)
+	{
+		Diffuse = LigntColor * getDiffuseReflectionColor() * NdotL;
+		
+		Bow::Core::Vector3<float> reflect(-lightDir - 2.0f * DotP(-lightDir, hit.getNormal()) * hit.getNormal());
+		reflect.Normalize();
+
+		Bow::Core::Vector3<float> ViewDir(hit.getRay().Origin - hit.getLocation());
+		ViewDir.Normalize();
+
+		float NdotV = DotP(reflect, ViewDir);
+		if (NdotV > 0.0f)
+		{
+			Specular = LigntColor * m_Color * powf(NdotV, getPhongExponent());
+		}
+	}
+	return Diffuse + Specular;
 }
 
 
-double Material::getDiffuseReflection() const			// Diffuser Reflexionsgrad
+float Material::getDiffuseReflection() const // Diffuser Reflexionsgrad
 {
-	return mDiffuse;
+	return m_Diffuse;
 }
 
 Bow::Core::ColorRGB Material::getDiffuseReflectionColor() const	// Diffuser Reflexionsgrad als Farbe
 {
-	return mDiffuse * mColor;
+	return m_Diffuse * m_Color;
 }
 
-double Material::getSpecularReflection() const		// Spekularer Reflexionsgrad
+float Material::getSpecularReflection() const // Spekularer Reflexionsgrad
 {
-	return mSpecular;
+	return m_Specular;
 }
 
-double Material::getPhongExponent() const				// Phong Exponent
+float Material::getPhongExponent() const // Phong Exponent
 {
-	return mPhongExponent;
+	return m_PhongExponent;
 }
 

@@ -45,7 +45,7 @@ bool List::closestIntersection(Intersection & hit)
 * \return Liefert zurueck ob ein Schnittpunkt existiert
 * \see Ray
 */
-bool List::anyIntersection(Bow::Core::Ray<double>& ray, double maxLambda)
+bool List::anyIntersection(Bow::Core::Ray<float>& ray, float maxLambda)
 {
 	ObjectList::iterator item = items.begin();
 	while (item != items.end()) {

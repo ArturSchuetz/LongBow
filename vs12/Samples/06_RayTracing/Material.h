@@ -13,18 +13,18 @@ class Lightsource;
 class Material
 {
 public:
-	Material(const Bow::Core::ColorRGB& color, double diffuse, double specular, double phong);
+	Material(const Bow::Core::ColorRGB& color, float diffuse, float specular, float phong);
 
 	Bow::Core::ColorRGB shade(Intersection& hit, Lightsource& light); // Farbe fuer einen Pixel
 
-	double getDiffuseReflection() const;			// Diffuser Reflexionsgrad
+	float getDiffuseReflection() const;					// Diffuser Reflexionsgrad
 	Bow::Core::ColorRGB getDiffuseReflectionColor() const;	// Diffuser Reflexionsgrad als Farbe
-	double getSpecularReflection() const;		// Spekularer Reflexionsgrad
-	double getPhongExponent() const;				// Phong Exponent
+	float getSpecularReflection() const;					// Spekularer Reflexionsgrad
+	float getPhongExponent() const;						// Phong Exponent
 
 protected:
-	Bow::Core::ColorRGB mColor;			// Materialfarbe
-	double mDiffuse;			// Diffuser Reflexionsgrad
-	double mSpecular;		// Spekularer Reflexionsgrad
-	double mPhongExponent;	// Phong Exponent
+	Bow::Core::ColorRGB m_Color;	// Materialfarbe
+	float m_Diffuse;				// Diffuser Reflexionsgrad
+	float m_Specular;				// Spekularer Reflexionsgrad
+	float m_PhongExponent;			// Phong Exponent
 };

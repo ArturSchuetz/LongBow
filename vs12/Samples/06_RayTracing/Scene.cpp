@@ -12,7 +12,7 @@
 Scene::Scene(int width, int height)
 {
 	mObjects = new List();
-	mCamera = new Bow::Renderer::Camera(Bow::Core::Vector3<double>(5, 5, 5), Bow::Core::Vector3<double>(0, 0, 0), Bow::Core::Vector3<double>(0, 1, 0), width, height);
+	mCamera = new Bow::Renderer::Camera(Bow::Core::Vector3<float>(5, 5, 5), Bow::Core::Vector3<float>(0, 0, 0), Bow::Core::Vector3<float>(0, 1, 0), width, height);
 	mBackgroundColor = new Bow::Core::ColorRGB(0.0, 0.0, 0.0);
 }
 

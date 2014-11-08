@@ -14,23 +14,23 @@ class Intersection
 {
 public:
 
-	Intersection(const Bow::Core::Ray<double>& ray); // Konstruktor erwartet eine Strahl
+	Intersection(const Bow::Core::Ray<float>& ray); // Konstruktor erwartet eine Strahl
 
-	Bow::Core::Ray<double>&  getRay(); // Auf den Strahl zugreifen
-	double      getLambda() const; // Lambda des Schnittpunktes
-	IObject* getObject() const; // Geschnittenes Objekt
-	Bow::Core::Vector3<double>&     getLocation(); // Schnittpunkt
-	Bow::Core::Vector3<double>&    getNormal(); // Normale am Schnittpunkt
-	int        getMaterialIndex() const; // Material am Schnittpunkt
+	Bow::Core::Ray<float>&			getRay(); // Auf den Strahl zugreifen
+	float							getLambda() const; // Lambda des Schnittpunktes
+	IObject*						getObject() const; // Geschnittenes Objekt
+	Bow::Core::Vector3<float>&		getLocation(); // Schnittpunkt
+	Bow::Core::Vector3<float>&		getNormal(); // Normale am Schnittpunkt
+	int								getMaterialIndex() const; // Material am Schnittpunkt
 
-	void update(IObject* object, double lambda); // Schnittpunktinformationen setzen
+	void update(IObject* object, float lambda); // Schnittpunktinformationen setzen
 	void calcNormal(); // Normale berechnen
 
 
 protected:
-	Bow::Core::Ray<double>		mRay; //! Strahl
-	double						mLambda; //! Lambda
+	Bow::Core::Ray<float>		mRay; //! Strahl
+	float						mLambda; //! Lambda
 	IObject*					mObject; //! Geschnittenes Objekt
-	Bow::Core::Vector3<double>	mLocation; //! Schnittpunkt
-	Bow::Core::Vector3<double>	mNormal; //! Normale am Schnittpunkt
+	Bow::Core::Vector3<float>	mLocation; //! Schnittpunkt
+	Bow::Core::Vector3<float>	mNormal; //! Normale am Schnittpunkt
 };

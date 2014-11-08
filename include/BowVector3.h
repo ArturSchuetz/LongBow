@@ -110,6 +110,11 @@ namespace Bow {
 				return Vector3(x * other, y * other, z * other);
 			}
 
+			Vector3 operator * (Vector3 other) const
+			{
+				return Vector3(x * other.x, y * other.y, z * other.z);
+			}
+
 			void operator /= (T other)
 			{
 				x /= other;

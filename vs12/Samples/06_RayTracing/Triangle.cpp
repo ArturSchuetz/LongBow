@@ -12,7 +12,7 @@
 * \param p1 Zweiter Punkt
 * \param p2 Dritter Punkt
 */
-TriangleObject::TriangleObject(const Bow::Core::Triangle<double> &triangle, int matIndex)
+TriangleObject::TriangleObject(const Bow::Core::Triangle<float> &triangle, int matIndex)
 	: IObject(matIndex)
 {
 	// Normale bestimmen und Ebene definieren
@@ -31,9 +31,9 @@ TriangleObject::TriangleObject(const Bow::Core::Triangle<double> &triangle, int 
 */
 bool TriangleObject::closestIntersection(Intersection& hit)
 {
-	Bow::Core::Ray<double> &ray = hit.getRay();
-	Bow::Core::Vector3<double> direction = ray.Direction;
-	Bow::Core::Vector3<double> origin(ray.Origin);
+	Bow::Core::Ray<float> &ray = hit.getRay();
+	Bow::Core::Vector3<float> direction = ray.Direction;
+	Bow::Core::Vector3<float> origin(ray.Origin);
 
 	// Testen ob Punkt im Dreieck (nach Moeller)
 	// Umsetzung der Formel
@@ -41,31 +41,31 @@ bool TriangleObject::closestIntersection(Intersection& hit)
 	//
 	// wobei p = d x v2, q = s x v1
 
-	Bow::Core::Vector3<double> p = Bow::Core::CrossP(direction, m_PlaneVector2);
-	double qv1 = Bow::Core::DotP(m_PlaneVector1, p);
+	Bow::Core::Vector3<float> p = Bow::Core::CrossP(direction, m_PlaneVector2);
+	float qv1 = Bow::Core::DotP(m_PlaneVector1, p);
 
 	// nenner~=0 ?
 	if (qv1>-EPSILON && qv1<EPSILON)
 		return false;
 
-	double skalar = 1.0f / qv1;
-	Bow::Core::Vector3<double> s = origin - m_PlaneBase;
+	float skalar = 1.0f / qv1;
+	Bow::Core::Vector3<float> s = origin - m_PlaneBase;
 
 	// u ermitteln es muss gelten 0 <= v <= 1
-	double u = skalar*(DotP(s, p));
+	float u = skalar*(DotP(s, p));
 
 	if (u<0.0f || u>1.0f)
 		return false;
 
 	// v ermitteln
-	Bow::Core::Vector3<double> q = Bow::Core::CrossP(s, m_PlaneVector1);
-	double v = skalar*(Bow::Core::DotP(direction, q));
+	Bow::Core::Vector3<float> q = Bow::Core::CrossP(s, m_PlaneVector1);
+	float v = skalar*(Bow::Core::DotP(direction, q));
 
 	if (v<0.0f || u + v>1.0f)
 		return false;
 
 	// t (lambda) ermitteln (ist bereits normalisiert)   
-	double t = skalar*(Bow::Core::DotP(q, m_PlaneVector2));
+	float t = skalar*(Bow::Core::DotP(q, m_PlaneVector2));
 
 	// Schnittpunkt "hinter" dem Ursprung de Strahles
 	if (t<0)
@@ -82,32 +82,32 @@ bool TriangleObject::closestIntersection(Intersection& hit)
 * \param maxLambda Maximale Lambda
 * \return Erfolg
 */
-bool TriangleObject::anyIntersection(Bow::Core::Ray<double>& ray, double maxLambda)
+bool TriangleObject::anyIntersection(Bow::Core::Ray<float>& ray, float maxLambda)
 {
-	Bow::Core::Vector3<double> direction = ray.Direction;
-	Bow::Core::Vector3<double> origin(ray.Origin);
+	Bow::Core::Vector3<float> direction = ray.Direction;
+	Bow::Core::Vector3<float> origin(ray.Origin);
 
-	Bow::Core::Vector3<double> p = Bow::Core::CrossP(direction, m_PlaneVector2);
-	double qv1 = Bow::Core::DotP(m_PlaneVector1, p);
+	Bow::Core::Vector3<float> p = Bow::Core::CrossP(direction, m_PlaneVector2);
+	float qv1 = Bow::Core::DotP(m_PlaneVector1, p);
 	if (qv1>-EPSILON && qv1<EPSILON)
 		return false;
 
-	double skalar = 1.0f / qv1;
-	Bow::Core::Vector3<double> s = origin - m_PlaneBase;
+	float skalar = 1.0f / qv1;
+	Bow::Core::Vector3<float> s = origin - m_PlaneBase;
 
-	double u = skalar*(DotP(s, p));
+	float u = skalar*(DotP(s, p));
 
 	if (u<0.0f || u>1.0f)
 		return false;
 
-	Bow::Core::Vector3<double> q = Bow::Core::CrossP(s, m_PlaneVector1);
-	double v = skalar*(Bow::Core::DotP(direction, q));
+	Bow::Core::Vector3<float> q = Bow::Core::CrossP(s, m_PlaneVector1);
+	float v = skalar*(Bow::Core::DotP(direction, q));
 
 	if (v<0.0f || u + v>1.0f)
 		return false;
 
 	// t (lambda) ermitteln und normalisieren   
-	double t = skalar*(Bow::Core::DotP(q, m_PlaneVector2));
+	float t = skalar*(Bow::Core::DotP(q, m_PlaneVector2));
 
 	if (t<0)
 		return false;
