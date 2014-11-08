@@ -58,7 +58,8 @@ Bow::Core::ColorRGB Material::shade(Intersection& hit, Lightsource& light)
 		float NdotV = DotP(reflect, ViewDir);
 		if (NdotV > 0.0f)
 		{
-			Specular = LigntColor * m_Color * powf(NdotV, getPhongExponent());
+			Specular = LigntColor * powf(NdotV, getPhongExponent()); // Reflektionsfarbe = Lichtfarbe
+			//Specular = LigntColor * m_Color * powf(NdotV, getPhongExponent()); // Color als Reflektionsfarbe
 		}
 	}
 	return Diffuse + Specular;
