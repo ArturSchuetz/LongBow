@@ -20,6 +20,11 @@ namespace Bow
 		}
 		/*----------------------------------------------------------------*/
 
+		Camera::Camera(const Core::Vector3<double>& cameraPosition, const Core::Vector3<double>& lookAtPoint, const Core::Vector3<double>& worldUp, unsigned int width, unsigned int height) : Camera(width, height)
+		{
+			SetViewLookAt(cameraPosition, lookAtPoint, worldUp);
+		}
+
 		bool Camera::SetViewLookAt(	const Core::Vector3<double>& cameraPosition,
 									const Core::Vector3<double>& lookAtPoint,
 									const Core::Vector3<double>& worldUp)
@@ -30,7 +35,7 @@ namespace Bow
 			vcDir.Normalize();
 
 			// calculate up vector
-			double fDot = worldUp.DotP(vcDir);
+			double fDot = DotP(worldUp, vcDir);
 
 			vcTemp = vcDir * fDot;
 			vcUp = worldUp - vcTemp;
@@ -64,7 +69,7 @@ namespace Bow
 			vcUp /= fL;
 
 			// build right vector using cross product
-			Core::Vector3<double> vcRight(vcUp.CrossP(vcDir));
+			Core::Vector3<double> vcRight(CrossP(vcUp, vcDir));
 
 			// build final matrix and set for device
 			return SetView(vcRight, vcUp, vcDir, cameraPosition);
@@ -81,17 +86,17 @@ namespace Bow
 			m_View._11 = right.x;
 			m_View._12 = right.y;
 			m_View._13 = right.z;
-			m_View._14 = -(right.DotP(position));
+			m_View._14 = -(DotP(right, position));
 
 			m_View._21 = up.x;
 			m_View._22 = up.y;
 			m_View._23 = up.z;
-			m_View._24 = -(up.DotP(position));
+			m_View._24 = -(DotP(up, position));
 
 			m_View._31 = direction.x;
 			m_View._32 = direction.y;
 			m_View._33 = direction.z;
-			m_View._34 = -(direction.DotP(position));
+			m_View._34 = -(DotP(direction, position));
 
 			m_View._44 = 1.0f;
 
@@ -147,7 +152,7 @@ namespace Bow
 			}
 		}
 
-		void Camera::SetMode(ProjectionMode mode)
+		/*void Camera::SetMode(ProjectionMode mode)
 		{
 			if (m_Mode != mode)
 			{
@@ -155,7 +160,7 @@ namespace Bow
 
 				dirty = true;
 			}
-		}
+		}*/
 		/*----------------------------------------------------------------*/
 		
 		Core::Ray<double> Camera::Transform2Dto3D(const unsigned int screenX, const unsigned int screenY)

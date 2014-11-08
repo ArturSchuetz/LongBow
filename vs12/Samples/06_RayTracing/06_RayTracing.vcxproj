@@ -89,10 +89,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Intersection.cpp" />
+    <ClCompile Include="Lightsource.cpp" />
+    <ClCompile Include="List.cpp" />
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="Raytracer.cpp" />
     <ClCompile Include="RayTracing.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Intersection.h" />
+    <ClInclude Include="IObject.h" />
+    <ClInclude Include="Lightsource.h" />
+    <ClInclude Include="List.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="Raytracer.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Triangle.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />

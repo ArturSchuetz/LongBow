@@ -21,6 +21,7 @@ namespace Bow {
 		{
 		public:
 			Camera(unsigned int width, unsigned int height);
+			Camera(const Core::Vector3<double>& cameraPosition, const Core::Vector3<double>& lookAtPoint, const Core::Vector3<double>& worldUp, unsigned int width, unsigned int height);
 			~Camera(){}
 
 			// set look at matrix: from, at, world up
@@ -32,6 +33,9 @@ namespace Bow {
 			// set width and height for projection
 			void SetResolution(unsigned int width, unsigned int height);
 
+			unsigned int GetXResolution() { return m_Width; }
+			unsigned int GetYResolution() { return m_Height; }
+
 			// set near and far clipping plane
 			void SetClippingPlanes(double near, double far);
 
@@ -39,7 +43,7 @@ namespace Bow {
 			void SetFOV(float FOV);
 
 			// set mode for stage n, 0:=3D(perspective), 1:=2D(orthogonal)
-			void SetMode(ProjectionMode mode);
+			//void SetMode(ProjectionMode mode);
 
 			// screen to worldray, give ray for output
 			Core::Ray<double> Transform2Dto3D(const unsigned int screenX, const unsigned int screenY);

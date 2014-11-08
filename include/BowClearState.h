@@ -5,6 +5,8 @@
 #include "BowScissorTest.h"
 #include "BowColorMask.h"
 
+#include "BowMath.h"
+
 namespace Bow {
 	namespace Renderer{
 
@@ -25,10 +27,7 @@ namespace Bow {
 				DepthMask = true;
 
 				Buffers = ClearBuffers::All;
-				Color[0] = 1.0f;
-				Color[1] = 1.0f;
-				Color[2] = 1.0f;
-				Color[3] = 1.0f;
+				Color = Core::ColorRGBA(1.0f, 1.0f, 1.0f, 1.0f);
 				Depth = 1;
 				Stencil = 0;
 			}
@@ -37,10 +36,10 @@ namespace Bow {
 			ColorMask	ColorMask;
 			bool		DepthMask;
 
-			ClearBuffers Buffers;
-			float		 Color[4];
-			float		 Depth;
-			int			 Stencil;
+			ClearBuffers	Buffers;
+			Core::ColorRGBA	Color;
+			float			Depth;
+			int				Stencil;
 		};
 
 	}

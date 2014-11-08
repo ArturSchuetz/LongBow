@@ -266,5 +266,10 @@ namespace Bow {
 			}
 		};
 		/*----------------------------------------------------------------*/
+
+		template <typename T> inline Matrix3D<T> operator *(float s, const Matrix3D<T>& matrix)
+		{
+			return matrix * s;
+		}
 	}
 }

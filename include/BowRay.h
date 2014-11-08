@@ -10,10 +10,7 @@ namespace Bow {
 		template <typename T> class Ray
 		{
 		public:
-			struct
-			{
-				Vector3<T> Origin, Direction;	// Koordinaten
-			};
+			Vector3<T> Origin, Direction;	// Koordinaten
 
 			Ray()
 			{
@@ -28,6 +25,12 @@ namespace Bow {
 			inline void Set(Vector3<T> _origin, Vector3<T> _direction)
 			{
 				Origin = _origin, Direction = _direction;
+			}
+
+			template <typename C>
+			inline operator Ray<C>()
+			{
+				return Ray<C>((Vector3<C>)Origin, (Vector3<C>)Direction);
 			}
 		};
 		/*----------------------------------------------------------------*/

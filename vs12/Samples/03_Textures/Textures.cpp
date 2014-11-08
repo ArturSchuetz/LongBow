@@ -40,8 +40,7 @@ int main()
 	// ClearState and Color
 
 	ClearState clearState;
-	float cornflowerBlue[] = { 0.392f, 0.584f, 0.929f, 1.0f };
-	memcpy(&clearState.Color, &cornflowerBlue, sizeof(float)* 4);
+	clearState.Color = ColorRGBA(0.392f, 0.584f, 0.929f, 1.0f);
 
 	///////////////////////////////////////////////////////////////////
 	// Vertex Array
@@ -68,7 +67,7 @@ int main()
 	TextureCoordBuffer->VCopyFromSystemMemory(texcoor, 0, sizeof(Vector2<float>) * 3);
 
 	// Define buffer as vertexattribute for shaders
-	VertexBufferAttributePtr	TextureCoordAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(TextureCoordBuffer, ComponentDatatype::Float, 2));
+	VertexBufferAttributePtr TextureCoordAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(TextureCoordBuffer, ComponentDatatype::Float, 2));
 
 	// create VertexArray and connect attributeBuffers with location
 	VertexArrayPtr VertexArray = ContextOGL->VCreateVertexArray();
@@ -78,7 +77,7 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Textures
 
-	Texture2DPtr texture = DeviceOGL->VCreateTexture2DFromFile("./test.jpg");
+	Texture2DPtr texture = DeviceOGL->VCreateTexture2DFromFile("../Data/Textures/test.jpg");
 	TextureSamplerPtr sampler = DeviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Clamp, TextureWrap::Clamp);
 
 	int TexID = 0;

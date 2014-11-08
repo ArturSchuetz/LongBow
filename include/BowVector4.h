@@ -3,6 +3,7 @@
 #include "BowCorePredeclares.h"
 
 #include <math.h>
+#include "BowLogger.h"
 
 namespace Bow {
 	namespace Core {
@@ -43,32 +44,19 @@ namespace Bow {
 				x = _x, y = _y, z = _z, w = _w;
 			}
 
-			inline T LengthSquared() const
-			{
-				return x * x + y * y + z * z;
-			}
-
 			inline T Length() const
 			{
 				return sqrt(LengthSquared());
 			}
 
+			inline T LengthSquared() const
+			{
+				return x * x + y * y + z * z;
+			}
+
 			inline T Angle(const Vector4& other)
 			{
 				return acos((DotP(other)) / (Length() * other.Length()));
-			}
-
-			inline T DotP(const Vector4& other) const
-			{
-				return x * other.x + y * other.y + z * other.z;
-			}
-
-			inline Vector4 CrossP(const Vector4& other) 
-			{
-				x = y * other.z - z * other.y;
-				y = z * other.x - x * other.z;
-				z = x * other.y - y * other.x;
-				w = 1.0f;
 			}
 
 			inline void Normalize()
@@ -81,6 +69,11 @@ namespace Bow {
 				x = -x;
 				y = -y;
 				z = -z;
+			}
+
+			inline Vector4 operator - () const
+			{
+				return Vector4(-x, -y, -z);
 			}
 
 			void operator += (const Vector4& other)
@@ -141,6 +134,22 @@ namespace Bow {
 				return x != other.x || y != other.y || z != other.z || w != other.w;
 			}
 
+			// write a value
+			inline T& operator [](int index)
+			{
+				LOG_ASSERT(index >= 0 && index < 4, "Out of bounds of Vector4");
+
+				return a[index];
+			}
+
+			// read a value
+			inline const T& operator [](int index) const
+			{
+				LOG_ASSERT(index >= 0 && index < 4, "Out of bounds of Vector4");
+
+				return a[index];
+			}
+
 			template <typename C>
 			inline operator Vector4<C>()
 			{
@@ -148,5 +157,29 @@ namespace Bow {
 			}
 		};
 		/*----------------------------------------------------------------*/
+
+		template <typename C, typename T>
+		inline Vector4<T> operator *(C s, const Vector4<T>& vector)
+		{
+			return vector * (T)s;
+		}
+
+		// Dot product
+		template <typename T> inline T DotP(const Vector4<T>& v1, const Vector4<T>& v2)
+		{
+			return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w * v2.w;
+		}
+
+		// Cross product calculation for a 3D Vector
+		template <typename T> inline Vector4<T> CrossP(const Vector4<T>& v1, const Vector4<T>& v2)
+		{
+			return Vector4<T>(
+				v1.y * other.z - v1.z * other.y,
+				v1.z * other.x - v1.x * other.z,
+				v1.x * other.y - v1.y * other.x,
+				1.0f);
+		}
+
+		typedef Vector4<float> ColorRGBA;
 	}
 }

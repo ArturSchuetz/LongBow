@@ -37,11 +37,14 @@ namespace Bow {
 
 		MeshPtr ResourceManager::LoadMesh(const std::string& path)
 		{
+			LOG_TRACE("Loading modeldata...");
 			// OBJ is just for test and performance is not important
 			ModelLoaderOBJ loader;
 			if (loader.import(path.c_str(), false))
 			{
-				Mesh* mesh = new Mesh();
+				LOG_TRACE("Creating mesh object...");
+
+				MeshPtr mesh(new Mesh());
 				if (loader.getNumberOfIndices() > 0)
 				{
 					mesh->m_HasIndices = true;
@@ -120,11 +123,12 @@ namespace Bow {
 					Material.shininess = loader.getMesh(i).pMaterial->shininess;
 					Material.alpha = loader.getMesh(i).pMaterial->alpha;
 
-					mesh->SubMeshes.push_back(SubMesh(mesh, loader.getMesh(i).startIndex, loader.getMesh(i).triangleCount, mesh->Materials.size()));
+					mesh->SubMeshes.push_back(SubMesh(mesh.get(), loader.getMesh(i).startIndex, loader.getMesh(i).triangleCount, mesh->Materials.size()));
 					mesh->Materials.push_back(Material);
 				}
 
-				return MeshPtr(mesh);
+				LOG_TRACE("Loaded mesh successfully!");
+				return mesh;
 			}
 			return nullptr;
 		}

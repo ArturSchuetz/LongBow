@@ -222,5 +222,10 @@ namespace Bow {
 			}
 		};
 		/*----------------------------------------------------------------*/
+
+		template <typename T> inline Matrix2D<T> operator *(float s, const Matrix2D<T>& matrix)
+		{
+			return matrix * s;
+		}
 	}
 }

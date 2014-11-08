@@ -24,7 +24,7 @@ int main()
 	// Load Mesh
 
 	LOG_TRACE("Loading Modeldata...");
-	MeshPtr mesh = ResourceManager::GetInstance().LoadMesh("./IronManNoRig.obj");
+	MeshPtr mesh = ResourceManager::GetInstance().LoadMesh("../Data/Models/IronManNoRig.obj");
 
 	if (mesh == nullptr)
 	{
@@ -33,28 +33,27 @@ int main()
 
 	///////////////////////////////////////////////////////////////////
 	// Creating Render Device
-	RenderDevicePtr DeviceOGL		= RenderDeviceManager::GetInstance().GetOrCreateDevice(API::OpenGL3x);
+	RenderDevicePtr DeviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(API::OpenGL3x);
 	if (DeviceOGL == nullptr)
 	{
 		return -1;
 	}
 
 	// Creating Window
-	GraphicsWindowPtr WindowOGL		= DeviceOGL->VCreateWindow(450, 600, "Mesh Rendering Sample", WindowType::Windowed);
+	GraphicsWindowPtr WindowOGL	= DeviceOGL->VCreateWindow(450, 600, "Mesh Rendering Sample", WindowType::Windowed);
 	if (WindowOGL == nullptr)
 	{
 		return -1;
 	}
 
-	RenderContextPtr ContextOGL		= WindowOGL->VGetContext();
+	RenderContextPtr ContextOGL	= WindowOGL->VGetContext();
 	ShaderProgramPtr ShaderProgram = DeviceOGL->VCreateShaderProgram(LoadShaderFromResouce(IDS_VERTEXSHADER), LoadShaderFromResouce(IDS_FRAGMENTSHADER));
 
 	///////////////////////////////////////////////////////////////////
 	// ClearState and Color
 
-	ClearState clearBlue;
-	float cornflowerBlue[] = { 0.392f, 0.584f, 0.929f, 1.0f };
-	memcpy(&clearBlue.Color, &cornflowerBlue, sizeof(float)* 4);
+	ClearState clearState;
+	clearState.Color = ColorRGBA(0.392f, 0.584f, 0.929f, 1.0f);
 
 	///////////////////////////////////////////////////////////////////
 	// Create Vertexa Array from Mesh
@@ -87,8 +86,6 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Uniforms
 
-	ShaderProgram->VSetUniform("u_color", Vector4<float>(1.0f, 0.0f, 0.0f, 1.0f));
-
 	Camera camera(WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
 	Vector3<float> Position = Vector3<float>(258.634399f, 126.081482f, 258.634399f);
 	Vector3<float> LookAt = Vector3<float>(-0.873367310f, 126.081482f, 0.599601746f);
@@ -110,7 +107,7 @@ int main()
 
 	while (!WindowOGL->VShouldClose())
 	{
-		ContextOGL->VClear(clearBlue);
+		ContextOGL->VClear(clearState);
 		
 		ContextOGL->VSetViewport(Viewport(0, 0, WindowOGL->VGetWidth(), WindowOGL->VGetHeight()));
 

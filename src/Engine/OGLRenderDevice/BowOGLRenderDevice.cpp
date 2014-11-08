@@ -212,7 +212,7 @@ namespace Bow {
 
 			// Create and Fill Texture
 			auto texture = OGLTexture2DPtr(new OGLTexture2D(description, GL_TEXTURE_2D));
-			texture->VCopyFromSystemMemory(bitmap.GetData(), 0, 0, bitmap.GetWidth(), bitmap.GetHeight(), ImageFormat::BlueGreenRed, ImageDatatype::UnsignedByte, 4);
+			texture->VCopyFromSystemMemory(bitmap.GetData(), bitmap.GetWidth(), bitmap.GetHeight(), ImageFormat::BlueGreenRed, ImageDatatype::UnsignedByte, 4);
 
 			return texture;
 		}

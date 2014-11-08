@@ -157,5 +157,14 @@
     <ClInclude Include="..\..\..\src\Engine\Core\BowModelLoaderOBJ.h">
       <Filter>Header Files\ResourceLoader</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\BowSphere.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowPlane.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowTriangle.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

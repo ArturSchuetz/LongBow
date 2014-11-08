@@ -39,8 +39,7 @@ int main()
 	// ClearState and Color
 
 	ClearState clearState;
-	float cornflowerBlue[] = { 0.392f, 0.584f, 0.929f, 1.0f };
-	memcpy(&clearState.Color, &cornflowerBlue, sizeof(float)* 4);
+	clearState.Color = ColorRGBA(0.392f, 0.584f, 0.929f, 1.0f);
 
 	///////////////////////////////////////////////////////////////////
 	// Vertex Array
@@ -65,8 +64,7 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Uniforms
 
-	float rosa[] = { 1.0f, 0.0f, 1.0f };
-	ShaderProgram->VSetUniformVector("u_color", rosa, 3);
+	ShaderProgram->VSetUniform("u_color", ColorRGB(1.0f, 0.0f, 1.0f));
 
 	///////////////////////////////////////////////////////////////////
 	// RenderState

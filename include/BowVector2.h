@@ -3,6 +3,7 @@
 #include "BowCorePredeclares.h"
 
 #include <math.h>
+#include "BowLogger.h"
 
 namespace Bow {
 	namespace Core {
@@ -40,24 +41,19 @@ namespace Bow {
 				x = _x, y = _y;
 			}
 
+			inline T Length() const
+			{
+				return sqrt(LengthSquared());
+			}
+			
 			inline T LengthSquared() const
 			{
 				return x * x + y * y;
 			}
 
-			inline T Length() const
-			{
-				return sqrt(LengthSquared());
-			}
-
 			inline T Angle(const Vector2& other)
 			{
-				return acos((DotP(other)) / (Length() * other.Length()));
-			}
-
-			inline T DotP(const Vector2& other) const
-			{
-				return x * other.x + y * other.y;
+				return acos((DotP(*this, other)) / (Length() * other.Length()));
 			}
 
 			inline void Normalize()
@@ -69,6 +65,11 @@ namespace Bow {
 			{
 				x = -x;
 				y = -y;
+			}
+
+			inline Vector2 operator - () const
+			{
+				return Vector2(-x, -y, -z);
 			}
 
 			inline void operator += (const Vector2& other)
@@ -125,6 +126,22 @@ namespace Bow {
 				return x != other.x || y != other.y;
 			}
 
+			// write a value
+			inline T& operator [](int index)
+			{
+				LOG_ASSERT(index >= 0 && index < 2, "Out of bounds of Vector2");
+
+				return a[index];
+			}
+
+			// read a value
+			inline const T& operator [](int index) const
+			{
+				LOG_ASSERT(index >= 0 && index < 2, "Out of bounds of Vector2");
+
+				return a[index];
+			}
+
 			template <typename C>
 			inline operator Vector2<C>()
 			{
@@ -132,5 +149,18 @@ namespace Bow {
 			}
 		};
 		/*----------------------------------------------------------------*/
+
+		template <typename C, typename T>
+		inline Vector2<T> operator *(C s, const Vector2<T>& vector)
+		{
+			return vector * (T)s;
+		}
+
+		// Dot product
+		template <typename T> 
+		inline T DotP(const Vector2<T>& v1, const Vector2<T>& v2)
+		{
+			return v1.x * v2.x + v1.y * v2.y;
+		}
 	}
 }

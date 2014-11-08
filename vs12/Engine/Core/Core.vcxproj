@@ -198,6 +198,7 @@
     <ClInclude Include="..\..\..\include\BowCorePredeclares.h" />
     <ClInclude Include="..\..\..\include\BowIndicesUnsignedInt.h" />
     <ClInclude Include="..\..\..\include\BowIndicesUnsignedShort.h" />
+    <ClInclude Include="..\..\..\include\BowPlane.h" />
     <ClInclude Include="..\..\..\include\BowResourceManager.h" />
     <ClInclude Include="..\..\..\include\BowLogger.h" />
     <ClInclude Include="..\..\..\include\BowMath.h" />
@@ -206,7 +207,9 @@
     <ClInclude Include="..\..\..\include\BowMatrix3D.h" />
     <ClInclude Include="..\..\..\include\BowMesh.h" />
     <ClInclude Include="..\..\..\include\BowRay.h" />
+    <ClInclude Include="..\..\..\include\BowSphere.h" />
     <ClInclude Include="..\..\..\include\BowSubMesh.h" />
+    <ClInclude Include="..\..\..\include\BowTriangle.h" />
     <ClInclude Include="..\..\..\include\BowVector2.h" />
     <ClInclude Include="..\..\..\include\BowPrerequisites.h" />
     <ClInclude Include="..\..\..\include\BowVector3.h" />

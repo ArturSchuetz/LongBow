@@ -6,6 +6,8 @@
 #include "IBowRenderContext.h"
 #include "BowRenderState.h"
 
+#include "BowMath.h"
+
 struct GLFWwindow;
 
 namespace Bow {
@@ -75,14 +77,14 @@ namespace Bow {
 			void ApplyColorMask(ColorMask colorMask);
 			void ApplyDepthMask(bool depthMask);
 
-			Viewport m_viewport;
+			Viewport			m_viewport;
 
-			float	m_clearColor[4];
-			float	m_clearDepth;
-			int		m_clearStencil;
+			Core::ColorRGBA		m_clearColor;
+			float				m_clearDepth;
+			int					m_clearStencil;
 
 			RenderState			m_renderState;
-			OGLShaderProgramPtr m_boundShaderProgram;
+			OGLShaderProgramPtr	m_boundShaderProgram;
 			OGLTextureUnitsPtr	m_textureUnits;
 
 			OGLFramebufferPtr	m_boundFramebuffer;

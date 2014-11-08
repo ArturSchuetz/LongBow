@@ -297,17 +297,17 @@ namespace Bow {
 
 			virtual void VCopyFromBuffer(WritePixelBufferPtr pixelBuffer, ImageFormat format, ImageDatatype dataType, int rowAlignment = 4)
 			{
-				VCopyFromBuffer(pixelBuffer, 0, 0, VGetDescription().GetWidth(), VGetDescription().GetHeight(), format, dataType, rowAlignment);
+				VCopyFromBuffer(pixelBuffer, 0, 0, VGetDescription().GetWidth(), VGetDescription().GetHeight(), format, dataType, rowAlignment = 4);
 			}
 
-			virtual void VCopyFromBuffer(WritePixelBufferPtr pixelBuffer, int xOffset, int yOffset, int width, int height, ImageFormat format, ImageDatatype dataType, int rowAlignment) = 0;
+			virtual void VCopyFromBuffer(WritePixelBufferPtr pixelBuffer, int xOffset, int yOffset, int width, int height, ImageFormat format, ImageDatatype dataType, int rowAlignment = 4) = 0;
 
 			virtual void VCopyFromSystemMemory(void* bitmapInSystemMemory, ImageFormat format, ImageDatatype dataType, int rowAlignment = 4)
 			{
-				VCopyFromSystemMemory(bitmapInSystemMemory, 0, 0, VGetDescription().GetWidth(), VGetDescription().GetHeight(), format, dataType, rowAlignment);
+				VCopyFromSystemMemory(bitmapInSystemMemory, VGetDescription().GetWidth(), VGetDescription().GetHeight(), format, dataType, rowAlignment = 4);
 			}
 
-			virtual void VCopyFromSystemMemory(void* bitmapInSystemMemory, int xOffset, int yOffset, int width, int height, ImageFormat format, ImageDatatype dataType, int rowAlignment) = 0;
+			virtual void VCopyFromSystemMemory(void* bitmapInSystemMemory, int width, int height, ImageFormat format, ImageDatatype dataType, int rowAlignment = 4) = 0;
 
 			virtual std::shared_ptr<void> VCopyToSystemMemory(ImageFormat format, ImageDatatype dataType, int rowAlignment = 4) = 0;
 

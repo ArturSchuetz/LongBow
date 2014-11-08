@@ -47,6 +47,8 @@ namespace Bow {
 			unsigned int GetNumberOfSubmeshes(){ return m_NumberOfSubMeshes; }
 
 		private:
+			Mesh(const Mesh& other) { } // you shall not copy
+
 			bool m_HasIndices;
 			bool m_HasPositions;
 			bool m_HasNormals;
@@ -57,7 +59,7 @@ namespace Bow {
 			unsigned int m_NumberOfVertices;
 			unsigned int m_NumberOfSubMeshes;
 
-			float m_Center[3];
+			Vector3<float> m_Center;
 			float m_Width;
 			float m_Height;
 			float m_Length;

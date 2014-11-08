@@ -6,6 +6,7 @@
 #include "resource.h"
 
 using namespace Bow;
+using namespace Core;
 using namespace Renderer;
 
 std::string LoadShaderFromResouce(int name)
@@ -39,12 +40,10 @@ int main()
 	// ClearState and Color
 
 	ClearState clearBlue;
-	float cornflowerBlue[] = { 0.392f, 0.584f, 0.929f, 1.0f };
-	memcpy(&clearBlue.Color, &cornflowerBlue, sizeof(float)* 4);
+	clearBlue.Color = ColorRGBA(0.392f, 0.584f, 0.929f, 1.0f);
 
 	ClearState clearBlack;
-	float black[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	memcpy(&clearBlack.Color, &black, sizeof(float)* 4);
+	clearBlack.Color = ColorRGBA(0.0f, 0.0f, 0.0f, 1.0f);
 
 	///////////////////////////////////////////////////////////////////
 	// Vertex Array
@@ -105,7 +104,7 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Textures
 
-	Texture2DPtr texture = DeviceOGL->VCreateTexture2DFromFile("./test.jpg");
+	Texture2DPtr texture = DeviceOGL->VCreateTexture2DFromFile("../Data/Textures/test.jpg");
 	TextureSamplerPtr sampler = DeviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Repeat, TextureWrap::Repeat);
 
 	///////////////////////////////////////////////////////////////////
@@ -113,7 +112,7 @@ int main()
 
 	FramebufferPtr FrameBuffer = ContextOGL->VCreateFramebuffer();
 
-	Viewport viewport		= ContextOGL->VGetViewport();
+	Viewport viewport = ContextOGL->VGetViewport();
 	int out_Color_Location = ShaderProgram->VGetFragmentOutputLocation("out_Color");
 
 	FrameBuffer->VSetColorAttachment(out_Color_Location, DeviceOGL->VCreateTexture2D(Texture2DDescription(viewport.width, viewport.height, TextureFormat::RedGreenBlue8)));

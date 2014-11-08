@@ -47,15 +47,12 @@ namespace Bow {
 				LOG_TRACE("GLEW sucessfully initialized!");
 			}
 
-			float clearColor[4];
+			Core::Vector4<float> clearColor;
 			glGetFloatv(GL_DEPTH_CLEAR_VALUE, &m_clearDepth);
 			glGetIntegerv(GL_STENCIL_CLEAR_VALUE, &m_clearStencil);
 			glGetFloatv(GL_COLOR_CLEAR_VALUE, (GLfloat*)&clearColor);
 
-			m_clearColor[0] = clearColor[0] * 255.0f;
-			m_clearColor[1] = clearColor[1] * 255.0f;
-			m_clearColor[2] = clearColor[2] * 255.0f;
-			m_clearColor[3] = clearColor[3] * 255.0f;
+			m_clearColor = clearColor * 255.0f;
 
 			m_textureUnits = OGLTextureUnitsPtr(new OGLTextureUnits());
 
@@ -122,8 +119,8 @@ namespace Bow {
 
 			if (m_clearColor != clearState.Color)
 			{
-				glClearColor(clearState.Color[0], clearState.Color[1], clearState.Color[2], clearState.Color[3]);
-				memcpy(&m_clearColor, clearState.Color, sizeof(float)* 4);
+				glClearColor(clearState.Color.a[0], clearState.Color.a[1], clearState.Color.a[2], clearState.Color.a[3]);
+				m_clearColor = clearState.Color;
 			}
 
 			if (m_clearDepth != clearState.Depth)

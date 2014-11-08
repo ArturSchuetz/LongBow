@@ -3,6 +3,7 @@
 #include "BowCorePredeclares.h"
 
 #include <math.h>
+#include "BowLogger.h"
 
 namespace Bow {
 	namespace Core {
@@ -41,31 +42,19 @@ namespace Bow {
 				x = _x, y = _y, z = _z;
 			}
 
-			inline T LengthSquared() const
-			{
-				return this->x * x + this->y * y + this->z * z;
-			}
-
 			inline T Length() const
 			{
 				return sqrt(LengthSquared());
 			}
 
+			inline T LengthSquared() const
+			{
+				return this->x * x + this->y * y + this->z * z;
+			}
+
 			inline T Angle(const Vector3& other)
 			{
-				return acos((DotP(other)) / (Length() * other.Length()));
-			}
-
-			inline T DotP(const Vector3& other) const
-			{
-				return x * other.x + y * other.y + z * other.z;
-			}
-
-			inline Vector3 CrossP(const Vector3& other) const
-			{
-				return Vector3(	y * other.z - z * other.y,	// x
-								z * other.x - x * other.z,	// y
-								x * other.y - y * other.x); // z
+				return acos((DotP(*this, other)) / (Length() * other.Length()));
 			}
 
 			inline void Normalize()
@@ -80,9 +69,9 @@ namespace Bow {
 				z = -z;
 			}
 
-			inline Vector3 Negative() const
+			inline Vector3 operator - () const
 			{
-				return Vector3(-x,-y,-z);
+				return Vector3(-x, -y, -z);
 			}
 
 			void operator += (const Vector3& other)
@@ -143,6 +132,22 @@ namespace Bow {
 				return x != other.x || y != other.y || z != other.z;
 			}
 
+			// write a value
+			inline T& operator [](int index)
+			{
+				LOG_ASSERT(index >= 0 && index < 3, "Out of bounds of Vector3");
+
+				return a[index];
+			}
+
+			// read a value
+			inline const T& operator [](int index) const
+			{
+				LOG_ASSERT(index >= 0 && index < 3, "Out of bounds of Vector3");
+
+				return a[index];
+			}
+
 			template <typename C>
 			inline operator Vector3<C>()
 			{
@@ -150,5 +155,27 @@ namespace Bow {
 			}
 		};
 		/*----------------------------------------------------------------*/
+
+		template <typename C, typename T>
+		inline Vector3<T> operator *(C s, const Vector3<T>& vector)
+		{
+			return vector * (T)s;
+		}
+
+		// Dot product
+		template <typename T> inline T DotP(const Vector3<T>& v1, const Vector3<T>& v2)
+		{
+			return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+		}
+
+		// Cross product
+		template <typename T> inline Vector3<T> CrossP(const Vector3<T>& v1, const Vector3<T>& v2)
+		{
+			return Vector3<T>(	v1.y * v2.z - v1.z * v2.y,	// x
+								v1.z * v2.x - v1.x * v2.z,	// y
+								v1.x * v2.y - v1.y * v2.x); // z
+		}
+
+		typedef Vector3<float> ColorRGB;
 	}
 }

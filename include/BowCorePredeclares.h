@@ -10,12 +10,20 @@ namespace Bow {
 			typedef std::shared_ptr<SubMesh> SubMeshPtr;
 		class ResourceManager;
 
-		template<class T>
-		class Vector2;
-		template<class T>
-		class Vector3;
-		template<class T>
-		class Vector4;
+		template<class T> class Vector2;
+		template<class T> class Vector3;
+			typedef Vector3<float> ColorRGB;
+		template<class T> class Vector4;
+			typedef Vector4<float> ColorRGBA;
+
+		template <typename T> class Matrix2x2;
+		template <typename T> class Matrix2D;
+		template <typename T> class Matrix3D;
+
+		template <typename T> class Plane;
+		template <typename T> class Ray;
+		template <typename T> class Sphere;
+		template <typename T> class Triangle;
 
 		class EventLogger;
 

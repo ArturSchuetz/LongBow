@@ -4,6 +4,7 @@
 #include <windows.h>
 
 using namespace Bow;
+using namespace Core;
 using namespace Renderer;
 
 int main()
@@ -24,8 +25,7 @@ int main()
 
 	// Change ClearColor
 	ClearState clearState;
-	float cornflowerBlue[] = { 0.392f, 0.584f, 0.929f, 1.0f };
-	memcpy(&clearState.Color, &cornflowerBlue, sizeof(float)* 4);
+	clearState.Color = ColorRGBA(0.392f, 0.584f, 0.929f, 1.0f);
 
 	///////////////////////////////////////////////////////////////////
 	// Gameloop

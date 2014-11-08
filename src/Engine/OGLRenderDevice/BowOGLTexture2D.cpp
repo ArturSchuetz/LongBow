@@ -159,9 +159,9 @@ namespace Bow {
 
 			if (description.GenerateMipmaps())
 			{
-				LOG_ASSERT(!(textureTarget == GL_TEXTURE_RECTANGLE), "description.GenerateMipmaps cannot be true for texture rectangles.");
-				LOG_ASSERT(!IsPowerOfTwo(description.GetWidth()), "When description.GenerateMipmaps is true, the width must be a power of two.");
-				LOG_ASSERT(!IsPowerOfTwo(description.GetHeight()), "When description.GenerateMipmaps is true, the height must be a power of two.");
+				LOG_ASSERT(textureTarget != GL_TEXTURE_RECTANGLE, "description.GenerateMipmaps cannot be true for texture rectangles.");
+				LOG_ASSERT(IsPowerOfTwo(description.GetWidth()), "When description.GenerateMipmaps is true, the width must be a power of two.");
+				LOG_ASSERT(IsPowerOfTwo(description.GetHeight()), "When description.GenerateMipmaps is true, the height must be a power of two.");
 			}
 
 			int numberOfTextureUnits;
@@ -250,12 +250,10 @@ namespace Bow {
 		}
 
 
-		void OGLTexture2D::VCopyFromSystemMemory(void* bitmapInSystemMemory, int xOffset, int yOffset, int width, int height, ImageFormat format, ImageDatatype dataType, int rowAlignment)
+		void OGLTexture2D::VCopyFromSystemMemory(void* bitmapInSystemMemory, int width, int height, ImageFormat format, ImageDatatype dataType, int rowAlignment)
 		{
-			LOG_ASSERT(!(xOffset < 0), "xOffset must be greater than or equal to zero.");
-			LOG_ASSERT(!(yOffset < 0), "yOffset must be greater than or equal to zero.");
-			LOG_ASSERT(!((xOffset + width) > m_Description.GetWidth()), "xOffset + width must be less than or equal to Description.Width");
-			LOG_ASSERT(!((yOffset + height) > m_Description.GetHeight()), "yOffset + height must be less than or equal to Description.Height");
+			LOG_ASSERT(!((width) > m_Description.GetWidth()), "xOffset + width must be less than or equal to Description.Width");
+			LOG_ASSERT(!((height) > m_Description.GetHeight()), "yOffset + height must be less than or equal to Description.Height");
 
 			VerifyRowAlignment(rowAlignment);
 
