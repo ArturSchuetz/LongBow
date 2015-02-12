@@ -10,60 +10,93 @@
 namespace Bow {
 	namespace Core {
 
+		// ---------------------------------------------------------------------------
+		/** @brief A mesh represents a geometry or model with a single material.
+		*/
 		class Mesh
 		{
 			friend class ResourceManager;
 
-		public:
+		public:			
 			struct Material
 			{
-				Vector4<float> ambient;
-				Vector4<float> diffuse;
-				Vector4<float> specular;
+				ColorRGB ambient;
+				ColorRGB diffuse;
+				ColorRGB specular;
+				ColorRGB emissive;
+				ColorRGB transparent;
 				float shininess;        // [0 = min shininess, 1 = max shininess]
-				float alpha;            // [0 = fully transparent, 1 = fully opaque]
+				float opacity;          // [0 = fully transparent, 1 = fully opaque]
+
+				Bitmap* ambientTexture;
+				Bitmap* diffuseTexture;
+				Bitmap* normalsTexture;
+				Bitmap* opacityTexture;
+
+				std::string name;
 			};
+
+			IIndicesBase *m_Indices;
+			std::vector<SubMesh> m_SubMeshes;
+			std::vector<Material> m_Materials;
+
+			std::vector<Vector3<float>> m_Positions;		//! Vertex Positions
+			std::vector<Vector3<float>> m_Normals;			//! Vertex Normals
+			std::vector<Vector2<float>> m_TextureCoords;	//! Vertex Texture Coordinates
+			std::vector<Vector4<float>> m_Tangents;			//! Vertex Tangents pointing in the direction of the positive X texture axis.
+			std::vector<Vector4<float>> m_Biangents;		//! Vertex Biangents pointing in the direction of the positive Y texture axis.
 
 			Mesh();
 			~Mesh();
 
-			IIndicesBase *Indices;
-			Vector3<float> *Positions;
-			Vector3<float> *Normals;
-			Vector2<float> *TextureCoords;
-			Vector4<float> *Tangents;
+			inline bool HasNormals() const
+			{
+				return !m_Normals.empty() && m_NumVertices > 0;
+			}
 
-			std::vector<SubMesh> SubMeshes;
-			std::vector<Material> Materials;
+			inline bool HasPositions() const
+			{
+				return !m_Positions.empty() && m_NumVertices > 0;
+			}
 
-			bool HasIndices() const { return m_HasIndices; }
-			bool HasPositions() const { return m_HasPositions; }
-			bool HasNormals() const { return m_HasNormals; }
-			bool HasTextureCoords() const { return m_HasTextureCoords; }
-			bool HasTangents() const { return m_HasTangents; }
+			inline bool HasTangentsAndBitangents() const
+			{
+				return !m_Tangents.empty() && !m_Biangents.empty() && m_NumVertices > 0;
+			}
 
-			unsigned int GetNumberOfIndices(){ return m_NumberOfIndices; }
-			unsigned int GetNumberOfVertices(){ return m_NumberOfVertices; }
-			unsigned int GetNumberOfSubmeshes(){ return m_NumberOfSubMeshes; }
+			inline unsigned int GetNumberOfSubmeshes() const
+			{
+				return m_SubMeshes.size();
+			}
 
-		private:
-			Mesh(const Mesh& other) { } // you shall not copy
+			inline unsigned int GetNumberOfVertices() const
+			{
+				return m_NumVertices;
+			}
 
-			bool m_HasIndices;
-			bool m_HasPositions;
-			bool m_HasNormals;
-			bool m_HasTextureCoords;
-			bool m_HasTangents;
+			inline unsigned int GetNumberOfIndices() const
+			{
+				return m_NumIndices;
+			}
 
-			unsigned int m_NumberOfIndices;
-			unsigned int m_NumberOfVertices;
-			unsigned int m_NumberOfSubMeshes;
+			inline unsigned int GetNumberOfFaces() const
+			{
+				return m_NumFaces;
+			}
 
 			Vector3<float> m_Center;
 			float m_Width;
 			float m_Height;
 			float m_Length;
 			float m_Radius;
+
+		private:
+			Mesh(const Mesh& other) { } // you shall not copy
+
+
+			unsigned int m_NumVertices; //! The number of vertices in this mesh
+			unsigned int m_NumIndices; //! The number of indices in this mesh
+			unsigned int m_NumFaces; //! The number of primitives (triangles, polygons, lines) in this  mesh. 
 		};
 
 	}

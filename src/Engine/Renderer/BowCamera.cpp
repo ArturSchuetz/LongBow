@@ -5,6 +5,8 @@ namespace Bow
 {
 	namespace Renderer
 	{
+		const Core::Matrix3D<double> negativeZ = Core::Matrix3D<double>(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0);
+
 		Camera::Camera(unsigned int width, unsigned int height)
 		{
 			m_Width = width;
@@ -12,8 +14,8 @@ namespace Bow
 			m_FOV = 90.0f * M_PI / 360.0f;
 			m_Mode = ProjectionMode::Perspective;
 
-			m_Near = 0.1f;
-			m_Far = 1000.0f;
+			m_Near = 0.5f;
+			m_Far = 500.0f;
 
 			m_View.SetIdentity();
 			CalcPerspProjMatrix();
@@ -69,7 +71,7 @@ namespace Bow
 			vcUp /= fL;
 
 			// build right vector using cross product
-			Core::Vector3<double> vcRight(CrossP(vcUp, vcDir));
+			Core::Vector3<double> vcRight(Bow::Core::CrossP(vcDir, vcUp));
 
 			// build final matrix and set for device
 			return SetView(vcRight, vcUp, vcDir, cameraPosition);
@@ -100,7 +102,7 @@ namespace Bow
 
 			m_View._44 = 1.0f;
 
-			m_ViewProjection = m_PerspectiveProjection * m_View;
+			m_ViewProjection = m_Projection * m_View;
 			return  true;
 		}
 		/*----------------------------------------------------------------*/
@@ -172,8 +174,8 @@ namespace Bow
 			Core::Vector3<double> vcS;
 
 			// resize to viewportspace [-1,1] -> projection
-			vcS.x = ((((double)screenX * 2.0f) / m_Width) - 1.0f) / m_PerspectiveProjection._11;
-			vcS.y = -((((double)screenY * 2.0f) / m_Height) - 1.0f) / m_PerspectiveProjection._22;
+			vcS.x = ((((double)screenX * 2.0f) / m_Width) - 1.0f) / m_Projection._11;
+			vcS.y = -((((double)screenY * 2.0f) / m_Height) - 1.0f) / m_Projection._22;
 			vcS.z = 1.0f;
 
 			// invert view matrix
@@ -222,21 +224,41 @@ namespace Bow
 		}
 		/*----------------------------------------------------------------*/
 
-		Core::Matrix3D<double> Camera::CalculateWorldViewProjection()
+		Core::Matrix3D<double> Camera::CalculateView()
+		{
+			return m_View;
+		}
+
+		Core::Matrix3D<double> Camera::CalculateWorldView(const Core::Matrix3D<double>& world)
+		{
+			return m_View * world;
+		}
+
+		Core::Matrix4x4<double> Camera::CalculateProjection()
+		{
+			if (dirty)
+				CalcPerspProjMatrix();
+
+			return m_Projection;
+		}
+
+		Core::Matrix4x4<double> Camera::CalculateViewProjection()
 		{
 			if (dirty)
 				CalcPerspProjMatrix();
 
 			return m_ViewProjection;
 		}
-		
-		Core::Matrix3D<double> Camera::CalculateWorldViewProjection(const Core::Matrix3D<double>& world)
+
+		Core::Matrix4x4<double> Camera::CalculateWorldViewProjection(const Core::Matrix3D<double>& world)
 		{
 			if (dirty)
 				CalcPerspProjMatrix();
 
-			return m_ViewProjection * world;
+			return m_ViewProjection * (Core::Matrix4x4<double>)world;
 		}
+
+		
 		/*----------------------------------------------------------------*/
 		
 		bool Camera::CalcPerspProjMatrix()
@@ -256,14 +278,15 @@ namespace Bow
 			float h = 1.0f  * (cosFOV2 / sinFOV2);
 			double Q = m_Far / (m_Far - m_Near);
 
-			memset(&m_PerspectiveProjection, 0, sizeof(Core::Matrix3D<double>));
-			m_PerspectiveProjection._11 = w;
-			m_PerspectiveProjection._22 = h;
-			m_PerspectiveProjection._33 = Q;
-			m_PerspectiveProjection._43 = 1.0f;
-			m_PerspectiveProjection._34 = -Q*m_Near;
+			memset(&m_Projection, 0, sizeof(Core::Matrix3D<double>));
+			// Old
+			m_Projection._11 = w; // Wieso das Minus?
+			m_Projection._22 = h;
+			m_Projection._33 = Q;
+			m_Projection._43 = 1.0f;
+			m_Projection._34 = -Q*m_Near;
 
-			m_ViewProjection = m_PerspectiveProjection * m_View;
+			m_ViewProjection = m_Projection * m_View;
 
 			dirty = false;
 			return true;

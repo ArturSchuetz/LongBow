@@ -15,13 +15,14 @@ namespace Bow {
 
 			bool LoadFile(std::string FileName);
 
-			int GetWidth();
-			int GetHeight();
-			int GetSizeInBytes();
+			int GetWidth() const;
+			int GetHeight() const;
+			int GetSizeInBytes() const;
 
-			unsigned char* GetData();
+			unsigned char* GetData() const;
 
 		private:
+			Bitmap(const Bitmap& other){} // do not copy
 			unsigned int m_width;
 			unsigned int m_height;
 			unsigned int m_size;

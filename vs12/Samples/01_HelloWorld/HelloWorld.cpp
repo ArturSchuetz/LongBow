@@ -37,6 +37,8 @@ int main()
 		ContextOGL->VClear(clearState);
 
 		ContextOGL->VSwapBuffers();
+
+		WindowOGL->VPollWindowEvents();
 	}
 	return 0;
 }

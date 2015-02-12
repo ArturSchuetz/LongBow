@@ -985,7 +985,7 @@ namespace Bow {
 					}
 					else if (sscanf(buffer, "%d/%d/%d", &v[0], &vt[0], &vn[0]) == 3) // v/vt/vn
 					{
-						fscanf(pFile, "%d/%d/%d", &v[1], &vt[1], &vn[1]);
+						/*fscanf(pFile, "%d/%d/%d", &v[1], &vt[1], &vn[1]);
 						fscanf(pFile, "%d/%d/%d", &v[2], &vt[2], &vn[2]);
 
 						v[0] = (v[0] < 0) ? v[0] + numVertices - 1 : v[0] - 1;
@@ -1000,8 +1000,7 @@ namespace Bow {
 						vn[1] = (vn[1] < 0) ? vn[1] + numNormals - 1 : vn[1] - 1;
 						vn[2] = (vn[2] < 0) ? vn[2] + numNormals - 1 : vn[2] - 1;
 
-						addTrianglePosTexCoordNormal(numTriangles++, activeMaterial,
-							v[0], v[1], v[2], vt[0], vt[1], vt[2], vn[0], vn[1], vn[2]);
+						addTrianglePosTexCoordNormal(numTriangles++, activeMaterial, v[0], v[1], v[2], vt[0], vt[1], vt[2], vn[0], vn[1], vn[2]);
 
 						v[1] = v[2];
 						vt[1] = vt[2];
@@ -1013,13 +1012,12 @@ namespace Bow {
 							vt[2] = (vt[2] < 0) ? vt[2] + numTexCoords - 1 : vt[2] - 1;
 							vn[2] = (vn[2] < 0) ? vn[2] + numNormals - 1 : vn[2] - 1;
 
-							addTrianglePosTexCoordNormal(numTriangles++, activeMaterial,
-								v[0], v[1], v[2], vt[0], vt[1], vt[2], vn[0], vn[1], vn[2]);
+							addTrianglePosTexCoordNormal(numTriangles++, activeMaterial, v[0], v[1], v[2], vt[0], vt[1], vt[2], vn[0], vn[1], vn[2]);
 
 							v[1] = v[2];
 							vt[1] = vt[2];
 							vn[1] = vn[2];
-						}
+						}*/
 					}
 					else if (sscanf(buffer, "%d/%d", &v[0], &vt[0]) == 2) // v/vt
 					{

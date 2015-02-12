@@ -22,10 +22,7 @@ int main()
 {	
 	///////////////////////////////////////////////////////////////////
 	// Load Mesh
-
-	LOG_TRACE("Loading Modeldata...");
-	MeshPtr mesh = ResourceManager::GetInstance().LoadMesh("../Data/Models/IronManNoRig.obj");
-
+	MeshPtr mesh = ResourceManager::GetInstance().LoadMesh("../Data/Models/lost-empire/lost_empire.obj");
 	if (mesh == nullptr)
 	{
 		return -1;
@@ -40,7 +37,7 @@ int main()
 	}
 
 	// Creating Window
-	GraphicsWindowPtr WindowOGL	= DeviceOGL->VCreateWindow(450, 600, "Mesh Rendering Sample", WindowType::Windowed);
+	GraphicsWindowPtr WindowOGL	= DeviceOGL->VCreateWindow(800, 600, "Mesh Rendering Sample", WindowType::Windowed);
 	if (WindowOGL == nullptr)
 	{
 		return -1;
@@ -57,53 +54,78 @@ int main()
 
 	///////////////////////////////////////////////////////////////////
 	// Create Vertexa Array from Mesh
-
+	
 	// fill buffer with informations
 	IndexBufferPtr indexBuffer; 
-	if (mesh->Indices->Type == IndicesType::UnsignedInt)
+	if (mesh->m_Indices->Type == IndicesType::UnsignedInt)
 	{
 		indexBuffer = DeviceOGL->VCreateIndexBuffer(BufferHint::StaticDraw, IndexBufferDatatype::UnsignedInt, sizeof(unsigned int) * mesh->GetNumberOfIndices());
-		indexBuffer->VCopyFromSystemMemory(&(((IndicesUnsignedInt*)(mesh->Indices))->Values[0]), sizeof(unsigned int) * mesh->GetNumberOfIndices());
+		indexBuffer->VCopyFromSystemMemory(&(((IndicesUnsignedInt*)(mesh->m_Indices))->Values[0]), sizeof(unsigned int) * mesh->GetNumberOfIndices());
 	}
-	else if (mesh->Indices->Type == IndicesType::UnsignedShort)
+	else if (mesh->m_Indices->Type == IndicesType::UnsignedShort)
 	{
 		indexBuffer = DeviceOGL->VCreateIndexBuffer(BufferHint::StaticDraw, IndexBufferDatatype::UnsignedShort, sizeof(unsigned short) * mesh->GetNumberOfIndices());
-		indexBuffer->VCopyFromSystemMemory(&(((IndicesUnsignedShort*)(mesh->Indices))->Values[0]), sizeof(unsigned short) * mesh->GetNumberOfIndices());
+		indexBuffer->VCopyFromSystemMemory(&(((IndicesUnsignedShort*)(mesh->m_Indices))->Values[0]), sizeof(unsigned short) * mesh->GetNumberOfIndices());
 	}
 
+	/////////////////////////
+	// POSITIONS
 	VertexBufferPtr VertexBuffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector3<float>) * mesh->GetNumberOfVertices());
-	VertexBuffer->VCopyFromSystemMemory(mesh->Positions, sizeof(Vector3<float>) * mesh->GetNumberOfVertices());
+	VertexBuffer->VCopyFromSystemMemory(&(mesh->m_Positions.at(0)), sizeof(Vector3<float>) * mesh->GetNumberOfVertices());
 
 	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(VertexBuffer, ComponentDatatype::Float, 3));
 
+	/////////////////////////
+	// TEXTURE COORDINATES
+	// Create vertex texturecoodinate buffer and fill with informations
+	VertexBufferPtr TextureCoordBuffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector2<float>) * mesh->GetNumberOfVertices());
+	TextureCoordBuffer->VCopyFromSystemMemory(&(mesh->m_TextureCoords.at(0)), 0, sizeof(Vector2<float>) * mesh->GetNumberOfVertices());
+
+	// Define buffer as vertexattribute for shaders
+	VertexBufferAttributePtr TextureCoordAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(TextureCoordBuffer, ComponentDatatype::Float, 2));
+
+
 	// create VertexArray
 	VertexArrayPtr VertexArray = ContextOGL->VCreateVertexArray();
-
+	
 	// connect buffer with location in shader
 	VertexArray->VSetIndexBuffer(indexBuffer);
 	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_Position")->Location, PositionAttribute);
+	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_TexCoord")->Location, TextureCoordAttribute);
+
 
 	///////////////////////////////////////////////////////////////////
 	// Uniforms
 
-	Camera camera(WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
-	Vector3<float> Position = Vector3<float>(258.634399f, 126.081482f, 258.634399f);
-	Vector3<float> LookAt = Vector3<float>(-0.873367310f, 126.081482f, 0.599601746f);
+	Vector3<float> Position = Vector3<float>(mesh->m_Center.x - 8.0f, mesh->m_Center.y - 1.5f, mesh->m_Center.z - 16.0f);
+	Vector3<float> LookAt = mesh->m_Center + Vector3<float>(0.0f, -5.0f, 10.0f);
 	Vector3<float> UpVector = Vector3<float>(0.0f, 1.0f, 0.0f);
-	camera.SetViewLookAt(Position, LookAt, UpVector);
+
+	Camera camera(Position, LookAt, UpVector, WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
 
 	///////////////////////////////////////////////////////////////////
 	// RenderState
 
-	RenderState renderState;
-	renderState.FaceCulling.Enabled = false;
-	renderState.DepthTest.Enabled = true;
+	RenderState renderStateSolid;
+	renderStateSolid.FaceCulling.Enabled = true;
+	renderStateSolid.DepthTest.Enabled = true;
+
+	RenderState renderStateTransparent;
+	renderStateTransparent.FaceCulling.Enabled = true;
+	renderStateTransparent.DepthTest.Enabled = true;
+	renderStateTransparent.Blending.Enabled = true;
+	renderStateTransparent.Blending.DestinationRGBFactor = DestinationBlendingFactor::OneMinusSourceAlpha;
+	renderStateTransparent.Blending.SourceRGBFactor = SourceBlendingFactor::SourceAlpha;
 
 	///////////////////////////////////////////////////////////////////
 	// Gameloop
 
 	Core::Matrix3D<float> worldMat;
 	worldMat.Translate(Vector3<float>(0.0f, 0.0f, 35.0f));
+
+	// Textures
+	int TexID = 0;
+	TextureSamplerPtr sampler = DeviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Nearest, TextureWrap::Clamp, TextureWrap::Clamp);
 
 	while (!WindowOGL->VShouldClose())
 	{
@@ -113,15 +135,36 @@ int main()
 
 		camera.SetResolution(WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
 
-		ShaderProgram->VSetUniform("u_ModelViewProj", (Core::Matrix3D<float>)camera.CalculateWorldViewProjection(worldMat));
+		ShaderProgram->VSetUniform("u_ModelViewProj", (Core::Matrix4x4<float>)camera.CalculateWorldViewProjection(worldMat));
 
 		for (unsigned int i = 0; i < mesh->GetNumberOfSubmeshes(); ++i)
 		{
-			ShaderProgram->VSetUniform("u_color", mesh->Materials[mesh->SubMeshes[i].MaterialID].diffuse);
-			ContextOGL->VDraw(PrimitiveType::Triangles, mesh->SubMeshes[i].StartIndex, mesh->SubMeshes[i].TriangleCount * 3, VertexArray, ShaderProgram, renderState);
+			if (mesh->m_Materials[mesh->m_SubMeshes[i].MaterialID].diffuseTexture->GetSizeInBytes() / (mesh->m_Materials[mesh->m_SubMeshes[i].MaterialID].diffuseTexture->GetHeight() * mesh->m_Materials[mesh->m_SubMeshes[i].MaterialID].diffuseTexture->GetWidth()) == 3)
+			{
+				ContextOGL->VSetTexture(TexID, DeviceOGL->VCreateTexture2D(mesh->m_Materials[mesh->m_SubMeshes[i].MaterialID].diffuseTexture, TextureFormat::RedGreenBlue8, true));
+
+				ContextOGL->VSetTextureSampler(TexID, sampler);
+				ShaderProgram->VSetUniform("diffuseTex", TexID);
+				ContextOGL->VDraw(PrimitiveType::Triangles, mesh->m_SubMeshes[i].StartIndex, mesh->m_SubMeshes[i].NumIndices, VertexArray, ShaderProgram, renderStateSolid);
+			}
+
+		}
+
+		// Transparent Objects (without sorting so far)
+		for (unsigned int i = 0; i < mesh->GetNumberOfSubmeshes(); ++i)
+		{
+			if (mesh->m_Materials[mesh->m_SubMeshes[i].MaterialID].diffuseTexture->GetSizeInBytes() / (mesh->m_Materials[mesh->m_SubMeshes[i].MaterialID].diffuseTexture->GetHeight() * mesh->m_Materials[mesh->m_SubMeshes[i].MaterialID].diffuseTexture->GetWidth()) == 4)
+			{
+				ContextOGL->VSetTexture(TexID, DeviceOGL->VCreateTexture2D(mesh->m_Materials[mesh->m_SubMeshes[i].MaterialID].diffuseTexture, TextureFormat::RedGreenBlueAlpha8, true));
+
+				ContextOGL->VSetTextureSampler(TexID, sampler);
+				ShaderProgram->VSetUniform("diffuseTex", TexID);
+				ContextOGL->VDraw(PrimitiveType::Triangles, mesh->m_SubMeshes[i].StartIndex, mesh->m_SubMeshes[i].NumIndices, VertexArray, ShaderProgram, renderStateTransparent);
+			}
 		}
 
 		ContextOGL->VSwapBuffers();
+		WindowOGL->VPollWindowEvents();
 	}
 	return 0;
 }

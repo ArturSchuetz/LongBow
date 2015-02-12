@@ -5,9 +5,6 @@
 namespace Bow {
 	namespace Renderer {
 
-		class IRenderDevice;
-		typedef std::shared_ptr<IRenderDevice> RenderDevicePtr;
-
 		enum class API : char
 		{
 			OpenGL3x,
@@ -17,13 +14,6 @@ namespace Bow {
 		//! \brief RenderDeviceManager is a singleton and creates devices. 
 		class RenderDeviceManager
 		{
-		protected:
-			RenderDeviceManager(){}
-
-		private:
-			RenderDeviceManager(const RenderDeviceManager&){}; //!< You shall not copy
-			RenderDeviceManager& operator=(const RenderDeviceManager&) { return *this; }
-
 		public:
 			~RenderDeviceManager(void);
 
@@ -34,9 +24,13 @@ namespace Bow {
 			//! \return shared_pointer of RenderDevice
 			RenderDevicePtr GetOrCreateDevice(API api);
 			void ReleaseDevice(API api);
+
+		protected:
+			RenderDeviceManager(){}
+
+		private:
+			RenderDeviceManager(const RenderDeviceManager&){}; //!< You shall not copy
+			RenderDeviceManager& operator=(const RenderDeviceManager&) { return *this; }
 		};
-
-
-
 	}
 }

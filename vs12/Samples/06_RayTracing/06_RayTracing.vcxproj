@@ -93,6 +93,7 @@
     <ClCompile Include="Lightsource.cpp" />
     <ClCompile Include="List.cpp" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Raytracer.cpp" />
     <ClCompile Include="RayTracing.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -105,6 +106,7 @@
     <ClInclude Include="Lightsource.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="Raytracer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />

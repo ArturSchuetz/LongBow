@@ -52,8 +52,11 @@ namespace Bow {
 			Core::Vector2<double> Transform3Dto2D(const Core::Vector3<double>& worldPosition);
 
 			// get world view projection matrix or NULL
-			Core::Matrix3D<double> CalculateWorldViewProjection();
-			Core::Matrix3D<double> CalculateWorldViewProjection(const Core::Matrix3D<double>& world);
+			Core::Matrix3D<double> CalculateView();
+			Core::Matrix3D<double> CalculateWorldView(const Core::Matrix3D<double>& world);
+			Core::Matrix4x4<double> CalculateViewProjection();
+			Core::Matrix4x4<double> CalculateWorldViewProjection(const Core::Matrix3D<double>& world);
+			Core::Matrix4x4<double> CalculateProjection();
 
 		private:
 			bool	CalcPerspProjMatrix();
@@ -67,8 +70,8 @@ namespace Bow {
 			
 			ProjectionMode	m_Mode;		// persp., ortho or 2d
 
-			Core::Matrix3D<double>	m_View,
-									m_PerspectiveProjection,
+			Core::Matrix3D<double>	m_View;
+			Core::Matrix4x4<double>	m_Projection,
 									m_ViewProjection;
 
 			bool dirty;

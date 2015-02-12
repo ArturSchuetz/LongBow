@@ -21,6 +21,8 @@ namespace Bow {
 		public:
 			virtual ~IIndicesBase(){}
 
+			virtual unsigned int Size() = 0;
+
 		public:
 			const IndicesType Type;
 		};

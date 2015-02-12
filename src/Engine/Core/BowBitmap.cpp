@@ -57,22 +57,22 @@ namespace Bow {
 			return true;
 		}
 
-		int Bitmap::GetWidth()
+		int Bitmap::GetWidth() const
 		{
 			return m_width;
 		}
 
-		int Bitmap::GetHeight()
+		int Bitmap::GetHeight() const
 		{
 			return m_height;
 		}
 
-		int Bitmap::GetSizeInBytes()
+		int Bitmap::GetSizeInBytes() const
 		{
 			return m_size;
 		}
 
-		unsigned char* Bitmap::GetData()
+		unsigned char* Bitmap::GetData() const
 		{
 			return FreeImage_GetBits(dib.get());
 		}

@@ -11,14 +11,13 @@ namespace Bow
 {
 	namespace Renderer
 	{
-		using namespace Core;
 
 		static std::unordered_map<API, RenderDevicePtr> DeviceMap;
 
 		// Function inside the DLL we want to call to create our Device-Object
 		extern "C"
 		{
-			typedef IRenderDevice* (*CREATERENDERDEVICE)(EventLogger& logger);
+			typedef IRenderDevice* (*CREATERENDERDEVICE)(Core::EventLogger& logger);
 		}
 
 		RenderDeviceManager::~RenderDeviceManager(void)
@@ -30,26 +29,11 @@ namespace Bow
 			DeviceMap.clear();
 		}
 
-
 		RenderDeviceManager& RenderDeviceManager::GetInstance()
 		{
 			static RenderDeviceManager instance;
 			return instance;
 		}
-
-
-		void RenderDeviceManager::ReleaseDevice(API api)
-		{
-			if (DeviceMap.find(api) != DeviceMap.end())
-			{
-				if (DeviceMap[api].get() != nullptr)
-				{
-					DeviceMap[api]->VRelease();
-					DeviceMap.erase(api);
-				}
-			}
-		}
-
 
 		RenderDevicePtr RenderDeviceManager::GetOrCreateDevice(API api)
 		{
@@ -98,7 +82,7 @@ namespace Bow
 
 				// Zeiger auf die dll Funktion 'CreateRenderDevice'
 				_CreateRenderDevice = (CREATERENDERDEVICE)GetProcAddress(hDLL, "CreateRenderDevice");
-				IRenderDevice *pDevice = _CreateRenderDevice(EventLogger::GetInstance());
+				IRenderDevice *pDevice = _CreateRenderDevice(Core::EventLogger::GetInstance());
 
 				// aufruf der dll Create-Funktionc
 				if (pDevice == nullptr)
@@ -118,5 +102,16 @@ namespace Bow
 			}
 		}
 
+		void RenderDeviceManager::ReleaseDevice(API api)
+		{
+			if (DeviceMap.find(api) != DeviceMap.end())
+			{
+				if (DeviceMap[api].get() != nullptr)
+				{
+					DeviceMap[api]->VRelease();
+					DeviceMap.erase(api);
+				}
+			}
+		}
 	}
 }

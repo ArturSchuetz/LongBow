@@ -12,6 +12,11 @@ namespace Bow {
 		{
 		}
 
+		unsigned int IndicesUnsignedInt::Size()
+		{
+			return Values.size();
+		}
+
 		IndicesUnsignedInt::~IndicesUnsignedInt()
 		{
 			Values.clear();

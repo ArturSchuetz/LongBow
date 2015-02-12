@@ -109,9 +109,6 @@
     <ClInclude Include="..\..\..\include\BowMatrix2D.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\BowMatrix3D.h">
-      <Filter>Header Files\Math</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\BowVector3.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
@@ -164,6 +161,9 @@
       <Filter>Header Files\Math</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\BowTriangle.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowMatrix4x4.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
   </ItemGroup>

@@ -48,6 +48,9 @@
     <ClCompile Include="Intersection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files\SceneObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -79,6 +82,9 @@
     </ClInclude>
     <ClInclude Include="Intersection.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files\SceneObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

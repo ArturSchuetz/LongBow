@@ -5,6 +5,8 @@
 #include <math.h>
 #include "BowLogger.h"
 
+#include "BowVector3.h"
+
 namespace Bow {
 	namespace Core {
 
@@ -29,6 +31,11 @@ namespace Bow {
 			Vector4(T _x, T _y, T _z, T _w = 1)
 			{
 				x = _x, y = _y, z = _z, w = _w;
+			}
+
+			Vector4(const Vector3<T> &other,T _w = 1)
+			{
+				x = other.x, y = other.y, z = other.z, w = _w;
 			}
 
 			Vector4(const T* _a)
@@ -165,13 +172,15 @@ namespace Bow {
 		}
 
 		// Dot product
-		template <typename T> inline T DotP(const Vector4<T>& v1, const Vector4<T>& v2)
+		template <typename T> 
+		inline T DotP(const Vector4<T>& v1, const Vector4<T>& v2)
 		{
 			return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w * v2.w;
 		}
 
 		// Cross product calculation for a 3D Vector
-		template <typename T> inline Vector4<T> CrossP(const Vector4<T>& v1, const Vector4<T>& v2)
+		template <typename T> 
+		inline Vector4<T> CrossP(const Vector4<T>& v1, const Vector4<T>& v2)
 		{
 			return Vector4<T>(
 				v1.y * other.z - v1.z * other.y,

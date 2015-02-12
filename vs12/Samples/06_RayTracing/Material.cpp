@@ -36,7 +36,7 @@ Material::Material(const Bow::Core::ColorRGB& color, float diffuse, float specul
 Bow::Core::ColorRGB Material::shade(Intersection& hit, Lightsource& light)
 {
 	// ToDo: Implement
-	float attenuation = 1.0 / (hit.getLocation() - light.getLocation()).Length();
+	float attenuation = 1.0f / (hit.getLocation() - light.getLocation()).LengthSquared();
 	Bow::Core::ColorRGB LigntColor = attenuation * light.getColor();
 	Bow::Core::ColorRGB Diffuse;
 	Bow::Core::ColorRGB Specular;
@@ -56,10 +56,9 @@ Bow::Core::ColorRGB Material::shade(Intersection& hit, Lightsource& light)
 		ViewDir.Normalize();
 
 		float NdotV = DotP(reflect, ViewDir);
-		if (NdotV > 0.0f)
+		if (NdotV > 0.0f && getPhongExponent() > 0)
 		{
 			Specular = LigntColor * powf(NdotV, getPhongExponent()); // Reflektionsfarbe = Lichtfarbe
-			//Specular = LigntColor * m_Color * powf(NdotV, getPhongExponent()); // Color als Reflektionsfarbe
 		}
 	}
 	return Diffuse + Specular;

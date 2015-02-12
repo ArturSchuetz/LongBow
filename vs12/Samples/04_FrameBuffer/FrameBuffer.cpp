@@ -151,6 +151,7 @@ int main()
 		ContextOGL->VDraw(PrimitiveType::TriangleStrip, QuadVertexArray, ShaderProgram, renderState);
 
 		ContextOGL->VSwapBuffers();
+		WindowOGL->VPollWindowEvents();
 	}
 	return 0;
 }

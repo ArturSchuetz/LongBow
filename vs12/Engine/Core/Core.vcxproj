@@ -92,7 +92,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\dependencies\FreeImage\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\dependencies\FreeImage\include;..\..\..\dependencies\assimp-3.1.1\include</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -100,10 +100,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>FreeImage.lib</AdditionalDependencies>
+      <AdditionalDependencies>FreeImage.lib;assimpd.lib</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);..\..\..\dependencies\FreeImage\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);..\..\..\dependencies\FreeImage\lib;..\..\..\dependencies\assimp-3.1.1\Debug</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -114,17 +114,17 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\dependencies\FreeImage\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\dependencies\FreeImage\include;..\..\..\dependencies\assimp-3.1.1\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>FreeImage.lib</AdditionalDependencies>
+      <AdditionalDependencies>FreeImage.lib;assimp.lib</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);..\..\..\dependencies\FreeImage\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);..\..\..\dependencies\FreeImage\lib;..\..\..\dependencies\assimp-3.1.1\lib64</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -137,7 +137,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\dependencies\FreeImage\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\dependencies\FreeImage\include;..\..\..\dependencies\assimp-3.1.1\include</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -147,10 +147,10 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>FreeImage.lib</AdditionalDependencies>
+      <AdditionalDependencies>FreeImage.lib;assimp.lib</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);..\..\..\dependencies\FreeImage\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);..\..\..\dependencies\FreeImage\lib;..\..\..\dependencies\assimp-3.1.1\Release</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -163,7 +163,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\dependencies\FreeImage\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\dependencies\FreeImage\include;..\..\..\dependencies\assimp-3.1.1\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -172,10 +172,10 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>FreeImage.lib</AdditionalDependencies>
+      <AdditionalDependencies>FreeImage.lib;assimp.lib</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);..\..\..\dependencies\FreeImage\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);..\..\..\dependencies\FreeImage\lib;..\..\..\dependencies\assimp-3.1.1\lib64</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -198,13 +198,13 @@
     <ClInclude Include="..\..\..\include\BowCorePredeclares.h" />
     <ClInclude Include="..\..\..\include\BowIndicesUnsignedInt.h" />
     <ClInclude Include="..\..\..\include\BowIndicesUnsignedShort.h" />
+    <ClInclude Include="..\..\..\include\BowMatrix4x4.h" />
     <ClInclude Include="..\..\..\include\BowPlane.h" />
     <ClInclude Include="..\..\..\include\BowResourceManager.h" />
     <ClInclude Include="..\..\..\include\BowLogger.h" />
     <ClInclude Include="..\..\..\include\BowMath.h" />
     <ClInclude Include="..\..\..\include\BowMatrix2D.h" />
     <ClInclude Include="..\..\..\include\BowMatrix2x2.h" />
-    <ClInclude Include="..\..\..\include\BowMatrix3D.h" />
     <ClInclude Include="..\..\..\include\BowMesh.h" />
     <ClInclude Include="..\..\..\include\BowRay.h" />
     <ClInclude Include="..\..\..\include\BowSphere.h" />

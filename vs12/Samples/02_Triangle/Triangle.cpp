@@ -82,6 +82,7 @@ int main()
 		ContextOGL->VDraw(PrimitiveType::Triangles, 0, 3, VertexArray, ShaderProgram, renderState);
 
 		ContextOGL->VSwapBuffers();
+		WindowOGL->VPollWindowEvents();
 	}
 	return 0;
 }

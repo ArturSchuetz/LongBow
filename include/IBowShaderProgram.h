@@ -44,6 +44,13 @@ namespace Bow {
 				VSetUniformMatrix(name, value.a, 9);
 			}
 
+			void VSetUniform(const char* name, Core::Matrix2x2<int> value) {
+				VSetUniformMatrix(name, value.a, 4);
+			}
+			void VSetUniform(const char* name, Core::Matrix2x2<float> value) {
+				VSetUniformMatrix(name, value.a, 4);
+			}
+
 			void VSetUniform(const char* name, Core::Matrix3D<int> value) {
 				VSetUniformMatrix(name, value.a, 16);
 			}
@@ -51,11 +58,11 @@ namespace Bow {
 				VSetUniformMatrix(name, value.a, 16);
 			}
 
-			void VSetUniform(const char* name, Core::Matrix2x2<int> value) {
-				VSetUniformMatrix(name, value.a, 4);
+			void VSetUniform(const char* name, Core::Matrix4x4<int> value) {
+				VSetUniformMatrix(name, value.a, 16);
 			}
-			void VSetUniform(const char* name, Core::Matrix2x2<float> value) {
-				VSetUniformMatrix(name, value.a, 4);
+			void VSetUniform(const char* name, Core::Matrix4x4<float> value) {
+				VSetUniformMatrix(name, value.a, 16);
 			}
 
 			virtual void VSetUniform(const char* name, int value) = 0;

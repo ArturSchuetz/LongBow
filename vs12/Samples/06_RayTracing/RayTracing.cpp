@@ -9,6 +9,7 @@
 #include "Raytracer.h"
 #include "Sphere.h"
 #include "Triangle.h"
+#include "Mesh.h"
 
 using namespace Bow;
 using namespace Core;
@@ -26,10 +27,27 @@ std::string LoadShaderFromResouce(int name)
 #define PIC_WIDTH 512
 #define PIC_HEIGHT 512
 
-int lineNum = 0;			// aktuelle Zeile
+void setupSphereScene(Scene *myScene)
+{
+	// Materialien hinzufuegen (Farbe, Diffus, Spekular, Phong Exponent)
+	myScene->addMaterial(new Material(ColorRGB(1.0f, 0.2f, 0.2f), 0.8f, 0.2f, 10.0f));
+	myScene->addMaterial(new Material(ColorRGB(0.1f, 0.9f, 0.1f), 0.5f, 0.5f, 50.0f));
+	myScene->addMaterial(new Material(ColorRGB(0.1f, 0.1f, 0.9f), 0.8f, 0.2f, 100.0f));
+	myScene->addMaterial(new Material(ColorRGB(1.0f, 1.0f, 0.2f), 0.8f, 0.2f, 20.0f));
+	myScene->addMaterial(new Material(ColorRGB(0.0f, 1.0f, 0.8f), 0.8f, 0.2f, 30.0f));
 
-Raytracer myRaytracer;		// Raytracer Objekt
-unsigned char *pixels;		// Pixel
+	// Punktlichtquellen hinzufuegen (Position, Farbe, Lichtstaerke)
+	myScene->addLight(new Lightsource(Vector3<float>(4.0f, 6.0f, 2.0f), ColorRGB(1.0f, 1.0f, 1.0f), 50));
+	myScene->addLight(new Lightsource(Vector3<float>(-4.0f, 3.0f, 1.0f), ColorRGB(1.0f, 1.0f, 1.0f), 50));
+
+	// Objekte hinzufuegen
+	myScene->addObject(new SphereObject(Sphere<float>(Vector3<float>(1.1f, 1.1f, 1.1f), 1.0f), 3));
+	myScene->addObject(new SphereObject(Sphere<float>(Vector3<float>(-1.1f, 1.1f, 1.1f), 1.0f), 0));
+	myScene->addObject(new SphereObject(Sphere<float>(Vector3<float>(0.0f, 1.1f, -1.1f), 1.0f), 2));
+	myScene->addObject(new SphereObject(Sphere<float>(Vector3<float>(0.0f, 2.0f, 0.0f), 1.0f), 4));
+	myScene->addObject(new TriangleObject(Triangle<float>(Vector3<float>(-5.0f, 0.0f, 5.0f), Vector3<float>(5.0f, 0.0f, 5.0f), Vector3<float>(5.0f, 0.0f, -5.0f)), 1));
+	myScene->addObject(new TriangleObject(Triangle<float>(Vector3<float>(-5.0f, 0.0f, 5.0f), Vector3<float>(5.0f, 0.0f, -5.0f), Vector3<float>(-5.0f, 0.0f, -5.0f)), 1));
+}
 
 int main()
 {
@@ -58,29 +76,12 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Initialize raytracer and create scene
 
-	pixels = new unsigned char[PIC_WIDTH * PIC_HEIGHT * 3];
+	unsigned char *pixels = new unsigned char[PIC_WIDTH * PIC_HEIGHT * 3];
 
 	Scene myScene = Scene(PIC_WIDTH, PIC_HEIGHT);	// Szene anlegen
+	setupSphereScene(&myScene);
 
-	// Materialien hinzufuegen (Farbe, Diffus, Spekular, Phong Exponent)
-	myScene.addMaterial(new Material(Vector3<float>(1.0f, 0.2f, 0.2f), 0.8f, 0.2f, 10.0f));
-	myScene.addMaterial(new Material(Vector3<float>(0.1f, 0.9f, 0.1f), 0.5f, 0.5f, 50.0f));
-	myScene.addMaterial(new Material(Vector3<float>(0.1f, 0.1f, 0.9f), 0.8f, 0.2f, 100.0f));
-	myScene.addMaterial(new Material(Vector3<float>(1.0f, 1.0f, 0.2f), 0.8f, 0.2f, 20.0f));
-	myScene.addMaterial(new Material(Vector3<float>(0.0f, 1.0f, 0.8f), 0.8f, 0.2f, 30.0f));
-
-	// Punktlichtquellen hinzufuegen (Position, Farbe, Lichtstaerke)
-	myScene.addLight(new Lightsource(Vector3<float>(4.0f, 6.0f, 2.0f), Vector3<float>(1.0f, 1.0f, 1.0f), 5));
-	myScene.addLight(new Lightsource(Vector3<float>(-4.0f, 3.0f, 1.0f), Vector3<float>(1.0f, 1.0f, 1.0f), 5));
-
-	// Objekte hinzufuegen
-	myScene.addObject(new SphereObject(Sphere<float>(Vector3<float>(1.1f, 1.1f, 1.1f), 1.0f), 3));
-	myScene.addObject(new SphereObject(Sphere<float>(Vector3<float>(-1.1f, 1.1f, 1.1f), 1.0f), 0));
-	myScene.addObject(new SphereObject(Sphere<float>(Vector3<float>(0.0f, 1.1f, -1.1f), 1.0f), 2));
-	myScene.addObject(new SphereObject(Sphere<float>(Vector3<float>(0.0f, 2.0f, 0.0f), 1.0f), 4));
-	myScene.addObject(new TriangleObject(Triangle<float>(Vector3<float>(-5.0f, 0.0f, 5.0f), Vector3<float>(5.0f, 0.0f, 5.0f), Vector3<float>(5.0f, 0.0f, -5.0f)), 1));
-	myScene.addObject(new TriangleObject(Triangle<float>(Vector3<float>(-5.0f, 0.0f, 5.0f), Vector3<float>(5.0f, 0.0f, -5.0f), Vector3<float>(-5.0f, 0.0f, -5.0f)), 1));
-
+	Raytracer myRaytracer;
 	myRaytracer.init(5, &myScene, pixels);		// init ray tracer mit 5 Reflexionen
 
 	///////////////////////////////////////////////////////////////////
@@ -138,6 +139,7 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Gameloop
 
+	int lineNum = 0;
 	while (!WindowOGL->VShouldClose())
 	{
 		ContextOGL->VClear(clearState);
@@ -155,6 +157,7 @@ int main()
 		ContextOGL->VDraw(PrimitiveType::TriangleStrip, QuadVertexArray, ShaderProgram, renderState);
 
 		ContextOGL->VSwapBuffers();
+		WindowOGL->VPollWindowEvents();
 	}
 
 	delete[] pixels;

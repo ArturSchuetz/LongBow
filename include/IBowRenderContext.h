@@ -74,7 +74,7 @@ namespace Bow {
 			virtual void VSetViewport(Viewport viewport) = 0;
 			virtual Viewport VGetViewport(void) = 0;
 
-			virtual void VSwapBuffers(void) = 0;
+			virtual void VSwapBuffers(bool vsync = false) = 0;
 		};
 
 	}

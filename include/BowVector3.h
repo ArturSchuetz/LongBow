@@ -154,6 +154,12 @@ namespace Bow {
 			}
 
 			template <typename C>
+			inline operator Vector3<C>() const
+			{
+				return Vector3<C>((C)x, (C)y, (C)z);
+			}
+
+			template <typename C>
 			inline operator Vector3<C>()
 			{
 				return Vector3<C>((C)x, (C)y, (C)z);
@@ -168,15 +174,17 @@ namespace Bow {
 		}
 
 		// Dot product
-		template <typename T> inline T DotP(const Vector3<T>& v1, const Vector3<T>& v2)
+		template <typename T> 
+		inline T DotP(const Vector3<T>& v1, const Vector3<T>& v2)
 		{
 			return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 		}
 
 		// Cross product
-		template <typename T> inline Vector3<T> CrossP(const Vector3<T>& v1, const Vector3<T>& v2)
+		template <typename T> 
+		inline Vector3<T> CrossP(const Vector3<T>& v1, const Vector3<T>& v2)
 		{
-			return Vector3<T>(	v1.y * v2.z - v1.z * v2.y,	// x
+			return Vector3<T>(v1.y * v2.z - v1.z * v2.y,	// x
 								v1.z * v2.x - v1.x * v2.z,	// y
 								v1.x * v2.y - v1.y * v2.x); // z
 		}

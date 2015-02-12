@@ -15,16 +15,17 @@ namespace Bow
 			~SubMesh();
 
 			const int StartIndex;
-			const int TriangleCount;
+			const int FaceCount;
+			unsigned int NumIndices;
 
 			const int MaterialID;
 			const Mesh* Parent;
 
 		private:
-			SubMesh(Mesh* parent, int startIndex, int triangleCount, int material) :
+			SubMesh(Mesh* parent, int startIndex, int faceCount, int material) :
 				Parent(parent),
 				StartIndex(startIndex),
-				TriangleCount(triangleCount),
+				FaceCount(faceCount),
 				MaterialID(material)
 			{} // I don't want anybody to create submeshes without parents
 		};

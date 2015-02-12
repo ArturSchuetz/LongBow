@@ -25,9 +25,6 @@ namespace Bow {
 			virtual ~IRenderDevice(void){}
 			virtual void VRelease(void) = 0;
 
-			// =========================================================================
-			// INIT/RELEASE STUFF:
-			// =========================================================================
 			virtual GraphicsWindowPtr	VCreateWindow(int width = 800, int height = 600, const std::string& title = "LongBow Game", WindowType type = WindowType::Windowed) = 0;
 
 			virtual ShaderProgramPtr	VCreateShaderProgramFromFile(const std::string& VertexShaderFilename, const std::string& FragementShaderFilename) = 0;
@@ -41,7 +38,7 @@ namespace Bow {
 			virtual WritePixelBufferPtr	VCreateWritePixelBuffer(PixelBufferHint usageHint, int sizeInBytes) = 0;
 
 			virtual Texture2DPtr		VCreateTexture2DFromFile(const std::string& Filename, bool generateMipmaps = false) = 0;
-			virtual Texture2DPtr		VCreateTexture2D(Core::Bitmap bitmap, TextureFormat format, bool generateMipmaps = false) = 0;
+			virtual Texture2DPtr		VCreateTexture2D(Core::Bitmap* bitmap, TextureFormat format, bool generateMipmaps = false) = 0;
 			virtual Texture2DPtr		VCreateTexture2D(Texture2DDescription description) = 0;
 			virtual TextureSamplerPtr	VCreateTexture2DSampler(TextureMinificationFilter minificationFilter, TextureMagnificationFilter magnificationFilter, TextureWrap wrapS, TextureWrap wrapT, float maximumAnistropy = 1) = 0;
 		};

@@ -16,9 +16,10 @@ namespace Bow {
 		template<class T> class Vector4;
 			typedef Vector4<float> ColorRGBA;
 
-		template <typename T> class Matrix2x2;
 		template <typename T> class Matrix2D;
+		template <typename T> class Matrix2x2;
 		template <typename T> class Matrix3D;
+		template <typename T> class Matrix4x4;
 
 		template <typename T> class Plane;
 		template <typename T> class Ray;

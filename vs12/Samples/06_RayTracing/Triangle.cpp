@@ -21,6 +21,7 @@ TriangleObject::TriangleObject(const Bow::Core::Triangle<float> &triangle, int m
 	m_PlaneVector2 = triangle.p2 - triangle.p0;
 	m_Normal = Bow::Core::CrossP(m_PlaneVector1, m_PlaneVector2);
 	m_Normal.Normalize();
+	LOG_ASSERT(m_Normal.LengthSquared() != 0, "Wat?!");
 }
 
 /**
