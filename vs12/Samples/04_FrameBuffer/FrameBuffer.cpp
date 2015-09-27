@@ -27,7 +27,7 @@ int main()
 	}
 
 	// Creating Window
-	GraphicsWindowPtr WindowOGL = DeviceOGL->VCreateWindow(800, 600, "Framebuffer Sample", WindowType::Windowed);
+	GraphicsWindowPtr WindowOGL = DeviceOGL->VCreateWindow(256, 256, "Framebuffer Sample", WindowType::Windowed);
 	if (WindowOGL == nullptr)
 	{
 		return 0;
@@ -115,7 +115,8 @@ int main()
 	Viewport viewport = ContextOGL->VGetViewport();
 	int out_Color_Location = ShaderProgram->VGetFragmentOutputLocation("out_Color");
 
-	FrameBuffer->VSetColorAttachment(out_Color_Location, DeviceOGL->VCreateTexture2D(Texture2DDescription(viewport.width, viewport.height, TextureFormat::RedGreenBlue8)));
+	Texture2DPtr renderTarget = DeviceOGL->VCreateTexture2D(Texture2DDescription(viewport.width, viewport.height, TextureFormat::RedGreenBlue8));
+	FrameBuffer->VSetColorAttachment(out_Color_Location, renderTarget);
 
 	///////////////////////////////////////////////////////////////////
 	// RenderState
@@ -152,6 +153,12 @@ int main()
 
 		ContextOGL->VSwapBuffers();
 		WindowOGL->VPollWindowEvents();
+
+		std::shared_ptr<void> image = renderTarget->VCopyToSystemMemory(ImageFormat::BlueGreenRed, ImageDatatype::UnsignedByte);
+		Bitmap bmp;
+		bmp.SaveFile(image.get(), WindowOGL->VGetWidth(), WindowOGL->VGetHeight(), "out.bmp");
+
+		return 0;
 	}
 	return 0;
 }

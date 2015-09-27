@@ -11,7 +11,6 @@ namespace Bow {
 
 		OGLPixelBuffer::OGLPixelBuffer(GLenum target, BufferHint usageHint, int sizeInBytes) : m_name(new OGLBufferName()), m_sizeInBytes(sizeInBytes), m_target(target), m_UsageHint(OGLTypeConverter::To(usageHint))
 		{
-
 			LOG_ASSERT(!(sizeInBytes <= 0), "sizeInBytes must be greater than zero");
 
 			Bind();
@@ -21,7 +20,6 @@ namespace Bow {
 
 		void OGLPixelBuffer::CopyFromSystemMemory(void* bufferInSystemMemory, int destinationOffsetInBytes, int lengthInBytes)
 		{
-
 			LOG_ASSERT(!(destinationOffsetInBytes < 0), "destinationOffsetInBytes must be greater than or equal to zero.");
 			LOG_ASSERT(!(destinationOffsetInBytes + lengthInBytes > m_sizeInBytes), "destinationOffsetInBytes + lengthInBytes must be less than or equal to SizeInBytes.");
 			LOG_ASSERT(!(lengthInBytes < 0), "lengthInBytes must be greater than or equal to zero.");
@@ -33,7 +31,6 @@ namespace Bow {
 
 		std::shared_ptr<void> OGLPixelBuffer::CopyToSystemMemory(int offsetInBytes, int sizeInBytes)
 		{
-
 			LOG_ASSERT(!(offsetInBytes < 0), "offsetInBytes must be greater than or equal to zero.");
 			LOG_ASSERT(!(sizeInBytes <= 0), "lengthInBytes must be greater than zero.");
 			LOG_ASSERT(!(offsetInBytes + sizeInBytes > m_sizeInBytes), "offsetInBytes + lengthInBytes must be less than or equal to SizeInBytes.");
@@ -48,7 +45,6 @@ namespace Bow {
 
 		int OGLPixelBuffer::GetSizeInBytes() const
 		{
-
 			return m_sizeInBytes;
 		}
 

@@ -14,6 +14,7 @@ namespace Bow {
 			~Bitmap();
 
 			bool LoadFile(std::string FileName);
+			bool SaveFile(void* pixels, int width, int height, std::string fileName);
 
 			int GetWidth() const;
 			int GetHeight() const;

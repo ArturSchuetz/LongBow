@@ -275,10 +275,23 @@ namespace Bow {
 			BindToLastTextureUnit();
 
 			glPixelStorei(GL_PACK_ALIGNMENT, rowAlignment);
-			glGetTexImage(m_target, 0, OGLTypeConverter::To(format), OGLTypeConverter::To(dataType), nullptr);
 
-			// Warum?!
-			return std::shared_ptr<void>(nullptr);
+			GLint textureformat;
+			glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &textureformat);
+
+			GLint width;
+			glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
+
+			GLint height;
+			glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
+
+			unsigned char* pixels = new unsigned char[(int)width * (int)height * 3];
+			
+			glGetTexImage(m_target, 0, OGLTypeConverter::To(format), OGLTypeConverter::To(dataType), pixels);
+
+			//glReadPixels(0, 0, width, height, OGLTypeConverter::To(format), OGLTypeConverter::To(dataType), pixels);
+
+			return std::shared_ptr<unsigned char>(pixels);
 		}
 
 

@@ -57,6 +57,20 @@ namespace Bow {
 			return true;
 		}
 
+		bool Bitmap::SaveFile(void* pixels, int width, int height, std::string fileName)
+		{
+			// Convert to FreeImage format & save to file
+			FIBITMAP* image = FreeImage_ConvertFromRawBits((BYTE*)pixels, width, height, 3 * width, 24, 0xFF0000, 0x00FF00, 0x0000FF, false);
+			FreeImage_Save(FIF_BMP, image, fileName.c_str(), 0);
+
+			// Free resources
+			FreeImage_Unload(image);
+
+			//return success
+			return true;
+		}
+
+
 		int Bitmap::GetWidth() const
 		{
 			return m_width;
