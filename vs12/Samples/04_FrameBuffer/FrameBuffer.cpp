@@ -153,10 +153,6 @@ int main()
 
 		ContextOGL->VSwapBuffers();
 		WindowOGL->VPollWindowEvents();
-
-		std::shared_ptr<void> image = renderTarget->VCopyToSystemMemory(ImageFormat::BlueGreenRed, ImageDatatype::UnsignedByte);
-		Bitmap bmp;
-		bmp.SaveFile(image.get(), WindowOGL->VGetWidth(), WindowOGL->VGetHeight(), "out.bmp");
 	}
 	return 0;
 }
