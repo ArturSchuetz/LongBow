@@ -2,6 +2,7 @@
 #include "BowPrerequisites.h"
 
 #include "IBowGraphicsWindow.h"
+
 struct GLFWwindow;
 
 namespace Bow {
