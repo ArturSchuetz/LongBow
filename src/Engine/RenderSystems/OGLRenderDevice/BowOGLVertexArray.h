@@ -22,7 +22,7 @@ namespace Bow {
 			int	MaximumArrayIndex();
 
 			VertexBufferAttributeMap	VGetAttributes();
-			void						VSetAttribute(int Location, VertexBufferAttributePtr pointer);
+			void						VSetAttribute(ShaderVertexAttributePtr Location, VertexBufferAttributePtr pointer);
 
 			IndexBufferPtr				VGetIndexBuffer();
 			void						VSetIndexBuffer(IndexBufferPtr pointer);

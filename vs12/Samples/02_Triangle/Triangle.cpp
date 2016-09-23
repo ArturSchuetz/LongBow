@@ -59,7 +59,7 @@ int main()
 	VertexArrayPtr VertexArray = ContextOGL->VCreateVertexArray();
 
 	// connect buffer with location in shader
-	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_Position")->Location, PositionAttribute);
+	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_Position"), PositionAttribute);
 
 	///////////////////////////////////////////////////////////////////
 	// Uniforms

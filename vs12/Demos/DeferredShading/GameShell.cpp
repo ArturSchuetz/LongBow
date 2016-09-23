@@ -162,8 +162,8 @@ void GameShell::PrepareScreenFillingQuad(void)
 
 	// connect buffer with location
 	m_QuadVA = m_contextOGL->VCreateVertexArray();
-	m_QuadVA->VSetAttribute(m_ambientShaderProgram->VGetVertexAttribute("in_Position")->Location, QuadPositionAttribute);
-	m_QuadVA->VSetAttribute(m_ambientShaderProgram->VGetVertexAttribute("in_TexCoord")->Location, QuadTextureCoordAttribute);
+	m_QuadVA->VSetAttribute(m_ambientShaderProgram->VGetVertexAttribute("in_Position"), QuadPositionAttribute);
+	m_QuadVA->VSetAttribute(m_ambientShaderProgram->VGetVertexAttribute("in_TexCoord"), QuadTextureCoordAttribute);
 }
 
 void GameShell::PrepareLightVolumes(void)
@@ -193,7 +193,7 @@ void GameShell::PrepareLightVolumes(void)
 	// connect buffer with location
 	m_LightVA = m_contextOGL->VCreateVertexArray();
 	m_LightVA->VSetIndexBuffer(indexBuffer);
-	m_LightVA->VSetAttribute(m_compositeShaderProgram->VGetVertexAttribute("in_Position")->Location, PositionAttribute);
+	m_LightVA->VSetAttribute(m_compositeShaderProgram->VGetVertexAttribute("in_Position"), PositionAttribute);
 }
 
 void GameShell::PrepareScene(void)
@@ -243,9 +243,9 @@ void GameShell::PrepareScene(void)
 	// create VertexArray and connect buffer with location in shader
 	m_sceneVA = m_contextOGL->VCreateVertexArray();
 	m_sceneVA->VSetIndexBuffer(indexBuffer);
-	m_sceneVA->VSetAttribute(m_fillGBufferShaderProgram->VGetVertexAttribute("in_Position")->Location, PositionAttribute);
-	m_sceneVA->VSetAttribute(m_fillGBufferShaderProgram->VGetVertexAttribute("in_Normal")->Location, NormalAttribute);
-	m_sceneVA->VSetAttribute(m_fillGBufferShaderProgram->VGetVertexAttribute("in_TexCoord")->Location, TextureCoordAttribute);
+	m_sceneVA->VSetAttribute(m_fillGBufferShaderProgram->VGetVertexAttribute("in_Position"), PositionAttribute);
+	m_sceneVA->VSetAttribute(m_fillGBufferShaderProgram->VGetVertexAttribute("in_Normal"), NormalAttribute);
+	m_sceneVA->VSetAttribute(m_fillGBufferShaderProgram->VGetVertexAttribute("in_TexCoord"), TextureCoordAttribute);
 }
 
 void GameShell::Release(void)

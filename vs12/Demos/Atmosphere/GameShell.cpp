@@ -106,8 +106,8 @@ bool GameShell::Init(void)
 	// create VertexArray and connect buffer with location in shader
 	m_sceneVA = m_contextOGL->VCreateVertexArray();
 	m_sceneVA->VSetIndexBuffer(indexBuffer);
-	m_sceneVA->VSetAttribute(m_GroundShaderProgram->VGetVertexAttribute("in_Position")->Location, PositionAttribute);
-	m_sceneVA->VSetAttribute(m_GroundShaderProgram->VGetVertexAttribute("in_TexCoord")->Location, TextureCoordAttribute);
+	m_sceneVA->VSetAttribute(m_GroundShaderProgram->VGetVertexAttribute("in_Position"), PositionAttribute);
+	m_sceneVA->VSetAttribute(m_GroundShaderProgram->VGetVertexAttribute("in_TexCoord"), TextureCoordAttribute);
 
 	m_textureSampler = m_device->VCreateTexture2DSampler(Renderer::TextureMinificationFilter::Linear, Renderer::TextureMagnificationFilter::Nearest, Renderer::TextureWrap::Clamp, Renderer::TextureWrap::Clamp);
 

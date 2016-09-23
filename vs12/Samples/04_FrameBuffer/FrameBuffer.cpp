@@ -69,8 +69,8 @@ int main()
 
 	// create VertexArray and connect buffer with location
 	VertexArrayPtr VertexArray = ContextOGL->VCreateVertexArray();
-	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_Position")->Location, PositionAttribute);
-	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_TexCoord")->Location, TextureCoordAttribute);
+	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_Position"), PositionAttribute);
+	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_TexCoord"), TextureCoordAttribute);
 
 	///////////////////////////////////////////////////////////////////
 	// Screenfilling Quad Preperations
@@ -98,8 +98,8 @@ int main()
 
 	// connect buffer with location
 	auto QuadVertexArray = ContextOGL->VCreateVertexArray();
-	QuadVertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_Position")->Location, QuadPositionAttribute);
-	QuadVertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_TexCoord")->Location, QuadTextureCoordAttribute);
+	QuadVertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_Position"), QuadPositionAttribute);
+	QuadVertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_TexCoord"), QuadTextureCoordAttribute);
 
 	///////////////////////////////////////////////////////////////////
 	// Textures

@@ -2,6 +2,7 @@
 #include "BowLogger.h"
 
 #include "BowOGLIndexBuffer.h"
+#include "BowShaderVertexAttribute.h"
 
 #include <GL\glew.h>
 
@@ -56,9 +57,9 @@ namespace Bow {
 			return m_Attributes.GetAttributes();
 		}
 
-		void OGLVertexArray::VSetAttribute(int Location, VertexBufferAttributePtr pointer)
+		void OGLVertexArray::VSetAttribute(ShaderVertexAttributePtr vertexAttribute, VertexBufferAttributePtr pointer)
 		{
-			m_Attributes.SetAttribute(Location, pointer);
+			m_Attributes.SetAttribute(vertexAttribute->Location, pointer);
 		}
 
 		IndexBufferPtr OGLVertexArray::VGetIndexBuffer()

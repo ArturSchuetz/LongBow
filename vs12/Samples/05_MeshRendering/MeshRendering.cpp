@@ -90,8 +90,8 @@ int main()
 	
 	// connect buffer with location in shader
 	VertexArray->VSetIndexBuffer(indexBuffer);
-	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_Position")->Location, PositionAttribute);
-	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_TexCoord")->Location, TextureCoordAttribute);
+	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_Position"), PositionAttribute);
+	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_TexCoord"), TextureCoordAttribute);
 
 
 	///////////////////////////////////////////////////////////////////
@@ -147,7 +147,6 @@ int main()
 				ShaderProgram->VSetUniform("diffuseTex", TexID);
 				ContextOGL->VDraw(PrimitiveType::Triangles, mesh->m_SubMeshes[i].StartIndex, mesh->m_SubMeshes[i].NumIndices, VertexArray, ShaderProgram, renderStateSolid);
 			}
-
 		}
 
 		// Transparent Objects (without sorting so far)

@@ -123,8 +123,8 @@ int main()
 
 	// connect buffer with location
 	auto QuadVertexArray = ContextOGL->VCreateVertexArray();
-	QuadVertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_Position")->Location, QuadPositionAttribute);
-	QuadVertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_TexCoord")->Location, QuadTextureCoordAttribute);
+	QuadVertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_Position"), QuadPositionAttribute);
+	QuadVertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_TexCoord"), QuadTextureCoordAttribute);
 
 	///////////////////////////////////////////////////////////////////
 	// Create Texture to Render with

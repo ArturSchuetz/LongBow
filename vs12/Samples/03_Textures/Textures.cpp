@@ -71,8 +71,8 @@ int main()
 
 	// create VertexArray and connect attributeBuffers with location
 	VertexArrayPtr VertexArray = ContextOGL->VCreateVertexArray();
-	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_Position")->Location, PositionAttribute);
-	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_TexCoord")->Location, TextureCoordAttribute);
+	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_Position"), PositionAttribute);
+	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_TexCoord"), TextureCoordAttribute);
 
 	///////////////////////////////////////////////////////////////////
 	// Textures
