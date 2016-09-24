@@ -94,8 +94,8 @@
       <AdditionalIncludeDirectories>..\..\..\include;..\..\..\dependencies\FreeImage\include;..\..\..\dependencies\assimp-3.1.1\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Lib>
-      <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);..\..\..\dependencies\FreeImage\lib;..\..\..\dependencies\assimp-3.1.1\$(Configuration); </AdditionalLibraryDirectories>
-      <AdditionalDependencies>Core_d.lib;FreeImage.lib;assimpd.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);..\..\..\dependencies\FreeImage\lib;..\..\..\dependencies\assimp-3.1.1\Release </AdditionalLibraryDirectories>
+      <AdditionalDependencies>Core_d.lib;FreeImage.lib;assimp.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
