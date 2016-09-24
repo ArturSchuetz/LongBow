@@ -3,10 +3,11 @@
 #include "BowRendererPredeclares.h"
 
 #include "BowCorePredeclares.h"
+#include "BowResourcesPredeclares.h"
 #include "IBowGraphicsWindow.h"
 
 namespace Bow {
-	namespace Renderer{
+	namespace Renderer {
 
 		enum class WindowType : char
 		{

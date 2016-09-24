@@ -1,6 +1,6 @@
 #pragma once
 #include "BowMesh.h"
-#include "BowCore.h"
+#include "BowResources.h"
 
 namespace Bow {
 	namespace Core {

@@ -1,5 +1,6 @@
 #include "BowRenderer.h"
 #include "BowCore.h"
+#include "BowResources.h"
 
 #include <cstdint>
 #include <windows.h>

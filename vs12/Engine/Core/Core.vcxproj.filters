@@ -30,28 +30,13 @@
     <Filter Include="Header Files\Math">
       <UniqueIdentifier>{d887ea83-0a01-4f4a-90ea-2014613e0b9d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Resources">
-      <UniqueIdentifier>{c0b300cb-9ac1-4d7a-a7c9-d6dbbd6ade65}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Resources">
-      <UniqueIdentifier>{3ad77577-fae5-48ab-8cf8-276b229445b5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\DesignPattern">
       <UniqueIdentifier>{53eecd0a-1967-41ed-ac7b-c641721890e4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\ResourceLoader">
-      <UniqueIdentifier>{d74f6eb0-e376-4871-8f2a-3bf980b5c15f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\ResourceLoader">
-      <UniqueIdentifier>{dd5d21b1-c4dc-4b42-ad46-16753abaf6bf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\Engine\Core\BowLogger.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\Core\BowBitmap.cpp">
-      <Filter>Source Files\Resources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\Engine\Core\BowVertexAttributeFloatVec3.cpp">
       <Filter>Source Files\Geometry\VertexAttributes</Filter>
@@ -65,20 +50,8 @@
     <ClCompile Include="..\..\..\src\Engine\Core\BowBasicTimer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\Core\BowMesh.cpp">
-      <Filter>Source Files\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\Engine\Core\BowVertexAttributeFloatVec2.cpp">
       <Filter>Source Files\Geometry\VertexAttributes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\Core\BowResourceManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\Core\BowModelLoaderOBJ.cpp">
-      <Filter>Source Files\ResourceLoader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\Core\BowSubMesh.cpp">
-      <Filter>Source Files\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -87,9 +60,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\IBowCleanableObserver.h">
       <Filter>Header Files\DesignPattern</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\BowBitmap.h">
-      <Filter>Header Files\Resources</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\BowCorePredeclares.h">
       <Filter>Header Files</Filter>
@@ -124,15 +94,6 @@
     <ClInclude Include="..\..\..\include\BowRay.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\BowResourceManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\BowMesh.h">
-      <Filter>Header Files\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\BowSubMesh.h">
-      <Filter>Header Files\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\BowIndicesUnsignedInt.h">
       <Filter>Header Files\Geometry\Indices</Filter>
     </ClInclude>
@@ -150,9 +111,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\IBowVertexAttribute.h">
       <Filter>Header Files\Geometry\VertexAttributes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\Engine\Core\BowModelLoaderOBJ.h">
-      <Filter>Header Files\ResourceLoader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\BowSphere.h">
       <Filter>Header Files\Math</Filter>

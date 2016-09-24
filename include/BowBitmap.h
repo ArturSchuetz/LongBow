@@ -1,6 +1,6 @@
 #pragma once
 #include "BowPrerequisites.h"
-#include "BowCorePredeclares.h"
+#include "BowResourcesPredeclares.h"
 
 struct FIBITMAP;
 

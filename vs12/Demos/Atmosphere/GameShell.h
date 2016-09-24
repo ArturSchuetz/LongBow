@@ -2,6 +2,7 @@
 #include "BowRenderer.h"
 #include "BowInput.h"
 #include "BowCore.h"
+#include "BowResources.h"
 
 using namespace Bow;
 

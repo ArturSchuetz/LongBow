@@ -4,11 +4,6 @@
 
 #include "BowLogger.h"
 
-#include "BowResourceManager.h"
-#include "BowBitmap.h"
-#include "BowMesh.h"
-#include "BowSubMesh.h"
-
 #include "BowMath.h"
 
 #include "BowIndicesUnsignedInt.h"

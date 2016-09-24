@@ -1,11 +1,9 @@
 #pragma once
 #include "BowPrerequisites.h"
-#include "BowCorePredeclares.h"
+#include "BowResourcesPredeclares.h"
 
-namespace Bow 
-{
-	namespace Core 
-	{
+namespace Bow {
+	namespace Core {
 
 		class SubMesh
 		{

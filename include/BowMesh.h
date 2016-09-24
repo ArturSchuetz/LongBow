@@ -1,6 +1,6 @@
 #pragma once
 #include "BowPrerequisites.h"
-#include "BowCorePredeclares.h"
+#include "BowResourcesPredeclares.h"
 
 #include "IBowIndicesBase.h"
 #include "IBowVertexAttribute.h"
@@ -20,11 +20,11 @@ namespace Bow {
 		public:			
 			struct Material
 			{
-				ColorRGB ambient;
-				ColorRGB diffuse;
-				ColorRGB specular;
-				ColorRGB emissive;
-				ColorRGB transparent;
+				Core::ColorRGB ambient;
+				Core::ColorRGB diffuse;
+				Core::ColorRGB specular;
+				Core::ColorRGB emissive;
+				Core::ColorRGB transparent;
 				float shininess;        // [0 = min shininess, 1 = max shininess]
 				float opacity;          // [0 = fully transparent, 1 = fully opaque]
 
@@ -36,15 +36,15 @@ namespace Bow {
 				std::string name;
 			};
 
-			IIndicesBase *m_Indices;
+			Core::IIndicesBase *m_Indices;
 			std::vector<SubMesh> m_SubMeshes;
 			std::vector<Material> m_Materials;
 
-			std::vector<Vector3<float>> m_Positions;		//! Vertex Positions
-			std::vector<Vector3<float>> m_Normals;			//! Vertex Normals
-			std::vector<Vector2<float>> m_TextureCoords;	//! Vertex Texture Coordinates
-			std::vector<Vector4<float>> m_Tangents;			//! Vertex Tangents pointing in the direction of the positive X texture axis.
-			std::vector<Vector4<float>> m_Biangents;		//! Vertex Biangents pointing in the direction of the positive Y texture axis.
+			std::vector<Core::Vector3<float>> m_Positions;		//! Vertex Positions
+			std::vector<Core::Vector3<float>> m_Normals;			//! Vertex Normals
+			std::vector<Core::Vector2<float>> m_TextureCoords;	//! Vertex Texture Coordinates
+			std::vector<Core::Vector4<float>> m_Tangents;			//! Vertex Tangents pointing in the direction of the positive X texture axis.
+			std::vector<Core::Vector4<float>> m_Biangents;		//! Vertex Biangents pointing in the direction of the positive Y texture axis.
 
 			Mesh();
 			~Mesh();
@@ -84,7 +84,7 @@ namespace Bow {
 				return m_NumFaces;
 			}
 
-			Vector3<float> m_Center;
+			Core::Vector3<float> m_Center;
 			float m_Width;
 			float m_Height;
 			float m_Length;

@@ -11,7 +11,6 @@ namespace Bow
 {
 	namespace Renderer
 	{
-
 		static std::unordered_map<API, RenderDevicePtr> DeviceMap;
 
 		// Function inside the DLL we want to call to create our Device-Object

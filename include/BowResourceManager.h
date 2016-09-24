@@ -2,10 +2,11 @@
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"
 
-namespace Bow
-{
-	namespace Core
-	{
+#include "BowResourcesPredeclares.h"
+
+namespace Bow {
+	namespace Core {
+
 		class ResourceManager
 		{
 		protected:

@@ -5,6 +5,7 @@
 #include "BowModelLoaderOBJ.h"
 #include "BowMath.h"
 #include "BowCore.h"
+#include "BowResources.h"
 
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include <assimp/scene.h>           // Output data structure
@@ -69,22 +70,22 @@ namespace Bow {
 					Material.name = name.C_Str();
 
 				if (material->Get(AI_MATKEY_COLOR_AMBIENT, color) == AI_SUCCESS)
-					Material.ambient = ColorRGB(color.r, color.g, color.b);
+					Material.ambient = Core::ColorRGB(color.r, color.g, color.b);
 
 				if (material->Get(AI_MATKEY_COLOR_DIFFUSE, color) == AI_SUCCESS)
-					Material.diffuse = ColorRGB(color.r, color.g, color.b);
+					Material.diffuse = Core::ColorRGB(color.r, color.g, color.b);
 
 				if (material->Get(AI_MATKEY_COLOR_SPECULAR, color) == AI_SUCCESS)
-					Material.specular = ColorRGB(color.r, color.g, color.b);
+					Material.specular = Core::ColorRGB(color.r, color.g, color.b);
 
 				if (material->Get(AI_MATKEY_COLOR_SPECULAR, color) == AI_SUCCESS)
-					Material.specular = ColorRGB(color.r, color.g, color.b);
+					Material.specular = Core::ColorRGB(color.r, color.g, color.b);
 
 				if (material->Get(AI_MATKEY_COLOR_EMISSIVE, color) == AI_SUCCESS)
-					Material.emissive = ColorRGB(color.r, color.g, color.b);
+					Material.emissive = Core::ColorRGB(color.r, color.g, color.b);
 
 				if (material->Get(AI_MATKEY_COLOR_TRANSPARENT, color) == AI_SUCCESS)
-					Material.transparent = ColorRGB(color.r, color.g, color.b);
+					Material.transparent = Core::ColorRGB(color.r, color.g, color.b);
 
 				if (material->Get(AI_MATKEY_SHININESS, floatvalue) == AI_SUCCESS)
 					Material.shininess = floatvalue;
@@ -108,7 +109,7 @@ namespace Bow {
 				mesh->m_Materials.push_back(Material);
 			}
 
-			IndicesUnsignedInt *Indices = new IndicesUnsignedInt();
+			Core::IndicesUnsignedInt *Indices = new Core::IndicesUnsignedInt();
 			mesh->m_Indices = Indices;
 
 			float max_x = 0.0f, min_x = 0.0f,
@@ -125,7 +126,7 @@ namespace Bow {
 					for (unsigned int v = 0; v < submesh->mNumVertices; ++v)
 					{
 						aiVector3D pos = submesh->mVertices[v];
-						mesh->m_Positions.push_back(Vector3<float>(pos.x, pos.y, pos.z));
+						mesh->m_Positions.push_back(Core::Vector3<float>(pos.x, pos.y, pos.z));
 
 						if (max_x < pos.x)
 							max_x = pos.x;
@@ -151,7 +152,7 @@ namespace Bow {
 						for (unsigned int v = 0; v < submesh->mNumVertices; ++v)
 						{
 							aiVector3D norm = submesh->mNormals[v];
-							mesh->m_Normals.push_back(Vector3<float>(norm.x, norm.y, norm.z));
+							mesh->m_Normals.push_back(Core::Vector3<float>(norm.x, norm.y, norm.z));
 						}
 					}
 
@@ -160,7 +161,7 @@ namespace Bow {
 						for (unsigned int v = 0; v < submesh->mNumVertices; ++v)
 						{
 							aiVector3D texCoord = submesh->mTextureCoords[0][v];
-							mesh->m_TextureCoords.push_back(Vector2<float>(texCoord.x, texCoord.y));
+							mesh->m_TextureCoords.push_back(Core::Vector2<float>(texCoord.x, texCoord.y));
 						}
 					}
 
@@ -186,7 +187,7 @@ namespace Bow {
 			mesh->m_Width = max_x - min_x;
 			mesh->m_Height = max_y - min_y;
 			mesh->m_Length = max_z - min_z;
-			mesh->m_Center = Vector3<float>(max_x - mesh->m_Width / 2.0f, max_y - mesh->m_Height / 2.0f, max_z - mesh->m_Length / 2.0f);
+			mesh->m_Center = Core::Vector3<float>(max_x - mesh->m_Width / 2.0f, max_y - mesh->m_Height / 2.0f, max_z - mesh->m_Length / 2.0f);
 			
 			LOG_TRACE("Loaded mesh successfully!");
 			return mesh;

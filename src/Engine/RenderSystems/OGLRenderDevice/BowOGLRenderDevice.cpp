@@ -1,5 +1,6 @@
 #include "BowOGLRenderDevice.h"
 #include "BowCore.h"
+#include "BowResources.h"
 #include "BowLogger.h"
 
 #include "BowOGLGraphicsWindow.h"
