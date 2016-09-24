@@ -95,7 +95,7 @@
     </ClCompile>
     <Lib>
       <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);..\..\..\dependencies\FreeImage\lib;..\..\..\dependencies\assimp-3.1.1\$(Configuration); </AdditionalLibraryDirectories>
-      <AdditionalDependencies>Core_d.lib;FreeImage.lib;assimp.lib</AdditionalDependencies>
+      <AdditionalDependencies>Core_d.lib;FreeImage.lib;assimpd.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -107,7 +107,7 @@
     </ClCompile>
     <Lib>
       <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);..\..\..\dependencies\FreeImage\lib;..\..\..\dependencies\assimp-3.1.1\$(Configuration); </AdditionalLibraryDirectories>
-      <AdditionalDependencies>Core_d.lib;FreeImage.lib;assimp.lib</AdditionalDependencies>
+      <AdditionalDependencies>Core_d.lib;FreeImage.lib;assimpd.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
