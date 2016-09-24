@@ -26,7 +26,7 @@ GameShell::~GameShell()
 bool GameShell::Init(void)
 {
 	// Load Scene
-	m_sceneMesh = Core::ResourceManager::GetInstance().LoadMesh("../Data/Models/HighPolySphere.obj");
+	m_sceneMesh = Core::ResourceManager::GetInstance().LoadMesh("../Data/Models/sphere.obj");
 	if (m_sceneMesh == nullptr)
 	{
 		return false;
