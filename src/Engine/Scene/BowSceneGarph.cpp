@@ -1,4 +1,4 @@
-#include "BowSceneManager.h"
+#include "BowSceneGraph.h"
 #include "BowLogger.h"
 
 // Render Strategies
@@ -12,27 +12,27 @@ namespace Bow {
 			LOG_ERROR(description);
 		}
 
-		SceneManager::SceneManager(void)
+		SceneGraph::SceneGraph(void)
 		{
 			
 		}
 
-		SceneManager::~SceneManager(void)
+		SceneGraph::~SceneGraph(void)
 		{
 			VRelease();
 		}
 
-		bool SceneManager::VInit(void)
+		bool SceneGraph::VInit(void)
 		{
 			return true;
 		}
 
-		void SceneManager::VRelease(void)
+		void SceneGraph::VRelease(void)
 		{
 
 		}
 
-		void SceneManager::SetRenderStrategy(RenderStrategyType strategy)
+		void SceneGraph::SetRenderStrategy(RenderStrategyType strategy)
 		{
 			switch (strategy)
 			{

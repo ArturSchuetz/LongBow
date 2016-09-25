@@ -10,11 +10,11 @@ namespace Bow {
 		/**
 		* \~german
 		**/
-		class SceneManager
+		class SceneGraph
 		{
 		public:
-			SceneManager(void);
-			virtual ~SceneManager(void);
+			SceneGraph(void);
+			virtual ~SceneGraph(void);
 
 			virtual bool VInit(void);
 			virtual void VRelease(void);

@@ -35,7 +35,7 @@
     <ClInclude Include="..\..\..\include\BowLegacyVertexLitRenderer.h">
       <Filter>Header Files\RenderStrategies</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\BowSceneManager.h">
+    <ClInclude Include="..\..\..\include\BowSceneGraph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -43,7 +43,7 @@
     <ClCompile Include="..\..\..\src\Engine\Scene\BowLegacyVertexLitRenderer.cpp">
       <Filter>Source Files\RenderStrategies</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\Scene\BowSceneManager.cpp">
+    <ClCompile Include="..\..\..\src\Engine\Scene\BowSceneGarph.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
