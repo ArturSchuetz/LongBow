@@ -15,18 +15,9 @@
     <Filter Include="Source Files\RenderStrategies">
       <UniqueIdentifier>{5f15b92e-5377-429f-8656-3f07a520ecf8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\SceneManagementSystems">
-      <UniqueIdentifier>{35013d29-cc3f-4f81-894c-6821033e27b0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\SceneManagementSystems">
-      <UniqueIdentifier>{0399fd92-7e26-4b37-a9a9-bd870311f5a6}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\BowScenePredeclares.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\IBowSceneNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\IBowRenderStrategy.h">
@@ -38,12 +29,15 @@
     <ClInclude Include="..\..\..\include\BowSceneGraph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\BowScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\Engine\Scene\BowLegacyVertexLitRenderer.cpp">
       <Filter>Source Files\RenderStrategies</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\Scene\BowSceneGarph.cpp">
+    <ClCompile Include="..\..\..\src\Engine\Scene\BowSceneGraph.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

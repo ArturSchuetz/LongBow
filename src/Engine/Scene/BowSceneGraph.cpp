@@ -7,11 +7,6 @@
 namespace Bow {
 	namespace Scene {
 
-		void error_callback(int error, const char* description)
-		{
-			LOG_ERROR(description);
-		}
-
 		SceneGraph::SceneGraph(void)
 		{
 			
