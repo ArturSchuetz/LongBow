@@ -1,21 +1,24 @@
 #pragma once
 #include "BowPrerequisites.h"
+#include "BowScenePredeclares.h"
 
 #include "IBowRenderStrategy.h"
 
 namespace Bow {
 	namespace Scene {
 
-		class BowLegacyVertexLitRenderer : IRenderStrategy
+		class LegacyVertexLitRenderer : public IRenderStrategy
 		{
 		public:
-			BowLegacyVertexLitRenderer(void);
-			~BowLegacyVertexLitRenderer(void);
+			LegacyVertexLitRenderer(void);
+			~LegacyVertexLitRenderer(void);
 
 		private:		
 			//you shall not copy
-			BowLegacyVertexLitRenderer(BowLegacyVertexLitRenderer&){}
-			BowLegacyVertexLitRenderer& operator=(const BowLegacyVertexLitRenderer&) { return *this; }
+			LegacyVertexLitRenderer(LegacyVertexLitRenderer&){}
+			LegacyVertexLitRenderer& operator=(const LegacyVertexLitRenderer&) { return *this; }
 		};
+
+		typedef std::shared_ptr<LegacyVertexLitRenderer> LegacyVertexLitRendererPtr;
 	}
 }

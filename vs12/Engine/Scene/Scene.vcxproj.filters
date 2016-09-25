@@ -26,28 +26,25 @@
     <ClInclude Include="..\..\..\include\BowScenePredeclares.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\IBowSceneManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\IBowSceneNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\IBowRenderStrategy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\BowDefaultSceneManager.h">
-      <Filter>Header Files\SceneManagementSystems</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\BowLegacyVertexLitRenderer.h">
       <Filter>Header Files\RenderStrategies</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\BowSceneManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\Engine\Scene\BowDefaultSceneManager.cpp">
-      <Filter>Source Files\SceneManagementSystems</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\Engine\Scene\BowLegacyVertexLitRenderer.cpp">
       <Filter>Source Files\RenderStrategies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Scene\BowSceneManager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

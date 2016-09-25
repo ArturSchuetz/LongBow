@@ -18,6 +18,7 @@ namespace Bow {
 			void VCreateMesh(void);
 			void VDrawAll(void);
 
+
 		private:		
 			//you shall not copy
 			DefaultSceneManager(DefaultSceneManager&){}

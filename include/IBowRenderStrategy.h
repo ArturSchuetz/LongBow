@@ -2,11 +2,13 @@
 #include "BowPrerequisites.h"
 #include "BowScenePredeclares.h"
 
-#include "BowRendererPredeclares.h"
-#include "BowCorePredeclares.h"
-
 namespace Bow {
 	namespace Scene{
+
+		enum class RenderStrategyType : char
+		{
+			LagicyVertexLit
+		};
 
 		/**
 		* \~german
