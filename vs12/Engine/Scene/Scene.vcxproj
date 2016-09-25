@@ -147,12 +147,16 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\include\BowDefaultSceneManager.h" />
+    <ClInclude Include="..\..\..\include\BowLegacyVertexLitRenderer.h" />
     <ClInclude Include="..\..\..\include\BowScenePredeclares.h" />
+    <ClInclude Include="..\..\..\include\IBowRenderStrategy.h" />
     <ClInclude Include="..\..\..\include\IBowSceneManager.h" />
     <ClInclude Include="..\..\..\include\IBowSceneNode.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\Engine\Scene\BowPlaceholder.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Scene\BowDefaultSceneManager.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Scene\BowLegacyVertexLitRenderer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

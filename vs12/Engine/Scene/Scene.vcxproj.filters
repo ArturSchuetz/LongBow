@@ -9,9 +9,17 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Header Files\RenderStrategies">
+      <UniqueIdentifier>{671db9b1-f279-4eed-9e10-087f02000ed2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\RenderStrategies">
+      <UniqueIdentifier>{5f15b92e-5377-429f-8656-3f07a520ecf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SceneManagementSystems">
+      <UniqueIdentifier>{35013d29-cc3f-4f81-894c-6821033e27b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SceneManagementSystems">
+      <UniqueIdentifier>{0399fd92-7e26-4b37-a9a9-bd870311f5a6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -24,10 +32,22 @@
     <ClInclude Include="..\..\..\include\IBowSceneNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\IBowRenderStrategy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowDefaultSceneManager.h">
+      <Filter>Header Files\SceneManagementSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowLegacyVertexLitRenderer.h">
+      <Filter>Header Files\RenderStrategies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\Engine\Scene\BowPlaceholder.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\..\src\Engine\Scene\BowDefaultSceneManager.cpp">
+      <Filter>Source Files\SceneManagementSystems</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Scene\BowLegacyVertexLitRenderer.cpp">
+      <Filter>Source Files\RenderStrategies</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

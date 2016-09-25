@@ -24,8 +24,5 @@ namespace Bow {
 			DefaultSceneManager& operator=(const DefaultSceneManager&) { return *this; }
 		};
 
-		typedef std::shared_ptr<DefaultSceneManager> OGLRenderDevicePtr;
-		typedef std::unordered_map<int, DefaultSceneManager> OGLRenderDeviceMap;
-
 	}
 }
