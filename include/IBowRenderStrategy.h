@@ -5,15 +5,19 @@
 namespace Bow {
 	namespace Scene{
 
+		enum class RenderStrategyType : char
+		{
+			LagicyVertexLit
+		};
+
 		/**
 		* \~german
 		**/
-		class ISceneNode
+		class IRenderStrategy
 		{
 		public:
-			ISceneNode(void){};
-			virtual ~ISceneNode(void){}
-			virtual void VRelease(void) = 0;
+			IRenderStrategy(void){};
+			virtual ~IRenderStrategy(void){}
 		};
 	}
 }
