@@ -55,16 +55,16 @@ namespace Bow
 						}
 					}
 					break;
-				case API::Direct3D11:
+				case API::Vulkan:
 					{
 #ifdef _DEBUG
-						hDLL = LoadLibraryExW(L"D3D11Device_d.dll", NULL, 0);
+						hDLL = LoadLibraryExW(L"VulkanRenderDevice_d.dll", NULL, 0);
 #else
-						hDLL = LoadLibraryExW(L"D3D11Device.dll", NULL, 0);
+						hDLL = LoadLibraryExW(L"VulkanRenderDevice.dll", NULL, 0);
 #endif
 						if (!hDLL)
 						{
-							LOG_ERROR("Could not find D3D11Device.dll!");
+							LOG_ERROR("Could not find VulkanRenderDevice.dll!");
 							return RenderDevicePtr(nullptr);
 						}
 					}

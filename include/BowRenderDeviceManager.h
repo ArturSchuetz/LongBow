@@ -8,7 +8,7 @@ namespace Bow {
 		enum class API : char
 		{
 			OpenGL3x,
-			Direct3D11
+			Vulkan
 		};
 
 		//! \brief RenderDeviceManager is a singleton and creates devices. 

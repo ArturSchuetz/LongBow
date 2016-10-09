@@ -10,7 +10,7 @@ using namespace Renderer;
 int main()
 {
 	// Creating Render Device
-	RenderDevicePtr DeviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(API::OpenGL3x);
+	RenderDevicePtr DeviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(API::Vulkan);
 	if (DeviceOGL == nullptr)
 	{
 		return 0;
