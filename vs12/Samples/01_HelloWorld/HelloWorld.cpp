@@ -13,14 +13,14 @@ int main()
 	RenderDevicePtr DeviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(API::OpenGL3x);
 	if (DeviceOGL == nullptr)
 	{
-		return 0;
+		return -1;
 	}
 
 	// Creating Window
 	GraphicsWindowPtr WindowOGL = DeviceOGL->VCreateWindow(800, 600, "HelloWorld", WindowType::Windowed);
 	if (WindowOGL == nullptr)
 	{
-		return 0;
+		return -1;
 	}
 
 	// Change ClearColor

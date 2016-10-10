@@ -2,8 +2,6 @@
 #include "BowPrerequisites.h"
 #include "BowScenePredeclares.h"
 
-#include "IBowRenderStrategy.h"
-
 namespace Bow {
 	namespace Scene{
 
@@ -18,8 +16,6 @@ namespace Bow {
 
 			virtual bool VInit(void);
 			virtual void VRelease(void);
-
-			void SetRenderStrategy(RenderStrategyType strategy);
 
 		private:
 			RenderStrategyPtr	m_pRenderStrategy;
