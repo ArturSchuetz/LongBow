@@ -5,12 +5,17 @@
 
 #include "IBowTexture2D.h"
 
+#include "vulkan.h"
+#include "OperatingSystem.h"
+#include "VulkanFunctions.h"
+
 namespace Bow {
 	namespace Renderer {
 
 		using namespace Core;
 
-		VulkanRenderDevice::VulkanRenderDevice(void)
+		VulkanRenderDevice::VulkanRenderDevice(void) :
+			VulkanLibrary()
 		{
 
 		}
@@ -22,6 +27,30 @@ namespace Bow {
 
 		bool VulkanRenderDevice::Init(void)
 		{
+			LOG_TRACE("Loadnig Vulkan Library frim DLL.");
+
+#if defined(_WIN32) || defined(_WIN64)
+			VulkanLibrary = LoadLibrary(L"vulkan-1.dll");
+#elif defined(__linux__) || defined(__unix__)
+			VulkanLibrary = dlopen("libvulkan.so.1", RTLD_NOW);
+#else
+#error "Unknown compiler"
+#endif
+			if (VulkanLibrary == nullptr) {
+				LOG_ERROR("Could not load Vulkan library! Please make sure you installed Vulkan drivers!");
+				return false;
+			}
+
+#if defined(_WIN32) || defined(_WIN64)
+	#define LoadProcAddress GetProcAddress
+#elif defined(__linux__) || defined(__unix__)
+	#define LoadProcAddress dlsym
+#endif
+
+//#define VK_EXPORTED_FUNCTION( fun ) if( !(fun = ((PFN_##fun)LoadProcAddress( VulkanLibrary, #fun ))) ) { LOG_ERROR("Could not load exported function: %s", #fun); return false; }
+
+#include "ListOfFunctions.inl"
+
 			return true;
 		}
 

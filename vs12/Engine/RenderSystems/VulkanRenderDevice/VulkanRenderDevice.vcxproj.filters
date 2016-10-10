@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Vulkan">
+      <UniqueIdentifier>{76885a75-38cf-4c8e-a7a0-5a95861d77cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common">
+      <UniqueIdentifier>{a695ed19-9fb9-47b6-b1d1-cb0bfb4fb96b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\src\Engine\RenderSystems\VulkanRenderDevice\DLLExport.cpp">
@@ -25,6 +31,21 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\..\src\Engine\RenderSystems\VulkanRenderDevice\BowVulkanRenderDevice.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Engine\RenderSystems\VulkanRenderDevice\vulkan.h">
+      <Filter>Header Files\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Engine\RenderSystems\VulkanRenderDevice\vk_platform.h">
+      <Filter>Header Files\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Engine\RenderSystems\VulkanRenderDevice\ListOfFunctions.inl">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Engine\RenderSystems\VulkanRenderDevice\VulkanFunctions.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Engine\RenderSystems\VulkanRenderDevice\OperatingSystem.h">
+      <Filter>Header Files\Common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

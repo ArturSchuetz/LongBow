@@ -3,11 +3,15 @@
 
 #include "IBowRenderDevice.h"
 
+#include "vulkan.h"
+#include "OperatingSystem.h"
+
 namespace Bow {
 	namespace Renderer {
 
 		typedef std::shared_ptr<class OGLGraphicsWindow> OGLGraphicsWindowPtr;
 		typedef std::unordered_map<int, OGLGraphicsWindowPtr> OGLGraphicsWindowMap;
+
 
 		class VulkanRenderDevice : public IRenderDevice
 		{
@@ -21,7 +25,7 @@ namespace Bow {
 			bool Init(void);
 			void VRelease(void);
 
-			GraphicsWindowPtr VCreateWindow(int width, int height, const std::string& title, WindowType type);
+			GraphicsWindowPtr		VCreateWindow(int width, int height, const std::string& title, WindowType type);
 
 			// =========================================================================
 			// SHADER STUFF:
@@ -48,11 +52,7 @@ namespace Bow {
 			VulkanRenderDevice(VulkanRenderDevice&) {}
 			VulkanRenderDevice& operator=(const VulkanRenderDevice&) { return *this; }
 
-			int	m_maximumNumberOfVertexAttributes;
-			int	m_numberOfTextureUnits;
-			int	m_maximumNumberOfColorAttachments;
-
-			std::unordered_map<int, Texture2DPtr> textures;
+			LibraryHandle VulkanLibrary;
 		};
 
 		typedef std::shared_ptr<VulkanRenderDevice> OGLRenderDevicePtr;

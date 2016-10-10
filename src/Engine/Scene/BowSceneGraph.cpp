@@ -1,8 +1,6 @@
 #include "BowSceneGraph.h"
 #include "BowLogger.h"
 
-// Render Strategies
-#include "BowLegacyVertexLitRenderer.h"
 
 namespace Bow {
 	namespace Scene {
@@ -25,19 +23,6 @@ namespace Bow {
 		void SceneGraph::VRelease(void)
 		{
 
-		}
-
-		void SceneGraph::SetRenderStrategy(RenderStrategyType strategy)
-		{
-			switch (strategy)
-			{
-			case RenderStrategyType::LagicyVertexLit:
-				m_pRenderStrategy = LegacyVertexLitRendererPtr(new LegacyVertexLitRenderer());
-				break;
-			default:
-				m_pRenderStrategy = LegacyVertexLitRendererPtr(new LegacyVertexLitRenderer());
-				break;
-			}
 		}
 	}
 }

@@ -23,7 +23,12 @@
     <ClCompile Include="..\..\..\..\src\Engine\RenderSystems\VulkanRenderDevice\DLLExport.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\Engine\RenderSystems\VulkanRenderDevice\ListOfFunctions.inl" />
     <ClInclude Include="..\..\..\..\src\Engine\RenderSystems\VulkanRenderDevice\BowVulkanRenderDevice.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderSystems\VulkanRenderDevice\OperatingSystem.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderSystems\VulkanRenderDevice\vk_platform.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderSystems\VulkanRenderDevice\vulkan.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderSystems\VulkanRenderDevice\VulkanFunctions.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{98CC71B1-381A-492A-B299-3F50021938BC}</ProjectGuid>
