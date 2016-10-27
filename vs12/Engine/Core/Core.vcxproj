@@ -197,6 +197,7 @@
     <ClInclude Include="..\..\..\include\BowCorePredeclares.h" />
     <ClInclude Include="..\..\..\include\BowIndicesUnsignedInt.h" />
     <ClInclude Include="..\..\..\include\BowIndicesUnsignedShort.h" />
+    <ClInclude Include="..\..\..\include\BowMatrix3D.h" />
     <ClInclude Include="..\..\..\include\BowMatrix4x4.h" />
     <ClInclude Include="..\..\..\include\BowPlane.h" />
     <ClInclude Include="..\..\..\include\BowLogger.h" />
