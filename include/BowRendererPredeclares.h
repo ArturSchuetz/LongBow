@@ -19,7 +19,7 @@ namespace Bow {
 			enum class ComponentDatatype : char;
 
 		typedef std::shared_ptr<VertexBufferAttribute> VertexBufferAttributePtr;
-		typedef std::unordered_map<int, VertexBufferAttributePtr> VertexBufferAttributeMap;
+		typedef std::unordered_map<unsigned int, VertexBufferAttributePtr> VertexBufferAttributeMap;
 
 		////////////////////////////////////////////////////
 		// Shader
@@ -84,6 +84,11 @@ namespace Bow {
 
 				class IFramebuffer;
 				typedef std::shared_ptr<IFramebuffer> FramebufferPtr;
+
+				////////////////////////////////////////////////////
+				// Mesh
+				class MeshBuffers;
+				typedef std::shared_ptr<MeshBuffers> MeshBufferPtr;
 
 				////////////////////////////////////////////////////
 				// VertexArray

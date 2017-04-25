@@ -10,8 +10,7 @@
 namespace Bow {
 	namespace Input {
 
-		DIMouseDevice::DIMouseDevice(IDirectInput8 *directInput, HWND windowHandle)
-			: DIInputDeviceBase(directInput, windowHandle)
+		DIMouseDevice::DIMouseDevice(IDirectInput8 *directInput, HWND windowHandle) : DIInputDeviceBase(directInput, windowHandle)
 		{
 
 			m_Event = nullptr;
@@ -177,6 +176,20 @@ namespace Bow {
 		Core::Vector2<long> DIMouseDevice::VGetAbsolutePosition() const
 		{
 			return Core::Vector2<long>(m_x, m_y);
+		}
+
+		Core::Vector2<long> DIMouseDevice::VGetAbsolutePositionInsideWindow() const
+		{
+			POINT point;
+			if (GetCursorPos(&point))
+			{
+				if (ScreenToClient(m_windowHandle, &point))
+				{
+					return Core::Vector2<long>(point.x, point.y);
+				}
+			}
+
+			return Core::Vector2<long>(0, 0);
 		}
 
 		bool DIMouseDevice::VSetCursorPosition(int x, int y)

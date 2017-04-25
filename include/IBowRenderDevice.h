@@ -33,7 +33,8 @@ namespace Bow {
 
 			virtual ShaderProgramPtr	VCreateShaderProgram(const std::string& VertexShaderSource, const std::string& FragementShaderSource) = 0;
 			virtual ShaderProgramPtr	VCreateShaderProgram(const std::string& VertexShaderSource, const std::string& GeometryShaderSource, const std::string& FragementShaderSource) = 0;
-
+			
+			virtual MeshBufferPtr		VCreateMeshBuffers(Core::Mesh mesh, ShaderVertexAttributeMap shaderAttributes, BufferHint usageHint) = 0;
 			virtual VertexBufferPtr		VCreateVertexBuffer(BufferHint usageHint, int sizeInBytes) = 0;
 			virtual IndexBufferPtr		VCreateIndexBuffer(BufferHint usageHint, IndexBufferDatatype dataType, int sizeInBytes) = 0;
 			virtual WritePixelBufferPtr	VCreateWritePixelBuffer(PixelBufferHint usageHint, int sizeInBytes) = 0;

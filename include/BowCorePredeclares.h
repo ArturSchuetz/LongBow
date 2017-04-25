@@ -18,13 +18,20 @@ namespace Bow {
 		template <typename T> class Ray;
 		template <typename T> class Sphere;
 		template <typename T> class Triangle;
+		template <typename T> class Frustum;
 
 		class EventLogger;
+		class MemoryManager;
 
 		enum class IndicesType : char;
 		struct IndicesUnsignedInt;
 		struct IndicesUnsignedShort;
+		struct TriangleIndicesUnsignedInt;
 		struct VertexAttributeFloat;
+		struct VertexAttributeFloatVec2;
 		struct VertexAttributeFloatVec3;
+		struct VertexAttributeFloatVec4;
+
+		class Mesh;
 	}
 }

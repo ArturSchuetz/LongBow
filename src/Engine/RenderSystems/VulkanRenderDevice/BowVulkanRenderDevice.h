@@ -10,7 +10,7 @@ namespace Bow {
 	namespace Renderer {
 
 		typedef std::shared_ptr<class OGLGraphicsWindow> OGLGraphicsWindowPtr;
-		typedef std::unordered_map<int, OGLGraphicsWindowPtr> OGLGraphicsWindowMap;
+		typedef std::unordered_map<unsigned int, OGLGraphicsWindowPtr> OGLGraphicsWindowMap;
 
 
 		class VulkanRenderDevice : public IRenderDevice
@@ -36,6 +36,7 @@ namespace Bow {
 			ShaderProgramPtr		VCreateShaderProgram(const std::string& VertexShaderSource, const std::string& FragementShaderSource);
 			ShaderProgramPtr		VCreateShaderProgram(const std::string& VertexShaderSource, const std::string& GeometryShaderSource, const std::string& FragementShaderSource);
 
+			MeshBufferPtr			VCreateMeshBuffers(Core::Mesh mesh, ShaderVertexAttributeMap shaderAttributes, BufferHint usageHint);
 			VertexBufferPtr			VCreateVertexBuffer(BufferHint usageHint, int sizeInBytes);
 			IndexBufferPtr			VCreateIndexBuffer(BufferHint usageHint, IndexBufferDatatype dataType, int sizeInBytes);
 
@@ -56,7 +57,7 @@ namespace Bow {
 		};
 
 		typedef std::shared_ptr<VulkanRenderDevice> OGLRenderDevicePtr;
-		typedef std::unordered_map<int, VulkanRenderDevice> OGLRenderDeviceMap;
+		typedef std::unordered_map<unsigned int, VulkanRenderDevice> OGLRenderDeviceMap;
 
 	}
 }

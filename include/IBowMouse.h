@@ -30,6 +30,7 @@ namespace Bow {
 
 			virtual Core::Vector3<long> VGetRelativePosition() const = 0; // X and X are relative screen coordinates since last poll and Z represents the scroll wheel
 			virtual Core::Vector2<long> VGetAbsolutePosition() const = 0;
+			virtual Core::Vector2<long> VGetAbsolutePositionInsideWindow() const = 0;
 			virtual bool VSetCursorPosition(int x, int y) = 0;
 
 			virtual void VCageMouse(bool cage) = 0;

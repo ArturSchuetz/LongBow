@@ -2,9 +2,13 @@
 #include "BowLogger.h"
 #include "BowOGLTypeConverter.h"
 
+#include "BowMesh.h"
+#include "BowMeshBuffers.h"
+
 #include "BowClearState.h"
 
 #include "BowOGLShaderProgram.h"
+#include "BowVertexBufferAttribute.h"
 
 #include "BowOGLTexture2D.h"
 #include "BowOGLTextureUnits.h"
@@ -30,7 +34,7 @@ namespace Bow {
 		}
 
 
-		bool OGLRenderContext::Initialize()
+		bool OGLRenderContext::Initialize(OGLRenderDevice* device)
 		{
 			if (m_currentContext != this)
 			{
@@ -75,6 +79,7 @@ namespace Bow {
 			glClampColor(GL_CLAMP_VERTEX_COLOR, GL_FALSE);
 			glClampColor(GL_CLAMP_FRAGMENT_COLOR, GL_FALSE);
 
+			m_device = device;
 			m_initialized = true;
 			return m_initialized;
 		}
@@ -91,6 +96,29 @@ namespace Bow {
 			m_initialized = false;
 			m_window = nullptr;
 			LOG_TRACE("OGLRenderContext released");
+		}
+
+
+		VertexArrayPtr OGLRenderContext::VCreateVertexArray(Core::Mesh mesh, ShaderVertexAttributeMap shaderAttributes, BufferHint usageHint)
+		{
+			return VCreateVertexArray(m_device->VCreateMeshBuffers(mesh, shaderAttributes, usageHint));
+		}
+
+		VertexArrayPtr OGLRenderContext::VCreateVertexArray(MeshBufferPtr meshBuffers)
+		{
+			VertexArrayPtr vertexArray = VCreateVertexArray();
+			if (meshBuffers->IndexBuffer != nullptr)
+			{
+				vertexArray->VSetIndexBuffer(meshBuffers->IndexBuffer);
+			}
+
+			VertexBufferAttributeMap attributeMap = meshBuffers->GetAttributes();
+			for(auto attribute = attributeMap.begin(); attribute != attributeMap.end(); ++attribute)
+			{
+				vertexArray->VSetAttribute(attribute->first, attribute->second);
+			}
+
+			return vertexArray;
 		}
 
 
@@ -174,6 +202,19 @@ namespace Bow {
 			Draw(primitiveType, offset, count, vertexArray, shaderProgram, renderState);
 		}
 
+		void OGLRenderContext::VDrawLine(const Bow::Core::Vector3<float> &start, const Bow::Core::Vector3<float> &end)
+		{
+			m_textureUnits->Clean();
+
+			glFlush();
+			ApplyFramebuffer();
+
+			glBegin(GL_LINES);
+			glVertex3f(start.x, start.y, start.z);
+			glVertex3f(end.x, end.y, end.z);
+			glEnd();
+		}
+
 		void OGLRenderContext::Draw(PrimitiveType primitiveType, int offset, int count, VertexArrayPtr vertexArray, ShaderProgramPtr shaderProgram, RenderState renderState)
 		{
 			m_textureUnits->Clean();
@@ -201,7 +242,6 @@ namespace Bow {
 			}
 		}
 
-
 		void OGLRenderContext::VSetTexture(int location, Texture2DPtr texture)
 		{
 			LOG_ASSERT(location < m_textureUnits->GetMaxTextureUnits(), "TextureUnit does not Exist");
@@ -209,18 +249,15 @@ namespace Bow {
 			m_textureUnits->SetTexture(location, std::dynamic_pointer_cast<OGLTexture2D>(texture));
 		}
 
-
 		void OGLRenderContext::VSetTextureSampler(int location, TextureSamplerPtr sampler)
 		{
 			m_textureUnits->SetSampler(location, std::dynamic_pointer_cast<OGLTextureSampler>(sampler));
 		}
 
-
 		void OGLRenderContext::VSetFramebuffer(FramebufferPtr framebufer)
 		{
 			m_setFramebuffer = std::dynamic_pointer_cast<OGLFramebuffer>(framebufer);
 		}
-
 
 		void OGLRenderContext::VSetViewport(Viewport viewport)
 		{

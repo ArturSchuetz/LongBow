@@ -36,6 +36,11 @@ namespace Bow {
 				y = _a[1];
 				z = _a[2];
 			}
+			
+			inline static Vector3 Lerp(Vector3 vectorA, Vector3 vectorB, T alpha)
+			{
+				return vectorA * (1 - alpha) + vectorB * alpha;
+			}
 
 			inline void Set(T _x, T _y, T _z)
 			{
@@ -62,11 +67,33 @@ namespace Bow {
 				return (*this) /= Length();
 			}
 
+			inline Vector3 Normalized()
+			{
+				return (*this) / Length();
+			}
+
 			inline void Negate()
 			{
 				x = -x;
 				y = -y;
 				z = -z;
+			}
+
+			inline T DotP(const Vector3& other) const
+			{
+				return x * other.x + y * other.y + z * other.z;
+			}
+
+			inline Vector3 CompP(const Vector3& other) const
+			{
+				return Vector3(x* other.x, y * other.y, z * other.z);
+			}
+
+			inline Vector3 CrossP(const Vector3& other) const
+			{
+				return Vector3<T>(	y * other.z - z * other.y,	// x
+									z * other.x - x * other.z,	// y
+									x * other.y - y * other.x); // z
 			}
 
 			inline Vector3 operator - () const
@@ -110,9 +137,9 @@ namespace Bow {
 				return Vector3(x * other, y * other, z * other);
 			}
 
-			Vector3 operator * (Vector3 other) const
+			T operator * (const Vector3 &other) const
 			{
-				return Vector3(x * other.x, y * other.y, z * other.z);
+				return x * other.x + y * other.y + z * other.z;
 			}
 
 			void operator /= (T other)
@@ -167,11 +194,11 @@ namespace Bow {
 		};
 		/*----------------------------------------------------------------*/
 
-		template <typename C, typename T>
-		inline Vector3<T> operator *(C s, const Vector3<T>& vector)
-		{
-			return vector * (T)s;
-		}
+		//template <typename C, typename T>
+		//inline Vector3<T> operator *(C s, const Vector3<T>& vector)
+		//{
+		//	return vector * (T)s;
+		//}
 
 		// Dot product
 		template <typename T> 
@@ -187,6 +214,15 @@ namespace Bow {
 			return Vector3<T>(v1.y * v2.z - v1.z * v2.y,	// x
 								v1.z * v2.x - v1.x * v2.z,	// y
 								v1.x * v2.y - v1.y * v2.x); // z
+		}
+
+		// Cross product
+		template <typename T>
+		inline Vector3<T> CompP(const Vector3<T>& v1, const Vector3<T>& v2)
+		{
+			return Vector3<T>(	v1.x * v2.x,	// x
+								v1.y * v2.y,	// y
+								v1.z * v2.z); // z
 		}
 
 		typedef Vector3<float> ColorRGB;

@@ -75,6 +75,6 @@ namespace Bow {
 		};
 
 		typedef std::shared_ptr<VertexBufferAttribute> VertexBufferAttributePtr;
-		typedef std::unordered_map<int, VertexBufferAttributePtr> VertexBufferAttributeMap;
+		typedef std::unordered_map<unsigned int, VertexBufferAttributePtr> VertexBufferAttributeMap;
 	}
 }

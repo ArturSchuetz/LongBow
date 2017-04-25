@@ -205,7 +205,7 @@ namespace Bow {
 					);
 			}
 
-			inline void operator *= (const T& scalar) const
+			inline void operator *= (const T& scalar)
 			{
 				Set(
 					_11 * scalar, _12 * scalar, _13 * scalar, _14 * scalar,

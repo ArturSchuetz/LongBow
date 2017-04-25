@@ -35,6 +35,11 @@ namespace Bow {
 				x = _a[0];
 				y = _a[1];
 			}
+			
+			inline static Vector2 Lerp(Vector2 vectorA, Vector2 vectorB, T alpha)
+			{
+				return vectorA * (1 - alpha) + vectorB * alpha;
+			}
 
 			inline void Set(T _x, T _y)
 			{
@@ -59,6 +64,11 @@ namespace Bow {
 			inline void Normalize()
 			{
 				(*this) /= Length();
+			}
+
+			inline Vector2 Normalized()
+			{
+				return (*this) / Length();
 			}
 
 			inline void Negate()

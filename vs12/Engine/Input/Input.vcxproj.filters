@@ -9,12 +9,18 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Header Files\Device">
-      <UniqueIdentifier>{08091745-a0c4-4b7f-924a-da3b2eb48df9}</UniqueIdentifier>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\BowPrerequisites.h">
+    <ClCompile Include="..\..\..\src\Engine\Input\BowInputDeviceManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\BowInput.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\BowInputDeviceManager.h">
@@ -23,22 +29,8 @@
     <ClInclude Include="..\..\..\include\BowInputPredeclares.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\IBowMouse.h">
-      <Filter>Header Files\Device</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\IBowKeyboard.h">
-      <Filter>Header Files\Device</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\IBowInputDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\BowInput.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\src\Engine\Input\BowInputDeviceManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

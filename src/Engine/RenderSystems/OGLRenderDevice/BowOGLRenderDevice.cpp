@@ -5,12 +5,18 @@
 
 #include "BowOGLGraphicsWindow.h"
 #include "BowOGLShaderProgram.h"
+#include "BowShaderVertexAttribute.h"
+#include "BowVertexBufferAttribute.h"
+#include "IBowVertexAttribute.h"
 
 #include "IBowIndicesBase.h"
 #include "BowOGLIndexBuffer.h"
 
 #include "BowOGLVertexBuffer.h"
 #include "BowOGLWritePixelBuffer.h"
+
+#include "BowMesh.h"
+#include "BowMeshBuffers.h"
 
 #include "BowOGLTexture2D.h"
 #include "BowOGLTextureSampler.h"
@@ -64,7 +70,7 @@ namespace Bow {
 		GraphicsWindowPtr OGLRenderDevice::VCreateWindow(int width, int height, const std::string& title, WindowType type)
 		{
 			OGLGraphicsWindowPtr pGraphicsWindow = OGLGraphicsWindowPtr(new OGLGraphicsWindow());
-			if (pGraphicsWindow->Initialize(width, height, title, type))
+			if (pGraphicsWindow->Initialize(width, height, title, type, this))
 			{
 				glGetIntegerv(GL_MAX_VERTEX_ATOMIC_COUNTERS, &m_maximumNumberOfVertexAttributes);
 				LOG_TRACE("\tMaximum number of Vertex Attributes: %i", m_maximumNumberOfVertexAttributes);
@@ -180,6 +186,108 @@ namespace Bow {
 		ShaderProgramPtr OGLRenderDevice::VCreateShaderProgram(const std::string& VertexShaderSource, const std::string& GeometryShaderSource, const std::string& FragementShaderSource)
 		{
 			return OGLShaderProgramPtr(new OGLShaderProgram(VertexShaderSource, GeometryShaderSource, FragementShaderSource));
+		}
+
+		MeshBufferPtr OGLRenderDevice::VCreateMeshBuffers(Mesh mesh, ShaderVertexAttributeMap shaderAttributes, BufferHint usageHint)
+		{
+			MeshBuffers *meshBuffers = new MeshBuffers();
+
+			if (mesh.Indices != nullptr)
+			{
+				if (mesh.Indices->Type == IndicesType::UnsignedShort)
+				{
+					std::vector<unsigned short> meshIndices = (std::dynamic_pointer_cast<IndicesUnsignedShort>(mesh.Indices))->Values;
+
+					std::vector<unsigned short> indices = std::vector<unsigned short>(meshIndices.size());
+					for (unsigned int j = 0; j < meshIndices.size(); ++j)
+					{
+						indices[j] = meshIndices[j];
+					}
+
+					IndexBufferPtr indexBuffer = VCreateIndexBuffer(usageHint, IndexBufferDatatype::UnsignedShort, indices.size() * sizeof(unsigned short));
+					indexBuffer->VCopyFromSystemMemory(&(indices[0]), indices.size() * sizeof(unsigned short));
+					meshBuffers->IndexBuffer = indexBuffer;
+				}
+				else if (mesh.Indices->Type == IndicesType::UnsignedInt)
+				{
+					std::vector<unsigned int> meshIndices = (std::dynamic_pointer_cast<IndicesUnsignedInt>(mesh.Indices))->Values;
+
+					std::vector<unsigned int> indices = std::vector<unsigned int>(meshIndices.size());
+					for (unsigned int j = 0; j < meshIndices.size(); ++j)
+					{
+						indices[j] = meshIndices[j];
+					}
+
+					IndexBufferPtr indexBuffer = VCreateIndexBuffer(usageHint, IndexBufferDatatype::UnsignedInt, indices.size() * sizeof(unsigned int));
+					indexBuffer->VCopyFromSystemMemory(&(indices[0]), indices.size() * sizeof(unsigned int));
+					meshBuffers->IndexBuffer = indexBuffer;
+				}
+				else
+				{
+					LOG_ASSERT(false, "mesh.Indices.Datatype is not supported.");
+				}
+			}
+			
+			for (auto shaderAttribute = shaderAttributes.begin(); shaderAttribute != shaderAttributes.end(); ++shaderAttribute)
+			{
+				VertexAttributePtr attribute = mesh.GetAttribute(shaderAttribute->first);
+				if (attribute.get() == nullptr)
+				{
+					LOG_ERROR("Shader requires vertex attribute \"%s\", which is not present in mesh.", shaderAttribute->first);
+				}
+
+				if (attribute->Type == VertexAttributeType::UnsignedByte)
+				{
+					unsigned int count = (std::dynamic_pointer_cast<VertexAttribute<unsigned char>>(attribute))->Values.size();
+
+					VertexBufferPtr vertexBuffer = VCreateVertexBuffer(usageHint, sizeof(unsigned char) * count);
+					vertexBuffer->VCopyFromSystemMemory(&((std::dynamic_pointer_cast<VertexAttribute<unsigned char>>(attribute))->Values[0]), 0, sizeof(unsigned char) * count);
+
+					meshBuffers->SetAttribute(shaderAttribute->second->Location, VertexBufferAttributePtr(new VertexBufferAttribute(vertexBuffer, ComponentDatatype::UnsignedByte, 1)));
+				}
+				else if (attribute->Type == VertexAttributeType::Float)
+				{
+					unsigned int count = (std::dynamic_pointer_cast<VertexAttribute<float>>(attribute))->Values.size();
+
+					VertexBufferPtr vertexBuffer = VCreateVertexBuffer(usageHint, sizeof(float) * count);
+					vertexBuffer->VCopyFromSystemMemory(&((std::dynamic_pointer_cast<VertexAttribute<float>>(attribute))->Values[0]), 0, sizeof(float) * count);
+
+					meshBuffers->SetAttribute(shaderAttribute->second->Location, VertexBufferAttributePtr(new VertexBufferAttribute(vertexBuffer, ComponentDatatype::Float, 1)));
+				}
+				else if (attribute->Type == VertexAttributeType::FloatVector2)
+				{
+					unsigned int count = (std::dynamic_pointer_cast<VertexAttribute<Vector2<float>>>(attribute))->Values.size();
+
+					VertexBufferPtr vertexBuffer = VCreateVertexBuffer(usageHint, sizeof(Vector2<float>) * count);
+					vertexBuffer->VCopyFromSystemMemory(&((std::dynamic_pointer_cast<VertexAttribute<Vector2<float>>>(attribute))->Values[0]), 0, sizeof(Vector2<float>) * count);
+
+					meshBuffers->SetAttribute(shaderAttribute->second->Location, VertexBufferAttributePtr(new VertexBufferAttribute(vertexBuffer, ComponentDatatype::Float, 2)));
+				}
+				else if (attribute->Type == VertexAttributeType::FloatVector3)
+				{
+					unsigned int count = (std::dynamic_pointer_cast<VertexAttribute<Vector3<float>>>(attribute))->Values.size();
+
+					VertexBufferPtr vertexBuffer = VCreateVertexBuffer(usageHint, sizeof(Vector3<float>) * count);
+					vertexBuffer->VCopyFromSystemMemory(&((std::dynamic_pointer_cast<VertexAttribute<Vector3<float>>>(attribute))->Values[0]), 0, sizeof(Vector3<float>) * count);
+
+					meshBuffers->SetAttribute(shaderAttribute->second->Location, VertexBufferAttributePtr(new VertexBufferAttribute(vertexBuffer, ComponentDatatype::Float, 3)));
+				}
+				else if (attribute->Type == VertexAttributeType::FloatVector4)
+				{
+					unsigned int count = (std::dynamic_pointer_cast<VertexAttribute<Vector4<float>>>(attribute))->Values.size();
+
+					VertexBufferPtr vertexBuffer = VCreateVertexBuffer(usageHint, sizeof(Vector4<float>) * count);
+					vertexBuffer->VCopyFromSystemMemory(&((std::dynamic_pointer_cast<VertexAttribute<Vector4<float>>>(attribute))->Values[0]), 0, sizeof(Vector4<float>) * count);
+
+					meshBuffers->SetAttribute(shaderAttribute->second->Location, VertexBufferAttributePtr(new VertexBufferAttribute(vertexBuffer, ComponentDatatype::Float, 4)));
+				}
+				else
+				{
+					LOG_ERROR("attribute.Datatype not implemented!");
+				}
+			}
+
+			return MeshBufferPtr(meshBuffers);
 		}
 
 		VertexBufferPtr	OGLRenderDevice::VCreateVertexBuffer(BufferHint usageHint, int sizeInBytes)

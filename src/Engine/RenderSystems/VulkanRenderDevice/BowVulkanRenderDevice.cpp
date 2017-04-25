@@ -86,6 +86,11 @@ namespace Bow {
 			return ShaderProgramPtr(nullptr);
 		}
 
+		MeshBufferPtr VulkanRenderDevice::VCreateMeshBuffers(Core::Mesh mesh, ShaderVertexAttributeMap shaderAttributes, BufferHint usageHint)
+		{
+			return MeshBufferPtr(nullptr);
+		}
+
 		VertexBufferPtr	VulkanRenderDevice::VCreateVertexBuffer(BufferHint usageHint, int sizeInBytes)
 		{
 			return VertexBufferPtr(nullptr);

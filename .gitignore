@@ -152,3 +152,5 @@ $RECYCLE.BIN/
 .DS_Store
 /vs12/*.opendb
 /vs12/*.db
+/vs12/Samples/06_RayTracing/*.user
+/vs12/Samples/04_FrameBuffer/*.user

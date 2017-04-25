@@ -7,6 +7,10 @@
 #include "BowRenderState.h"
 
 #include "BowMath.h"
+#include "BowOGLShaderProgram.h"
+#include "BowOGLTextureUnits.h"
+#include "BowOGLFramebuffer.h"
+#include "BowOGLRenderDevice.h"
 
 struct GLFWwindow;
 
@@ -29,12 +33,14 @@ namespace Bow {
 			// =========================================================================
 			// INIT/RELEASE STUFF:
 			// =========================================================================
-			bool	Initialize();
+			bool	Initialize(OGLRenderDevice* device);
 			void	VRelease(void);
 
 			// =========================================================================
 			// RENDERING STUFF:
 			// =========================================================================
+			VertexArrayPtr	VCreateVertexArray(Core::Mesh mesh, ShaderVertexAttributeMap shaderAttributes, BufferHint usageHint);
+			VertexArrayPtr	VCreateVertexArray(MeshBufferPtr meshBuffers);
 			VertexArrayPtr	VCreateVertexArray();
 			FramebufferPtr	VCreateFramebuffer();
 
@@ -42,6 +48,7 @@ namespace Bow {
 			void	VDraw(PrimitiveType primitiveType, VertexArrayPtr vertexArray, ShaderProgramPtr shaderProgram, RenderState renderState);
 			void	VDraw(PrimitiveType primitiveType, int offset, int count, VertexArrayPtr vertexArray, ShaderProgramPtr shaderProgram, RenderState renderState);
 			void	Draw(PrimitiveType primitiveType, int offset, int count, VertexArrayPtr vertexArray, ShaderProgramPtr shaderProgram, RenderState renderState);
+			void	VDrawLine(const Bow::Core::Vector3<float> &start, const Bow::Core::Vector3<float> &end);
 
 			void	VSetTexture(int location, Texture2DPtr texture);
 			void	VSetTextureSampler(int location, TextureSamplerPtr sampler);
@@ -91,6 +98,7 @@ namespace Bow {
 			OGLFramebufferPtr	m_setFramebuffer;
 
 			GLFWwindow*					m_window;
+			OGLRenderDevice*			m_device;
 			static OGLRenderContext*	m_currentContext;
 			bool						m_initialized;
 		};

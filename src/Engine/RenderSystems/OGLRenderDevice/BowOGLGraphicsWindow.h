@@ -9,6 +9,7 @@ namespace Bow {
 	namespace Renderer {
 
 		typedef std::shared_ptr<class OGLRenderContext> OGLRenderContextPtr;
+		class OGLRenderDevice;
 
 		class OGLGraphicsWindow : public IGraphicsWindow
 		{
@@ -19,7 +20,7 @@ namespace Bow {
 			// =========================================================================
 			// INIT/RELEASE STUFF:
 			// =========================================================================
-			bool Initialize(unsigned int width, unsigned int height, const std::string& title, WindowType windowType);
+			bool Initialize(unsigned int width, unsigned int height, const std::string& title, WindowType windowType, OGLRenderDevice *device);
 			void VRelease(void);
 
 			RenderContextPtr VGetContext() const;
@@ -41,9 +42,10 @@ namespace Bow {
 			static void ResizeCallback(GLFWwindow* window, int width, int height);
 
 			//you shall not copy
-			OGLGraphicsWindow(OGLGraphicsWindow&) : m_Context(nullptr){}
+			OGLGraphicsWindow(OGLGraphicsWindow&) : m_Context(nullptr), m_ParentDevice(nullptr){}
 			OGLGraphicsWindow& operator=(const OGLGraphicsWindow&) { return *this; }
 
+			OGLRenderDevice*	m_ParentDevice;
 			OGLRenderContextPtr m_Context;
 			GLFWwindow			*m_Window;
 
@@ -52,6 +54,6 @@ namespace Bow {
 		};
 
 		typedef std::shared_ptr<OGLGraphicsWindow> OGLGraphicsWindowPtr;
-		typedef std::unordered_map<int, OGLGraphicsWindowPtr> OGLGraphicsWindowMap;
+		typedef std::unordered_map<unsigned int, OGLGraphicsWindowPtr> OGLGraphicsWindowMap;
 	}
 }

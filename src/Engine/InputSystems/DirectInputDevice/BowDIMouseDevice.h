@@ -20,6 +20,7 @@ namespace Bow {
 
 			Core::Vector3<long>		VGetRelativePosition() const;
 			Core::Vector2<long>		VGetAbsolutePosition() const;
+			Core::Vector2<long>		VGetAbsolutePositionInsideWindow() const;
 
 			bool VSetCursorPosition(int x, int y);
 

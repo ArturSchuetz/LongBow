@@ -35,6 +35,7 @@ namespace Bow {
 			std::string					VGetLog();
 
 			ShaderVertexAttributePtr	VGetVertexAttribute(std::string name);
+			ShaderVertexAttributeMap	VGetVertexAttributes();
 			int							VGetFragmentOutputLocation(std::string name);
 
 			void VSetUniform(const char* name, int value);

@@ -19,7 +19,6 @@ namespace Bow {
 
 			void Release();
 
-			MeshPtr LoadMesh(const std::string& path);
 			Bitmap* LoadImageFile(const std::string& path);
 
 		private:

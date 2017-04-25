@@ -21,9 +21,6 @@
     <Filter Include="Header Files\Device\RenderStates">
       <UniqueIdentifier>{c85debb8-097a-4ec1-ab90-a34f7982e123}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Device\Textures">
-      <UniqueIdentifier>{dfd2071c-3503-4d9c-b32a-7f24a360872f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Device\Context\VertexArray">
       <UniqueIdentifier>{23a2c8e0-0948-454f-8f62-a41d71aec9df}</UniqueIdentifier>
     </Filter>
@@ -32,6 +29,12 @@
     </Filter>
     <Filter Include="Header Files\Device\Context\FrameBuffer">
       <UniqueIdentifier>{4e17ef7a-ea3f-44c1-acd8-0d064ac32466}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Device\Context\Mesh">
+      <UniqueIdentifier>{0aec1c83-758d-4459-bd75-d188ff2172da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Device\Shader\Textures">
+      <UniqueIdentifier>{dfd2071c-3503-4d9c-b32a-7f24a360872f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -126,10 +129,10 @@
       <Filter>Header Files\Device\Shader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\IBowTextureSampler.h">
-      <Filter>Header Files\Device\Textures</Filter>
+      <Filter>Header Files\Device\Shader\Textures</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\IBowTexture2D.h">
-      <Filter>Header Files\Device\Textures</Filter>
+      <Filter>Header Files\Device\Shader\Textures</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\IBowVertexArray.h">
       <Filter>Header Files\Device\Context\VertexArray</Filter>
@@ -145,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\BowCamera.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowMeshBuffers.h">
+      <Filter>Header Files\Device\Context\Mesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

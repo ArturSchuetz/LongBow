@@ -94,7 +94,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\..\include;</AdditionalIncludeDirectories>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -139,7 +139,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\..\..\include;</AdditionalIncludeDirectories>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -207,6 +207,7 @@
     <ClInclude Include="..\..\..\include\IBowFramebuffer.h" />
     <ClInclude Include="..\..\..\include\IBowGraphicsWindow.h" />
     <ClInclude Include="..\..\..\include\IBowIndexBuffer.h" />
+    <ClInclude Include="..\..\..\include\BowMeshBuffers.h" />
     <ClInclude Include="..\..\..\include\IBowReadPixelBuffer.h" />
     <ClInclude Include="..\..\..\include\IBowRenderContext.h" />
     <ClInclude Include="..\..\..\include\IBowRenderDevice.h" />

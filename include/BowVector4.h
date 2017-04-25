@@ -46,6 +46,11 @@ namespace Bow {
 				w = _a[3];
 			}
 
+			inline static Vector4 Lerp(Vector4 vectorA, Vector4 vectorB, T alpha)
+			{
+				return vectorA * (1 - alpha) + vectorB * alpha;
+			}
+
 			inline void Set(T _x, T _y, T _z, T _w = 1)
 			{
 				x = _x, y = _y, z = _z, w = _w;
@@ -69,6 +74,11 @@ namespace Bow {
 			inline void Normalize()
 			{
 				(*this) /= Length();
+			}
+
+			inline Vector4 Normalized()
+			{
+				return (*this) / Length();
 			}
 
 			inline void Negate() const
@@ -165,11 +175,11 @@ namespace Bow {
 		};
 		/*----------------------------------------------------------------*/
 
-		template <typename C, typename T>
-		inline Vector4<T> operator *(C s, const Vector4<T>& vector)
-		{
-			return vector * (T)s;
-		}
+		//template <typename C, typename T>
+		//inline Vector4<T> operator *(C s, const Vector4<T>& vector)
+		//{
+		//	return vector * (T)s;
+		//}
 
 		// Dot product
 		template <typename T> 

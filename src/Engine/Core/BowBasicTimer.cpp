@@ -22,7 +22,7 @@ namespace Bow
 		{
 			QueryPerformanceCounter(&m_currentTime);
 
-			m_total = static_cast<float>(
+			m_total = static_cast<double>(
 				static_cast<double>(m_currentTime.QuadPart - m_startTime.QuadPart) /
 				static_cast<double>(m_frequency.QuadPart)
 				);
@@ -34,7 +34,7 @@ namespace Bow
 			}
 			else
 			{
-				m_delta = static_cast<float>(
+				m_delta = static_cast<double>(
 					static_cast<double>(m_currentTime.QuadPart - m_lastTime.QuadPart) /
 					static_cast<double>(m_frequency.QuadPart)
 					);
@@ -43,12 +43,12 @@ namespace Bow
 			m_lastTime = m_currentTime;
 		}
 
-		float BasicTimer::GetTotal()
+		double BasicTimer::GetTotal()
 		{
 			return m_total;
 		}
 
-		float BasicTimer::GetDelta()
+		double BasicTimer::GetDelta()
 		{
 			return m_delta;
 		}

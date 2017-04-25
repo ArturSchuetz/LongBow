@@ -26,7 +26,7 @@ namespace Bow {
 		}
 
 
-		bool OGLGraphicsWindow::Initialize(unsigned int width, unsigned int height, const std::string& title, WindowType windowType)
+		bool OGLGraphicsWindow::Initialize(unsigned int width, unsigned int height, const std::string& title, WindowType windowType, OGLRenderDevice *device)
 		{
 			// Create a fullscrenn window?
 			GLFWmonitor* monitor = nullptr;
@@ -52,10 +52,11 @@ namespace Bow {
 
 			glfwSetWindowSizeCallback(m_Window, OGLGraphicsWindow::ResizeCallback);
 
+			m_ParentDevice = device;
 			m_Context = OGLRenderContextPtr(new OGLRenderContext(m_Window));
 
 			LOG_TRACE("OpenGL-Window sucessfully initialized!");
-			return m_Context->Initialize();
+			return m_Context->Initialize(m_ParentDevice);
 		}
 
 

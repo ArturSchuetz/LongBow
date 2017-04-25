@@ -57,6 +57,11 @@ namespace Bow {
 			return m_Attributes.GetAttributes();
 		}
 
+		void OGLVertexArray::VSetAttribute(unsigned int location, VertexBufferAttributePtr pointer)
+		{
+			m_Attributes.SetAttribute(location, pointer);
+		}
+
 		void OGLVertexArray::VSetAttribute(ShaderVertexAttributePtr vertexAttribute, VertexBufferAttributePtr pointer)
 		{
 			m_Attributes.SetAttribute(vertexAttribute->Location, pointer);

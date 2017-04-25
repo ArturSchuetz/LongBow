@@ -93,8 +93,8 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\include</AdditionalIncludeDirectories>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>..\..\..\include;</AdditionalIncludeDirectories>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -116,7 +116,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -140,8 +140,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\include</AdditionalIncludeDirectories>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>..\..\..\include;</AdditionalIncludeDirectories>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -167,7 +167,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -188,17 +188,25 @@
     <ClCompile Include="..\..\..\src\Engine\Core\BowIndicesUnsignedInt.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core\BowIndicesUnsignedShort.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core\BowLogger.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Core\BowMemoryManager.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Core\BowMesh.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Core\BowSphereTessellator.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Core\BowVertexAttributeFloat.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core\BowVertexAttributeFloatVec2.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core\BowVertexAttributeFloatVec3.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Core\BowVertexAttributeFloatVec4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\BowBasicTimer.h" />
     <ClInclude Include="..\..\..\include\BowCore.h" />
     <ClInclude Include="..\..\..\include\BowCorePredeclares.h" />
+    <ClInclude Include="..\..\..\include\BowFrustum.h" />
     <ClInclude Include="..\..\..\include\BowIndicesUnsignedInt.h" />
     <ClInclude Include="..\..\..\include\BowIndicesUnsignedShort.h" />
     <ClInclude Include="..\..\..\include\BowMatrix3D.h" />
     <ClInclude Include="..\..\..\include\BowMatrix4x4.h" />
+    <ClInclude Include="..\..\..\include\BowMemoryManager.h" />
+    <ClInclude Include="..\..\..\include\BowMesh.h" />
     <ClInclude Include="..\..\..\include\BowPlane.h" />
     <ClInclude Include="..\..\..\include\BowLogger.h" />
     <ClInclude Include="..\..\..\include\BowMath.h" />
@@ -206,13 +214,17 @@
     <ClInclude Include="..\..\..\include\BowMatrix2x2.h" />
     <ClInclude Include="..\..\..\include\BowRay.h" />
     <ClInclude Include="..\..\..\include\BowSphere.h" />
+    <ClInclude Include="..\..\..\include\BowSphereTessellator.h" />
     <ClInclude Include="..\..\..\include\BowTriangle.h" />
+    <ClInclude Include="..\..\..\include\BowTriangleIndicesUnsignedInt.h" />
     <ClInclude Include="..\..\..\include\BowVector2.h" />
     <ClInclude Include="..\..\..\include\BowPrerequisites.h" />
     <ClInclude Include="..\..\..\include\BowVector3.h" />
     <ClInclude Include="..\..\..\include\BowVector4.h" />
+    <ClInclude Include="..\..\..\include\BowVertexAttributeFloat.h" />
     <ClInclude Include="..\..\..\include\BowVertexAttributeFloatVec2.h" />
     <ClInclude Include="..\..\..\include\BowVertexAttributeFloatVec3.h" />
+    <ClInclude Include="..\..\..\include\BowVertexAttributeFloatVec4.h" />
     <ClInclude Include="..\..\..\include\IBowCleanableObserver.h" />
     <ClInclude Include="..\..\..\include\IBowIndicesBase.h" />
     <ClInclude Include="..\..\..\include\IBowVertexAttribute.h" />

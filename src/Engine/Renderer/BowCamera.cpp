@@ -103,6 +103,7 @@ namespace Bow
 			m_View._44 = 1.0f;
 
 			m_ViewProjection = m_Projection * m_View;
+
 			return  true;
 		}
 		/*----------------------------------------------------------------*/
@@ -153,16 +154,6 @@ namespace Bow
 				dirty = true;
 			}
 		}
-
-		/*void Camera::SetMode(ProjectionMode mode)
-		{
-			if (m_Mode != mode)
-			{
-				m_Mode = mode;
-
-				dirty = true;
-			}
-		}*/
 		/*----------------------------------------------------------------*/
 		
 		Core::Ray<double> Camera::Transform2Dto3D(const unsigned int screenX, const unsigned int screenY)
@@ -205,20 +196,17 @@ namespace Bow
 
 			Core::Vector2<double> pt;
 			double fClip_x, fClip_y;
-			double fXp, fYp, fWp;
 
 			fClip_x = (double)(m_Width >> 1);
 			fClip_y = (double)(m_Height >> 1);
 
-			fXp = (m_ViewProjection._11*worldPosition.x) + (m_ViewProjection._12*worldPosition.y) + (m_ViewProjection._13*worldPosition.z) + m_ViewProjection._14;
-			fYp = (m_ViewProjection._21*worldPosition.x) + (m_ViewProjection._22*worldPosition.y) + (m_ViewProjection._23*worldPosition.z) + m_ViewProjection._24;
-			fWp = (m_ViewProjection._41*worldPosition.x) + (m_ViewProjection._42*worldPosition.y) + (m_ViewProjection._43*worldPosition.z) + m_ViewProjection._44;
+			Core::Vector4<double> out = m_ViewProjection * worldPosition;
 
-			double fWpInv = 1.0f / fWp;
+			double fWpInv = 1.0 / out.z;
 
 			// transform from [-1,1] to actual viewport dimensions
-			pt.x = ((1.0f + (fXp * fWpInv)) * fClip_x);
-			pt.y = ((1.0f + (fYp * fWpInv)) * fClip_y);
+			pt.x = ((1.0f + (out.x * fWpInv)) * fClip_x);
+			pt.y = ((1.0f + (out.y * fWpInv)) * fClip_y);
 
 			return pt;
 		}
@@ -255,10 +243,16 @@ namespace Bow
 			if (dirty)
 				CalcPerspProjMatrix();
 
-			return m_ViewProjection * (Core::Matrix4x4<double>)world;
+			return m_ViewProjection * world;
 		}
 
-		
+		Core::Frustum<double> Camera::CalculateFrustum(const Core::Matrix3D<double>& world)
+		{
+			if (dirty)
+				CalcPerspProjMatrix();
+
+			return Core::Frustum<double>(m_ViewProjection * world);
+		}
 		/*----------------------------------------------------------------*/
 		
 		bool Camera::CalcPerspProjMatrix()
@@ -292,5 +286,6 @@ namespace Bow
 			return true;
 		}
 		/*----------------------------------------------------------------*/
+
 	}
 }

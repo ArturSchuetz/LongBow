@@ -47,7 +47,7 @@ Bow::Core::ColorRGB Material::shade(Intersection& hit, Lightsource& light)
 	float NdotL = DotP(hit.getNormal(), lightDir);
 	if (NdotL > 0.0f)
 	{
-		Diffuse = LigntColor * getDiffuseReflectionColor() * NdotL;
+		Diffuse = LigntColor.CompP(getDiffuseReflectionColor() * NdotL);
 		
 		Bow::Core::Vector3<float> reflect(-lightDir - 2.0f * DotP(-lightDir, hit.getNormal()) * hit.getNormal());
 		reflect.Normalize();

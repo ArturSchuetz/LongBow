@@ -24,10 +24,10 @@ namespace Bow
 			void Update();
 
 			// Duration in seconds between the last call to Reset() and the last call to Update().
-			float GetTotal();
+			double GetTotal();
 
 			// Duration in seconds between the previous two calls to Update().
-			float GetDelta();
+			double GetDelta();
 
 		private:
 			#ifdef _WIN32
@@ -37,8 +37,8 @@ namespace Bow
 			LARGE_INTEGER m_lastTime;
 			#endif
 
-			float m_total;
-			float m_delta;
+			double m_total;
+			double m_delta;
 		};
 	}
 }

@@ -16,7 +16,7 @@ namespace Bow
 	namespace Core
 	{
 		static std::shared_ptr<EventLogger> Instance;
-		const int MAX_DEBUG_LINE_LEN = 1024;
+		const int MAX_DEBUG_LINE_LEN = 2048;
 
 		EventLogger::EventLogger()
 		{

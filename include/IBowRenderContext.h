@@ -1,6 +1,7 @@
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"
+#include "BowCorePredeclares.h"
 
 namespace Bow {
 	namespace Renderer{
@@ -60,12 +61,15 @@ namespace Bow {
 			// =========================================================================
 			// RENDERING STUFF:
 			// =========================================================================
+			virtual VertexArrayPtr VCreateVertexArray(Core::Mesh mesh, ShaderVertexAttributeMap shaderAttributes, BufferHint usageHint) = 0;
+			virtual VertexArrayPtr VCreateVertexArray(MeshBufferPtr meshBuffers) = 0;
 			virtual VertexArrayPtr VCreateVertexArray() = 0;
 			virtual FramebufferPtr VCreateFramebuffer() = 0;
 
 			virtual void VClear(ClearState clearState) = 0;
 			virtual void VDraw(PrimitiveType primitiveType, VertexArrayPtr vertexArray, ShaderProgramPtr shaderProgram, RenderState renderState) = 0;
 			virtual void VDraw(PrimitiveType primitiveType, int offset, int count, VertexArrayPtr vertexArray, ShaderProgramPtr shaderProgram, RenderState renderState) = 0;
+			virtual void VDrawLine(const Bow::Core::Vector3<float> &start, const Bow::Core::Vector3<float> &end) = 0;
 
 			virtual void VSetTexture(int location, Texture2DPtr texture) = 0;
 			virtual void VSetTextureSampler(int location, TextureSamplerPtr sampler) = 0;

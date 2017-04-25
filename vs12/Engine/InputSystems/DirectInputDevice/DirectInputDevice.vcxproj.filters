@@ -9,41 +9,45 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
     <Filter Include="Header Files\Device">
-      <UniqueIdentifier>{a63f1605-5422-4f12-a9f4-4d29d0507bcb}</UniqueIdentifier>
+      <UniqueIdentifier>{5563132c-9677-49a6-b94e-2bdf3b1c2ec8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Device">
-      <UniqueIdentifier>{5d02b41c-cbb3-4f6b-a45a-d93877437fb8}</UniqueIdentifier>
+      <UniqueIdentifier>{fbafa0b9-46d1-4eee-9747-95299c7ea4a0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\src\Engine\InputSystems\DirectInputDevice\DLLExport.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Engine\InputSystems\DirectInputDevice\BowDIMouseDevice.cpp">
+    <ClCompile Include="..\..\..\..\src\Engine\InputSystems\DirectInputDevice\BowDIInputDeviceBase.cpp">
       <Filter>Source Files\Device</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\src\Engine\InputSystems\DirectInputDevice\BowDIKeyboardDevice.cpp">
       <Filter>Source Files\Device</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Engine\InputSystems\DirectInputDevice\BowDIInputDeviceBase.cpp">
+    <ClCompile Include="..\..\..\..\src\Engine\InputSystems\DirectInputDevice\BowDIMouseDevice.cpp">
       <Filter>Source Files\Device</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Engine\InputSystems\DirectInputDevice\BowDIInputDevice.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\src\Engine\InputSystems\DirectInputDevice\BowDITypeConverter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Engine\InputSystems\DirectInputDevice\BowDIInputDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\src\Engine\InputSystems\DirectInputDevice\BowDIMouseDevice.h">
+    <ClInclude Include="..\..\..\..\src\Engine\InputSystems\DirectInputDevice\BowDIInputDeviceBase.h">
       <Filter>Header Files\Device</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\Engine\InputSystems\DirectInputDevice\BowDIKeyboardDevice.h">
       <Filter>Header Files\Device</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\Engine\InputSystems\DirectInputDevice\BowDIInputDeviceBase.h">
+    <ClInclude Include="..\..\..\..\src\Engine\InputSystems\DirectInputDevice\BowDIMouseDevice.h">
       <Filter>Header Files\Device</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\Engine\InputSystems\DirectInputDevice\BowDITypeConverter.h">

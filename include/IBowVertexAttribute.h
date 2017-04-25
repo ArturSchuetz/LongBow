@@ -20,8 +20,7 @@ namespace Bow {
 			IVertexAttribute(const std::string& name, VertexAttributeType type) : Name(name), Type(type)
 			{
 			}
-
-			virtual ~IVertexAttribute() = 0;
+			virtual ~IVertexAttribute() {}
 
 		public:
 			const std::string			Name;
@@ -41,8 +40,12 @@ namespace Bow {
 			}
 
 		public:
-			const std::vector<T> Values;
+			std::vector<T> Values;
 		};
+
+
+		typedef std::shared_ptr<IVertexAttribute> VertexAttributePtr;
+		typedef std::unordered_map<std::string, VertexAttributePtr> VertexAttributeMap;
 
 	}
 }

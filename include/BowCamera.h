@@ -42,24 +42,22 @@ namespace Bow {
 			// set field of view
 			void SetFOV(float FOV);
 
-			// set mode for stage n, 0:=3D(perspective), 1:=2D(orthogonal)
-			//void SetMode(ProjectionMode mode);
-
 			// screen to worldray, give ray for output
 			Core::Ray<double> Transform2Dto3D(const unsigned int screenX, const unsigned int screenY);
 
 			// cast world position to screen coordinates
 			Core::Vector2<double> Transform3Dto2D(const Core::Vector3<double>& worldPosition);
-
+			
 			// get world view projection matrix or NULL
 			Core::Matrix3D<double> CalculateView();
 			Core::Matrix3D<double> CalculateWorldView(const Core::Matrix3D<double>& world);
 			Core::Matrix4x4<double> CalculateViewProjection();
 			Core::Matrix4x4<double> CalculateWorldViewProjection(const Core::Matrix3D<double>& world);
 			Core::Matrix4x4<double> CalculateProjection();
+			Core::Frustum<double> CalculateFrustum(const Core::Matrix3D<double>& world);
 
 		private:
-			bool	CalcPerspProjMatrix();
+			bool CalcPerspProjMatrix();
 
 			unsigned int	m_Width,	// Screenwidth (or Viewport width)
 							m_Height;	// Screenheight (or Viewport height)
@@ -73,7 +71,7 @@ namespace Bow {
 			Core::Matrix3D<double>	m_View;
 			Core::Matrix4x4<double>	m_Projection,
 									m_ViewProjection;
-
+			Core::Frustum<double>	m_Frustum;
 			bool dirty;
 		};
 	}

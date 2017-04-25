@@ -159,7 +159,6 @@ namespace Bow {
 				_34 += vector.z;
 			}
 
-			/* ToDo: Lineare Rotationsinterpolation zwischen 2 winkeln und Translationsinterpolation */
 			inline void RotateX(T a)
 			{
 				T Cos = (T)cos(a);

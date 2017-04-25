@@ -7,7 +7,7 @@ namespace Bow {
 	namespace Renderer {
 
 		typedef std::shared_ptr<class OGLGraphicsWindow> OGLGraphicsWindowPtr;
-		typedef std::unordered_map<int, OGLGraphicsWindowPtr> OGLGraphicsWindowMap;
+		typedef std::unordered_map<unsigned int, OGLGraphicsWindowPtr> OGLGraphicsWindowMap;
 
 		class OGLRenderDevice : public IRenderDevice
 		{
@@ -32,6 +32,7 @@ namespace Bow {
 			ShaderProgramPtr		VCreateShaderProgram(const std::string& VertexShaderSource, const std::string& FragementShaderSource);
 			ShaderProgramPtr		VCreateShaderProgram(const std::string& VertexShaderSource, const std::string& GeometryShaderSource, const std::string& FragementShaderSource);
 
+			MeshBufferPtr			VCreateMeshBuffers(Core::Mesh mesh, ShaderVertexAttributeMap shaderAttributes, BufferHint usageHint);
 			VertexBufferPtr			VCreateVertexBuffer(BufferHint usageHint, int sizeInBytes);
 			IndexBufferPtr			VCreateIndexBuffer(BufferHint usageHint, IndexBufferDatatype dataType, int sizeInBytes);
 
@@ -52,11 +53,11 @@ namespace Bow {
 			int	m_numberOfTextureUnits;
 			int	m_maximumNumberOfColorAttachments;
 
-			std::unordered_map<int, Texture2DPtr> textures;
+			std::unordered_map<unsigned int, Texture2DPtr> textures;
 		};
 
 		typedef std::shared_ptr<OGLRenderDevice> OGLRenderDevicePtr;
-		typedef std::unordered_map<int, OGLRenderDevice> OGLRenderDeviceMap;
+		typedef std::unordered_map<unsigned int, OGLRenderDevice> OGLRenderDeviceMap;
 
 	}
 }

@@ -14,6 +14,7 @@ namespace Bow {
 
 			virtual std::string					VGetLog() = 0;
 			virtual ShaderVertexAttributePtr	VGetVertexAttribute(std::string name) = 0;
+			virtual ShaderVertexAttributeMap	VGetVertexAttributes() = 0;
 			virtual int							VGetFragmentOutputLocation(std::string name) = 0;
 
 			void VSetUniform(const char* name, Core::Vector2<int> value) {

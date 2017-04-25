@@ -50,7 +50,11 @@ namespace Bow
 #endif
 						if (!hDLL)
 						{
+#ifdef _DEBUG
+							LOG_ERROR("Could not find OGLRenderDevice_d.dll!");
+#else
 							LOG_ERROR("Could not find OGLRenderDevice.dll!");
+#endif
 							return RenderDevicePtr(nullptr);
 						}
 					}
@@ -64,7 +68,11 @@ namespace Bow
 #endif
 						if (!hDLL)
 						{
+#ifdef _DEBUG
+							LOG_ERROR("Could not find VulkanRenderDevice_d.dll!");
+#else
 							LOG_ERROR("Could not find VulkanRenderDevice.dll!");
+#endif
 							return RenderDevicePtr(nullptr);
 						}
 					}

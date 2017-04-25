@@ -33,6 +33,18 @@
     <Filter Include="Header Files\DesignPattern">
       <UniqueIdentifier>{53eecd0a-1967-41ed-ac7b-c641721890e4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Tessellation">
+      <UniqueIdentifier>{92bc7e34-1401-46a2-b9d4-389f4999218a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tessellation">
+      <UniqueIdentifier>{266bf7a0-552a-4a01-bd42-2f85aafa1be7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MemoryAllocators">
+      <UniqueIdentifier>{34c16f0d-9ecd-4ca0-a56d-1288549ce48e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MemoryAllocators">
+      <UniqueIdentifier>{9f3466ec-1755-4c34-8121-5539c135d197}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\Engine\Core\BowLogger.cpp">
@@ -52,6 +64,21 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\Engine\Core\BowVertexAttributeFloatVec2.cpp">
       <Filter>Source Files\Geometry\VertexAttributes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Core\BowSphereTessellator.cpp">
+      <Filter>Source Files\Tessellation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Core\BowMesh.cpp">
+      <Filter>Source Files\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Core\BowVertexAttributeFloatVec4.cpp">
+      <Filter>Source Files\Geometry\VertexAttributes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Core\BowVertexAttributeFloat.cpp">
+      <Filter>Source Files\Geometry\VertexAttributes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Core\BowMemoryManager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +153,27 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\BowMatrix3D.h">
       <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowSphereTessellator.h">
+      <Filter>Header Files\Tessellation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowMesh.h">
+      <Filter>Header Files\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowTriangleIndicesUnsignedInt.h">
+      <Filter>Header Files\Geometry\Indices</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowVertexAttributeFloatVec4.h">
+      <Filter>Header Files\Geometry\VertexAttributes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowVertexAttributeFloat.h">
+      <Filter>Header Files\Geometry\VertexAttributes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowFrustum.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowMemoryManager.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

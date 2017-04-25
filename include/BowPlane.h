@@ -10,8 +10,15 @@ namespace Bow {
 		template <typename T> class Plane
 		{
 		public:
-			Vector3<T>	Point, Normal;
-			T			Distance;
+			struct
+			{
+				Vector3<T>	Point, Normal;
+				T			Distance;
+			};
+
+			Plane()
+			{
+			}
 		};
 		/*----------------------------------------------------------------*/
 	}

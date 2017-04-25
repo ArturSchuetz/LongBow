@@ -25,10 +25,10 @@ namespace Bow {
 			void	SetSampler(int index, OGLTextureSamplerPtr sampler);
 
 		private:
-			std::unordered_map<int, OGLTextureUnitPtr>	m_textureUnits;
-			std::list<ICleanable*>					m_dirtyTextureUnits;
-			OGLTextureUnitPtr						m_lastTextureUnit;
-			int										m_numberOfTextureUnits;
+			std::unordered_map<unsigned int, OGLTextureUnitPtr>	m_textureUnits;
+			std::list<ICleanable*>								m_dirtyTextureUnits;
+			OGLTextureUnitPtr									m_lastTextureUnit;
+			int													m_numberOfTextureUnits;
 		};
 
 		typedef std::shared_ptr<OGLTextureUnits> OGLTextureUnitsPtr;

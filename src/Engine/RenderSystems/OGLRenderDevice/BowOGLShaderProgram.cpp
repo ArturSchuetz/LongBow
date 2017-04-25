@@ -86,6 +86,12 @@ namespace Bow {
 		}
 
 
+		ShaderVertexAttributeMap OGLShaderProgram::VGetVertexAttributes()
+		{
+			return m_shaderVertexAttributes;
+		}
+
+
 		int OGLShaderProgram::VGetFragmentOutputLocation(std::string name)
 		{
 			return (*m_fragmentOutputs)[name];

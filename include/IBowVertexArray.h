@@ -10,6 +10,7 @@ namespace Bow {
 		public:
 			virtual ~IVertexArray() {}
 			virtual VertexBufferAttributeMap VGetAttributes() = 0;
+			virtual void VSetAttribute(unsigned int location, VertexBufferAttributePtr pointer) = 0;
 			virtual void VSetAttribute(ShaderVertexAttributePtr Location, VertexBufferAttributePtr pointer) = 0;
 
 			virtual IndexBufferPtr	VGetIndexBuffer() = 0;

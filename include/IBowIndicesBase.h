@@ -27,5 +27,7 @@ namespace Bow {
 			const IndicesType Type;
 		};
 
+		typedef std::shared_ptr<IIndicesBase> IndicesBasePtr;
+
 	}
 }

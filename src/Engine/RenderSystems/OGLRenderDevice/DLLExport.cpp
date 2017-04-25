@@ -1,5 +1,5 @@
-#include "BowLogger.h"
 #include "BowOGLRenderDevice.h"
+#include "BowLogger.h"
 
 namespace Bow{
 	namespace Renderer{
