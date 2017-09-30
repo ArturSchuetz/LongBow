@@ -33,6 +33,8 @@ private:
 	Renderer::RenderContextPtr	m_contextOGL;
 
 	Renderer::ShaderProgramPtr	m_shaderProgram;
+	Renderer::Texture2DPtr		m_terrainDiffuseTexture;
+	Renderer::TextureSamplerPtr m_sampler;
 
 	Renderer::ClearState	m_clearState;
 
@@ -40,8 +42,14 @@ private:
 	Input::MousePtr		m_mouse;
 
 	bool				m_pressedQ;
-	bool				m_pressedMouse0;
+	bool				m_pressedF1;
+	bool				m_pressedF2;
+	bool				m_pressedF3;
+	bool				m_pressedF4;
+	bool				m_pressedF5;
+	bool				m_pressedReturn;
 
+	bool				m_updateFrustum;
 	float				m_moveSpeed;
 	FirstPersonCamera	*m_camera;
 	Core::Vector2<long> m_lastCursorPosition;

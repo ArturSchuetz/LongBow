@@ -3,6 +3,7 @@
 #include "BowInput.h"
 #include "BowCore.h"
 #include "BowResources.h"
+#include "BowCorePredeclares.h"
 
 #include "WaveletFace.h"
 
@@ -15,32 +16,39 @@ public:
 	WaveletSphere();
 	~WaveletSphere();
 
-	void Init(Bow::Renderer::ShaderProgramPtr shaderProgram, const char* heighMapPath);
-	void Render(Bow::Renderer::RenderContextPtr renderContext, Bow::Renderer::Camera* camera, bool renderFilled = true);
+	void GenerateData(unsigned int subdivisions);
+	void Init(Bow::Renderer::ShaderProgramPtr shaderProgram);
+	void Update(float deltaTime, Bow::Renderer::Camera* camera);
+	void Render(Bow::Renderer::RenderContextPtr renderContext, Bow::Renderer::Texture2DPtr texture, Bow::Renderer::TextureSamplerPtr sampler, Bow::Renderer::Camera* camera, bool renderFilled = true);
 
-	void Update(float deltaTime, Bow::Core::Ray<double> mouseRay);
-	void Subdivide(Bow::Renderer::Camera* camera, Bow::Core::Ray<double> mouseRay);
+	bool m_realtime;
+	bool m_interpolateFaces;
+	bool m_renderHeight;
+	bool m_updateVertexAttributes;
+	bool m_renderTextured;
 
 private:
-	void ComputeFromOctahedron(int numberOfSubdivisions);
-	void Subdivide(WaveletFace *face, unsigned int &currentFaceIndex, unsigned int &currentValueIndex);
+	void CalculateWaveletCoefficients(int numberOfSubdivisions);
+	void CaluclateWaveletCoefficientsRecustive(WaveletFace* face, int level, const Bow::Core::Clipmap* heighMap, std::ofstream* outputFile);
+	
+	void CaluclateScalarCoefficientsRecustive(WaveletFace* triangle, Bow::Core::Frustum<double>* frustum, Bow::Renderer::Camera* camera, Bow::Core::Vector3<float> position, int minLevel, int maxLevel, float threshold, std::ifstream* outputFile);
 
-	void RecursRender(WaveletFace* face, Bow::Core::VertexAttributeFloatVec3 *positionsAttribute, Bow::Core::VertexAttributeFloat *colorAttribute);
+	void RecursRender(WaveletFace* face, Bow::Core::VertexAttributeFloatVec4 *positionsAttribute, Bow::Core::VertexAttributeFloatVec3 *normalsAttribute);
 
-	void RecursCalculateWavelet(WaveletFace* triangle);
-	void RecursCalculateScalar(WaveletFace* triangle, Bow::Core::Frustum<double>* frustum, int forceLevel, float threshold);
-	void FillDataRecursive(WaveletFace* face);
+	WaveletFace*	m_Faces;
 
-	unsigned int NumberOfTriangles(int numberOfSubdivisions);
+	unsigned int	m_currentCount; // for progress
+	unsigned int	m_notNullCount; // for progress
+	double			m_percentage;// for progress
+	float			m_maxValue;// for progress
+	float			m_minValue;// for progress
 
-	WaveletFace						*m_Faces;
-	double							*m_Values;
-	unsigned char					m_NumberOfRootFaces;
+	unsigned int	m_NumberOfSubdivions;
+	unsigned int	m_NumberOfTriangles;
+	unsigned int	m_NumberOfValues;
+	unsigned char	m_NumberOfRootFaces;
 
-	unsigned char					*m_HeightMap;
-	unsigned int					m_MapHeight;
-	unsigned int					m_MapWidth;
-	unsigned int					m_MapSize;
+	float m_heightMultiplicator;
 
 	// ==========================================================================================
 	// Rendering stuff (Not important for Algorithm)

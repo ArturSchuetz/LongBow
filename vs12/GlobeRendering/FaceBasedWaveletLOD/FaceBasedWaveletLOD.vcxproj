@@ -19,10 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{B2D735F9-7C09-44D5-A08C-627137F4D467}</ProjectGuid>
-    <RootNamespace>FaceBasedWaveletLOD</RootNamespace>
+    <ProjectGuid>{C3203FD3-7D1D-4301-A6B9-1ED8319ABFFC}</ProjectGuid>
+    <RootNamespace>FaceBasedWaveletLOD_Complete</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
-    <ProjectName>10_FaceBasedWaveletLOD</ProjectName>
+    <ProjectName>04_FaceBasedWaveletLOD</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -152,18 +152,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Application.h" />
-    <ClInclude Include="FirstPersonCamera.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="WaveletFace.h" />
-    <ClInclude Include="WaveletSphere.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="FaceBasedOptimzedMesh.cpp" />
     <ClCompile Include="FirstPersonCamera.cpp" />
     <ClCompile Include="WaveletFace.cpp" />
     <ClCompile Include="WaveletSphere.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="FirstPersonCamera.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="WaveletEdge.h" />
+    <ClInclude Include="WaveletFace.h" />
+    <ClInclude Include="WaveletSphere.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BaseFragmentShader.frag" />

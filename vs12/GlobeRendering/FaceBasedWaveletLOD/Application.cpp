@@ -21,6 +21,7 @@ Application::Application()
 {
 	m_camera = nullptr;
 	m_renderFilled = false;
+	m_updateFrustum = true;
 }
 
 Application::~Application()
@@ -30,6 +31,8 @@ Application::~Application()
 
 bool Application::Init(void)
 {
+	m_Sphere.GenerateData(14);
+
 	std::cout << "Instuctions:" << std::endl << std::endl;
 	std::cout << "\tUse W,A,S,D to move and press shift to move faster." << std::endl;
 	std::cout << "\tUse spacebar to move up and left control to move down." << std::endl;
@@ -94,14 +97,13 @@ void Application::PrepareScene(void)
 	///////////////////////////////////////////////////////////////////
 	// Textures
 
-	Renderer::Texture2DPtr terrainDiffuseTexture = m_device->VCreateTexture2DFromFile("../Data/Textures/NASA/world_topo_bathy_200411_3x5400x2700.jpg");
-	Renderer::TextureSamplerPtr sampler = m_device->VCreateTexture2DSampler(Renderer::TextureMinificationFilter::Linear, Renderer::TextureMagnificationFilter::Linear, Renderer::TextureWrap::Clamp, Renderer::TextureWrap::Clamp);
-	
+	m_terrainDiffuseTexture = m_device->VCreateTexture2DFromFile("../Data/Textures/NASA/world.topo.200412.3x5400x2700.jpg");
+	m_sampler = m_device->VCreateTexture2DSampler(Renderer::TextureMinificationFilter::Linear, Renderer::TextureMagnificationFilter::Linear, Renderer::TextureWrap::Clamp, Renderer::TextureWrap::Clamp);
 	m_shaderProgram = m_device->VCreateShaderProgram(LoadShaderFromResouce(IDS_VERTEXSHADER), LoadShaderFromResouce(IDS_FRAGMENTSHADER));
 
 	m_moveSpeed = 50.0;
 
-	m_Sphere.Init(m_shaderProgram, "../Data/Textures/NASA/gebco_08_rev_elev_21600x10800.png");
+	m_Sphere.Init(m_shaderProgram);
 }
 
 void Application::Release(void)
@@ -178,32 +180,76 @@ void Application::Update(float deltaTime)
 		m_window->VShowCursor();
 	}
 
-	m_lastCursorPosition = m_mouse->VGetAbsolutePosition();
-
-	Core::Vector2<long> moveVec = m_mouse->VGetAbsolutePositionInsideWindow();
-	Bow::Core::Ray<double> ray = m_camera->Transform2Dto3D(moveVec.x, moveVec.y);
-
-	if (m_mouse->VIsPressed(Input::MouseButton::MOFS_BUTTON0))
+	if (m_keyboard->VIsPressed(Input::Key::K_F1))
 	{
-		if (!m_pressedMouse0)
+		if (!m_pressedF1)
 		{
-			auto start = std::chrono::high_resolution_clock::now(); // Take time before frame
-			m_Sphere.Subdivide(m_camera, ray);
-			auto end = std::chrono::high_resolution_clock::now(); // Take time after frame
-
-			std::chrono::duration<double, std::milli> duration = end - start;
-			char buff[5];
-			snprintf(buff, sizeof(buff), "%f", duration.count());
-			std::string timeStr = buff;
-
-			std::cout << "Time for Subdivision: " << timeStr << " ms \t\t\r" << std::endl << std::flush;
+			m_Sphere.m_realtime = !m_Sphere.m_realtime;
 		}
 
-		m_pressedMouse0 = true;
+		m_pressedF1 = true;
 	}
-	else { m_pressedMouse0 = false; }
+	else { m_pressedF1 = false; }
 
-	m_Sphere.Update(deltaTime, ray);
+	if (m_keyboard->VIsPressed(Input::Key::K_F2))
+	{
+		if (!m_pressedF2)
+		{
+			m_Sphere.m_interpolateFaces = !m_Sphere.m_interpolateFaces;
+		}
+
+		m_pressedF2 = true;
+	}
+	else { m_pressedF2 = false; }
+
+	if (m_keyboard->VIsPressed(Input::Key::K_F3))
+	{
+		if (!m_pressedF3)
+		{
+			m_Sphere.m_renderHeight = !m_Sphere.m_renderHeight;
+		}
+
+		m_pressedF3 = true;
+	}
+	else { m_pressedF3 = false; }
+
+	if (m_keyboard->VIsPressed(Input::Key::K_F4))
+	{
+		if (!m_pressedF4)
+		{
+			m_Sphere.m_updateVertexAttributes = !m_Sphere.m_updateVertexAttributes;
+		}
+
+		m_pressedF4 = true;
+	}
+	else { m_pressedF4 = false; }
+
+	if (m_keyboard->VIsPressed(Input::Key::K_F5))
+	{
+		if (!m_pressedF5)
+		{
+			m_Sphere.m_renderTextured = !m_Sphere.m_renderTextured;
+		}
+
+		m_pressedF5 = true;
+	}
+	else { m_pressedF5 = false; }
+
+	if (m_keyboard->VIsPressed(Input::Key::K_RETURN))
+	{
+		if (!m_pressedReturn)
+		{
+			m_updateFrustum = !m_updateFrustum;
+		}
+
+		m_pressedReturn = true;
+	}
+	else { m_pressedReturn = false; }
+
+	m_lastCursorPosition = m_mouse->VGetAbsolutePosition();
+
+	if(m_updateFrustum)
+		m_Sphere.Update(deltaTime, m_camera);
 }
 
 void Application::Render(void)
@@ -220,7 +266,7 @@ void Application::Render(void)
 
 	m_contextOGL->VSetViewport(Renderer::Viewport(0, 0, m_window->VGetWidth(), m_window->VGetHeight()));
 
-	m_Sphere.Render(m_contextOGL, m_camera, m_renderFilled);
+	m_Sphere.Render(m_contextOGL, m_terrainDiffuseTexture, m_sampler, m_camera, m_renderFilled);
 
 	m_contextOGL->VSwapBuffers();
 

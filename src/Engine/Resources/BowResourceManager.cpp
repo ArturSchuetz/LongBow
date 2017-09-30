@@ -1,6 +1,8 @@
 #include "BowResources.h"
 #include "BowResourceManager.h"
 
+#include "BowMesh.h"
+
 namespace Bow {
 	namespace Core {
 
@@ -41,6 +43,16 @@ namespace Bow {
 				}
 			}
 			return &Images[path];
+		}
+
+		Mesh* ResourceManager::LoadMeshFile(const std::string& path)
+		{
+			if (Meshes.find(path) == Meshes.end())
+			{
+				Meshes[path] = Mesh();
+				// Load OBJ here
+			}
+			return &Meshes[path];
 		}
 	}
 }

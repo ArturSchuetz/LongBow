@@ -20,12 +20,14 @@ namespace Bow {
 			void Release();
 
 			Bitmap* LoadImageFile(const std::string& path);
+			Mesh* LoadMeshFile(const std::string& path);
 
 		private:
 			ResourceManager(const ResourceManager&){}; // You shall not copy
 			ResourceManager& operator=(const ResourceManager&) { return *this; }
 
 			std::unordered_map<std::string, Bitmap> Images;
+			std::unordered_map<std::string, Mesh> Meshes;
 		};
 
 	}
