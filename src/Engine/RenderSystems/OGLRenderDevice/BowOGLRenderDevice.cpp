@@ -188,7 +188,7 @@ namespace Bow {
 			return OGLShaderProgramPtr(new OGLShaderProgram(VertexShaderSource, GeometryShaderSource, FragementShaderSource));
 		}
 
-		MeshBufferPtr OGLRenderDevice::VCreateMeshBuffers(Mesh mesh, ShaderVertexAttributeMap shaderAttributes, BufferHint usageHint)
+		MeshBufferPtr OGLRenderDevice::VCreateMeshBuffers(MeshAttribute mesh, ShaderVertexAttributeMap shaderAttributes, BufferHint usageHint)
 		{
 			MeshBuffers *meshBuffers = new MeshBuffers();
 
@@ -303,21 +303,6 @@ namespace Bow {
 		WritePixelBufferPtr OGLRenderDevice::VCreateWritePixelBuffer(PixelBufferHint usageHint, int sizeInBytes)
 		{
 			return OGLWritePixelBufferPtr(new OGLWritePixelBuffer(usageHint, sizeInBytes));
-		}
-
-		Texture2DPtr OGLRenderDevice::VCreateTexture2DFromFile(const std::string& Filename, bool generateMipmaps)
-		{
-			Bitmap *bitmap = ResourceManager::GetInstance().LoadImageFile(Filename);
-			if (bitmap == nullptr)
-			{
-				LOG_ERROR("Couldn't find Texture: %s", Filename.c_str());
-				return Texture2DPtr(nullptr);
-			}
-
-			if (bitmap->GetSizeInBytes() / (bitmap->GetHeight() * bitmap->GetWidth()) == 3)
-				return VCreateTexture2D(bitmap, TextureFormat::RedGreenBlue8, generateMipmaps);
-			else
-				return VCreateTexture2D(bitmap, TextureFormat::RedGreenBlueAlpha8, generateMipmaps);
 		}
 
 		Texture2DPtr OGLRenderDevice::VCreateTexture2D(Bitmap* bitmap, TextureFormat format, bool generateMipmaps)

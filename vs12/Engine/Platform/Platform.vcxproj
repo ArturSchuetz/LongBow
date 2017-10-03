@@ -21,7 +21,9 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\include\BowFileReader.h" />
     <ClInclude Include="..\..\..\include\BowFileWriter.h" />
+    <ClInclude Include="..\..\..\include\BowPlatform.h" />
     <ClInclude Include="..\..\..\include\BowPlatformPredeclares.h" />
+    <ClInclude Include="..\..\..\include\BowPrerequisites.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\Engine\Platform\BowFileReader.cpp" />

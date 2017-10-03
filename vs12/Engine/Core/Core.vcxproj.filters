@@ -68,9 +68,6 @@
     <ClCompile Include="..\..\..\src\Engine\Core\BowSphereTessellator.cpp">
       <Filter>Source Files\Tessellation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\Core\BowMesh.cpp">
-      <Filter>Source Files\Geometry</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\Engine\Core\BowVertexAttributeFloatVec4.cpp">
       <Filter>Source Files\Geometry\VertexAttributes</Filter>
     </ClCompile>
@@ -79,6 +76,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\Engine\Core\BowMemoryManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Core\BowMeshAttribute.cpp">
+      <Filter>Source Files\Geometry</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -157,9 +157,6 @@
     <ClInclude Include="..\..\..\include\BowSphereTessellator.h">
       <Filter>Header Files\Tessellation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\BowMesh.h">
-      <Filter>Header Files\Geometry</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\BowTriangleIndicesUnsignedInt.h">
       <Filter>Header Files\Geometry\Indices</Filter>
     </ClInclude>
@@ -174,6 +171,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\BowMemoryManager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowMeshAttribute.h">
+      <Filter>Header Files\Geometry</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -49,7 +49,7 @@ void WaveletSphere::Render(Bow::Renderer::RenderContextPtr renderContext, Bow::R
 {
 	if (m_isDirty)
 	{
-		Bow::Core::Mesh mesh;
+		Bow::Core::MeshAttribute mesh;
 
 		Bow::Core::VertexAttributeFloatVec3 *positionsAttribute = new Bow::Core::VertexAttributeFloatVec3("in_Position");
 		mesh.AddAttribute(Bow::Core::VertexAttributePtr(positionsAttribute));

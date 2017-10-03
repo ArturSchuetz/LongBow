@@ -149,7 +149,7 @@ void WaveletSphere::Render(Bow::Renderer::RenderContextPtr renderContext, Bow::R
 {
 	if (m_isDirty && m_updateVertexAttributes)
 	{
-		Bow::Core::Mesh mesh;
+		Bow::Core::MeshAttribute mesh;
 
 		Bow::Core::VertexAttributeFloatVec4 *positionsAttribute = new Bow::Core::VertexAttributeFloatVec4("in_Position");
 		mesh.AddAttribute(Bow::Core::VertexAttributePtr(positionsAttribute));
@@ -396,10 +396,10 @@ void WaveletSphere::CaluclateWaveletCoefficientsRecustive(WaveletFace* face, int
 	{
 		double PI = 3.1415926535897931;
 
-		Bow::Core::Vector3<float> center = (face->m_p0->GetVertex(0.0) + face->m_p1->GetVertex(0.0) + face->m_p2->GetVertex(0.0)) * 1.0 / 3.0;
+		Bow::Core::Vector3<float> center = (face->m_p0->GetVertex(0.0f) + face->m_p1->GetVertex(0.0f) + face->m_p2->GetVertex(0.0f)) * 1.0f / 3.0f;
 		center.Normalize();
 
-		Bow::Core::Vector2<float> texCoord = Bow::Core::Vector2<float>((atan2(center.y, center.x) / (PI * 2.0)) + 0.5, (asin(center.z) / PI) + 0.5);
+		Bow::Core::Vector2<float> texCoord = Bow::Core::Vector2<float>((atan2(center.y, center.x) / (PI * 2.0f)) + 0.5f, (asin(center.z) / PI) + 0.5f);
 
 		float val = heighMap->GetPixel(texCoord.x, texCoord.y);
 		face->m_Value = val;

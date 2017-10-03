@@ -1,5 +1,6 @@
 #include "BowRenderer.h"
 #include "BowInput.h"
+#include "BowBitmap.h"
 
 #include <cstdint>
 #include <windows.h>
@@ -122,7 +123,16 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Textures
 
-	Texture2DPtr texture = DeviceOGL->VCreateTexture2DFromFile("../Data/Textures/NASA/world_topo_bathy_200411_3x5400x2700.jpg");
+	Texture2DPtr texture;
+	
+	Core::Bitmap bitmap;
+	bitmap.LoadFile("../Data/Textures/NASA/world_topo_bathy_200411_3x5400x2700.jpg");
+
+	if (bitmap.GetSizeInBytes() / (bitmap.GetHeight() * bitmap.GetWidth()) == 3)
+		texture = DeviceOGL->VCreateTexture2D(&bitmap, Renderer::TextureFormat::RedGreenBlue8);
+	else
+		texture = DeviceOGL->VCreateTexture2D(&bitmap, Renderer::TextureFormat::RedGreenBlueAlpha8);
+	
 	TextureSamplerPtr sampler = DeviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Clamp, TextureWrap::Clamp);
 
 	int TexID = 0;
@@ -251,7 +261,7 @@ int main()
 			currentLEvel = g_subdivisionLevel;
 			currentSourceObject = g_sourceObject;
 			currentlyNormalized = g_normalize;
-			Mesh mesh;
+			MeshAttribute mesh;
 
 			switch (currentSourceObject)
 			{

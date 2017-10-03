@@ -90,7 +90,7 @@ void ROAMSphere::RecursTessellate(ROAMTriangle* triangle, Bow::Core::Vector3<flo
 
 void ROAMSphere::Render(Bow::Renderer::RenderContextPtr context, Bow::Renderer::Camera* camera)
 {
-	Bow::Core::Mesh mesh;
+	Bow::Core::MeshAttribute mesh;
 
 	Bow::Core::VertexAttributeFloatVec3 *positionsAttribute = new Bow::Core::VertexAttributeFloatVec3("in_Position");
 	mesh.AddAttribute(Bow::Core::VertexAttributePtr(positionsAttribute));

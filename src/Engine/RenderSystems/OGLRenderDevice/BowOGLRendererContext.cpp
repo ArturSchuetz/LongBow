@@ -2,7 +2,7 @@
 #include "BowLogger.h"
 #include "BowOGLTypeConverter.h"
 
-#include "BowMesh.h"
+#include "BowMeshAttribute.h"
 #include "BowMeshBuffers.h"
 
 #include "BowClearState.h"
@@ -99,7 +99,7 @@ namespace Bow {
 		}
 
 
-		VertexArrayPtr OGLRenderContext::VCreateVertexArray(Core::Mesh mesh, ShaderVertexAttributeMap shaderAttributes, BufferHint usageHint)
+		VertexArrayPtr OGLRenderContext::VCreateVertexArray(Core::MeshAttribute mesh, ShaderVertexAttributeMap shaderAttributes, BufferHint usageHint)
 		{
 			return VCreateVertexArray(m_device->VCreateMeshBuffers(mesh, shaderAttributes, usageHint));
 		}

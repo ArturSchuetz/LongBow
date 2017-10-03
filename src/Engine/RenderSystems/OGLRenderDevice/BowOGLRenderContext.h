@@ -39,7 +39,7 @@ namespace Bow {
 			// =========================================================================
 			// RENDERING STUFF:
 			// =========================================================================
-			VertexArrayPtr	VCreateVertexArray(Core::Mesh mesh, ShaderVertexAttributeMap shaderAttributes, BufferHint usageHint);
+			VertexArrayPtr	VCreateVertexArray(Core::MeshAttribute mesh, ShaderVertexAttributeMap shaderAttributes, BufferHint usageHint);
 			VertexArrayPtr	VCreateVertexArray(MeshBufferPtr meshBuffers);
 			VertexArrayPtr	VCreateVertexArray();
 			FramebufferPtr	VCreateFramebuffer();

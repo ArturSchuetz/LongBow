@@ -86,7 +86,7 @@ namespace Bow {
 			return ShaderProgramPtr(nullptr);
 		}
 
-		MeshBufferPtr VulkanRenderDevice::VCreateMeshBuffers(Core::Mesh mesh, ShaderVertexAttributeMap shaderAttributes, BufferHint usageHint)
+		MeshBufferPtr VulkanRenderDevice::VCreateMeshBuffers(Core::MeshAttribute mesh, ShaderVertexAttributeMap shaderAttributes, BufferHint usageHint)
 		{
 			return MeshBufferPtr(nullptr);
 		}
@@ -104,11 +104,6 @@ namespace Bow {
 		WritePixelBufferPtr VulkanRenderDevice::VCreateWritePixelBuffer(PixelBufferHint usageHint, int sizeInBytes)
 		{
 			return WritePixelBufferPtr(nullptr);
-		}
-
-		Texture2DPtr VulkanRenderDevice::VCreateTexture2DFromFile(const std::string& Filename, bool generateMipmaps)
-		{
-			return Texture2DPtr(nullptr);
 		}
 
 		Texture2DPtr VulkanRenderDevice::VCreateTexture2D(Bitmap* bitmap, TextureFormat format, bool generateMipmaps)

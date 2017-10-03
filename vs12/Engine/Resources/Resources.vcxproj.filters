@@ -15,6 +15,24 @@
     <Filter Include="Source Files\Resources">
       <UniqueIdentifier>{396be42e-3f30-4a24-9311-5c9002d2fbe0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ResourceManagers">
+      <UniqueIdentifier>{5b89780c-0cd5-4e46-8075-0f5f9b13151b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ResourceManagers">
+      <UniqueIdentifier>{234b8660-bbe5-40ab-b403-7990b3c354e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FileLoaders">
+      <UniqueIdentifier>{9ea03e45-1bde-4b32-8a6b-ae321d1c4dae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FileLoaders\MeshLoader">
+      <UniqueIdentifier>{0f5665b4-3e68-4fb4-b838-f71b8931a180}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FileLoaders">
+      <UniqueIdentifier>{61a470ab-acf7-45d5-98f6-63863c541919}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FileLoaders\MeshLoader">
+      <UniqueIdentifier>{0c2cc53e-ec36-4357-be4e-2090b2899dbe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\BowResourceManager.h">
@@ -32,6 +50,24 @@
     <ClInclude Include="..\..\..\include\BowClipmap.h">
       <Filter>Header Files\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\BowResource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowMeshManager.h">
+      <Filter>Header Files\ResourceManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowMesh.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowSubMesh.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowTexture.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowModelLoader_obj.h">
+      <Filter>Header Files\FileLoaders\MeshLoader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\Engine\Resources\BowResourceManager.cpp">
@@ -42,6 +78,24 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\Engine\Resources\BowClipmap.cpp">
       <Filter>Source Files\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowResource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowMeshManager.cpp">
+      <Filter>Source Files\ResourceManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowMesh.cpp">
+      <Filter>Source Files\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowSubMesh.cpp">
+      <Filter>Source Files\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowTexture.cpp">
+      <Filter>Source Files\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowModelLoader_obj.cpp">
+      <Filter>Source Files\FileLoaders\MeshLoader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

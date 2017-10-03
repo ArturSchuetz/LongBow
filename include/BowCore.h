@@ -15,7 +15,7 @@
 #include "BowVertexAttributeFloatVec3.h"
 #include "BowVertexAttributeFloatVec4.h"
 
-#include "BowMesh.h"
+#include "BowMeshAttribute.h"
 
 #include "BowSphereTessellator.h"
 #include "BowMemoryManager.h"

@@ -8,14 +8,16 @@ namespace Bow {
 		class FileWriter
 		{
 		public:
-			FileWriter() {}
-			~FileWriter() { Close(); }
+			FileWriter();
+			~FileWriter();
 
-			bool Open(const char* file);
+			bool Open(const char* filePath);
 
 			void Close();
 
-			unsigned int Tell();
+			size_t GetSizeOfFile();
+
+			unsigned long Tell();
 
 			void Seek(size_t offset);
 
@@ -24,6 +26,9 @@ namespace Bow {
 			size_t Write(char* memory_block, size_t sizeInBytes);
 
 			bool EndOfFile() const;
+
+		private:
+			void* m_pFile;
 		};
 		/*----------------------------------------------------------------*/
 	}

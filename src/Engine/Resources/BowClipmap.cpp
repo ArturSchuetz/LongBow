@@ -1,4 +1,4 @@
-#pragma once
+#include "BowResources.h"
 #include "BowClipmap.h"
 
 namespace Bow {

@@ -101,8 +101,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
+      <AdditionalDependencies>Platform_d.lib</AdditionalDependencies>
     </Lib>
     <Lib>
       <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);</AdditionalLibraryDirectories>
@@ -150,8 +149,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
+      <AdditionalDependencies>Platform.lib</AdditionalDependencies>
     </Lib>
     <Lib>
       <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);</AdditionalLibraryDirectories>
@@ -189,7 +187,7 @@
     <ClCompile Include="..\..\..\src\Engine\Core\BowIndicesUnsignedShort.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core\BowLogger.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core\BowMemoryManager.cpp" />
-    <ClCompile Include="..\..\..\src\Engine\Core\BowMesh.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Core\BowMeshAttribute.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core\BowSphereTessellator.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core\BowVertexAttributeFloat.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Core\BowVertexAttributeFloatVec2.cpp" />
@@ -206,7 +204,7 @@
     <ClInclude Include="..\..\..\include\BowMatrix3D.h" />
     <ClInclude Include="..\..\..\include\BowMatrix4x4.h" />
     <ClInclude Include="..\..\..\include\BowMemoryManager.h" />
-    <ClInclude Include="..\..\..\include\BowMesh.h" />
+    <ClInclude Include="..\..\..\include\BowMeshAttribute.h" />
     <ClInclude Include="..\..\..\include\BowPlane.h" />
     <ClInclude Include="..\..\..\include\BowLogger.h" />
     <ClInclude Include="..\..\..\include\BowMath.h" />

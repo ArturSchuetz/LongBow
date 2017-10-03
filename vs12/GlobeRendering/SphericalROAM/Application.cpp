@@ -92,7 +92,16 @@ void Application::PrepareScene(void)
 	///////////////////////////////////////////////////////////////////
 	// Textures
 
-	Renderer::Texture2DPtr terrainDiffuseTexture	= m_device->VCreateTexture2DFromFile("../Data/Textures/NASA/world_topo_bathy_200411_3x5400x2700.jpg");
+	Renderer::Texture2DPtr terrainDiffuseTexture;
+
+	Core::Bitmap bitmap;
+	bitmap.LoadFile("../Data/Textures/NASA/world_topo_bathy_200411_3x5400x2700.jpg");
+
+	if (bitmap.GetSizeInBytes() / (bitmap.GetHeight() * bitmap.GetWidth()) == 3)
+		terrainDiffuseTexture = m_device->VCreateTexture2D(&bitmap, Renderer::TextureFormat::RedGreenBlue8);
+	else
+		terrainDiffuseTexture = m_device->VCreateTexture2D(&bitmap, Renderer::TextureFormat::RedGreenBlueAlpha8);
+
 	Renderer::TextureSamplerPtr sampler				= m_device->VCreateTexture2DSampler(Renderer::TextureMinificationFilter::Linear, Renderer::TextureMagnificationFilter::Linear, Renderer::TextureWrap::Clamp, Renderer::TextureWrap::Clamp);
 	Renderer::ShaderProgramPtr shaderProgram		= m_device->VCreateShaderProgram(LoadShaderFromResouce(IDS_VERTEXSHADER), LoadShaderFromResouce(IDS_FRAGMENTSHADER));
 

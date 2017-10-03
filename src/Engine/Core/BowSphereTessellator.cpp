@@ -1,6 +1,6 @@
 #include "BowSphereTessellator.h"
 
-#include "BowMesh.h"
+#include "BowMeshAttribute.h"
 #include "BowIndicesUnsignedInt.h"
 #include "BowVertexAttributeFloat.h"
 #include "BowVertexAttributeFloatVec2.h"
@@ -13,11 +13,11 @@
 namespace Bow {
 	namespace Core {
 		
-		Mesh SubdivisionSphereTessellator::ComputeFromTetrahedron(int numberOfSubdivisions, bool normalize)
+		MeshAttribute SubdivisionSphereTessellator::ComputeFromTetrahedron(int numberOfSubdivisions, bool normalize)
 		{
 			LOG_ASSERT(numberOfSubdivisions >= 0, "numberOfSubdivisions has to be 0 or bigger");
 
-			Mesh mesh;
+			MeshAttribute mesh;
 
 			VertexAttributeFloatVec3 *positionsAttribute = new VertexAttributeFloatVec3("in_Position");
 			mesh.AddAttribute(VertexAttributePtr(positionsAttribute));
@@ -50,11 +50,11 @@ namespace Bow {
 			return mesh;
 		}
 
-		Mesh SubdivisionSphereTessellator::ComputeFromCube(int numberOfSubdivisions, bool normalize)
+		MeshAttribute SubdivisionSphereTessellator::ComputeFromCube(int numberOfSubdivisions, bool normalize)
 		{
 			LOG_ASSERT(numberOfSubdivisions >= 0, "numberOfSubdivisions has to be 0 or bigger");
 
-			Mesh mesh;
+			MeshAttribute mesh;
 
 			VertexAttributeFloatVec3 *positionsAttribute = new VertexAttributeFloatVec3("in_Position");
 			mesh.AddAttribute(VertexAttributePtr(positionsAttribute));
@@ -108,11 +108,11 @@ namespace Bow {
 			return mesh;
 		}
 
-		Mesh SubdivisionSphereTessellator::ComputeFromOctahedron(int numberOfSubdivisions, bool normalize)
+		MeshAttribute SubdivisionSphereTessellator::ComputeFromOctahedron(int numberOfSubdivisions, bool normalize)
 		{
 			LOG_ASSERT(numberOfSubdivisions >= 0, "numberOfSubdivisions has to be 0 or bigger");
 
-			Mesh mesh;
+			MeshAttribute mesh;
 
 			VertexAttributeFloatVec3 *positionsAttribute = new VertexAttributeFloatVec3("in_Position");
 			mesh.AddAttribute(VertexAttributePtr(positionsAttribute));
@@ -156,11 +156,11 @@ namespace Bow {
 			return mesh;
 		}
 
-		Mesh SubdivisionSphereTessellator::ComputeFromIcosahedron(int numberOfSubdivisions, bool normalize)
+		MeshAttribute SubdivisionSphereTessellator::ComputeFromIcosahedron(int numberOfSubdivisions, bool normalize)
 		{
 			LOG_ASSERT(numberOfSubdivisions >= 0, "numberOfSubdivisions has to be 0 or bigger");
 
-			Mesh mesh;
+			MeshAttribute mesh;
 
 			VertexAttributeFloatVec3 *positionsAttribute = new VertexAttributeFloatVec3("in_Position");
 			mesh.AddAttribute(VertexAttributePtr(positionsAttribute));

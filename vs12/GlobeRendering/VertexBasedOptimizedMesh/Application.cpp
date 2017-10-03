@@ -64,7 +64,6 @@ bool Application::Init(void)
 		return false;
 	}
 
-
 	///////////////////////////////////////////////////////////////////
 	// ClearState and Color
 
@@ -88,12 +87,22 @@ void Application::PrepareScene(void)
 	Core::Vector3<float> UpVector = Core::Vector3<float>(0.0f, 1.0f, 0.0f);
 
 	m_camera = new FirstPersonCamera(Position, LookAt, UpVector, m_window->VGetWidth(), m_window->VGetHeight());
-	m_camera->SetClippingPlanes(0.00001, 10.0);
+	m_camera->SetClippingPlanes(0.01, 1000.0);
 
 	///////////////////////////////////////////////////////////////////
 	// Textures
 
-	Renderer::Texture2DPtr terrainDiffuseTexture = m_device->VCreateTexture2DFromFile("../Data/Textures/NASA/world_topo_bathy_200411_3x5400x2700.jpg");
+
+	Renderer::Texture2DPtr terrainDiffuseTexture;
+
+	Core::Bitmap bitmap;
+	bitmap.LoadFile("../Data/Textures/NASA/world_topo_bathy_200411_3x5400x2700.jpg");
+
+	if (bitmap.GetSizeInBytes() / (bitmap.GetHeight() * bitmap.GetWidth()) == 3)
+		terrainDiffuseTexture = m_device->VCreateTexture2D(&bitmap, Renderer::TextureFormat::RedGreenBlue8);
+	else
+		terrainDiffuseTexture = m_device->VCreateTexture2D(&bitmap, Renderer::TextureFormat::RedGreenBlueAlpha8);
+
 	Renderer::TextureSamplerPtr sampler = m_device->VCreateTexture2DSampler(Renderer::TextureMinificationFilter::Linear, Renderer::TextureMagnificationFilter::Linear, Renderer::TextureWrap::Clamp, Renderer::TextureWrap::Clamp);
 	Renderer::ShaderProgramPtr m_shaderProgram = m_device->VCreateShaderProgram(LoadShaderFromResouce(IDS_VERTEXSHADER), LoadShaderFromResouce(IDS_FRAGMENTSHADER));
 

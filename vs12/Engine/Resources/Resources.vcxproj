@@ -149,14 +149,26 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\include\BowBitmap.h" />
     <ClInclude Include="..\..\..\include\BowClipmap.h" />
+    <ClInclude Include="..\..\..\include\BowMesh.h" />
+    <ClInclude Include="..\..\..\include\BowMeshManager.h" />
+    <ClInclude Include="..\..\..\include\BowModelLoader_obj.h" />
+    <ClInclude Include="..\..\..\include\BowResource.h" />
     <ClInclude Include="..\..\..\include\BowResourceManager.h" />
     <ClInclude Include="..\..\..\include\BowResources.h" />
     <ClInclude Include="..\..\..\include\BowResourcesPredeclares.h" />
+    <ClInclude Include="..\..\..\include\BowSubMesh.h" />
+    <ClInclude Include="..\..\..\include\BowTexture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\Engine\Resources\BowBitmap.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Resources\BowClipmap.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowMesh.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowMeshManager.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowModelLoader_obj.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowResource.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Resources\BowResourceManager.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowSubMesh.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowTexture.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

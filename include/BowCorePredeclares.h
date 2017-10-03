@@ -32,6 +32,7 @@ namespace Bow {
 		struct VertexAttributeFloatVec3;
 		struct VertexAttributeFloatVec4;
 
-		class Mesh;
+		class MeshAttribute;
+			typedef std::shared_ptr<MeshAttribute> MeshAttributePtr;
 	}
 }

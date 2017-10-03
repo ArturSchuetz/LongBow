@@ -32,13 +32,12 @@ namespace Bow {
 			ShaderProgramPtr		VCreateShaderProgram(const std::string& VertexShaderSource, const std::string& FragementShaderSource);
 			ShaderProgramPtr		VCreateShaderProgram(const std::string& VertexShaderSource, const std::string& GeometryShaderSource, const std::string& FragementShaderSource);
 
-			MeshBufferPtr			VCreateMeshBuffers(Core::Mesh mesh, ShaderVertexAttributeMap shaderAttributes, BufferHint usageHint);
+			MeshBufferPtr			VCreateMeshBuffers(Core::MeshAttribute mesh, ShaderVertexAttributeMap shaderAttributes, BufferHint usageHint);
 			VertexBufferPtr			VCreateVertexBuffer(BufferHint usageHint, int sizeInBytes);
 			IndexBufferPtr			VCreateIndexBuffer(BufferHint usageHint, IndexBufferDatatype dataType, int sizeInBytes);
 
 			WritePixelBufferPtr		VCreateWritePixelBuffer(PixelBufferHint usageHint, int sizeInBytes);
 
-			Texture2DPtr			VCreateTexture2DFromFile(const std::string& Filename, bool generateMipmaps = false);
 			Texture2DPtr			VCreateTexture2D(Core::Bitmap* bitmap, TextureFormat format, bool generateMipmaps = false);
 			Texture2DPtr			VCreateTexture2D(Texture2DDescription description);
 

@@ -1,4 +1,5 @@
 #include "BowRenderer.h"
+#include "BowBitmap.h"
 
 #include <cstdint>
 #include <windows.h>
@@ -104,7 +105,16 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Textures
 
-	Texture2DPtr texture = DeviceOGL->VCreateTexture2DFromFile("../Data/Textures/test.jpg");
+	Texture2DPtr texture;
+
+	Core::Bitmap bitmap;
+	bitmap.LoadFile("../Data/Textures/test.jpg");
+
+	if (bitmap.GetSizeInBytes() / (bitmap.GetHeight() * bitmap.GetWidth()) == 3)
+		texture = DeviceOGL->VCreateTexture2D(&bitmap, Renderer::TextureFormat::RedGreenBlue8);
+	else
+		texture = DeviceOGL->VCreateTexture2D(&bitmap, Renderer::TextureFormat::RedGreenBlueAlpha8);
+
 	TextureSamplerPtr sampler = DeviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Repeat, TextureWrap::Repeat);
 
 	///////////////////////////////////////////////////////////////////
