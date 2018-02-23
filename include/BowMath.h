@@ -6,6 +6,8 @@
 #include "BowVector3.h"
 #include "BowVector4.h"
 
+#include "BowQuaternion.h"
+
 #include "BowMatrix2D.h"
 #include "BowMatrix2x2.h"
 #include "BowMatrix3D.h"
@@ -16,3 +18,32 @@
 #include "BowSphere.h"
 #include "BowTriangle.h"
 #include "BowFrustum.h"
+
+namespace Bow 
+{
+	namespace Math
+	{
+		//Taken from 'From Quaterninon to Matrix and Back', J.M.P. van Waveren, February 27th 2005
+		static float Sqrt(float x) {
+			long i;
+			float y, r;
+			y = x * 0.5f;
+			i = *(long *)(&x);
+			i = 0x5f3759df - (i >> 1);
+			r = *(float *)(&i);
+			r = r * (1.5f - r * r * y);
+			return r;
+		}
+
+		static double Sqrt(double x) {
+			long i;
+			double y, r;
+			y = x * 0.5f;
+			i = *(long *)(&x);
+			i = 0x5f3759df - (i >> 1);
+			r = *(double *)(&i);
+			r = r * (1.5f - r * r * y);
+			return r;
+		}
+	}
+}
