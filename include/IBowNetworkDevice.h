@@ -2,15 +2,13 @@
 #include "BowPrerequisites.h"
 #include "BowNetworkPredeclares.h"
 
-namespace Bow {
-	namespace Network {
+namespace bow {
 
-		class INetworkDevice
-		{
-		public:
-			INetworkDevice(void){};
-			virtual ~INetworkDevice(void){}
-			virtual void VRelease(void) = 0;
-		};
-	}
+	class INetworkDevice
+	{
+	public:
+		INetworkDevice(void){};
+		virtual ~INetworkDevice(void){}
+		virtual void VRelease(void) = 0;
+	};
 }

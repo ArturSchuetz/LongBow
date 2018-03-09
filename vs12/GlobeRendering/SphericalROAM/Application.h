@@ -41,7 +41,7 @@ private:
 
 	float				m_moveSpeed;
 	FirstPersonCamera	*m_camera;
-	Core::Vector2<long> m_lastCursorPosition;
+	Vector2<long> m_lastCursorPosition;
 
 	ROAMSphere			m_Planet;
 };

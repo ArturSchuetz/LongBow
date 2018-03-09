@@ -2,25 +2,23 @@
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"
 
-namespace Bow {
-	namespace Core {
+namespace bow {
 
-		class MemoryManager
-		{
-		protected:
-			MemoryManager();
+	class MemoryManager
+	{
+	protected:
+		MemoryManager();
 
-		public:
-			~MemoryManager();
+	public:
+		~MemoryManager();
 
-			static MemoryManager& GetInstance();
+		static MemoryManager& GetInstance();
 
-			void Release();
+		void Release();
 
-		private:
-			MemoryManager(const MemoryManager&){}; // You shall not copy
-			MemoryManager& operator=(const MemoryManager&) { return *this; }
-		};
+	private:
+		MemoryManager(const MemoryManager&){}; // You shall not copy
+		MemoryManager& operator=(const MemoryManager&) { return *this; }
+	};
 
-	}
 }

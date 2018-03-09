@@ -130,12 +130,12 @@ void WaveletFace::SetEdges(std::shared_ptr<WaveletEdge<float>> e0, std::shared_p
 
 float WaveletFace::GetArea()
 {
-	Bow::Core::Vector3<float> b = (m_p0->GetVertex() + m_p1->GetVertex()) * 0.5;
-	Bow::Core::Vector3<float> h = m_p2->GetVertex() - b;
+	bow::Vector3<float> b = (m_p0->GetVertex() + m_p1->GetVertex()) * 0.5;
+	bow::Vector3<float> h = m_p2->GetVertex() - b;
 	return 0.5f * (b.Length() * h.Length());
 }
 
-Bow::Core::Vector3<float> WaveletFace::GetFaceNormal(float height)
+bow::Vector3<float> WaveletFace::GetFaceNormal(float height)
 {
 	return (m_p1->GetVertex(height) - m_p0->GetVertex(height)).CrossP(m_p2->GetVertex(height) - m_p0->GetVertex(height));
 }
@@ -174,9 +174,9 @@ bool WaveletFace::HasChildren()
 
 void WaveletFace::Analysis()
 {
-	Bow::Core::Matrix4x4<float> mat = CalculateAnalysisMatrix();
-	Bow::Core::Vector4<float> scalar(m_T0->m_Value, m_T1->m_Value, m_T2->m_Value, m_T3->m_Value);
-	Bow::Core::Vector4<float> wavelet = mat * scalar;
+	bow::Matrix4x4<float> mat = CalculateAnalysisMatrix();
+	bow::Vector4<float> scalar(m_T0->m_Value, m_T1->m_Value, m_T2->m_Value, m_T3->m_Value);
+	bow::Vector4<float> wavelet = mat * scalar;
 
 	m_T0->m_Value = wavelet.a[0];
 	m_T1->m_Value = wavelet.a[1];
@@ -277,9 +277,9 @@ void WaveletFace::Synthesis()
 	m_T3->m_e1->AddEdgeFace(m_T3);
 	m_T3->m_e2->AddEdgeFace(m_T3);
 
-	Bow::Core::Matrix4x4<float> mat = CalculateSynthesisMatrix();
-	Bow::Core::Vector4<float> wavelet(m_T0->m_Value, m_T1->m_Value, m_T2->m_Value, m_T3->m_Value);
-	Bow::Core::Vector4<float> scalar = mat * wavelet;
+	bow::Matrix4x4<float> mat = CalculateSynthesisMatrix();
+	bow::Vector4<float> wavelet(m_T0->m_Value, m_T1->m_Value, m_T2->m_Value, m_T3->m_Value);
+	bow::Vector4<float> scalar = mat * wavelet;
 
 	m_T0->m_Value = scalar[0];
 	m_T1->m_Value = scalar[1];
@@ -287,15 +287,15 @@ void WaveletFace::Synthesis()
 	m_T3->m_Value = scalar[3];
 }
 
-Bow::Core::Matrix4x4<float> WaveletFace::CalculateAnalysisMatrix()
+bow::Matrix4x4<float> WaveletFace::CalculateAnalysisMatrix()
 {
-	Bow::Core::Matrix4x4<float> mat = CalculateSynthesisMatrix();
+	bow::Matrix4x4<float> mat = CalculateSynthesisMatrix();
 	return mat.Inverse();
 }
 
-Bow::Core::Matrix4x4<float> WaveletFace::CalculateSynthesisMatrix()
+bow::Matrix4x4<float> WaveletFace::CalculateSynthesisMatrix()
 {
-	Bow::Core::Matrix4x4<float> mat;
+	bow::Matrix4x4<float> mat;
 	mat.SetIdentity();
 	mat *= 2.0;
 

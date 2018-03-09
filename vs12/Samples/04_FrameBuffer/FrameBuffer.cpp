@@ -1,14 +1,12 @@
 #include "BowRenderer.h"
-#include "BowBitmap.h"
+#include "BowResources.h"
 
 #include <cstdint>
 #include <windows.h>
 
 #include "resource.h"
 
-using namespace Bow;
-using namespace Core;
-using namespace Renderer;
+using namespace bow;
 
 std::string LoadShaderFromResouce(int name)
 {
@@ -21,7 +19,7 @@ std::string LoadShaderFromResouce(int name)
 int main()
 {
 	// Creating Render Device
-	RenderDevicePtr DeviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(API::OpenGL3x);
+	RenderDevicePtr DeviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(RenderDeviceAPI::OpenGL3x);
 	if (DeviceOGL == nullptr)
 	{
 		return 0;
@@ -107,13 +105,11 @@ int main()
 
 	Texture2DPtr texture;
 
-	Core::Bitmap bitmap;
-	bitmap.LoadFile("../Data/Textures/test.jpg");
-
-	if (bitmap.GetSizeInBytes() / (bitmap.GetHeight() * bitmap.GetWidth()) == 3)
-		texture = DeviceOGL->VCreateTexture2D(&bitmap, Renderer::TextureFormat::RedGreenBlue8);
+	ImagePtr image = ImageManager::GetInstance().Load("../Data/Textures/test.jpg");
+	if (image->GetSizeInBytes() / (image->GetHeight() * image->GetWidth()) == 3)
+		texture = DeviceOGL->VCreateTexture2D(image, TextureFormat::RedGreenBlue8);
 	else
-		texture = DeviceOGL->VCreateTexture2D(&bitmap, Renderer::TextureFormat::RedGreenBlueAlpha8);
+		texture = DeviceOGL->VCreateTexture2D(image, TextureFormat::RedGreenBlueAlpha8);
 
 	TextureSamplerPtr sampler = DeviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Repeat, TextureWrap::Repeat);
 

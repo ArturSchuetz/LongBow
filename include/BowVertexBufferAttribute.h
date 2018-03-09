@@ -9,72 +9,70 @@
 
 #include <unordered_map>
 
-namespace Bow {
-	namespace Renderer{
+namespace bow {
 
-		struct VertexBufferAttribute
+	struct VertexBufferAttribute
+	{
+	public:
+		VertexBufferAttribute(VertexBufferPtr vertexBuffer, ComponentDatatype componentDatatype, int numberOfComponents, bool normalize = false, int offsetInBytes = 0, int strideInBytes = 0)
+			: m_vertexBuffer(vertexBuffer), m_componentDatatype(componentDatatype), m_numberOfComponents(numberOfComponents), m_normalize(normalize), m_offsetInBytes(offsetInBytes)
 		{
-		public:
-			VertexBufferAttribute(VertexBufferPtr vertexBuffer, ComponentDatatype componentDatatype, int numberOfComponents, bool normalize = false, int offsetInBytes = 0, int strideInBytes = 0)
-				: m_vertexBuffer(vertexBuffer), m_componentDatatype(componentDatatype), m_numberOfComponents(numberOfComponents), m_normalize(normalize), m_offsetInBytes(offsetInBytes)
+			LOG_ASSERT(!((numberOfComponents <= 0)), "numberOfComponents must be greater than zero.");
+			LOG_ASSERT(!(offsetInBytes < 0), "offsetInBytes must be greater than or equal to zero.");
+			LOG_ASSERT(!(strideInBytes < 0), "stride must be greater than or equal to zero.");
+
+			if (strideInBytes == 0)
 			{
-				LOG_ASSERT(!((numberOfComponents <= 0)), "numberOfComponents must be greater than zero.");
-				LOG_ASSERT(!(offsetInBytes < 0), "offsetInBytes must be greater than or equal to zero.");
-				LOG_ASSERT(!(strideInBytes < 0), "stride must be greater than or equal to zero.");
-
-				if (strideInBytes == 0)
-				{
-					//
-					// Tightly packed
-					//
-					m_strideInBytes = numberOfComponents * VertexArraySizes::SizeOf(componentDatatype);
-				}
-				else
-				{
-					m_strideInBytes = strideInBytes;
-				}
+				//
+				// Tightly packed
+				//
+				m_strideInBytes = numberOfComponents * VertexArraySizes::SizeOf(componentDatatype);
 			}
-
-			VertexBufferPtr GetVertexBuffer(void)
+			else
 			{
-				return m_vertexBuffer;
+				m_strideInBytes = strideInBytes;
 			}
+		}
 
-			ComponentDatatype GetComponentDatatype(void)
-			{
-				return m_componentDatatype;
-			}
+		VertexBufferPtr GetVertexBuffer(void)
+		{
+			return m_vertexBuffer;
+		}
 
-			int GetNumberOfComponents(void)
-			{
-				return m_numberOfComponents;
-			}
+		ComponentDatatype GetComponentDatatype(void)
+		{
+			return m_componentDatatype;
+		}
 
-			bool Normalize(void)
-			{
-				return m_normalize;
-			}
+		int GetNumberOfComponents(void)
+		{
+			return m_numberOfComponents;
+		}
 
-			int GetOffsetInBytes(void)
-			{
-				return m_offsetInBytes;
-			}
+		bool Normalize(void)
+		{
+			return m_normalize;
+		}
 
-			int GetStrideInBytes(void)
-			{
-				return m_strideInBytes;
-			}
+		int GetOffsetInBytes(void)
+		{
+			return m_offsetInBytes;
+		}
 
-		private:
-			const VertexBufferPtr	m_vertexBuffer;
-			const ComponentDatatype	m_componentDatatype;
-			const int				m_numberOfComponents;
-			const bool				m_normalize;
-			const int				m_offsetInBytes;
-			int						m_strideInBytes;
-		};
+		int GetStrideInBytes(void)
+		{
+			return m_strideInBytes;
+		}
 
-		typedef std::shared_ptr<VertexBufferAttribute> VertexBufferAttributePtr;
-		typedef std::unordered_map<unsigned int, VertexBufferAttributePtr> VertexBufferAttributeMap;
-	}
+	private:
+		const VertexBufferPtr	m_vertexBuffer;
+		const ComponentDatatype	m_componentDatatype;
+		const int				m_numberOfComponents;
+		const bool				m_normalize;
+		const int				m_offsetInBytes;
+		int						m_strideInBytes;
+	};
+
+	typedef std::shared_ptr<VertexBufferAttribute> VertexBufferAttributePtr;
+	typedef std::unordered_map<unsigned int, VertexBufferAttributePtr> VertexBufferAttributeMap;
 }

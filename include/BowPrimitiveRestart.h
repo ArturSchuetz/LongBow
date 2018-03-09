@@ -2,21 +2,19 @@
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"
 
-namespace Bow {
-	namespace Renderer{
+namespace bow {
 
-		struct PrimitiveRestart
+	struct PrimitiveRestart
+	{
+	public:
+		PrimitiveRestart()
 		{
-		public:
-			PrimitiveRestart()
-			{
-				Enabled = false;
-				Index = 0;
-			}
+			Enabled = false;
+			Index = 0;
+		}
 
-			bool Enabled;
-			int Index;
-		};
+		bool Enabled;
+		int Index;
+	};
 
-	}
 }

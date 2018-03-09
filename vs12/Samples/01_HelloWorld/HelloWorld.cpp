@@ -3,14 +3,14 @@
 #include <cstdint>
 #include <windows.h>
 
-using namespace Bow;
-using namespace Core;
-using namespace Renderer;
+using namespace bow;
+
+
 
 int main()
 {
 	// Creating Render Device
-	RenderDevicePtr DeviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(API::OpenGL3x);
+	RenderDevicePtr DeviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(RenderDeviceAPI::OpenGL3x);
 	if (DeviceOGL == nullptr)
 	{
 		return -1;

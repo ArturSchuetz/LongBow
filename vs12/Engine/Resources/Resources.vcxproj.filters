@@ -33,6 +33,18 @@
     <Filter Include="Source Files\FileLoaders\MeshLoader">
       <UniqueIdentifier>{0c2cc53e-ec36-4357-be4e-2090b2899dbe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\FileLoaders\ImageLoader">
+      <UniqueIdentifier>{0f5854fa-6632-4596-a814-3724190091c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FileLoaders\PointCloudLoader">
+      <UniqueIdentifier>{91f42a0a-fbc5-4e33-a252-ecfa46850aea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FileLoaders\PointCloudLoader">
+      <UniqueIdentifier>{72fb2980-fafa-4383-ba3e-8675641c8a96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FileLoaders\ImageLoader">
+      <UniqueIdentifier>{8537a213-0610-41ac-8eed-2e51e620addc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\BowResourceManager.h">
@@ -44,17 +56,35 @@
     <ClInclude Include="..\..\..\include\BowResources.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\BowBitmap.h">
-      <Filter>Header Files\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\BowClipmap.h">
-      <Filter>Header Files\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\BowResource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\BowMeshManager.h">
       <Filter>Header Files\ResourceManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowPointCloudManager.h">
+      <Filter>Header Files\ResourceManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowImageManager.h">
+      <Filter>Header Files\ResourceManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Engine\Resources\BowModelLoader_obj.h">
+      <Filter>Header Files\FileLoaders\MeshLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Engine\Resources\BowImageLoader_bmp.h">
+      <Filter>Header Files\FileLoaders\ImageLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Engine\Resources\BowImageLoader_png.h">
+      <Filter>Header Files\FileLoaders\ImageLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Engine\Resources\BowPointCloudLoader.h">
+      <Filter>Header Files\FileLoaders\PointCloudLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowImage.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowMaterial.h">
+      <Filter>Header Files\Resources</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\BowMesh.h">
       <Filter>Header Files\Resources</Filter>
@@ -62,22 +92,13 @@
     <ClInclude Include="..\..\..\include\BowSubMesh.h">
       <Filter>Header Files\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\BowTexture.h">
+    <ClInclude Include="..\..\..\include\BowPointCloud.h">
       <Filter>Header Files\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\BowModelLoader_obj.h">
-      <Filter>Header Files\FileLoaders\MeshLoader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\Engine\Resources\BowResourceManager.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\Resources\BowBitmap.cpp">
-      <Filter>Source Files\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\Resources\BowClipmap.cpp">
-      <Filter>Source Files\Resources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\Engine\Resources\BowResource.cpp">
       <Filter>Source Files</Filter>
@@ -85,17 +106,38 @@
     <ClCompile Include="..\..\..\src\Engine\Resources\BowMeshManager.cpp">
       <Filter>Source Files\ResourceManagers</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowModelLoader_obj.cpp">
+      <Filter>Source Files\FileLoaders\MeshLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowPointCloudManager.cpp">
+      <Filter>Source Files\ResourceManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowImageManager.cpp">
+      <Filter>Source Files\ResourceManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowPointCloudLoader.cpp">
+      <Filter>Source Files\FileLoaders\PointCloudLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowImageLoader_bmp.cpp">
+      <Filter>Source Files\FileLoaders\ImageLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowImageLoader_png.cpp">
+      <Filter>Source Files\FileLoaders\ImageLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowImage.cpp">
+      <Filter>Source Files\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowMaterial.cpp">
+      <Filter>Source Files\Resources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\Engine\Resources\BowMesh.cpp">
+      <Filter>Source Files\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowPointCloud.cpp">
       <Filter>Source Files\Resources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\Engine\Resources\BowSubMesh.cpp">
       <Filter>Source Files\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\Resources\BowTexture.cpp">
-      <Filter>Source Files\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\Resources\BowModelLoader_obj.cpp">
-      <Filter>Source Files\FileLoaders\MeshLoader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -4,21 +4,19 @@
 
 #include "BowStencilTestFace.h"
 
-namespace Bow {
-	namespace Renderer{
+namespace bow {
 
-		struct StencilTest
+	struct StencilTest
+	{
+	public:
+		StencilTest()
 		{
-		public:
-			StencilTest()
-			{
-				Enabled = false;
-			}
+			Enabled = false;
+		}
 
-			bool Enabled;
-			StencilTestFace FrontFace;
-			StencilTestFace BackFace;
-		};
+		bool Enabled;
+		StencilTestFace FrontFace;
+		StencilTestFace BackFace;
+	};
 
-	}
 }

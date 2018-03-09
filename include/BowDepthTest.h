@@ -2,33 +2,31 @@
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"
 
-namespace Bow {
-	namespace Renderer{
+namespace bow {
 
-		enum class DepthTestFunction : char
+	enum class DepthTestFunction : char
+	{
+		Never,
+		Less,
+		Equal,
+		LessThanOrEqual,
+		Greater,
+		NotEqual,
+		GreaterThanOrEqual,
+		Always
+	};
+
+	struct DepthTest
+	{
+	public:
+		DepthTest()
 		{
-			Never,
-			Less,
-			Equal,
-			LessThanOrEqual,
-			Greater,
-			NotEqual,
-			GreaterThanOrEqual,
-			Always
-		};
+			Enabled = true;
+			Function = DepthTestFunction::Less;
+		}
 
-		struct DepthTest
-		{
-		public:
-			DepthTest()
-			{
-				Enabled = true;
-				Function = DepthTestFunction::Less;
-			}
+		bool Enabled;
+		DepthTestFunction Function;
+	};
 
-			bool Enabled;
-			DepthTestFunction Function;
-		};
-
-	}
 }

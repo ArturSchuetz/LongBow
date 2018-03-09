@@ -4,22 +4,20 @@
 
 #include "BowVector3.h"
 
-namespace Bow {
-	namespace Core {
+namespace bow {
 
-		template <typename T> class Plane
+	template <typename T> class Plane
+	{
+	public:
+		struct
 		{
-		public:
-			struct
-			{
-				Vector3<T>	Point, Normal;
-				T			Distance;
-			};
-
-			Plane()
-			{
-			}
+			Vector3<T>	Point, Normal;
+			T			Distance;
 		};
-		/*----------------------------------------------------------------*/
-	}
+
+		Plane()
+		{
+		}
+	};
+	/*----------------------------------------------------------------*/
 }

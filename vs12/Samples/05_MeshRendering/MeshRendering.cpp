@@ -1,5 +1,5 @@
 #include "BowRenderer.h"
-#include "BowBitmap.h"
+#include "BowResources.h"
 
 #include <cstdint>
 #include <windows.h>
@@ -9,9 +9,7 @@
 
 #include "resource.h"
 
-using namespace Bow;
-using namespace Core;
-using namespace Renderer;
+using namespace bow;
 
 std::string LoadShaderFromResouce(int name)
 {
@@ -24,7 +22,7 @@ std::string LoadShaderFromResouce(int name)
 int main()
 {
 	// Creating Render Device
-	RenderDevicePtr DeviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(API::OpenGL3x);
+	RenderDevicePtr DeviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(RenderDeviceAPI::OpenGL3x);
 	if (DeviceOGL == nullptr)
 	{
 		return 0;
@@ -88,13 +86,11 @@ int main()
 
 	Texture2DPtr texture;
 
-	Core::Bitmap bitmap;
-	bitmap.LoadFile("../Data/Textures/test.jpg");
-
-	if (bitmap.GetSizeInBytes() / (bitmap.GetHeight() * bitmap.GetWidth()) == 3)
-		texture = DeviceOGL->VCreateTexture2D(&bitmap, Renderer::TextureFormat::RedGreenBlue8);
+	ImagePtr image = ImageManager::GetInstance().Load("../Data/Textures/test.jpg");
+	if (image->GetSizeInBytes() / (image->GetHeight() * image->GetWidth()) == 3)
+		texture = DeviceOGL->VCreateTexture2D(image, TextureFormat::RedGreenBlue8);
 	else
-		texture = DeviceOGL->VCreateTexture2D(&bitmap, Renderer::TextureFormat::RedGreenBlueAlpha8);
+		texture = DeviceOGL->VCreateTexture2D(image, TextureFormat::RedGreenBlueAlpha8);
 
 	TextureSamplerPtr sampler = DeviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Clamp, TextureWrap::Clamp);
 
@@ -117,7 +113,7 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Gameloop
 
-	Core::Matrix3D<float> worldMat;
+	Matrix3D<float> worldMat;
 	worldMat.Translate(Vector3<float>(0.0f, 0.0f, 0.0f));
 
 	BasicTimer timer;
@@ -131,7 +127,7 @@ int main()
 
 		ContextOGL->VSetViewport(Viewport(0, 0, WindowOGL->VGetWidth(), WindowOGL->VGetHeight()));
 		camera.SetResolution(WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
-		ShaderProgram->VSetUniform("u_ModelViewProj", (Core::Matrix4x4<float>)camera.CalculateWorldViewProjection(worldMat));
+		ShaderProgram->VSetUniform("u_ModelViewProj", (Matrix4x4<float>)camera.CalculateWorldViewProjection(worldMat));
 
 		ContextOGL->VDraw(PrimitiveType::Triangles, 0, 3, VertexArray, ShaderProgram, renderState);
 

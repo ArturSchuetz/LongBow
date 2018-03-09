@@ -3,7 +3,7 @@
 #include "BowResourcesPredeclares.h"
 #include "BowBitmap.h"
 
-namespace Bow {
+namespace bow {
 	namespace Core {
 
 		class Clipmap

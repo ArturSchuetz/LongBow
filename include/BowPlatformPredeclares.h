@@ -1,9 +1,8 @@
 #pragma once
 
-namespace Bow {
-	namespace Platform {
+namespace bow {
 		
-		class FileReader;
-		class FileWriter;
-	}
+	class FileReader;
+	class FileWriter;
 }
+

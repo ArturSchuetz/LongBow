@@ -12,9 +12,9 @@
 
 #include "resource.h"
 
-using namespace Bow;
-using namespace Core;
-using namespace Renderer;
+using namespace bow;
+
+
 
 std::string LoadShaderFromResouce(int name)
 {
@@ -27,7 +27,7 @@ std::string LoadShaderFromResouce(int name)
 int main()
 {
 	// Creating Render Device
-	RenderDevicePtr DeviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(API::OpenGL3x);
+	RenderDevicePtr DeviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(RenderDeviceAPI::OpenGL3x);
 	if (DeviceOGL == nullptr)
 	{
 		return 0;
@@ -60,9 +60,9 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Camera
 
-	Core::Vector3<float> Position = Core::Vector3<float>(0.0f, 200.0f, 0.0f);
-	Core::Vector3<float> LookAt = Core::Vector3<float>(0.0f, 0.0f, 0.0f);
-	Core::Vector3<float> UpVector = Core::Vector3<float>(0.0f, 1.0f, 0.0f);
+	Vector3<float> Position = Vector3<float>(0.0f, 200.0f, 0.0f);
+	Vector3<float> LookAt = Vector3<float>(0.0f, 0.0f, 0.0f);
+	Vector3<float> UpVector = Vector3<float>(0.0f, 1.0f, 0.0f);
 
 	FirstPersonCamera camera = FirstPersonCamera(Position, LookAt, UpVector, WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
 	camera.SetClippingPlanes(0.1, 10000.0);
@@ -70,13 +70,13 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Input
 
-	Input::KeyboardPtr keyboard = Input::InputDeviceManager::GetInstance().CreateKeyboardObject(WindowOGL);
+	KeyboardPtr keyboard = InputDeviceManager::GetInstance().CreateKeyboardObject(WindowOGL);
 	if (keyboard == nullptr)
 	{
 		return false;
 	}
 
-	Input::MousePtr mouse = Input::InputDeviceManager::GetInstance().CreateMouseObject(WindowOGL);
+	MousePtr mouse = InputDeviceManager::GetInstance().CreateMouseObject(WindowOGL);
 	if (mouse == nullptr)
 	{
 		return false;
@@ -91,12 +91,12 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Gameloop
 
-	Core::Matrix3D<float> worldMat;
+	Matrix3D<float> worldMat;
 	worldMat.Translate(Vector3<float>(0.0f, 0.0f, 2000.0f));
 
 	BasicTimer timer;
 	float m_moveSpeed;
-	Core::Vector2<long> lastCursorPosition;
+	Vector2<long> lastCursorPosition;
 
 	while (!WindowOGL->VShouldClose())
 	{
@@ -107,7 +107,7 @@ int main()
 
 		ContextOGL->VSetViewport(Viewport(0, 0, WindowOGL->VGetWidth(), WindowOGL->VGetHeight()));
 		camera.SetResolution(WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
-		ShaderProgram->VSetUniform("u_ModelViewProj", (Core::Matrix4x4<float>)camera.CalculateWorldViewProjection(worldMat));
+		ShaderProgram->VSetUniform("u_ModelViewProj", (Matrix4x4<float>)camera.CalculateWorldViewProjection(worldMat));
 
 		ContextOGL->VDraw(PrimitiveType::Triangles, 0, meshAttr.Indices->Size(), VertexArray, ShaderProgram, renderState);
 
@@ -123,9 +123,9 @@ int main()
 
 		m_moveSpeed = 10000.0;
 
-		if (keyboard->VIsPressed(Input::Key::K_W))
+		if (keyboard->VIsPressed(Key::K_W))
 		{
-			if (keyboard->VIsPressed(Input::Key::K_LSHIFT))
+			if (keyboard->VIsPressed(Key::K_LSHIFT))
 			{
 				camera.MoveForward(m_moveSpeed * (float)timer.GetDelta() * 2);
 			}
@@ -135,35 +135,35 @@ int main()
 			}
 		}
 
-		if (keyboard->VIsPressed(Input::Key::K_S))
+		if (keyboard->VIsPressed(Key::K_S))
 		{
 			camera.MoveBackward(m_moveSpeed * (float)timer.GetDelta());
 		}
 
-		if (keyboard->VIsPressed(Input::Key::K_D))
+		if (keyboard->VIsPressed(Key::K_D))
 		{
 			camera.MoveRight(m_moveSpeed * (float)timer.GetDelta());
 		}
 
-		if (keyboard->VIsPressed(Input::Key::K_A))
+		if (keyboard->VIsPressed(Key::K_A))
 		{
 			camera.MoveLeft(m_moveSpeed * (float)timer.GetDelta());
 		}
 
-		if (keyboard->VIsPressed(Input::Key::K_SPACE))
+		if (keyboard->VIsPressed(Key::K_SPACE))
 		{
 			camera.MoveUp(m_moveSpeed * (float)timer.GetDelta());
 		}
 
-		if (keyboard->VIsPressed(Input::Key::K_LCONTROL))
+		if (keyboard->VIsPressed(Key::K_LCONTROL))
 		{
 			camera.MoveDown(m_moveSpeed * (float)timer.GetDelta());
 		}
 
-		if (mouse->VIsPressed(Input::MouseButton::MOFS_BUTTON1))
+		if (mouse->VIsPressed(MouseButton::MOFS_BUTTON1))
 		{
 			WindowOGL->VHideCursor();
-			Core::Vector3<long> moveVec = mouse->VGetRelativePosition();
+			Vector3<long> moveVec = mouse->VGetRelativePosition();
 			camera.rotate((float)moveVec.x, (float)moveVec.y);
 			mouse->VSetCursorPosition(lastCursorPosition.x, lastCursorPosition.y);
 		}

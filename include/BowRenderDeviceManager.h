@@ -2,35 +2,33 @@
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"
 
-namespace Bow {
-	namespace Renderer {
+namespace bow {
 
-		enum class API : char
-		{
-			OpenGL3x,
-			Vulkan
-		};
+	enum class RenderDeviceAPI : char
+	{
+		OpenGL3x,
+		Vulkan
+	};
 
-		//! \brief RenderDeviceManager is a singleton and creates devices. 
-		class RenderDeviceManager
-		{
-		public:
-			~RenderDeviceManager(void);
+	//! \brief RenderDeviceManager is a singleton and creates devices. 
+	class RenderDeviceManager
+	{
+	public:
+		~RenderDeviceManager(void);
 
-			static RenderDeviceManager& GetInstance();
+		static RenderDeviceManager& GetInstance();
 
-			//! \brief Create an Device with an specific API
-			//! \param api The API which should be used.
-			//! \return shared_pointer of RenderDevice
-			RenderDevicePtr GetOrCreateDevice(API api);
-			void ReleaseDevice(API api);
+		//! \brief Create an Device with an specific API
+		//! \param api The API which should be used.
+		//! \return shared_pointer of RenderDevice
+		RenderDevicePtr GetOrCreateDevice(RenderDeviceAPI api);
+		void ReleaseDevice(RenderDeviceAPI api);
 
-		protected:
-			RenderDeviceManager(){}
+	protected:
+		RenderDeviceManager(){}
 
-		private:
-			RenderDeviceManager(const RenderDeviceManager&){}; //!< You shall not copy
-			RenderDeviceManager& operator=(const RenderDeviceManager&) { return *this; }
-		};
-	}
+	private:
+		RenderDeviceManager(const RenderDeviceManager&){}; //!< You shall not copy
+		RenderDeviceManager& operator=(const RenderDeviceManager&) { return *this; }
+	};
 }

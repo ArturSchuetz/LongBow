@@ -2,15 +2,13 @@
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"
 
-namespace Bow {
-	namespace Renderer{
+namespace bow {
 
-		class IFragmentOutputs
-		{
-		public:
-			virtual ~IFragmentOutputs(){}
-			virtual int operator[](std::string index) const = 0;
-		};
+	class IFragmentOutputs
+	{
+	public:
+		virtual ~IFragmentOutputs(){}
+		virtual int operator[](std::string index) const = 0;
+	};
 
-	}
 }

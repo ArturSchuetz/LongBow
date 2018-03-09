@@ -91,11 +91,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\dependencies\FreeImage\$(Platform);</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\src\Engine\ThirdParty</AdditionalIncludeDirectories>
     </ClCompile>
     <Lib>
-      <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);..\..\..\dependencies\FreeImage\$(Platform);</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Core_d.lib;FreeImage.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);</AdditionalLibraryDirectories>
+      <AdditionalDependencies>RenderDevice_d.lib;CoreSystems_d.lib;ThirdParty_d.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -117,15 +117,15 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\dependencies\FreeImage\$(Platform);</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\src\Engine\ThirdParty</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);..\..\..\dependencies\FreeImage\$(Platform);</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Core.lib;FreeImage.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);</AdditionalLibraryDirectories>
+      <AdditionalDependencies>RenderDevice.lib;CoreSystems.lib;ThirdParty.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -147,28 +147,38 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\BowBitmap.h" />
-    <ClInclude Include="..\..\..\include\BowClipmap.h" />
+    <ClInclude Include="..\..\..\include\BowImageManager.h" />
+    <ClInclude Include="..\..\..\include\BowMaterial.h" />
     <ClInclude Include="..\..\..\include\BowMesh.h" />
     <ClInclude Include="..\..\..\include\BowMeshManager.h" />
-    <ClInclude Include="..\..\..\include\BowModelLoader_obj.h" />
+    <ClInclude Include="..\..\..\include\BowPointCloud.h" />
+    <ClInclude Include="..\..\..\include\BowPointCloudManager.h" />
     <ClInclude Include="..\..\..\include\BowResource.h" />
     <ClInclude Include="..\..\..\include\BowResourceManager.h" />
     <ClInclude Include="..\..\..\include\BowResources.h" />
     <ClInclude Include="..\..\..\include\BowResourcesPredeclares.h" />
     <ClInclude Include="..\..\..\include\BowSubMesh.h" />
-    <ClInclude Include="..\..\..\include\BowTexture.h" />
+    <ClInclude Include="..\..\..\include\BowImage.h" />
+    <ClInclude Include="..\..\..\src\Engine\Resources\BowImageLoader_bmp.h" />
+    <ClInclude Include="..\..\..\src\Engine\Resources\BowImageLoader_png.h" />
+    <ClInclude Include="..\..\..\src\Engine\Resources\BowModelLoader_obj.h" />
+    <ClInclude Include="..\..\..\src\Engine\Resources\BowPointCloudLoader.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\Engine\Resources\BowBitmap.cpp" />
-    <ClCompile Include="..\..\..\src\Engine\Resources\BowClipmap.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowImageLoader_bmp.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowImageLoader_png.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowImageManager.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowMaterial.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Resources\BowMesh.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Resources\BowMeshManager.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Resources\BowModelLoader_obj.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowPointCloud.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowPointCloudLoader.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowPointCloudManager.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Resources\BowResource.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Resources\BowResourceManager.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Resources\BowSubMesh.cpp" />
-    <ClCompile Include="..\..\..\src\Engine\Resources\BowTexture.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowImage.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

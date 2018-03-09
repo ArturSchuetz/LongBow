@@ -2,24 +2,21 @@
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"
 
-namespace Bow
+namespace bow
 {
-	namespace Core
+	class ICleanable
 	{
-		class ICleanable
-		{
-		public:
-			virtual ~ICleanable(){}
+	public:
+		virtual ~ICleanable(){}
 
-			virtual void Clean() = 0;
-		};
+		virtual void Clean() = 0;
+	};
 
-		class ICleanableObserver
-		{
-		public:
-			virtual ~ICleanableObserver(){}
+	class ICleanableObserver
+	{
+	public:
+		virtual ~ICleanableObserver(){}
 
-			virtual void NotifyDirty(ICleanable* obj) = 0;
-		};
-	}
+		virtual void NotifyDirty(ICleanable* obj) = 0;
+	};
 }

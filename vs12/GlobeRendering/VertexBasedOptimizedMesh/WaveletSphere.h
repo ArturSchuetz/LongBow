@@ -15,8 +15,8 @@ public:
 	WaveletSphere();
 	~WaveletSphere();
 
-	void Init(Bow::Renderer::ShaderProgramPtr shaderProgram, const char* heighMapPath);
-	void Render(Bow::Renderer::RenderContextPtr renderContext, Bow::Renderer::Camera* camera, bool renderFilled = true);
+	void Init(bow::ShaderProgramPtr shaderProgram, const char* heighMapPath);
+	void Render(bow::RenderContextPtr renderContext, bow::Camera* camera, bool renderFilled = true);
 
 	void Update(float deltaTime);
 
@@ -24,7 +24,7 @@ private:
 	void ComputeFromIcosahedron(int numberOfSubdivisions);
 
 	void Subdivide(WaveletTriangle* triangle, int level);
-	void RecursRender(WaveletTriangle* triangle, Bow::Core::IndicesUnsignedInt *indices);
+	void RecursRender(WaveletTriangle* triangle, bow::IndicesUnsignedInt *indices);
 
 	void RecursCalculateScalar(WaveletTriangle* triangle, int forceLevel, float threshold);
 	void RecursCalculateWavelet(WaveletTriangle* triangle);
@@ -33,7 +33,7 @@ private:
 
 	std::vector<WaveletTriangle>			m_RootTriangles;
 
-	std::vector<Bow::Core::Vector3<float>>	m_Positions;
+	std::vector<bow::Vector3<float>>	m_Positions;
 	std::vector<float>						m_Values;
 
 	unsigned char					*m_HeightMap;
@@ -45,9 +45,9 @@ private:
 	// Rendering stuff (Not important for Algorithm)
 	bool							m_isDirty; 
 
-	Bow::Renderer::ShaderProgramPtr m_shaderProgram;
-	Bow::Renderer::VertexArrayPtr	m_VertexArray;
+	bow::ShaderProgramPtr m_shaderProgram;
+	bow::VertexArrayPtr	m_VertexArray;
 
-	Bow::Core::Matrix3D<float>		m_objectWorldMat;
-	Bow::Renderer::RenderState		m_renderState;
+	bow::Matrix3D<float>		m_objectWorldMat;
+	bow::RenderState		m_renderState;
 };

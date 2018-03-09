@@ -2,29 +2,27 @@
 #include "BowPrerequisites.h"
 #include "BowNetworkPredeclares.h"
 
-namespace Bow {
-	namespace Network {
+namespace bow {
 
-		//! \brief RenderDeviceManager is a singleton and creates devices. 
-		class NetworkDeviceManager
-		{
-		public:
-			~NetworkDeviceManager(void);
+	//! \brief RenderDeviceManager is a singleton and creates devices. 
+	class NetworkDeviceManager
+	{
+	public:
+		~NetworkDeviceManager(void);
 
-			static NetworkDeviceManager& GetInstance();
+		static NetworkDeviceManager& GetInstance();
 
-			//! \brief Create an Device with an specific API
-			//! \param api The API which should be used.
-			//! \return shared_pointer of RenderDevice
-			NetworkDevicePtr GetOrCreateDevice();
-			void ReleaseDevice();
+		//! \brief Create an Device with an specific API
+		//! \param api The API which should be used.
+		//! \return shared_pointer of RenderDevice
+		NetworkDevicePtr GetOrCreateDevice();
+		void ReleaseDevice();
 
-		protected:
-			NetworkDeviceManager(){}
+	protected:
+		NetworkDeviceManager(){}
 
-		private:
-			NetworkDeviceManager(const NetworkDeviceManager&){}; //!< You shall not copy
-			NetworkDeviceManager& operator=(const NetworkDeviceManager&) { return *this; }
-		};
-	}
+	private:
+		NetworkDeviceManager(const NetworkDeviceManager&){}; //!< You shall not copy
+		NetworkDeviceManager& operator=(const NetworkDeviceManager&) { return *this; }
+	};
 }

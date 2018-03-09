@@ -1,19 +1,18 @@
-#include "BowResources.h"
 #include "BowSubMesh.h"
 
-namespace Bow {
-	namespace Core {
+#include "BowResources.h"
 
-		SubMesh::SubMesh()
-			: m_parent(0)
-		{
-
-		}
-
-		SubMesh::~SubMesh()
-		{
-
-		}
+namespace bow {
+	
+	SubMesh::SubMesh()
+		: m_parent(0)
+	{
 
 	}
+
+	SubMesh::~SubMesh()
+	{
+
+	}
+
 }

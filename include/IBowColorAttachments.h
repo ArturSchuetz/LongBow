@@ -2,17 +2,15 @@
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"
 
-namespace Bow {
-	namespace Renderer{
+namespace bow {
 
-		class IColorAttachments
-		{
-		public:
-			virtual ~IColorAttachments(){}
+	class IColorAttachments
+	{
+	public:
+		virtual ~IColorAttachments(){}
 
-			virtual Texture2DPtr	VGetAttachment(unsigned int index) const = 0;
-			virtual void			VSetAttachment(unsigned int index, Texture2DPtr texture) = 0;
-		};
+		virtual Texture2DPtr	VGetAttachment(unsigned int index) const = 0;
+		virtual void			VSetAttachment(unsigned int index, Texture2DPtr texture) = 0;
+	};
 
-	}
 }

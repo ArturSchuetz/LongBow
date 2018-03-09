@@ -5,120 +5,115 @@
 #include "BowMath.h"
 #include "BowResource.h"
 
-namespace Bow {
-	namespace Core {
+namespace bow {
 
-		// ---------------------------------------------------------------------------
-		/** @brief A mesh represents geometry without any material.
+	// ---------------------------------------------------------------------------
+	/** @brief A mesh represents geometry without any material.
+	*/
+	class Mesh : public Resource
+	{
+		friend class SubMesh;
+		friend class ModelLoader_OBJ;
+
+	public:
+		Mesh(ResourceManager* creator, const std::string& name, ResourceHandle handle);
+		~Mesh();
+
+		MeshAttribute CreateAttribute(const std::string& positionAttribute, const std::string& normalAttribute, const std::string& textureCoordinateAttribute);
+
+		/** Creates a new SubMesh.
+		@remarks
+		Method for manually creating geometry for the mesh.
+		Note - use with extreme caution - you must be sure that
+		you have set up the geometry properly.
 		*/
-		class Mesh : public Resource
-		{
-			friend class SubMesh;
-			friend class ModelLoader_OBJ;
+		SubMesh* CreateSubMesh(void);
 
-		public:
-			Mesh(ResourceManager* creator, const std::string& name, ResourceHandle handle);
-			~Mesh();
+		/** Creates a new SubMesh and gives it a name
+		*/
+		SubMesh* CreateSubMesh(const std::string& name);
 
-			MeshAttribute CreateAttribute(const std::string& positionAttribute, const std::string& normalAttribute, const std::string& textureCoordinateAttribute);
+		/** Gives a name to a SubMesh
+		*/
+		void NameSubMesh(const std::string& name, unsigned short index);
 
-			/** Creates a new SubMesh.
-			@remarks
-			Method for manually creating geometry for the mesh.
-			Note - use with extreme caution - you must be sure that
-			you have set up the geometry properly.
-			*/
-			SubMesh* CreateSubMesh(void);
+		/** Removes a name from a SubMesh
+		*/
+		void UnnameSubMesh(const std::string& name);
 
-			/** Creates a new SubMesh and gives it a name
-			*/
-			SubMesh* CreateSubMesh(const std::string& name);
+		/** Gets the index of a submesh with a given name.
+		@remarks
+		Useful if you identify the SubMeshes by name (using nameSubMesh)
+		but wish to have faster repeat access.
+		*/
+		unsigned short GetSubMeshIndex(const std::string& name) const;
 
-			/** Gives a name to a SubMesh
-			*/
-			void NameSubMesh(const std::string& name, unsigned short index);
+		/** Gets the number of sub meshes which comprise this mesh.
+		*  @deprecated use getSubMeshes() instead
+		*/
+		size_t GetNumSubMeshes(void) const {
+			return m_subMeshList.size();
+		}
 
-			/** Removes a name from a SubMesh
-			*/
-			void UnnameSubMesh(const std::string& name);
+		/** Gets a pointer to the submesh indicated by the index.
+		*  @deprecated use getSubMeshes() instead
+		*/
+		SubMesh* GetSubMesh(size_t index) const {
+			return m_subMeshList[index];
+		}
 
-			/** Gets the index of a submesh with a given name.
-			@remarks
-			Useful if you identify the SubMeshes by name (using nameSubMesh)
-			but wish to have faster repeat access.
-			*/
-			unsigned short GetSubMeshIndex(const std::string& name) const;
+		/** Gets a SubMesh by name
+		*/
+		SubMesh* GetSubMesh(const std::string& name) const;
 
-			/** Gets the number of sub meshes which comprise this mesh.
-			*  @deprecated use getSubMeshes() instead
-			*/
-			size_t GetNumSubMeshes(void) const {
-				return m_subMeshList.size();
-			}
+		/** Destroy a SubMesh with the given index.
+		@note
+		This will invalidate the contents of any existing Entity, or
+		any other object that is referring to the SubMesh list. Entity will
+		detect this and reinitialise, but it is still a disruptive action.
+		*/
+		void DestroySubMesh(unsigned short index);
 
-			/** Gets a pointer to the submesh indicated by the index.
-			*  @deprecated use getSubMeshes() instead
-			*/
-			SubMesh* GetSubMesh(size_t index) const {
-				return m_subMeshList[index];
-			}
+		/// Gets the available submeshes
+		const std::vector<SubMesh*>& GetSubMeshes() const {
+			return m_subMeshList;
+		}
 
-			/** Gets a SubMesh by name
-			*/
-			SubMesh* GetSubMesh(const std::string& name) const;
+	private:
+		/** Loads the mesh from disk.  This call only performs IO, it
+			does not parse the bytestream or check for any errors therein.
+			It also does not set up submeshes, etc.  You have to call load()
+			to do that.
+		*/
+		void VPrepareImpl(void);
 
-			/** Destroy a SubMesh with the given index.
-			@note
-			This will invalidate the contents of any existing Entity, or
-			any other object that is referring to the SubMesh list. Entity will
-			detect this and reinitialise, but it is still a disruptive action.
-			*/
-			void DestroySubMesh(unsigned short index);
+		/** Destroys data cached by prepareImpl.
+		*/
+		void VUnprepareImpl(void);
 
-			/// Gets the available submeshes
-			const std::vector<SubMesh*>& GetSubMeshes() const {
-				return m_subMeshList;
-			}
+		/// @copydoc Resource::VLoadImpl
+		void VLoadImpl(void);
 
-		private:
-			/** Loads the mesh from disk.  This call only performs IO, it
-				does not parse the bytestream or check for any errors therein.
-				It also does not set up submeshes, etc.  You have to call load()
-				to do that.
-			*/
-			void VPrepareImpl(void);
+		/// @copydoc Resource::VPostLoadImpl
+		void VPostLoadImpl(void);
 
-			/** Destroys data cached by prepareImpl.
-			*/
-			void VUnprepareImpl(void);
+		/// @copydoc Resource::VUnloadImpl
+		void VUnloadImpl(void);
 
-			/// @copydoc Resource::VLoadImpl
-			void VLoadImpl(void);
+		/** A list of submeshes which make up this mesh.
+		Each mesh is made up of 1 or more submeshes, which
+		are each based on a single material and can have their
+		own vertex data (they may not - they can share vertex data
+		from the Mesh, depending on preference).
+		*/
+		std::vector<SubMesh*> m_subMeshList;
+		std::map<std::string, unsigned short> m_subMeshNameMap;
 
-			/// @copydoc Resource::VPostLoadImpl
-			void VPostLoadImpl(void);
+		char* m_dataFromDisk;
 
-			/// @copydoc Resource::VUnloadImpl
-			void VUnloadImpl(void);
-
-			/// @copydoc Resource::VCalculateSize
-			size_t VCalculateSize(void) const;
-
-			/** A list of submeshes which make up this mesh.
-			Each mesh is made up of 1 or more submeshes, which
-			are each based on a single material and can have their
-			own vertex data (they may not - they can share vertex data
-			from the Mesh, depending on preference).
-			*/
-			std::vector<SubMesh*> m_subMeshList;
-			std::map<std::string, unsigned short> m_subMeshNameMap;
-
-			char* m_dataFromDisk;
-
-			std::vector<unsigned int> m_indices;
-			std::vector<Vector3<float>> m_vertices;
-			std::vector<Vector3<float>> m_normals;
-			std::vector<Vector2<float>> m_texCoords;
-		};
-	}
+		std::vector<unsigned int> m_indices;
+		std::vector<Vector3<float>> m_vertices;
+		std::vector<Vector3<float>> m_normals;
+		std::vector<Vector2<float>> m_texCoords;
+	};
 }

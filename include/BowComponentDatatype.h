@@ -2,19 +2,17 @@
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"
 
-namespace Bow {
-	namespace Renderer{
+namespace bow {
 
-		enum class ComponentDatatype : char
-		{
-			Byte,
-			UnsignedByte,
-			Short,
-			UnsignedShort,
-			Int,
-			UnsignedInt,
-			Float,
-		};
+	enum class ComponentDatatype : char
+	{
+		Byte,
+		UnsignedByte,
+		Short,
+		UnsignedShort,
+		Int,
+		UnsignedInt,
+		Float,
+	};
 
-	}
 }
