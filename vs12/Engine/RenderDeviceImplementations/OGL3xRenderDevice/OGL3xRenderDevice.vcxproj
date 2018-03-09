@@ -1,0 +1,227 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{CD04AAD2-418F-4F66-9F61-9766DF21B1B9}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>OGL3xRenderDevice</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\..\..\bin\$(Platform)\</OutDir>
+    <IntDir>..\..\..\..\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <TargetName>$(ProjectName)_d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IntDir>..\..\..\..\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <TargetName>$(ProjectName)_d</TargetName>
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\..\..\bin\$(Platform)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\..\..\bin\$(Platform)\</OutDir>
+    <IntDir>..\..\..\..\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IntDir>..\..\..\..\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\..\..\bin\$(Platform)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;OGL3xRENDERDEVICE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\..\..\include;..\..\..\..\dependencies\glew\include;..\..\..\..\dependencies\glfw\$(Platform)\include</AdditionalIncludeDirectories>
+      <TreatWarningAsError>false</TreatWarningAsError>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\..\..\..\lib\$(Platform);..\..\..\..\dependencies\glew\lib\Release\$(Platform);..\..\..\..\dependencies\glfw\$(Platform)\lib-vc2015;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>CoreSystems_d.lib;RenderDevice_d.lib;glfw3.lib;glew32.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;OGL3xRENDERDEVICE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\..\..\include;..\..\..\..\dependencies\glew\include;..\..\..\..\dependencies\glfw\$(Platform)\include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\..\..\..\lib\$(Platform);..\..\..\..\dependencies\glew\lib\Release\$(Platform);..\..\..\..\dependencies\glfw\$(Platform)\lib-vc2015;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Core_d.lib;Renderer_d.lib;glfw3.lib;glew32.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;OGL3xRENDERDEVICE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\..\..\include;..\..\..\..\dependencies\glew\include;..\..\..\..\dependencies\glfw\$(Platform)\include</AdditionalIncludeDirectories>
+      <TreatWarningAsError>false</TreatWarningAsError>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>..\..\..\..\lib\$(Platform);..\..\..\..\dependencies\glew\lib\Release\$(Platform);..\..\..\..\dependencies\glfw\$(Platform)\lib-vc2015;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>CoreSystems.lib;RenderDevice.lib;glfw3.lib;glew32.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;OGL3xRENDERDEVICE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\..\..\include;..\..\..\..\dependencies\glew\include;..\..\..\..\dependencies\glfw\$(Platform)\include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>..\..\..\..\lib\$(Platform);..\..\..\..\dependencies\glew\lib\Release\$(Platform);..\..\..\..\dependencies\glfw\$(Platform)\lib-vc2015;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Core.lib;Renderer.lib;glfw3.lib;glew32.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xRenderDevice.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xRendererContext_RenderState.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\DLLExport.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xTypeConverter.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xBuffer.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xBufferName.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xColorAttachments.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xFragmentOutputs.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xFramebuffer.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xGraphicsWindow.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xIndexBuffer.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xPixelBuffer.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xReadPixelBuffer.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xRendererContext.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xShaderObject.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xShaderProgram.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xTexture2D.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xTextureSampler.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xTextureUnit.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xTextureUnits.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xUniformF.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xUniformI.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xUniformUI.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xVertexArray.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xVertexBuffer.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xVertexBufferAttributes.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xWritePixelBuffer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xRenderDevice.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xTypeConverter.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xBuffer.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xBufferName.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xColorAttachments.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xFragmentOutputs.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xFramebuffer.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xGraphicsWindow.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xIndexBuffer.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xPixelBuffer.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xReadPixelBuffer.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xRenderContext.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xShaderObject.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xShaderProgram.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xTexture2D.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xTextureSampler.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xTextureUnit.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xTextureUnits.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xUniform.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xVertexArray.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xVertexBuffer.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xVertexBufferAttributes.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\OGL3xRenderDevice\BowOGL3xWritePixelBuffer.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

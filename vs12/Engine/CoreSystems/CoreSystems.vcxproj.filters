@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Geometry">
+      <UniqueIdentifier>{7b2b477e-6fa7-4841-8ef2-c1fda625e358}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Geometry">
+      <UniqueIdentifier>{d23ac050-fe65-41d2-b831-fc00ce24e6a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Geometry\Indices">
+      <UniqueIdentifier>{690b664a-5043-4ce8-b408-4b034af59e15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Geometry\VertexAttributes">
+      <UniqueIdentifier>{4df484b1-9248-4cd1-8c61-1b9783e73d4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Geometry\Indices">
+      <UniqueIdentifier>{7af38144-7edc-4a5b-9a71-e52e970c2aee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Geometry\VertexAttributes">
+      <UniqueIdentifier>{24067dfb-f9f2-4eb2-aec7-41e712101efd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Math">
+      <UniqueIdentifier>{d887ea83-0a01-4f4a-90ea-2014613e0b9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\DesignPattern">
+      <UniqueIdentifier>{53eecd0a-1967-41ed-ac7b-c641721890e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tessellation">
+      <UniqueIdentifier>{92bc7e34-1401-46a2-b9d4-389f4999218a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tessellation">
+      <UniqueIdentifier>{266bf7a0-552a-4a01-bd42-2f85aafa1be7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Math">
+      <UniqueIdentifier>{96ad38d7-8ac3-43fc-b384-79a70be4e499}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MemoryAllocators">
+      <UniqueIdentifier>{9f3466ec-1755-4c34-8121-5539c135d197}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Math\MemoryAllocators">
+      <UniqueIdentifier>{34c16f0d-9ecd-4ca0-a56d-1288549ce48e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\Engine\CoreSystems\BowLogger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\CoreSystems\BowVertexAttributeFloatVec3.cpp">
+      <Filter>Source Files\Geometry\VertexAttributes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\CoreSystems\BowIndicesUnsignedInt.cpp">
+      <Filter>Source Files\Geometry\Indices</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\CoreSystems\BowIndicesUnsignedShort.cpp">
+      <Filter>Source Files\Geometry\Indices</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\CoreSystems\BowBasicTimer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\CoreSystems\BowVertexAttributeFloatVec2.cpp">
+      <Filter>Source Files\Geometry\VertexAttributes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\CoreSystems\BowSphereTessellator.cpp">
+      <Filter>Source Files\Tessellation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\CoreSystems\BowVertexAttributeFloatVec4.cpp">
+      <Filter>Source Files\Geometry\VertexAttributes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\CoreSystems\BowVertexAttributeFloat.cpp">
+      <Filter>Source Files\Geometry\VertexAttributes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\CoreSystems\BowMemoryManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\CoreSystems\BowMeshAttribute.cpp">
+      <Filter>Source Files\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\CoreSystems\BowAABB.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\CoreSystems\BowSVD.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\BowLogger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\IBowCleanableObserver.h">
+      <Filter>Header Files\DesignPattern</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowCorePredeclares.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowPrerequisites.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowCore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowMath.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowVector2.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowMatrix2D.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowVector3.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowVector4.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowBasicTimer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowRay.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowIndicesUnsignedInt.h">
+      <Filter>Header Files\Geometry\Indices</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowIndicesUnsignedShort.h">
+      <Filter>Header Files\Geometry\Indices</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\IBowIndicesBase.h">
+      <Filter>Header Files\Geometry\Indices</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowVertexAttributeFloatVec3.h">
+      <Filter>Header Files\Geometry\VertexAttributes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowVertexAttributeFloatVec2.h">
+      <Filter>Header Files\Geometry\VertexAttributes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\IBowVertexAttribute.h">
+      <Filter>Header Files\Geometry\VertexAttributes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowSphere.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowPlane.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowTriangle.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowMatrix4x4.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowMatrix3D.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowSphereTessellator.h">
+      <Filter>Header Files\Tessellation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowTriangleIndicesUnsignedInt.h">
+      <Filter>Header Files\Geometry\Indices</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowVertexAttributeFloatVec4.h">
+      <Filter>Header Files\Geometry\VertexAttributes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowVertexAttributeFloat.h">
+      <Filter>Header Files\Geometry\VertexAttributes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowFrustum.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowMemoryManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowMeshAttribute.h">
+      <Filter>Header Files\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowAABB.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowMatrix.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowSVD.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowTransform.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowMatrix3x3.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowQuaternion.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
