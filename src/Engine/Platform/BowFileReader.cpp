@@ -51,7 +51,7 @@ namespace Bow
 
 			// restore position
 			((std::ifstream*)m_pFile)->seekg(curr, std::ios::beg);
-			return (size_t)(end - begin);
+			return (size_t)(end - begin) + 1;
 		}
 
 		unsigned long FileReader::Tell()

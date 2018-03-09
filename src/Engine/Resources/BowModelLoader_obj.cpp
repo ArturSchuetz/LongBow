@@ -26,7 +26,7 @@ namespace Bow {
 			SubMesh* currentSubMesh = nullptr;
 
 			std::string line;
-			std::istringstream dataStream = std::istringstream(inputData);
+			std::istringstream dataStream(inputData);
 			while (safeGetline(dataStream, line)) 
 			{
 				// Trim newline '\r\n' or '\n'
@@ -192,6 +192,7 @@ namespace Bow {
 
 		unsigned int ModelLoader_OBJ::getVertexIndex(Mesh* mesh, index_t index)
 		{
+			/* Inperformant
 			for (int i = mesh->m_vertices.size() - 1; i >= 0; --i)
 			{
 				if (mesh->m_vertices[i] == vertices[index.vertex_index]
@@ -201,6 +202,7 @@ namespace Bow {
 					return i;
 				}
 			}
+			*/
 
 			mesh->m_vertices.push_back(vertices[index.vertex_index]);
 			mesh->m_normals.push_back(normals[index.normal_index]);

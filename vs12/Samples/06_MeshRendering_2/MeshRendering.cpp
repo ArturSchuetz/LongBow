@@ -60,7 +60,7 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Camera
 
-	Core::Vector3<float> Position = Core::Vector3<float>(0.0f, 0.0f, -3.0f);
+	Core::Vector3<float> Position = Core::Vector3<float>(0.0f, 200.0f, 0.0f);
 	Core::Vector3<float> LookAt = Core::Vector3<float>(0.0f, 0.0f, 0.0f);
 	Core::Vector3<float> UpVector = Core::Vector3<float>(0.0f, 1.0f, 0.0f);
 
@@ -92,7 +92,7 @@ int main()
 	// Gameloop
 
 	Core::Matrix3D<float> worldMat;
-	worldMat.Translate(Vector3<float>(0.0f, 0.0f, 0.0f));
+	worldMat.Translate(Vector3<float>(0.0f, 0.0f, 2000.0f));
 
 	BasicTimer timer;
 	float m_moveSpeed;

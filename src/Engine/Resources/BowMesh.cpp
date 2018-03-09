@@ -153,6 +153,8 @@ namespace Bow {
 					readedBytes = reader.Read(buffer, 1024);
 					memcpy(m_dataFromDisk + i, buffer, readedBytes);
 				}
+
+				reader.Close();
 			}
 			else
 			{
