@@ -38,7 +38,7 @@ namespace bow {
 		WritePixelBufferPtr		VCreateWritePixelBuffer(PixelBufferHint usageHint, int sizeInBytes);
 
 		Texture2DPtr			VCreateTexture2D(Texture2DDescription description);
-		Texture2DPtr			VCreateTexture2D(ImagePtr image, TextureFormat format);
+		Texture2DPtr			VCreateTexture2D(ImagePtr image);
 
 		TextureSamplerPtr		VCreateTexture2DSampler(TextureMinificationFilter minificationFilter, TextureMagnificationFilter magnificationFilter, TextureWrap wrapS, TextureWrap wrapT, float maximumAnistropy);
 

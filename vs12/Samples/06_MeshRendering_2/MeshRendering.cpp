@@ -49,20 +49,11 @@ int main()
 
 	VertexArrayPtr vertexArray = contextOGL->VCreateVertexArray(meshAttr, shaderProgram->VGetVertexAttributes(), BufferHint::StaticDraw);
 
-	Texture2DPtr diffuseTexture;
 	ImagePtr image = ImageManager::GetInstance().Load("../Data/models/Corvette-F3/SF_Corvette-F3_diffuse.png");
-	if (image->GetSizeInBytes() / (image->GetHeight() * image->GetWidth()) == 3)
-		diffuseTexture = deviceOGL->VCreateTexture2D(image, TextureFormat::RedGreenBlue8);
-	else
-		diffuseTexture = deviceOGL->VCreateTexture2D(image, TextureFormat::RedGreenBlueAlpha8);
+	Texture2DPtr diffuseTexture = deviceOGL->VCreateTexture2D(image);
 
-	Texture2DPtr glowTexture;
 	ImagePtr image2 = ImageManager::GetInstance().Load("../Data/models/Corvette-F3/SF_Corvette-F3_glow.png");
-	if (image->GetSizeInBytes() / (image->GetHeight() * image->GetWidth()) == 3)
-		glowTexture = deviceOGL->VCreateTexture2D(image2, TextureFormat::RedGreenBlue8);
-	else
-		glowTexture = deviceOGL->VCreateTexture2D(image2, TextureFormat::RedGreenBlueAlpha8);
-
+	Texture2DPtr glowTexture = deviceOGL->VCreateTexture2D(image2);
 
 	int TexID = 0;
 	contextOGL->VSetTexture(TexID, diffuseTexture);

@@ -307,8 +307,14 @@ namespace bow {
 		return OGLTexture2DPtr(new OGLTexture2D(description, GL_TEXTURE_2D));
 	}
 
-	Texture2DPtr OGLRenderDevice::VCreateTexture2D(ImagePtr image, TextureFormat format)
+	Texture2DPtr OGLRenderDevice::VCreateTexture2D(ImagePtr image)
 	{
+		TextureFormat format;
+		if (image->GetSizeInBytes() / (image->GetHeight() * image->GetWidth()) == 3)
+			format = TextureFormat::RedGreenBlue8;
+		else
+			format = TextureFormat::RedGreenBlueAlpha8;
+
 		Texture2DPtr texture = OGLTexture2DPtr(new OGLTexture2D(Texture2DDescription(image->GetWidth(), image->GetHeight(), format), GL_TEXTURE_2D));
 		texture->VCopyFromSystemMemory(image->GetData(), OGLTypeConverter::TextureToImageFormat(format), ImageDatatype::UnsignedByte);
 		return texture;

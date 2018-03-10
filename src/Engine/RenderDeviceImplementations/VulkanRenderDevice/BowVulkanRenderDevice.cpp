@@ -108,7 +108,7 @@ namespace bow {
 		return Texture2DPtr(nullptr);
 	}
 
-	Texture2DPtr VulkanRenderDevice::VCreateTexture2D(ImagePtr image, TextureFormat format)
+	Texture2DPtr VulkanRenderDevice::VCreateTexture2D(ImagePtr image)
 	{
 		return Texture2DPtr(nullptr);
 	}

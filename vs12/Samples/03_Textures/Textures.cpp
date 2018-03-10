@@ -76,13 +76,8 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Textures
 
-	Texture2DPtr texture;
-
 	ImagePtr image = ImageManager::GetInstance().Load("../Data/Textures/test.png");
-	if (image->GetSizeInBytes() / (image->GetHeight() * image->GetWidth()) == 3)
-		texture = deviceOGL->VCreateTexture2D(image, TextureFormat::RedGreenBlue8);
-	else
-		texture = deviceOGL->VCreateTexture2D(image, TextureFormat::RedGreenBlueAlpha8);
+	Texture2DPtr texture = deviceOGL->VCreateTexture2D(image);
 
 	TextureSamplerPtr sampler = deviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Clamp, TextureWrap::Clamp);
 
