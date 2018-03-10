@@ -49,23 +49,34 @@ int main()
 
 	VertexArrayPtr vertexArray = contextOGL->VCreateVertexArray(meshAttr, shaderProgram->VGetVertexAttributes(), BufferHint::StaticDraw);
 
-	Texture2DPtr texture;
+	Texture2DPtr diffuseTexture;
 	ImagePtr image = ImageManager::GetInstance().Load("../Data/models/Corvette-F3/SF_Corvette-F3_diffuse.png");
 	if (image->GetSizeInBytes() / (image->GetHeight() * image->GetWidth()) == 3)
-		texture = deviceOGL->VCreateTexture2D(image, TextureFormat::RedGreenBlue8);
+		diffuseTexture = deviceOGL->VCreateTexture2D(image, TextureFormat::RedGreenBlue8);
 	else
-		texture = deviceOGL->VCreateTexture2D(image, TextureFormat::RedGreenBlueAlpha8);
+		diffuseTexture = deviceOGL->VCreateTexture2D(image, TextureFormat::RedGreenBlueAlpha8);
 
-	TextureSamplerPtr sampler = deviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Clamp, TextureWrap::Clamp);
+	Texture2DPtr glowTexture;
+	ImagePtr image2 = ImageManager::GetInstance().Load("../Data/models/Corvette-F3/SF_Corvette-F3_glow.png");
+	if (image->GetSizeInBytes() / (image->GetHeight() * image->GetWidth()) == 3)
+		glowTexture = deviceOGL->VCreateTexture2D(image2, TextureFormat::RedGreenBlue8);
+	else
+		glowTexture = deviceOGL->VCreateTexture2D(image2, TextureFormat::RedGreenBlueAlpha8);
+
 
 	int TexID = 0;
-	contextOGL->VSetTexture(TexID, texture);
+	contextOGL->VSetTexture(TexID, diffuseTexture);
+	contextOGL->VSetTexture(TexID+1, glowTexture);
+
+	TextureSamplerPtr sampler = deviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Clamp, TextureWrap::Clamp);
 	contextOGL->VSetTextureSampler(TexID, sampler);
+	contextOGL->VSetTextureSampler(TexID+1, sampler);
 
 	///////////////////////////////////////////////////////////////////
 	// Uniforms
 
 	shaderProgram->VSetUniform("diffuseTex", TexID);
+	shaderProgram->VSetUniform("glowTex", TexID+1);
 
 	///////////////////////////////////////////////////////////////////
 	// ClearState and Color
@@ -129,13 +140,11 @@ int main()
 		contextOGL->VDraw(PrimitiveType::Triangles, 0, meshAttr.Indices->Size(), vertexArray, shaderProgram, renderState);
 
 		contextOGL->VSwapBuffers();
-		windowOGL->VPollWindowEvents();
 
 		// =======================================================
 
 		timer.Update();
 
-		windowOGL->VPollWindowEvents();
 		keyboard->VUpdate();
 		mouse->VUpdate();
 
