@@ -1,11 +1,11 @@
 #version 130
 precision highp float; // needed only for version 1.30
 
-in vec2 TextureCoord;
+in vec3 var_Color;
 
-out vec4 out_Color;
+out vec3 out_Color;
  
 void main(void)
 {
-    out_Color = vec4(0.0, 0.0, 0.0, 1.0);
+    out_Color = var_Color;
 }

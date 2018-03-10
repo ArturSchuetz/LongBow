@@ -108,20 +108,20 @@ void planeUpdate(GameObject* gameObject, MousePtr mouse, KeyboardPtr keyboard, B
 int main()
 {
 	// Creating Render Device
-	RenderDevicePtr DeviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(RenderDeviceAPI::OpenGL3x);
-	if (DeviceOGL == nullptr)
+	RenderDevicePtr deviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(RenderDeviceAPI::OpenGL3x);
+	if (deviceOGL == nullptr)
 	{
 		return 0;
 	}
 
 	// Creating Window
-	GraphicsWindowPtr WindowOGL = DeviceOGL->VCreateWindow(800, 600, "Triangle Sample", WindowType::Windowed);
-	if (WindowOGL == nullptr)
+	GraphicsWindowPtr windowOGL = deviceOGL->VCreateWindow(800, 600, "Triangle Sample", WindowType::Windowed);
+	if (windowOGL == nullptr)
 	{
 		return 0;
 	}
-	RenderContextPtr ContextOGL = WindowOGL->VGetContext();
-	ShaderProgramPtr CameraShaderProgram = DeviceOGL->VCreateShaderProgram(LoadShaderFromResouce(IDS_CAMERAVERTEXSHADER), LoadShaderFromResouce(IDS_CAMERAFRAGMENTSHADER));
+	RenderContextPtr contextOGL = windowOGL->VGetContext();
+	ShaderProgramPtr CameraShaderProgram = deviceOGL->VCreateShaderProgram(LoadShaderFromResouce(IDS_CAMERAVERTEXSHADER), LoadShaderFromResouce(IDS_CAMERAFRAGMENTSHADER));
 	///////////////////////////////////////////////////////////////////
 	// ClearState and Color
 
@@ -131,13 +131,13 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Input
 
-	KeyboardPtr keyboard = InputDeviceManager::GetInstance().CreateKeyboardObject(WindowOGL);
+	KeyboardPtr keyboard = InputDeviceManager::GetInstance().CreateKeyboardObject(windowOGL);
 	if (keyboard == nullptr)
 	{
 		return false;
 	}
 
-	MousePtr mouse = InputDeviceManager::GetInstance().CreateMouseObject(WindowOGL);
+	MousePtr mouse = InputDeviceManager::GetInstance().CreateMouseObject(windowOGL);
 	if (mouse == nullptr)
 	{
 		return false;
@@ -159,13 +159,13 @@ int main()
 	floorVertices[2] = Vector4<float>(15.0f, -5.0f, -15.0f, 1.0f);
 
 	// fill buffer with informations
-	VertexBufferPtr floorBuffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector4<float>) * 3);
+	VertexBufferPtr floorBuffer = deviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector4<float>) * 3);
 	floorBuffer->VCopyFromSystemMemory(&floorVertices, 0, sizeof(Vector4<float>) * 3);
 
 	VertexBufferAttributePtr FloorPositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(floorBuffer, ComponentDatatype::Float, 4));
 
 	// create VertexArray
-	VertexArrayPtr FloorVertexArray = ContextOGL->VCreateVertexArray();
+	VertexArrayPtr FloorVertexArray = contextOGL->VCreateVertexArray();
 
 	// connect buffer with location in shader
 	FloorVertexArray->VSetAttribute(CameraShaderProgram->VGetVertexAttribute("in_Position"), FloorPositionAttribute);
@@ -178,11 +178,11 @@ int main()
 
 	// Game object and third Person Camera Test
 	GameObject plane = GameObject(Vector3<float>(0.0f, 0.0f, 0.0f), Vector3<float>(0.0f, 1.0f, 0.0f), Vector3<float>(0.0f, 1.0f, 0.0f), Vector3<float>(0.2f, 0.2f, 0.2f));
-	plane.setMesh("../Data/SU-27/Su-27_Flanker.obj", Vector3<float>(0.0f, 0.0f, 1.0f), CameraShaderProgram, ContextOGL, BufferHint::StaticDraw);
+	plane.setMesh("../Data/SU-27/Su-27_Flanker.obj", Vector3<float>(0.0f, 0.0f, 1.0f), CameraShaderProgram, contextOGL, BufferHint::StaticDraw);
 	plane.setRotation(0.0f, M_PI + M_PI / 2, M_PI);
 	//plane.setRotation(0.0f, 0.0f, 0.0f);
 
-	ThirdPersonQuaternionCamera camera2 = ThirdPersonQuaternionCamera(Position, plane.getPosition(), UpVector, WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
+	ThirdPersonQuaternionCamera camera2 = ThirdPersonQuaternionCamera(Position, plane.getPosition(), UpVector, windowOGL->VGetWidth(), windowOGL->VGetHeight());
 	camera2.SetClippingPlanes(0.1, 10000.0);
 
 	///////////////////////////////////////////////////////////////////
@@ -213,38 +213,38 @@ int main()
 
 	Vector2<long> lastCursorPosition;
 
-	while (!WindowOGL->VShouldClose())
+	while (!windowOGL->VShouldClose())
 	{
 		// Clear Backbuffer to our ClearState
-		ContextOGL->VClear(clearState);
+		contextOGL->VClear(clearState);
 
-		ContextOGL->VSetViewport(Viewport(0, 0, WindowOGL->VGetWidth(), WindowOGL->VGetHeight()));
+		contextOGL->VSetViewport(Viewport(0, 0, windowOGL->VGetWidth(), windowOGL->VGetHeight()));
 
 		// Draw floor triangle
 		CameraShaderProgram->VSetUniform("u_ModelViewProj", (Matrix4x4<float>)camera2.CalculateWorldViewProjection(Identity));
 
 		CameraShaderProgram->VSetUniform("u_color", ColorRGB(1.0f, 0.0f, 1.0f));
-		ContextOGL->VDraw(PrimitiveType::Triangles, 0, 3, FloorVertexArray, CameraShaderProgram, renderState2);
+		contextOGL->VDraw(PrimitiveType::Triangles, 0, 3, FloorVertexArray, CameraShaderProgram, renderState2);
 
 		// Ceiling floor triangle
 		CameraShaderProgram->VSetUniform("u_ModelViewProj", (Matrix4x4<float>)camera2.CalculateWorldViewProjection(negativeIdentity));
 
 		CameraShaderProgram->VSetUniform("u_color", ColorRGB(1.0f, 0.5f, 0.5f));
-		ContextOGL->VDraw(PrimitiveType::Triangles, 0, 3, FloorVertexArray, CameraShaderProgram, renderState2);
+		contextOGL->VDraw(PrimitiveType::Triangles, 0, 3, FloorVertexArray, CameraShaderProgram, renderState2);
 
 		// Draw plane
 		CameraShaderProgram->VSetUniform("u_ModelViewProj", (Matrix4x4<float>)camera2.CalculateWorldViewProjection(plane.getWorldMatrix()));
 
 		CameraShaderProgram->VSetUniform("u_color", ColorRGB(1.0f, 1.0f, 0.0f));
-		ContextOGL->VDraw(PrimitiveType::Triangles, 0, plane.getMeshAttribute().Indices->Size(), plane.getVertexArrayPtr(), CameraShaderProgram, renderState);
+		contextOGL->VDraw(PrimitiveType::Triangles, 0, plane.getMeshAttribute().Indices->Size(), plane.getVertexArrayPtr(), CameraShaderProgram, renderState);
 
-		ContextOGL->VSwapBuffers();
-		WindowOGL->VPollWindowEvents();
+		contextOGL->VSwapBuffers();
+		windowOGL->VPollWindowEvents();
 		keyboard->VUpdate();
 		mouse->VUpdate();
 		timer.Update();
 
-		planeUpdate(&plane, mouse, keyboard, timer, WindowOGL, lastCursorPosition, &camera2);
+		planeUpdate(&plane, mouse, keyboard, timer, windowOGL, lastCursorPosition, &camera2);
 		plane.updateThirdPersonCamera(&camera2, -0.01f * moveVec.x, -0.01f * moveVec.y);
 	}
 	return 0;

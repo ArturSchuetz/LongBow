@@ -12,7 +12,7 @@ public:
 	GameObject(const Vector3<float> position, const Vector3<float> lookAt, const Vector3<float> up, const Vector3<float> scaling);
 	~GameObject() {}
 
-	void setMesh(const std::string meshPath, const Vector3<float> orientationPhiThetaPsi, const ShaderProgramPtr shaderProgram, const RenderContextPtr ContextOGL, const BufferHint bufferHint);
+	void setMesh(const std::string meshPath, const Vector3<float> orientationPhiThetaPsi, const ShaderProgramPtr shaderProgram, const RenderContextPtr contextOGL, const BufferHint bufferHint);
 
 	void setScaling(const Vector3<float> scalingVector);
 

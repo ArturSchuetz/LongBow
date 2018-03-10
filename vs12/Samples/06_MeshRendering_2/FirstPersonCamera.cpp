@@ -23,6 +23,7 @@ FirstPersonCamera::FirstPersonCamera(const bow::Vector3<double>& cameraPosition,
 
 FirstPersonCamera::~FirstPersonCamera()
 {
+
 }
 
 void FirstPersonCamera::MoveForward(float deltaTime)

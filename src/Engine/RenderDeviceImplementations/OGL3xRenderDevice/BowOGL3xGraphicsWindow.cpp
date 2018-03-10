@@ -129,6 +129,7 @@ namespace bow {
 
 	bool OGLGraphicsWindow::VShouldClose() const
 	{
+		glfwPollEvents();
 		return glfwWindowShouldClose(m_Window) != 0;
 	}
 

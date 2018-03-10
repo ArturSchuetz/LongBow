@@ -20,20 +20,20 @@ std::string LoadShaderFromResouce(int name)
 int main()
 {
 	// Creating Render Device
-	RenderDevicePtr DeviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(RenderDeviceAPI::OpenGL3x);
-	if (DeviceOGL == nullptr)
+	RenderDevicePtr deviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(RenderDeviceAPI::OpenGL3x);
+	if (deviceOGL == nullptr)
 	{
 		return 0;
 	}
 
 	// Creating Window
-	GraphicsWindowPtr WindowOGL = DeviceOGL->VCreateWindow(800, 600, "Triangle Sample", WindowType::Windowed);
-	if (WindowOGL == nullptr)
+	GraphicsWindowPtr windowOGL = deviceOGL->VCreateWindow(800, 600, "Triangle Sample", WindowType::Windowed);
+	if (windowOGL == nullptr)
 	{
 		return 0;
 	}
-	RenderContextPtr ContextOGL = WindowOGL->VGetContext();
-	ShaderProgramPtr ShaderProgram = DeviceOGL->VCreateShaderProgram(LoadShaderFromResouce(IDS_VERTEXSHADER), LoadShaderFromResouce(IDS_FRAGMENTSHADER));
+	RenderContextPtr contextOGL = windowOGL->VGetContext();
+	ShaderProgramPtr ShaderProgram = deviceOGL->VCreateShaderProgram(LoadShaderFromResouce(IDS_VERTEXSHADER), LoadShaderFromResouce(IDS_FRAGMENTSHADER));
 
 	///////////////////////////////////////////////////////////////////
 	// ClearState and Color
@@ -50,13 +50,13 @@ int main()
 	vertices[2] = Vector2<float>(1.0f, 1.0f);
 
 	// fill buffer with informations
-	VertexBufferPtr buffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector2<float>) * 3);
+	VertexBufferPtr buffer = deviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector2<float>) * 3);
 	buffer->VCopyFromSystemMemory(vertices, 0, sizeof(Vector2<float>) * 3);
 
 	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(buffer, ComponentDatatype::Float, 2));
 	
 	// create VertexArray
-	VertexArrayPtr VertexArray = ContextOGL->VCreateVertexArray();
+	VertexArrayPtr VertexArray = contextOGL->VCreateVertexArray();
 
 	// connect buffer with location in shader
 	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_Position"), PositionAttribute);
@@ -73,16 +73,16 @@ int main()
 	renderState.FaceCulling.Enabled = false;
 	renderState.DepthTest.Enabled = false;
 
-	while (!WindowOGL->VShouldClose())
+	while (!windowOGL->VShouldClose())
 	{
 		// Clear Backbuffer to our ClearState
-		ContextOGL->VClear(clearState);
+		contextOGL->VClear(clearState);
 
-		ContextOGL->VSetViewport(Viewport(0, 0, WindowOGL->VGetWidth(), WindowOGL->VGetHeight()));
-		ContextOGL->VDraw(PrimitiveType::Triangles, 0, 3, VertexArray, ShaderProgram, renderState);
+		contextOGL->VSetViewport(Viewport(0, 0, windowOGL->VGetWidth(), windowOGL->VGetHeight()));
+		contextOGL->VDraw(PrimitiveType::Triangles, 0, 3, VertexArray, ShaderProgram, renderState);
 
-		ContextOGL->VSwapBuffers();
-		WindowOGL->VPollWindowEvents();
+		contextOGL->VSwapBuffers();
+		windowOGL->VPollWindowEvents();
 	}
 	return 0;
 }

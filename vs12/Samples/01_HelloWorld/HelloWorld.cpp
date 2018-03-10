@@ -10,15 +10,15 @@ using namespace bow;
 int main()
 {
 	// Creating Render Device
-	RenderDevicePtr DeviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(RenderDeviceAPI::OpenGL3x);
-	if (DeviceOGL == nullptr)
+	RenderDevicePtr deviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(RenderDeviceAPI::OpenGL3x);
+	if (deviceOGL == nullptr)
 	{
 		return -1;
 	}
 
 	// Creating Window
-	GraphicsWindowPtr WindowOGL = DeviceOGL->VCreateWindow(800, 600, "HelloWorld", WindowType::Windowed);
-	if (WindowOGL == nullptr)
+	GraphicsWindowPtr windowOGL = deviceOGL->VCreateWindow(800, 600, "HelloWorld", WindowType::Windowed);
+	if (windowOGL == nullptr)
 	{
 		return -1;
 	}
@@ -29,16 +29,16 @@ int main()
 
 	///////////////////////////////////////////////////////////////////
 	// Gameloop
-	auto ContextOGL = WindowOGL->VGetContext();
+	auto contextOGL = windowOGL->VGetContext();
 
-	while (!WindowOGL->VShouldClose())
+	while (!windowOGL->VShouldClose())
 	{
 		// Clear Backbuffer to our ClearState
-		ContextOGL->VClear(clearState);
+		contextOGL->VClear(clearState);
 
-		ContextOGL->VSwapBuffers();
+		contextOGL->VSwapBuffers();
 
-		WindowOGL->VPollWindowEvents();
+		windowOGL->VPollWindowEvents();
 	}
 	return 0;
 }

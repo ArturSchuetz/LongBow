@@ -24,13 +24,13 @@ GameObject::GameObject(const Vector3<float> position, const Vector3<float> lookA
 	m_translationMatrix = Matrix3D<float>();
 }
 
-void GameObject::setMesh(const std::string meshPath, const Vector3<float> orientationPhiThetaPsi, const ShaderProgramPtr shaderProgram, const RenderContextPtr ContextOGL, const BufferHint bufferHint)
+void GameObject::setMesh(const std::string meshPath, const Vector3<float> orientationPhiThetaPsi, const ShaderProgramPtr shaderProgram, const RenderContextPtr contextOGL, const BufferHint bufferHint)
 {
 	m_mesh = MeshManager::GetInstance().Load(meshPath);
 
 	m_meshAttr = m_mesh->CreateAttribute("in_Position", "in_Normal", "in_TexCoord");
 
-	m_vertexArray = ContextOGL->VCreateVertexArray(m_meshAttr, shaderProgram->VGetVertexAttributes(), bufferHint);
+	m_vertexArray = contextOGL->VCreateVertexArray(m_meshAttr, shaderProgram->VGetVertexAttributes(), bufferHint);
 }
 
 void GameObject::setScaling(const Vector3<float> scalingVector)

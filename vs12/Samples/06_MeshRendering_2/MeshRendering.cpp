@@ -14,8 +14,6 @@
 
 using namespace bow;
 
-
-
 std::string LoadShaderFromResouce(int name)
 {
 	HMODULE handle = GetModuleHandle(NULL);
@@ -27,20 +25,20 @@ std::string LoadShaderFromResouce(int name)
 int main()
 {
 	// Creating Render Device
-	RenderDevicePtr DeviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(RenderDeviceAPI::OpenGL3x);
-	if (DeviceOGL == nullptr)
+	RenderDevicePtr deviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(RenderDeviceAPI::OpenGL3x);
+	if (deviceOGL == nullptr)
 	{
 		return 0;
 	}
 
 	// Creating Window
-	GraphicsWindowPtr WindowOGL = DeviceOGL->VCreateWindow(800, 600, "Mesh Rendering Sample", WindowType::Windowed);
-	if (WindowOGL == nullptr)
+	GraphicsWindowPtr windowOGL = deviceOGL->VCreateWindow(800, 600, "Mesh Rendering Sample", WindowType::Windowed);
+	if (windowOGL == nullptr)
 	{
 		return 0;
 	}
-	RenderContextPtr ContextOGL = WindowOGL->VGetContext();
-	ShaderProgramPtr ShaderProgram = DeviceOGL->VCreateShaderProgram(LoadShaderFromResouce(IDS_VERTEXSHADER), LoadShaderFromResouce(IDS_FRAGMENTSHADER));
+	RenderContextPtr contextOGL = windowOGL->VGetContext();
+	ShaderProgramPtr shaderProgram = deviceOGL->VCreateShaderProgram(LoadShaderFromResouce(IDS_VERTEXSHADER), LoadShaderFromResouce(IDS_FRAGMENTSHADER));
 
 	///////////////////////////////////////////////////////////////////
 	// Vertex Array from Mesh
@@ -49,7 +47,7 @@ int main()
 
 	MeshAttribute meshAttr = mesh->CreateAttribute("in_Position", "in_Normal", "in_TexCoord");
 
-	VertexArrayPtr VertexArray = ContextOGL->VCreateVertexArray(meshAttr, ShaderProgram->VGetVertexAttributes(), BufferHint::StaticDraw);
+	VertexArrayPtr vertexArray = contextOGL->VCreateVertexArray(meshAttr, shaderProgram->VGetVertexAttributes(), BufferHint::StaticDraw);
 
 	///////////////////////////////////////////////////////////////////
 	// ClearState and Color
@@ -60,23 +58,23 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Camera
 
-	Vector3<float> Position = Vector3<float>(0.0f, 200.0f, 0.0f);
+	Vector3<float> Position = Vector3<float>(400.0f, 200.0f, 0.0f);
 	Vector3<float> LookAt = Vector3<float>(0.0f, 0.0f, 0.0f);
 	Vector3<float> UpVector = Vector3<float>(0.0f, 1.0f, 0.0f);
 
-	FirstPersonCamera camera = FirstPersonCamera(Position, LookAt, UpVector, WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
+	FirstPersonCamera camera = FirstPersonCamera(Position, LookAt, UpVector, windowOGL->VGetWidth(), windowOGL->VGetHeight());
 	camera.SetClippingPlanes(0.1, 10000.0);
 
 	///////////////////////////////////////////////////////////////////
 	// Input
 
-	KeyboardPtr keyboard = InputDeviceManager::GetInstance().CreateKeyboardObject(WindowOGL);
+	KeyboardPtr keyboard = InputDeviceManager::GetInstance().CreateKeyboardObject(windowOGL);
 	if (keyboard == nullptr)
 	{
 		return false;
 	}
 
-	MousePtr mouse = InputDeviceManager::GetInstance().CreateMouseObject(WindowOGL);
+	MousePtr mouse = InputDeviceManager::GetInstance().CreateMouseObject(windowOGL);
 	if (mouse == nullptr)
 	{
 		return false;
@@ -86,38 +84,40 @@ int main()
 	// RenderState
 
 	RenderState renderState;
-	renderState.RasterizationMode = RasterizationMode::Line;
+	renderState.RasterizationMode = RasterizationMode::Fill;
 
 	///////////////////////////////////////////////////////////////////
 	// Gameloop
 
 	Matrix3D<float> worldMat;
-	worldMat.Translate(Vector3<float>(0.0f, 0.0f, 2000.0f));
+	worldMat.Translate(Vector3<float>(0.0f, 0.0f, 0.0f));
 
 	BasicTimer timer;
 	float m_moveSpeed;
 	Vector2<long> lastCursorPosition;
 
-	while (!WindowOGL->VShouldClose())
+	while (!windowOGL->VShouldClose())
 	{
 		// =======================================================
 		// Render Frame
 
-		ContextOGL->VClear(clearState);
+		contextOGL->VClear(clearState);
 
-		ContextOGL->VSetViewport(Viewport(0, 0, WindowOGL->VGetWidth(), WindowOGL->VGetHeight()));
-		camera.SetResolution(WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
-		ShaderProgram->VSetUniform("u_ModelViewProj", (Matrix4x4<float>)camera.CalculateWorldViewProjection(worldMat));
+		contextOGL->VSetViewport(Viewport(0, 0, windowOGL->VGetWidth(), windowOGL->VGetHeight()));
+		camera.SetResolution(windowOGL->VGetWidth(), windowOGL->VGetHeight());
+		shaderProgram->VSetUniform("u_ModelView", (Matrix4x4<float>)camera.CalculateWorldView(worldMat));
+		shaderProgram->VSetUniform("u_Proj", (Matrix4x4<float>)camera.CalculateProjection());
 
-		ContextOGL->VDraw(PrimitiveType::Triangles, 0, meshAttr.Indices->Size(), VertexArray, ShaderProgram, renderState);
+		contextOGL->VDraw(PrimitiveType::Triangles, 0, meshAttr.Indices->Size(), vertexArray, shaderProgram, renderState);
 
-		ContextOGL->VSwapBuffers();
-		WindowOGL->VPollWindowEvents();
+		contextOGL->VSwapBuffers();
+		windowOGL->VPollWindowEvents();
+
 		// =======================================================
 
 		timer.Update();
 
-		WindowOGL->VPollWindowEvents();
+		windowOGL->VPollWindowEvents();
 		keyboard->VUpdate();
 		mouse->VUpdate();
 
@@ -162,14 +162,14 @@ int main()
 
 		if (mouse->VIsPressed(MouseButton::MOFS_BUTTON1))
 		{
-			WindowOGL->VHideCursor();
+			windowOGL->VHideCursor();
 			Vector3<long> moveVec = mouse->VGetRelativePosition();
 			camera.rotate((float)moveVec.x, (float)moveVec.y);
 			mouse->VSetCursorPosition(lastCursorPosition.x, lastCursorPosition.y);
 		}
 		else
 		{
-			WindowOGL->VShowCursor();
+			windowOGL->VShowCursor();
 		}
 
 		lastCursorPosition = mouse->VGetAbsolutePosition();
