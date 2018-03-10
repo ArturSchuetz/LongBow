@@ -105,7 +105,7 @@ int main()
 
 	Texture2DPtr texture;
 
-	ImagePtr image = ImageManager::GetInstance().Load("../Data/Textures/test.jpg");
+	ImagePtr image = ImageManager::GetInstance().Load("../Data/Textures/test.png");
 	if (image->GetSizeInBytes() / (image->GetHeight() * image->GetWidth()) == 3)
 		texture = deviceOGL->VCreateTexture2D(image, TextureFormat::RedGreenBlue8);
 	else
