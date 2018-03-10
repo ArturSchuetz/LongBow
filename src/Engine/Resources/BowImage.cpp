@@ -22,6 +22,22 @@ namespace bow {
 		VUnload();
 	}
 
+	unsigned int Image::GetSizeInBytes() {
+		return m_sizeInBytes;
+	}
+
+	unsigned int Image::GetHeight() {
+		return m_height;
+	}
+
+	unsigned int Image::GetWidth() {
+		return m_width;
+	}
+
+	unsigned char* Image::GetData() {
+		return &(m_data[0]);
+	}
+
 	// ============================================================
 
 	void Image::VPrepareImpl(void)
@@ -91,7 +107,7 @@ namespace bow {
 			}
 			else
 			{
-				LOG_ERROR("Unknown file format for mesh");
+				LOG_ERROR("Unknown file format for image");
 			}
 		}
 	}

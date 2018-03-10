@@ -19,17 +19,10 @@ namespace bow {
 		Image(ResourceManager* creator, const std::string& name, ResourceHandle handle);
 		~Image();
 
-		unsigned int Image::GetSizeInBytes() {
-			return m_sizeInBytes;
-		}
-
-		unsigned int Image::GetHeight() {
-			return m_height;
-		}
-
-		unsigned int Image::GetWidth() {
-			return m_width;
-		}
+		unsigned int GetSizeInBytes();
+		unsigned int GetHeight();
+		unsigned int GetWidth();
+		unsigned char* GetData();
 
 	private:
 		/** Loads the image from disk.  This call only performs IO, it

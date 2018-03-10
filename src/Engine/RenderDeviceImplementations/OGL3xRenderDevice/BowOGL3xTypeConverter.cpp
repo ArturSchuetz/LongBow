@@ -896,7 +896,7 @@ namespace bow{
 			case TextureFormat::RedGreenBlueAlpha32f:
 			case TextureFormat::RedGreenBlueAlpha32i:
 			case TextureFormat::RedGreenBlueAlpha32ui:
-				return ImageFormat::RedGreenBlue;
+				return ImageFormat::RedGreenBlueAlpha;
 		}
 		return ImageFormat::RedGreenBlue;
 	}

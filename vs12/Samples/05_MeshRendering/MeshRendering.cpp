@@ -75,7 +75,8 @@ int main()
 
 	///////////////////////////////////////////////////////////////////
 	// Camera
-	Vector3<float> Position = Vector3<float>(0.0f, 0.0f, 5.0f);
+
+	Vector3<float> Position = Vector3<float>(0.0f, 0.0f, 2.0f);
 	Vector3<float> LookAt = Vector3<float>(0.0f, 0.0f, 0.0f);
 	Vector3<float> UpVector = Vector3<float>(0.0f, 1.0f, 0.0f);
 
@@ -86,7 +87,7 @@ int main()
 
 	Texture2DPtr texture;
 
-	ImagePtr image = ImageManager::GetInstance().Load("../Data/Textures/test.jpg");
+	ImagePtr image = ImageManager::GetInstance().Load("../Data/Textures/test.png");
 	if (image->GetSizeInBytes() / (image->GetHeight() * image->GetWidth()) == 3)
 		texture = deviceOGL->VCreateTexture2D(image, TextureFormat::RedGreenBlue8);
 	else

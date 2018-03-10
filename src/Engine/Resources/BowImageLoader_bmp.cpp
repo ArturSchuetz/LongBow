@@ -26,7 +26,7 @@ namespace bow {
 
 		memcpy(&(outputImage->m_data[0]), inputData + headerSize, outputImage->m_sizeInBytes);
 
-		for (unsigned int i = (unsigned int)headerSize; i < (unsigned int)outputImage->m_sizeInBytes; i += 3)
+		for (unsigned int i = (unsigned int)headerSize; i+2 < (unsigned int)outputImage->m_sizeInBytes; i += 3)
 		{
 			unsigned char tmp = outputImage->m_data[i];
 			outputImage->m_data[i] = outputImage->m_data[i + 2];

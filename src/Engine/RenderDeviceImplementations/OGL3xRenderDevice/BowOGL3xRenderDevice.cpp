@@ -21,6 +21,8 @@
 #include "BowOGL3xTexture2D.h"
 #include "BowOGL3xTextureSampler.h"
 
+#include "BowOGL3xTypeConverter.h"
+
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 
@@ -307,7 +309,9 @@ namespace bow {
 
 	Texture2DPtr OGLRenderDevice::VCreateTexture2D(ImagePtr image, TextureFormat format)
 	{
-		return OGLTexture2DPtr(nullptr);
+		Texture2DPtr texture = OGLTexture2DPtr(new OGLTexture2D(Texture2DDescription(image->GetWidth(), image->GetHeight(), format), GL_TEXTURE_2D));
+		texture->VCopyFromSystemMemory(image->GetData(), OGLTypeConverter::TextureToImageFormat(format), ImageDatatype::UnsignedByte);
+		return texture;
 	}
 
 	TextureSamplerPtr OGLRenderDevice::VCreateTexture2DSampler(TextureMinificationFilter minificationFilter, TextureMagnificationFilter magnificationFilter, TextureWrap wrapS, TextureWrap wrapT, float maximumAnistropy)
