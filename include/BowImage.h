@@ -14,6 +14,7 @@ namespace bow {
 	{
 		friend class ImageLoader_bmp;
 		friend class ImageLoader_png;
+		friend class ImageLoader_tga;
 
 	public:
 		Image(ResourceManager* creator, const std::string& name, ResourceHandle handle);

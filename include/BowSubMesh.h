@@ -19,6 +19,9 @@ namespace bow {
 		SubMesh();
 		~SubMesh();
 
+		unsigned int GetStartIndex();
+		unsigned int GetNumIndices();
+
 		/// Reference to parent Mesh (not a smart pointer so child does not keep parent alive).
 		Mesh* m_parent;
 

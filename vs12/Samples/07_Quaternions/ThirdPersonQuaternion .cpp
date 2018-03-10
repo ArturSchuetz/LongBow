@@ -224,19 +224,19 @@ int main()
 		CameraShaderProgram->VSetUniform("u_ModelViewProj", (Matrix4x4<float>)camera2.CalculateWorldViewProjection(Identity));
 
 		CameraShaderProgram->VSetUniform("u_color", ColorRGB(1.0f, 0.0f, 1.0f));
-		contextOGL->VDraw(PrimitiveType::Triangles, 0, 3, FloorVertexArray, CameraShaderProgram, renderState2);
+		contextOGL->VDraw(PrimitiveType::Triangles, FloorVertexArray, CameraShaderProgram, renderState2);
 
 		// Ceiling floor triangle
 		CameraShaderProgram->VSetUniform("u_ModelViewProj", (Matrix4x4<float>)camera2.CalculateWorldViewProjection(negativeIdentity));
 
 		CameraShaderProgram->VSetUniform("u_color", ColorRGB(1.0f, 0.5f, 0.5f));
-		contextOGL->VDraw(PrimitiveType::Triangles, 0, 3, FloorVertexArray, CameraShaderProgram, renderState2);
+		contextOGL->VDraw(PrimitiveType::Triangles, FloorVertexArray, CameraShaderProgram, renderState2);
 
 		// Draw plane
 		CameraShaderProgram->VSetUniform("u_ModelViewProj", (Matrix4x4<float>)camera2.CalculateWorldViewProjection(plane.getWorldMatrix()));
 
 		CameraShaderProgram->VSetUniform("u_color", ColorRGB(1.0f, 1.0f, 0.0f));
-		contextOGL->VDraw(PrimitiveType::Triangles, 0, plane.getMeshAttribute().Indices->Size(), plane.getVertexArrayPtr(), CameraShaderProgram, renderState);
+		contextOGL->VDraw(PrimitiveType::Triangles, plane.getVertexArrayPtr(), CameraShaderProgram, renderState);
 
 		contextOGL->VSwapBuffers();
 		windowOGL->VPollWindowEvents();

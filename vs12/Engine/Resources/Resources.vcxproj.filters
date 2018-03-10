@@ -95,6 +95,9 @@
     <ClInclude Include="..\..\..\include\BowPointCloud.h">
       <Filter>Header Files\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\Engine\Resources\BowImageLoader_tga.h">
+      <Filter>Header Files\FileLoaders\ImageLoader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\Engine\Resources\BowResourceManager.cpp">
@@ -138,6 +141,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\Engine\Resources\BowSubMesh.cpp">
       <Filter>Source Files\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowImageLoader_tga.cpp">
+      <Filter>Source Files\FileLoaders\ImageLoader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

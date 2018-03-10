@@ -79,7 +79,7 @@ int main()
 		contextOGL->VClear(clearState);
 
 		contextOGL->VSetViewport(Viewport(0, 0, windowOGL->VGetWidth(), windowOGL->VGetHeight()));
-		contextOGL->VDraw(PrimitiveType::Triangles, 0, 3, VertexArray, ShaderProgram, renderState);
+		contextOGL->VDraw(PrimitiveType::Triangles, VertexArray, ShaderProgram, renderState);
 
 		contextOGL->VSwapBuffers();
 		windowOGL->VPollWindowEvents();

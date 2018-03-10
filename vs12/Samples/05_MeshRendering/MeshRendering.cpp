@@ -125,7 +125,7 @@ int main()
 		camera.SetResolution(windowOGL->VGetWidth(), windowOGL->VGetHeight());
 		ShaderProgram->VSetUniform("u_ModelViewProj", (Matrix4x4<float>)camera.CalculateWorldViewProjection(worldMat));
 
-		contextOGL->VDraw(PrimitiveType::Triangles, 0, 3, VertexArray, ShaderProgram, renderState);
+		contextOGL->VDraw(PrimitiveType::Triangles, VertexArray, ShaderProgram, renderState);
 
 		contextOGL->VSwapBuffers();
 		windowOGL->VPollWindowEvents();

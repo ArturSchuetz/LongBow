@@ -15,4 +15,13 @@ namespace bow {
 
 	}
 
+	unsigned int SubMesh::GetStartIndex()
+	{
+		return m_startIndex;
+	}
+
+	unsigned int SubMesh::GetNumIndices()
+	{
+		return m_numIndices;
+	}
 }

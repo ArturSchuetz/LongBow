@@ -43,10 +43,10 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Vertex Array from Mesh
 
-	MeshPtr mesh = MeshManager::GetInstance().Load("../Data/sponza.obj");
+	MeshPtr mesh = MeshManager::GetInstance().Load("../Data/models/sponza/sponza.obj");
+	std::vector<SubMesh*> subMeshes = mesh->GetSubMeshes();
 
 	MeshAttribute meshAttr = mesh->CreateAttribute("in_Position", "in_Normal", "in_TexCoord");
-
 	VertexArrayPtr vertexArray = contextOGL->VCreateVertexArray(meshAttr, shaderProgram->VGetVertexAttributes(), BufferHint::StaticDraw);
 
 	///////////////////////////////////////////////////////////////////
@@ -58,11 +58,11 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Camera
 
-	Vector3<float> Position = Vector3<float>(400.0f, 200.0f, 0.0f);
-	Vector3<float> LookAt = Vector3<float>(0.0f, 0.0f, 0.0f);
-	Vector3<float> UpVector = Vector3<float>(0.0f, 1.0f, 0.0f);
+	Vector3<float> position = Vector3<float>(400.0f, 200.0f, 0.0f);
+	Vector3<float> lookAt = Vector3<float>(0.0f, 0.0f, 0.0f);
+	Vector3<float> upVector = Vector3<float>(0.0f, 1.0f, 0.0f);
 
-	FirstPersonCamera camera = FirstPersonCamera(Position, LookAt, UpVector, windowOGL->VGetWidth(), windowOGL->VGetHeight());
+	FirstPersonCamera camera = FirstPersonCamera(position, lookAt, upVector, windowOGL->VGetWidth(), windowOGL->VGetHeight());
 	camera.SetClippingPlanes(0.1, 10000.0);
 
 	///////////////////////////////////////////////////////////////////
@@ -108,16 +108,17 @@ int main()
 		shaderProgram->VSetUniform("u_ModelView", (Matrix4x4<float>)camera.CalculateWorldView(worldMat));
 		shaderProgram->VSetUniform("u_Proj", (Matrix4x4<float>)camera.CalculateProjection());
 
-		contextOGL->VDraw(PrimitiveType::Triangles, 0, meshAttr.Indices->Size(), vertexArray, shaderProgram, renderState);
+		for (unsigned int i = 0; i < subMeshes.size(); i++)
+		{
+			contextOGL->VDraw(PrimitiveType::Triangles, subMeshes[i]->GetStartIndex(), subMeshes[i]->GetNumIndices(), vertexArray, shaderProgram, renderState);
+		}
 
 		contextOGL->VSwapBuffers();
-		windowOGL->VPollWindowEvents();
 
 		// =======================================================
 
 		timer.Update();
 
-		windowOGL->VPollWindowEvents();
 		keyboard->VUpdate();
 		mouse->VUpdate();
 
@@ -134,7 +135,7 @@ int main()
 				camera.MoveForward(m_moveSpeed * (float)timer.GetDelta());
 			}
 		}
-
+		
 		if (keyboard->VIsPressed(Key::K_S))
 		{
 			camera.MoveBackward(m_moveSpeed * (float)timer.GetDelta());

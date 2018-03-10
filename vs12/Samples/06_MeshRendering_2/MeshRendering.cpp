@@ -128,7 +128,7 @@ int main()
 		shaderProgram->VSetUniform("u_ModelView", (Matrix4x4<float>)camera.CalculateWorldView(worldMat));
 		shaderProgram->VSetUniform("u_Proj", (Matrix4x4<float>)camera.CalculateProjection());
 
-		contextOGL->VDraw(PrimitiveType::Triangles, 0, meshAttr.Indices->Size(), vertexArray, shaderProgram, renderState);
+		contextOGL->VDraw(PrimitiveType::Triangles, vertexArray, shaderProgram, renderState);
 
 		contextOGL->VSwapBuffers();
 

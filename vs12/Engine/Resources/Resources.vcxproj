@@ -161,12 +161,14 @@
     <ClInclude Include="..\..\..\include\BowImage.h" />
     <ClInclude Include="..\..\..\src\Engine\Resources\BowImageLoader_bmp.h" />
     <ClInclude Include="..\..\..\src\Engine\Resources\BowImageLoader_png.h" />
+    <ClInclude Include="..\..\..\src\Engine\Resources\BowImageLoader_tga.h" />
     <ClInclude Include="..\..\..\src\Engine\Resources\BowModelLoader_obj.h" />
     <ClInclude Include="..\..\..\src\Engine\Resources\BowPointCloudLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\Engine\Resources\BowImageLoader_bmp.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Resources\BowImageLoader_png.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowImageLoader_tga.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Resources\BowImageManager.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Resources\BowMaterial.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Resources\BowMesh.cpp" />

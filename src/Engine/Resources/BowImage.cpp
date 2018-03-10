@@ -6,6 +6,7 @@
 
 #include "BowImageLoader_bmp.h"
 #include "BowImageLoader_png.h"
+#include "BowImageLoader_tga.h"
 
 namespace bow {
 
@@ -104,6 +105,11 @@ namespace bow {
 				ImageLoader_png loader;
 				std::vector<unsigned char> raw_data(m_dataFromDisk, m_dataFromDisk + m_sizeInBytes);
 				loader.ImportImage(raw_data, this);
+			}
+			else if (extension == "tga")
+			{
+				ImageLoader_tga loader;
+				loader.ImportImage(m_dataFromDisk, this);
 			}
 			else
 			{

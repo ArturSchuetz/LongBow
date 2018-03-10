@@ -75,40 +75,6 @@ namespace bow {
 				continue;
 			}
 
-			// group name
-			if (token[0] == 'g' && IS_SPACE((token[1])))
-			{
-				if (currentSubMesh != nullptr)
-				{
-					currentSubMesh->m_numIndices = outputMesh->m_indices.size() - currentSubMesh->m_startIndex;
-				}
-
-				std::vector<std::string> names;
-				names.reserve(2);
-
-				while (!IS_NEW_LINE(token[0])) 
-				{
-					std::string str = parseString(&token);
-					names.push_back(str);
-					token += strspn(token, " \t\r");  // skip tag
-				}
-
-				LOG_ASSERT(names.size() > 0, "No Groupe Name");
-
-				// names[0] must be 'g', so skip the 0th element.
-				if (names.size() > 1) 
-				{
-					currentSubMesh = outputMesh->CreateSubMesh(names[1]);
-				}
-				else 
-				{
-					currentSubMesh = outputMesh->CreateSubMesh();
-				}
-				currentSubMesh->m_startIndex = outputMesh->m_indices.size();
-
-				continue;
-			}
-
 			// face
 			if (token[0] == 'f' && IS_SPACE((token[1]))) 
 			{
@@ -137,6 +103,110 @@ namespace bow {
 					LOG_ERROR("Failed to add faces to submesh");
 					return;
 				}
+
+				continue;
+			}
+			/*
+			// use mtl
+			if ((0 == strncmp(token, "usemtl", 6)) && IS_SPACE((token[6]))) 
+			{
+				token += 7;
+				std::stringstream ss;
+				ss << token;
+				std::string namebuf = ss.str();
+
+				int newMaterialId = -1;
+				if (material_map.find(namebuf) != material_map.end()) 
+				{
+					newMaterialId = material_map[namebuf];
+				}
+				else {
+					// { error!! material not found }
+				}
+
+				if (newMaterialId != material) 
+				{
+					// Create per-face material. Thus we don't add `shape` to `shapes` at
+					// this time.
+					// just clear `faceGroup` after `exportFaceGroupToShape()` call.
+					exportFaceGroupToShape(&shape, faceGroup, tags, material, name, triangulate, v);
+					faceGroup.clear();
+					material = newMaterialId;
+				}
+
+				continue;
+			}
+
+			// load mtl
+			if ((0 == strncmp(token, "mtllib", 6)) && IS_SPACE((token[6]))) 
+			{
+				token += 7;
+
+				std::vector<std::string> filenames;
+				SplitString(std::string(token), ' ', filenames);
+
+				if (filenames.empty()) 
+				{
+					LOG_WARNING("Looks like empty filename for mtllib. Use default material.");
+				}
+				else 
+				{
+					bool found = false;
+					for (size_t s = 0; s < filenames.size(); s++) 
+					{
+						std::string err_mtl;
+						bool ok = (*readMatFn)(filenames[s].c_str(), materials, &material_map, &err_mtl);
+						if (err && (!err_mtl.empty())) 
+						{
+							(*err) += err_mtl;  // This should be warn message.
+						}
+
+						if (ok) 
+						{
+							found = true;
+							break;
+						}
+					}
+
+					if (!found) 
+					{
+						LOG_WARNING("Failed to load material file(s). Use default material.");
+					}
+				}
+
+				continue;
+			}
+			*/
+			// group name
+			if (token[0] == 'g' && IS_SPACE((token[1])))
+			{
+				if (currentSubMesh != nullptr)
+				{
+					currentSubMesh->m_numIndices = outputMesh->m_indices.size() - currentSubMesh->m_startIndex;
+				}
+
+				std::vector<std::string> names;
+				names.reserve(2);
+
+				while (!IS_NEW_LINE(token[0]))
+				{
+					std::string str = parseString(&token);
+					names.push_back(str);
+					token += strspn(token, " \t\r");  // skip tag
+				}
+
+				LOG_ASSERT(names.size() > 0, "No Groupe Name");
+
+				// names[0] must be 'g', so skip the 0th element.
+				if (names.size() > 1)
+				{
+					currentSubMesh = outputMesh->CreateSubMesh(names[1]);
+				}
+				else
+				{
+					currentSubMesh = outputMesh->CreateSubMesh();
+				}
+				currentSubMesh->m_startIndex = outputMesh->m_indices.size();
 
 				continue;
 			}
