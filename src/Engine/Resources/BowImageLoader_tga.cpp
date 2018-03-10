@@ -91,15 +91,15 @@ namespace bow {
 			{
 				ucChunkHeader -= 127;	// Subteact 127 to get rid of the ID bit
 
-				// read the current color
-				memcpy(&outputImage->m_data[0] + (iCurrentPixel * (outputImage->m_numBitsPerPixel / 8)), inputData + m_readCounter, (outputImage->m_numBitsPerPixel / 8));
-				m_readCounter += (outputImage->m_numBitsPerPixel / 8);
-
 				// copy the color into the image data as many times as dictated 
 				for (int i = 0; i < (int)ucChunkHeader; ++i)
 				{
+					// read the current color
+					memcpy(&outputImage->m_data[0] + (iCurrentPixel * (outputImage->m_numBitsPerPixel / 8)), inputData + m_readCounter, (outputImage->m_numBitsPerPixel / 8));
+
 					++iCurrentPixel;
 				}
+				m_readCounter += (outputImage->m_numBitsPerPixel / 8);
 			}
 		} while (iCurrentPixel < iPixelCount);
 	}
