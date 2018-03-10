@@ -43,11 +43,29 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Vertex Array from Mesh
 
-	MeshPtr mesh = MeshManager::GetInstance().Load("../Data/sponza.obj");
+	MeshPtr mesh = MeshManager::GetInstance().Load("../Data/models/Corvette-F3/Corvette-F3.obj");
 
 	MeshAttribute meshAttr = mesh->CreateAttribute("in_Position", "in_Normal", "in_TexCoord");
 
 	VertexArrayPtr vertexArray = contextOGL->VCreateVertexArray(meshAttr, shaderProgram->VGetVertexAttributes(), BufferHint::StaticDraw);
+
+	Texture2DPtr texture;
+	ImagePtr image = ImageManager::GetInstance().Load("../Data/models/Corvette-F3/SF_Corvette-F3_diffuse.png");
+	if (image->GetSizeInBytes() / (image->GetHeight() * image->GetWidth()) == 3)
+		texture = deviceOGL->VCreateTexture2D(image, TextureFormat::RedGreenBlue8);
+	else
+		texture = deviceOGL->VCreateTexture2D(image, TextureFormat::RedGreenBlueAlpha8);
+
+	TextureSamplerPtr sampler = deviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Clamp, TextureWrap::Clamp);
+
+	int TexID = 0;
+	contextOGL->VSetTexture(TexID, texture);
+	contextOGL->VSetTextureSampler(TexID, sampler);
+
+	///////////////////////////////////////////////////////////////////
+	// Uniforms
+
+	shaderProgram->VSetUniform("diffuseTex", TexID);
 
 	///////////////////////////////////////////////////////////////////
 	// ClearState and Color
@@ -58,7 +76,7 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Camera
 
-	Vector3<float> Position = Vector3<float>(400.0f, 200.0f, 0.0f);
+	Vector3<float> Position = Vector3<float>(0.0f, 800.0f, -2000.0f);
 	Vector3<float> LookAt = Vector3<float>(0.0f, 0.0f, 0.0f);
 	Vector3<float> UpVector = Vector3<float>(0.0f, 1.0f, 0.0f);
 
