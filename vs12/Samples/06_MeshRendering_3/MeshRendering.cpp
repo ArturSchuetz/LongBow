@@ -101,7 +101,7 @@ int main()
 	Vector3<float> upVector = Vector3<float>(0.0f, 1.0f, 0.0f);
 
 	FirstPersonCamera camera = FirstPersonCamera(position, lookAt, upVector, windowOGL->VGetWidth(), windowOGL->VGetHeight());
-	camera.SetClippingPlanes(0.1, 10000.0);
+	camera.SetClippingPlanes(10.0, 10000.0);
 
 	///////////////////////////////////////////////////////////////////
 	// Input

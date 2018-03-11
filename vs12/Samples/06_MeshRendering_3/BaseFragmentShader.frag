@@ -15,7 +15,7 @@ void main(void)
 	
     vec4 diffuseColor = texture(diffuseTex, vec2(var_TexCoord.x, 1.0 - var_TexCoord.y)).rgba;
 
-	if(diffuseColor.a == 0.0)
+	if(diffuseColor.a < 0.1)
 		discard;
 
 	out_Color = intensity * diffuseColor.rgb;
