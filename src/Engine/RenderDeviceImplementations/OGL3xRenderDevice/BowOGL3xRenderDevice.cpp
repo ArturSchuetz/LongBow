@@ -318,7 +318,7 @@ namespace bow {
 		else
 			format = TextureFormat::RedGreenBlueAlpha8;
 
-		Texture2DPtr texture = OGLTexture2DPtr(new OGLTexture2D(Texture2DDescription(image->GetWidth(), image->GetHeight(), format), GL_TEXTURE_2D));
+		Texture2DPtr texture = OGLTexture2DPtr(new OGLTexture2D(Texture2DDescription(image->GetWidth(), image->GetHeight(), format, true), GL_TEXTURE_2D));
 		texture->VCopyFromSystemMemory(image->GetData(), OGLTypeConverter::TextureToImageFormat(format), ImageDatatype::UnsignedByte);
 		return texture;
 	}

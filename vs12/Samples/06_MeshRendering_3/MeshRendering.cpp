@@ -79,7 +79,7 @@ int main()
 
 	int texID = 0;
 
-	TextureSamplerPtr sampler = deviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Repeat, TextureWrap::Repeat);
+	TextureSamplerPtr sampler = deviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::LinearMipmapLinear, TextureMagnificationFilter::Linear, TextureWrap::Repeat, TextureWrap::Repeat);
 	contextOGL->VSetTextureSampler(texID, sampler);
 
 	///////////////////////////////////////////////////////////////////
