@@ -309,6 +309,9 @@ namespace bow {
 
 	Texture2DPtr OGLRenderDevice::VCreateTexture2D(ImagePtr image)
 	{
+		if (image->GetSizeInBytes() == 0)
+			return Texture2DPtr(nullptr);
+
 		TextureFormat format;
 		if (image->GetSizeInBytes() / (image->GetHeight() * image->GetWidth()) == 3)
 			format = TextureFormat::RedGreenBlue8;

@@ -46,8 +46,46 @@ int main()
 	MeshPtr mesh = MeshManager::GetInstance().Load("../Data/models/sponza/sponza.obj");
 	std::vector<SubMesh*> subMeshes = mesh->GetSubMeshes();
 
+	std::vector<std::string> files = mesh->GetMaterialFiles();
+
+	std::map<std::string, Texture2DPtr> m_diffuseTextures;
+	for (unsigned int i = 0; i < files.size(); i++)
+	{
+		MaterialCollectionPtr materialCollection = MaterialManager::GetInstance().Load(files[i]);
+		std::size_t foundPos = materialCollection->VGetName().find_last_of("/");
+		std::string filePath = "";
+		if (foundPos >= 0)
+		{
+			filePath = materialCollection->VGetName().substr(0, foundPos + 1);
+		}
+
+		std::vector<Material*> materials = materialCollection->GetMaterials();
+		for (unsigned int j = 0; j < materials.size(); j++)
+		{
+			if (!materials[j]->diffuse_texname.empty())
+			{
+				ImagePtr image = ImageManager::GetInstance().Load(filePath + materials[j]->diffuse_texname);
+				m_diffuseTextures.insert(std::pair<std::string, Texture2DPtr>(materials[j]->name, deviceOGL->VCreateTexture2D(image)));
+			}
+			else
+			{
+				m_diffuseTextures.insert(std::pair<std::string, Texture2DPtr>(materials[j]->name, Texture2DPtr(nullptr)));
+			}
+		}
+	}
+
 	MeshAttribute meshAttr = mesh->CreateAttribute("in_Position", "in_Normal", "in_TexCoord");
 	VertexArrayPtr vertexArray = contextOGL->VCreateVertexArray(meshAttr, shaderProgram->VGetVertexAttributes(), BufferHint::StaticDraw);
+
+	int texID = 0;
+
+	TextureSamplerPtr sampler = deviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Repeat, TextureWrap::Repeat);
+	contextOGL->VSetTextureSampler(texID, sampler);
+
+	///////////////////////////////////////////////////////////////////
+	// Uniforms
+
+	shaderProgram->VSetUniform("diffuseTex", texID);
 
 	///////////////////////////////////////////////////////////////////
 	// ClearState and Color
@@ -110,6 +148,11 @@ int main()
 
 		for (unsigned int i = 0; i < subMeshes.size(); i++)
 		{
+			std::string name = subMeshes[i]->GetMaterialName();
+
+			Texture2DPtr texture = m_diffuseTextures[name]; 
+			contextOGL->VSetTexture(texID, texture);
+
 			contextOGL->VDraw(PrimitiveType::Triangles, subMeshes[i]->GetStartIndex(), subMeshes[i]->GetNumIndices(), vertexArray, shaderProgram, renderState);
 		}
 

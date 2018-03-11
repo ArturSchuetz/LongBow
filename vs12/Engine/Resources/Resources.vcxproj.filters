@@ -83,13 +83,7 @@
     <ClInclude Include="..\..\..\include\BowImage.h">
       <Filter>Header Files\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\BowMaterial.h">
-      <Filter>Header Files\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\BowMesh.h">
-      <Filter>Header Files\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\BowSubMesh.h">
       <Filter>Header Files\Resources</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\BowPointCloud.h">
@@ -97,6 +91,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\Engine\Resources\BowImageLoader_tga.h">
       <Filter>Header Files\FileLoaders\ImageLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowMaterial.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BowMaterialManager.h">
+      <Filter>Header Files\ResourceManagers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -130,20 +130,20 @@
     <ClCompile Include="..\..\..\src\Engine\Resources\BowImage.cpp">
       <Filter>Source Files\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\Resources\BowMaterial.cpp">
-      <Filter>Source Files\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\Engine\Resources\BowMesh.cpp">
       <Filter>Source Files\Resources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\Engine\Resources\BowPointCloud.cpp">
       <Filter>Source Files\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\Engine\Resources\BowSubMesh.cpp">
-      <Filter>Source Files\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\Engine\Resources\BowImageLoader_tga.cpp">
       <Filter>Source Files\FileLoaders\ImageLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowMaterial.cpp">
+      <Filter>Source Files\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowMaterialManager.cpp">
+      <Filter>Source Files\ResourceManagers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

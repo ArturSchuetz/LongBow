@@ -10,8 +10,8 @@ namespace bow {
 	// Resources
 	class Mesh;
 		typedef std::shared_ptr<Mesh> MeshPtr;
-	class Material;
-		typedef std::shared_ptr<Material> MaterialPtr;
+	class MaterialCollection;
+		typedef std::shared_ptr<MaterialCollection> MaterialCollectionPtr;
 	class PointCloud;
 		typedef std::shared_ptr<PointCloud> PointCloudPtr;
 	class Image;

@@ -9,7 +9,7 @@
 #include "BowModelLoader_obj.h"
 
 namespace bow {
-	
+
 	Mesh::Mesh(ResourceManager* creator, const std::string& name, ResourceHandle handle)
 		: Resource(creator, name, handle)
 		, m_dataFromDisk(nullptr)
@@ -190,7 +190,7 @@ namespace bow {
 
 			if (extension == "obj") 
 			{
-				ModelLoader_OBJ loader;
+				ModelLoader_obj loader;
 				loader.ImportMesh(m_dataFromDisk, this);
 			}
 			else
@@ -217,6 +217,7 @@ namespace bow {
 		m_subMeshList.clear();
 		m_subMeshNameMap.clear();
 
+		m_indices.clear();
 		m_vertices.clear();
 		m_normals.clear();
 		m_texCoords.clear();

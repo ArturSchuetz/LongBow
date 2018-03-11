@@ -6,12 +6,11 @@
 
 //#include "BowResource.h"
 #include "BowImage.h"
-#include "BowPointCloud.h"
 #include "BowMesh.h"
-#include "BowSubMesh.h"
-#include "BowMaterial.h"
+#include "BowPointCloud.h"
 
 //#include "BowResourceManager.h"
 #include "BowImageManager.h"
 #include "BowMeshManager.h"
+#include "BowMaterialManager.h"
 #include "BowPointCloudManager.h"

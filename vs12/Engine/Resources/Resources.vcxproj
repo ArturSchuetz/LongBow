@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\include\BowImageManager.h" />
     <ClInclude Include="..\..\..\include\BowMaterial.h" />
+    <ClInclude Include="..\..\..\include\BowMaterialManager.h" />
     <ClInclude Include="..\..\..\include\BowMesh.h" />
     <ClInclude Include="..\..\..\include\BowMeshManager.h" />
     <ClInclude Include="..\..\..\include\BowPointCloud.h" />
@@ -157,7 +158,6 @@
     <ClInclude Include="..\..\..\include\BowResourceManager.h" />
     <ClInclude Include="..\..\..\include\BowResources.h" />
     <ClInclude Include="..\..\..\include\BowResourcesPredeclares.h" />
-    <ClInclude Include="..\..\..\include\BowSubMesh.h" />
     <ClInclude Include="..\..\..\include\BowImage.h" />
     <ClInclude Include="..\..\..\src\Engine\Resources\BowImageLoader_bmp.h" />
     <ClInclude Include="..\..\..\src\Engine\Resources\BowImageLoader_png.h" />
@@ -171,6 +171,7 @@
     <ClCompile Include="..\..\..\src\Engine\Resources\BowImageLoader_tga.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Resources\BowImageManager.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Resources\BowMaterial.cpp" />
+    <ClCompile Include="..\..\..\src\Engine\Resources\BowMaterialManager.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Resources\BowMesh.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Resources\BowMeshManager.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Resources\BowModelLoader_obj.cpp" />
@@ -179,7 +180,6 @@
     <ClCompile Include="..\..\..\src\Engine\Resources\BowPointCloudManager.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Resources\BowResource.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Resources\BowResourceManager.cpp" />
-    <ClCompile Include="..\..\..\src\Engine\Resources\BowSubMesh.cpp" />
     <ClCompile Include="..\..\..\src\Engine\Resources\BowImage.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

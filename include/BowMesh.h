@@ -8,12 +8,47 @@
 namespace bow {
 
 	// ---------------------------------------------------------------------------
+	/** @brief A sub mesh represents geometry without any material.
+	*/
+	class SubMesh
+	{
+		friend class Mesh;
+		friend class ModelLoader_obj;
+
+	public:
+		SubMesh() : m_parent(0) {}
+		~SubMesh(){}
+
+		unsigned int GetStartIndex() {
+			return m_startIndex;
+		}
+
+		unsigned int GetNumIndices() {
+			return m_numIndices; 
+		}
+
+		const std::string& GetMaterialName() {
+			return m_material;
+		}
+
+	private:
+		/// Reference to parent Mesh (not a smart pointer so child does not keep parent alive).
+		Mesh* m_parent;
+
+		std::string m_name;
+		unsigned int m_startIndex;
+		unsigned int m_numIndices;
+
+		std::string m_material;
+	};
+
+	// ---------------------------------------------------------------------------
 	/** @brief A mesh represents geometry without any material.
 	*/
 	class Mesh : public Resource
 	{
 		friend class SubMesh;
-		friend class ModelLoader_OBJ;
+		friend class ModelLoader_obj;
 
 	public:
 		Mesh(ResourceManager* creator, const std::string& name, ResourceHandle handle);
@@ -79,6 +114,10 @@ namespace bow {
 			return m_subMeshList;
 		}
 
+		const std::vector<std::string>& GetMaterialFiles() const {
+			return m_materialFilesList;
+		}
+
 	private:
 		/** Loads the mesh from disk.  This call only performs IO, it
 			does not parse the bytestream or check for any errors therein.
@@ -100,18 +139,20 @@ namespace bow {
 		/// @copydoc Resource::VUnloadImpl
 		void VUnloadImpl(void);
 
+		char* m_dataFromDisk;
+
 		/** A list of submeshes which make up this mesh.
 		Each mesh is made up of 1 or more submeshes, which
 		are each based on a single material and can have their
 		own vertex data (they may not - they can share vertex data
 		from the Mesh, depending on preference).
 		*/
-		std::vector<SubMesh*> m_subMeshList;
-		std::map<std::string, unsigned short> m_subMeshNameMap;
+		std::vector<SubMesh*>					m_subMeshList;
+		std::map<std::string, unsigned short>	m_subMeshNameMap;
 
-		char* m_dataFromDisk;
+		std::vector<std::string>				m_materialFilesList;
 
-		std::vector<unsigned int> m_indices;
+		std::vector<unsigned int>	m_indices;
 		std::vector<Vector3<float>> m_vertices;
 		std::vector<Vector3<float>> m_normals;
 		std::vector<Vector2<float>> m_texCoords;
