@@ -89,26 +89,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>..\..\..\bin\$(Platform)\</OutDir>
     <IntDir>..\..\..\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-	<LocalDebuggerWorkingDirectory>..\..\..\bin\$(Platform)\</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory>..\..\..\bin\$(Platform)\</LocalDebuggerWorkingDirectory>
     <TargetName>$(ProjectName)_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>..\..\..\bin\$(Platform)\</OutDir>
     <IntDir>..\..\..\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-	<LocalDebuggerWorkingDirectory>..\..\..\bin\$(Platform)\</LocalDebuggerWorkingDirectory>
-    <TargetName>$(ProjectName)_d</TargetName>
+    <LocalDebuggerWorkingDirectory>..\..\..\bin\$(Platform)\</LocalDebuggerWorkingDirectory>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\..\bin\$(Platform)\</OutDir>
     <IntDir>..\..\..\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-	<LocalDebuggerWorkingDirectory>..\..\..\bin\$(Platform)\</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory>..\..\..\bin\$(Platform)\</LocalDebuggerWorkingDirectory>
     <TargetName>$(ProjectName)_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\..\bin\$(Platform)\</OutDir>
     <IntDir>..\..\..\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-	<LocalDebuggerWorkingDirectory>..\..\..\bin\$(Platform)\</LocalDebuggerWorkingDirectory>
-    <TargetName>$(ProjectName)_d</TargetName>
+    <LocalDebuggerWorkingDirectory>..\..\..\bin\$(Platform)\</LocalDebuggerWorkingDirectory>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
