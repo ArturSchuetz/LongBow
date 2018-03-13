@@ -173,6 +173,8 @@
   <ItemGroup>
     <None Include="BaseFragmentShader.frag" />
     <None Include="BaseVertexShader.vert" />
+    <None Include="BumpMapFragmentShader.frag" />
+    <None Include="BumpMapVertexShader.vert" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />

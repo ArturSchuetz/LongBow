@@ -29,6 +29,12 @@
     <None Include="BaseVertexShader.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="BumpMapFragmentShader.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="BumpMapVertexShader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">

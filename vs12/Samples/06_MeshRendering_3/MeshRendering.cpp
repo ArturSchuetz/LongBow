@@ -39,6 +39,7 @@ int main()
 	}
 	RenderContextPtr contextOGL = windowOGL->VGetContext();
 	ShaderProgramPtr shaderProgram = deviceOGL->VCreateShaderProgram(LoadShaderFromResouce(IDS_VERTEXSHADER), LoadShaderFromResouce(IDS_FRAGMENTSHADER));
+	ShaderProgramPtr bumpMapShaderProgram = deviceOGL->VCreateShaderProgram(LoadShaderFromResouce(IDS_BUMPVERTEXSHADER), LoadShaderFromResouce(IDS_BUMPFRAGMENTSHADER));
 
 	///////////////////////////////////////////////////////////////////
 	// Vertex Array from Mesh
@@ -96,7 +97,7 @@ int main()
 	}
 
 	MeshAttribute meshAttr = mesh->CreateAttribute("in_Position", "in_Normal", "in_Tangent", "in_Bitangent", "in_TexCoord");
-	VertexArrayPtr vertexArray = contextOGL->VCreateVertexArray(meshAttr, shaderProgram->VGetVertexAttributes(), BufferHint::StaticDraw);
+	VertexArrayPtr vertexArray = contextOGL->VCreateVertexArray(meshAttr, bumpMapShaderProgram->VGetVertexAttributes(), BufferHint::StaticDraw);
 
 	int texID = 0;
 	int normalTexID = 1;
@@ -109,8 +110,8 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Uniforms
 
-	shaderProgram->VSetUniform("diffuseTex", texID);
-	shaderProgram->VSetUniform("normalTex", normalTexID);
+	bumpMapShaderProgram->VSetUniform("diffuseTex", texID);
+	bumpMapShaderProgram->VSetUniform("normalTex", normalTexID);
 
 	///////////////////////////////////////////////////////////////////
 	// ClearState and Color
@@ -169,9 +170,9 @@ int main()
 		contextOGL->VSetViewport(Viewport(0, 0, windowOGL->VGetWidth(), windowOGL->VGetHeight()));
 		camera.SetResolution(windowOGL->VGetWidth(), windowOGL->VGetHeight());
 
-		shaderProgram->VSetUniform("u_ModelView", (Matrix4x4<float>)camera.CalculateWorldView(worldMat));
-		shaderProgram->VSetUniform("u_View", (Matrix4x4<float>)camera.CalculateView());
-		shaderProgram->VSetUniform("u_Proj", (Matrix4x4<float>)camera.CalculateProjection());
+		bumpMapShaderProgram->VSetUniform("u_ModelView", (Matrix4x4<float>)camera.CalculateWorldView(worldMat));
+		bumpMapShaderProgram->VSetUniform("u_View", (Matrix4x4<float>)camera.CalculateView());
+		bumpMapShaderProgram->VSetUniform("u_Proj", (Matrix4x4<float>)camera.CalculateProjection());
 
 		for (unsigned int i = 0; i < subMeshes.size(); i++)
 		{
@@ -180,7 +181,7 @@ int main()
 			contextOGL->VSetTexture(texID, diffuseTextures[name]);
 			contextOGL->VSetTexture(normalTexID, normalTextures[name]);
 
-			contextOGL->VDraw(PrimitiveType::Triangles, subMeshes[i]->GetStartIndex(), subMeshes[i]->GetNumIndices(), vertexArray, shaderProgram, renderState);
+			contextOGL->VDraw(PrimitiveType::Triangles, subMeshes[i]->GetStartIndex(), subMeshes[i]->GetNumIndices(), vertexArray, bumpMapShaderProgram, renderState);
 		}
 
 		contextOGL->VSwapBuffers();
