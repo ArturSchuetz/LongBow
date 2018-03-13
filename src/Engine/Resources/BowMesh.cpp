@@ -252,7 +252,7 @@ namespace bow {
 
 			Vector3<float> normal = (deltaPos1.CrossP(deltaPos2)).Normalized();
 			Vector3<float> tangent = ((deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y)*r).Normalized();
-			Vector3<float> bitangent = ((deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x)*r).Normalized();
+			Vector3<float> bitangent = ((deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x)*r).Normalized() * -1.0f;
 
 			//m_normals[i1] = normal;
 			//m_normals[i2] = normal;
