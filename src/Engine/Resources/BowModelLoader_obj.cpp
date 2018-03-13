@@ -188,6 +188,12 @@ namespace bow {
 			// Ignore unknown command.
 		}
 
+		if (currentSubMesh == nullptr)
+		{
+			currentSubMesh = outputMesh->CreateSubMesh();
+			currentSubMesh->m_startIndex = 0;
+		}
+
 		if (currentSubMesh != nullptr)
 		{
 			currentSubMesh->m_numIndices = outputMesh->m_indices.size() - currentSubMesh->m_startIndex;
@@ -584,21 +590,28 @@ namespace bow {
 
 	unsigned int ModelLoader_obj::getVertexIndex(Mesh* mesh, index_t index)
 	{
-		/*
-		for (int i = mesh->m_vertices.size() - 1; i >= 0; --i)
-		{
-			if (mesh->m_vertices[i] == vertices[index.vertex_index]
-				&& mesh->m_normals[i] == normals[index.normal_index]
-				&& mesh->m_texCoords[i] == textureCoordinates[index.texcoord_index])
-			{
-				return i;
-			}
-		}
-		*/
-
+		// no vertices, no cookies!
 		mesh->m_vertices.push_back(vertices[index.vertex_index]);
-		mesh->m_normals.push_back(normals[index.normal_index]);
-		mesh->m_texCoords.push_back(texCoords[index.texcoord_index]);
+
+		// normals are optional
+		if (index.normal_index >= 0)
+		{
+			mesh->m_normals.push_back(normals[index.normal_index]);
+		}
+		else
+		{
+			mesh->m_normals.push_back(Vector3<float>(0.0f, 0.0f, 0.0f));
+		}
+
+		// normals are optional
+		if (index.texcoord_index >= 0)
+		{
+			mesh->m_texCoords.push_back(texCoords[index.texcoord_index]);
+		}
+		//else
+		//{
+		//	mesh->m_texCoords.push_back(Vector2<float>(0.0f, 0.0f));
+		//}
 
 		return mesh->m_vertices.size() - 1;
 	}

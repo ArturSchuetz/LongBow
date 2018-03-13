@@ -54,7 +54,9 @@ namespace bow {
 		Mesh(ResourceManager* creator, const std::string& name, ResourceHandle handle);
 		~Mesh();
 
+		MeshAttribute CreateAttribute(const std::string& positionAttribute, const std::string& normalAttribute);
 		MeshAttribute CreateAttribute(const std::string& positionAttribute, const std::string& normalAttribute, const std::string& textureCoordinateAttribute);
+		MeshAttribute CreateAttribute(const std::string& positionAttribute, const std::string& normalAttribute, const std::string& tangentAttribute, const std::string& bitangentAttribute, const std::string& textureCoordinateAttribute);
 
 		/** Creates a new SubMesh.
 		@remarks
@@ -118,7 +120,15 @@ namespace bow {
 			return m_materialFilesList;
 		}
 
+		bool HasTextureCoordinates() {
+			return m_texCoords.size() > 0;
+		}
+
 	private:
+
+		void CalculateMissingNormals();
+		void CalculateTangents();
+
 		/** Loads the mesh from disk.  This call only performs IO, it
 			does not parse the bytestream or check for any errors therein.
 			It also does not set up submeshes, etc.  You have to call load()
@@ -155,6 +165,8 @@ namespace bow {
 		std::vector<unsigned int>	m_indices;
 		std::vector<Vector3<float>> m_vertices;
 		std::vector<Vector3<float>> m_normals;
+		std::vector<Vector3<float>> m_tangents;
+		std::vector<Vector3<float>> m_bitangents;
 		std::vector<Vector2<float>> m_texCoords;
 	};
 }

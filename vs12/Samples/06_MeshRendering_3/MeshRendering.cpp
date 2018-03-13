@@ -48,7 +48,8 @@ int main()
 
 	std::vector<std::string> files = mesh->GetMaterialFiles();
 
-	std::map<std::string, Texture2DPtr> m_diffuseTextures;
+	std::map<std::string, Texture2DPtr> diffuseTextures;
+	std::map<std::string, Texture2DPtr> normalTextures;
 	for (unsigned int i = 0; i < files.size(); i++)
 	{
 		MaterialCollectionPtr materialCollection = MaterialManager::GetInstance().Load(files[i]);
@@ -59,33 +60,57 @@ int main()
 			filePath = materialCollection->VGetName().substr(0, foundPos + 1);
 		}
 
+		unsigned char* defaultNormalColor = new unsigned char[4];
+		defaultNormalColor[0] = defaultNormalColor[1] = 128;
+		defaultNormalColor[2] = 255;
+
 		std::vector<Material*> materials = materialCollection->GetMaterials();
 		for (unsigned int j = 0; j < materials.size(); j++)
 		{
 			if (!materials[j]->diffuse_texname.empty())
 			{
 				ImagePtr image = ImageManager::GetInstance().Load(filePath + materials[j]->diffuse_texname);
-				m_diffuseTextures.insert(std::pair<std::string, Texture2DPtr>(materials[j]->name, deviceOGL->VCreateTexture2D(image)));
+				diffuseTextures.insert(std::pair<std::string, Texture2DPtr>(materials[j]->name, deviceOGL->VCreateTexture2D(image)));
 			}
 			else
 			{
-				m_diffuseTextures.insert(std::pair<std::string, Texture2DPtr>(materials[j]->name, Texture2DPtr(nullptr)));
+				Texture2DPtr texture = deviceOGL->VCreateTexture2D(Texture2DDescription(1, 1, TextureFormat::RedGreenBlue8, true));
+				texture->VCopyFromSystemMemory(materials[j]->diffuse, ImageFormat::RedGreenBlue, ImageDatatype::UnsignedByte);
+				diffuseTextures.insert(std::pair<std::string, Texture2DPtr>(materials[j]->name, texture));
+			}
+
+			if (!materials[j]->bump_texname.empty())
+			{
+				ImagePtr image = ImageManager::GetInstance().Load(filePath + materials[j]->bump_texname);
+				normalTextures.insert(std::pair<std::string, Texture2DPtr>(materials[j]->name, deviceOGL->VCreateTexture2D(image)));
+			}
+			else
+			{
+				Texture2DPtr texture = deviceOGL->VCreateTexture2D(Texture2DDescription(1, 1, TextureFormat::RedGreenBlue8, true));
+				texture->VCopyFromSystemMemory(defaultNormalColor, ImageFormat::RedGreenBlue, ImageDatatype::UnsignedByte);
+				normalTextures.insert(std::pair<std::string, Texture2DPtr>(materials[j]->name, texture));
 			}
 		}
+
+		delete[] defaultNormalColor;
 	}
 
-	MeshAttribute meshAttr = mesh->CreateAttribute("in_Position", "in_Normal", "in_TexCoord");
+	MeshAttribute meshAttr = mesh->CreateAttribute("in_Position", "in_Normal", "in_Tangent", "in_Bitangent", "in_TexCoord");
 	VertexArrayPtr vertexArray = contextOGL->VCreateVertexArray(meshAttr, shaderProgram->VGetVertexAttributes(), BufferHint::StaticDraw);
 
 	int texID = 0;
+	int normalTexID = 1;
 
 	TextureSamplerPtr sampler = deviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::LinearMipmapLinear, TextureMagnificationFilter::Linear, TextureWrap::Repeat, TextureWrap::Repeat);
+	
 	contextOGL->VSetTextureSampler(texID, sampler);
+	contextOGL->VSetTextureSampler(normalTexID, sampler);
 
 	///////////////////////////////////////////////////////////////////
 	// Uniforms
 
 	shaderProgram->VSetUniform("diffuseTex", texID);
+	shaderProgram->VSetUniform("normalTex", normalTexID);
 
 	///////////////////////////////////////////////////////////////////
 	// ClearState and Color
@@ -96,7 +121,7 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Camera
 
-	Vector3<float> position = Vector3<float>(400.0f, 200.0f, 0.0f);
+	Vector3<float> position = Vector3<float>(0.0f, 180.0f, 0.0f);
 	Vector3<float> lookAt = Vector3<float>(0.0f, 0.0f, 0.0f);
 	Vector3<float> upVector = Vector3<float>(0.0f, 1.0f, 0.0f);
 
@@ -143,15 +168,17 @@ int main()
 
 		contextOGL->VSetViewport(Viewport(0, 0, windowOGL->VGetWidth(), windowOGL->VGetHeight()));
 		camera.SetResolution(windowOGL->VGetWidth(), windowOGL->VGetHeight());
+
 		shaderProgram->VSetUniform("u_ModelView", (Matrix4x4<float>)camera.CalculateWorldView(worldMat));
+		shaderProgram->VSetUniform("u_View", (Matrix4x4<float>)camera.CalculateView());
 		shaderProgram->VSetUniform("u_Proj", (Matrix4x4<float>)camera.CalculateProjection());
 
 		for (unsigned int i = 0; i < subMeshes.size(); i++)
 		{
 			std::string name = subMeshes[i]->GetMaterialName();
 
-			Texture2DPtr texture = m_diffuseTextures[name]; 
-			contextOGL->VSetTexture(texID, texture);
+			contextOGL->VSetTexture(texID, diffuseTextures[name]);
+			contextOGL->VSetTexture(normalTexID, normalTextures[name]);
 
 			contextOGL->VDraw(PrimitiveType::Triangles, subMeshes[i]->GetStartIndex(), subMeshes[i]->GetNumIndices(), vertexArray, shaderProgram, renderState);
 		}
