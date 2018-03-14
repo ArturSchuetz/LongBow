@@ -15,5 +15,5 @@ newmtl SF_Corvette_F3
 	map_Ka SF_Corvette-F3_diffuse.png
 	map_Kd SF_Corvette-F3_diffuse.png
 	map_Ke SF_Corvette-F3_glow.png
-	map_bump SF_Corvette-F3_bump.png
-	bump SF_Corvette-F3_bump.png
+	map_bump SF_Corvette-F3_normal.png
+	bump SF_Corvette-F3_normal.png

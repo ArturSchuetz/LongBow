@@ -47,7 +47,8 @@ int main()
 	std::vector<SubMesh*> subMeshes = mesh->GetSubMeshes();
 	std::vector<std::string> files = mesh->GetMaterialFiles();
 
-	std::map<std::string, Texture2DPtr> m_diffuseTextures;
+	std::map<std::string, Texture2DPtr> diffuseTextures;
+	std::map<std::string, Texture2DPtr> normalTextures;
 	for (unsigned int i = 0; i < files.size(); i++)
 	{
 		MaterialCollectionPtr materialCollection = MaterialManager::GetInstance().Load(files[i]);
@@ -61,23 +62,35 @@ int main()
 		std::vector<Material*> materials = materialCollection->GetMaterials();
 		for (unsigned int j = 0; j < materials.size(); j++)
 		{
-			ImagePtr image = ImageManager::GetInstance().Load(filePath + materials[j]->diffuse_texname);
-			m_diffuseTextures.insert(std::pair<std::string, Texture2DPtr>(materials[j]->name, deviceOGL->VCreateTexture2D(image)));
+			if (!materials[j]->diffuse_texname.empty())
+			{
+				ImagePtr image = ImageManager::GetInstance().Load(filePath + materials[j]->diffuse_texname);
+				diffuseTextures.insert(std::pair<std::string, Texture2DPtr>(materials[j]->name, deviceOGL->VCreateTexture2D(image)));
+			}
+
+			if (!materials[j]->bump_texname.empty())
+			{
+				ImagePtr image = ImageManager::GetInstance().Load(filePath + materials[j]->bump_texname);
+				normalTextures.insert(std::pair<std::string, Texture2DPtr>(materials[j]->name, deviceOGL->VCreateTexture2D(image)));
+			}
 		}
 	}
 
-	MeshAttribute meshAttr = mesh->CreateAttribute("in_Position", "in_Normal", "in_TexCoord");
+	MeshAttribute meshAttr = mesh->CreateAttribute("in_Position", "in_Normal", "in_Tangent", "in_Bitangent", "in_TexCoord");
 	VertexArrayPtr vertexArray = contextOGL->VCreateVertexArray(meshAttr, shaderProgram->VGetVertexAttributes(), BufferHint::StaticDraw);
 
 	int diffuseTexID = 0;
+	int normalTexID = 1;
 
 	TextureSamplerPtr sampler = deviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Clamp, TextureWrap::Clamp);
 	contextOGL->VSetTextureSampler(diffuseTexID, sampler);
+	contextOGL->VSetTextureSampler(normalTexID, sampler);
 
 	///////////////////////////////////////////////////////////////////
 	// Uniforms
 
 	shaderProgram->VSetUniform("diffuseTex", diffuseTexID);
+	shaderProgram->VSetUniform("normalTex", normalTexID);
 
 	///////////////////////////////////////////////////////////////////
 	// ClearState and Color
@@ -135,14 +148,18 @@ int main()
 
 		contextOGL->VSetViewport(Viewport(0, 0, windowOGL->VGetWidth(), windowOGL->VGetHeight()));
 		camera.SetResolution(windowOGL->VGetWidth(), windowOGL->VGetHeight());
+
 		shaderProgram->VSetUniform("u_ModelView", (Matrix4x4<float>)camera.CalculateWorldView(worldMat));
+		shaderProgram->VSetUniform("u_View", (Matrix4x4<float>)camera.CalculateView());
 		shaderProgram->VSetUniform("u_Proj", (Matrix4x4<float>)camera.CalculateProjection());
 
 		for (unsigned int i = 0; i < subMeshes.size(); i++)
 		{
 			std::string name = subMeshes[i]->GetMaterialName();
-			Texture2DPtr texture = m_diffuseTextures[name];
-			contextOGL->VSetTexture(diffuseTexID, texture);
+
+			contextOGL->VSetTexture(diffuseTexID, diffuseTextures[name]);
+			contextOGL->VSetTexture(normalTexID, normalTextures[name]);
+
 			contextOGL->VDraw(PrimitiveType::Triangles, subMeshes[i]->GetStartIndex(), subMeshes[i]->GetNumIndices(), vertexArray, shaderProgram, renderState);
 		}
 

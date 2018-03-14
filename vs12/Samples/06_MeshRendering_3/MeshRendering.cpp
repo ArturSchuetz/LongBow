@@ -122,7 +122,7 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Camera
 
-	Vector3<float> position = Vector3<float>(0.0f, 180.0f, 0.0f);
+	Vector3<float> position = Vector3<float>(1100.0f, 170.0f, 0.0f);
 	Vector3<float> lookAt = Vector3<float>(0.0f, 0.0f, 0.0f);
 	Vector3<float> upVector = Vector3<float>(0.0f, 1.0f, 0.0f);
 
