@@ -25,7 +25,6 @@ namespace bow {
 	
 	DirectX12RenderDevice::DirectX12RenderDevice(void) 
 	{
-
 	}
 
 	DirectX12RenderDevice::~DirectX12RenderDevice(void)
@@ -35,6 +34,14 @@ namespace bow {
 
 	bool DirectX12RenderDevice::Initialize(void)
 	{
+
+		IDXGIFactory4* dxgiFactory;
+		HRESULT hr = CreateDXGIFactory1(IID_PPV_ARGS(&dxgiFactory));
+		if (FAILED(hr))
+		{
+			LOG_ERROR("Error while creating DXGI Factory");
+			return false;
+		}
 
         return true;
 	}
