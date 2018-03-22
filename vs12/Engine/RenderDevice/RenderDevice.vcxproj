@@ -22,7 +22,7 @@
     <ProjectGuid>{D1B3D672-1304-4EA4-8DEB-095D0656E932}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Renderer</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
     <ProjectName>RenderDevice</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -123,7 +123,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>Resources_d.lib;Core_d.lib</AdditionalDependencies>
+      <AdditionalDependencies>CoreSystems_d.lib</AdditionalDependencies>
     </Lib>
     <Lib>
       <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);</AdditionalLibraryDirectories>

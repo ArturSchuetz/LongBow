@@ -5,14 +5,13 @@
 
 using namespace bow;
 
-
-
 int main()
 {
 	// Creating Render Device
-	RenderDevicePtr deviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(RenderDeviceAPI::OpenGL3x);
+	RenderDevicePtr deviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(RenderDeviceAPI::DirectX12);
 	if (deviceOGL == nullptr)
 	{
+		std::cout << "Could not create device!" << std::endl;
 		return -1;
 	}
 
@@ -20,6 +19,7 @@ int main()
 	GraphicsWindowPtr windowOGL = deviceOGL->VCreateWindow(800, 600, "HelloWorld", WindowType::Windowed);
 	if (windowOGL == nullptr)
 	{
+		std::cout << "Could not create window!" << std::endl;
 		return -1;
 	}
 

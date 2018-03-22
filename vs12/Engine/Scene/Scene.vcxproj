@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D262FFD1-A4C1-45C1-9716-0ABED28C8B08}</ProjectGuid>
     <RootNamespace>Resources</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -107,7 +107,7 @@
       <AdditionalIncludeDirectories>..\..\..\include;..\..\..\dependencies\FreeImage\$(Platform);</AdditionalIncludeDirectories>
     </ClCompile>
     <Lib>
-      <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);..\..\..\dependencies\FreeImage\$(Platform);</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);</AdditionalLibraryDirectories>
       <AdditionalDependencies>Core_d.lib;FreeImage.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
@@ -144,7 +144,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);..\..\..\dependencies\FreeImage\$(Platform);</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);</AdditionalLibraryDirectories>
       <AdditionalDependencies>Core.lib;FreeImage.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>

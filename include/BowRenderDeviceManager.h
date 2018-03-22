@@ -7,6 +7,7 @@ namespace bow {
 	enum class RenderDeviceAPI : char
 	{
 		OpenGL3x,
+		DirectX12,
 		Vulkan
 	};
 

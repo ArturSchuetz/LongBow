@@ -58,6 +58,24 @@ namespace bow
 					}
 				}
 				break;
+			case RenderDeviceAPI::DirectX12:
+			{
+#ifdef _DEBUG
+				hDLL = LoadLibraryExW(L"DirectX12RenderDevice_d.dll", NULL, 0);
+#else
+				hDLL = LoadLibraryExW(L"DirectX12RenderDevice.dll", NULL, 0);
+#endif
+				if (!hDLL)
+				{
+#ifdef _DEBUG
+					LOG_ERROR("Could not find DirectX12RenderDevice_d.dll!");
+#else
+					LOG_ERROR("Could not find DirectX12RenderDevice.dll!");
+#endif
+					return RenderDevicePtr(nullptr);
+				}
+			}
+			break;
 			case RenderDeviceAPI::Vulkan:
 				{
 #ifdef _DEBUG

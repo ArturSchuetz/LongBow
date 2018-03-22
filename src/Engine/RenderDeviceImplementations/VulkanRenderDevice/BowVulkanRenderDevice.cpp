@@ -24,7 +24,7 @@ namespace bow {
 
 	bool VulkanRenderDevice::Initialize(void)
 	{
-		LOG_TRACE("Loadnig Vulkan Library frim DLL.");
+		LOG_TRACE("Loading Vulkan library from DLL.");
 
 #if defined(_WIN32) || defined(_WIN64)
 		VulkanLibrary = LoadLibrary(L"vulkan-1.dll");
