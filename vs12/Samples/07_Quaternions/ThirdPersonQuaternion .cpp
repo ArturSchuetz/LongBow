@@ -178,7 +178,7 @@ int main()
 
 	// Game object and third Person Camera Test
 	GameObject plane = GameObject(Vector3<float>(0.0f, 0.0f, 0.0f), Vector3<float>(0.0f, 1.0f, 0.0f), Vector3<float>(0.0f, 1.0f, 0.0f), Vector3<float>(0.2f, 0.2f, 0.2f));
-	plane.setMesh("../Data/SU-27/Su-27_Flanker.obj", Vector3<float>(0.0f, 0.0f, 1.0f), CameraShaderProgram, contextOGL, BufferHint::StaticDraw);
+	plane.setMesh("../Data/models/SU-27/Su-27_Flanker.obj", Vector3<float>(0.0f, 0.0f, 1.0f), CameraShaderProgram, contextOGL, BufferHint::StaticDraw);
 	plane.setRotation(0.0f, M_PI + M_PI / 2, M_PI);
 	//plane.setRotation(0.0f, 0.0f, 0.0f);
 
