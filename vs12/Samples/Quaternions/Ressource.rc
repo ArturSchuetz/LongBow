@@ -1,0 +1,15 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// SHADER
+//
+
+IDS_VERTEXSHADER            SHADER                  "BaseVertexShader.vert"
+IDS_FRAGMENTSHADER          SHADER                  "BaseFragmentShader.frag"
+IDS_CAMERAVERTEXSHADER      SHADER                  "BaseCameraVertexShader.vert"
+IDS_CAMERAFRAGMENTSHADER    SHADER                  "BaseCameraFragmentShader.frag"
+
+/////////////////////////////////////////////////////////////////////////////
