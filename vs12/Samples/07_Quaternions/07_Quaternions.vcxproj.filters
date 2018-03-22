@@ -43,6 +43,12 @@
     <None Include="BaseVertexShader.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="BaseCameraFragmentShader.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="BaseCameraVertexShader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">

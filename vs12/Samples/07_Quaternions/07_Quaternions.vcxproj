@@ -29,6 +29,8 @@
     <ClInclude Include="ThridPersonQuaternionCamera.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="BaseCameraFragmentShader.frag" />
+    <None Include="BaseCameraVertexShader.vert" />
     <None Include="BaseFragmentShader.frag" />
     <None Include="BaseVertexShader.vert" />
   </ItemGroup>
