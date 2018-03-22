@@ -3,81 +3,79 @@
 #include <iostream>
 #include <fstream>
 
-namespace Bow
+namespace bow
 {
-	namespace Platform
+
+	FileReader::FileReader() 
+		: m_pFile(nullptr)
 	{
-		FileReader::FileReader() 
-			: m_pFile(nullptr)
+		m_pFile = (void*)new std::ifstream();
+	}
+
+	FileReader::~FileReader()
+	{ 
+		Close();
+
+		if (m_pFile != nullptr)
 		{
-			m_pFile = (void*)new std::ifstream();
+			delete m_pFile;
+			m_pFile = nullptr;
 		}
+	}
 
-		FileReader::~FileReader()
-		{ 
-			Close();
-
-			if (m_pFile != nullptr)
-			{
-				delete m_pFile;
-				m_pFile = nullptr;
-			}
-		}
-
-		bool FileReader::Open(const char* filePath)
+	bool FileReader::Open(const char* filePath)
+	{
+		((std::ifstream*)m_pFile)->open(filePath, std::ios::in | std::ios::binary);
+		if (!((std::ifstream*)m_pFile)->is_open())
 		{
-			((std::ifstream*)m_pFile)->open(filePath, std::ios::in | std::ios::binary);
-			if (!((std::ifstream*)m_pFile)->is_open())
-			{
-				return false;
-			}
-
-			return true;
+			return false;
 		}
 
-		void FileReader::Close()
-		{
-			((std::ifstream*)m_pFile)->close();
-		}
+		return true;
+	}
 
-		size_t FileReader::GetSizeOfFile()
-		{
-			// get current position
-			std::streampos curr = ((std::ifstream*)m_pFile)->tellg();
+	void FileReader::Close()
+	{
+		((std::ifstream*)m_pFile)->close();
+	}
 
-			std::streampos begin = ((std::ifstream*)m_pFile)->tellg();
-			((std::ifstream*)m_pFile)->seekg(0, std::ios::end);
-			std::streampos end = ((std::ifstream*)m_pFile)->tellg();
+	size_t FileReader::GetSizeOfFile()
+	{
+		// get current position
+		std::streampos curr = ((std::ifstream*)m_pFile)->tellg();
 
-			// restore position
-			((std::ifstream*)m_pFile)->seekg(curr, std::ios::beg);
-			return (size_t)(end - begin);
-		}
+		std::streampos begin = ((std::ifstream*)m_pFile)->tellg();
+		((std::ifstream*)m_pFile)->seekg(0, std::ios::end);
+		std::streampos end = ((std::ifstream*)m_pFile)->tellg();
 
-		unsigned long FileReader::Tell()
-		{
-			return (unsigned long)((std::ifstream*)m_pFile)->tellg();
-		}
+		// restore position
+		((std::ifstream*)m_pFile)->seekg(curr, std::ios::beg);
+		return (size_t)(end - begin) + 1;
+	}
 
-		void FileReader::Seek(size_t offset)
-		{
-			((std::ifstream*)m_pFile)->seekg(offset, std::ios::beg);
-		}
+	unsigned long FileReader::Tell()
+	{
+		return (unsigned long)((std::ifstream*)m_pFile)->tellg();
+	}
 
-		void FileReader::Skip(long count)
-		{
-			((std::ifstream*)m_pFile)->seekg(count, std::ios::cur);
-		}
+	void FileReader::Seek(size_t offset)
+	{
+		((std::ifstream*)m_pFile)->seekg(offset, std::ios::beg);
+	}
 
-		size_t FileReader::Read(char* memory_block, size_t sizeInBytes)
-		{
-			((std::ifstream*)m_pFile)->read(memory_block, sizeInBytes);
-			return (size_t)((std::ifstream*)m_pFile)->gcount();
-		}
+	void FileReader::Skip(long count)
+	{
+		((std::ifstream*)m_pFile)->seekg(count, std::ios::cur);
+	}
 
-		bool FileReader::EndOfFile() const
-		{
-			return ((std::ifstream*)m_pFile)->eof();
-		}
+	size_t FileReader::Read(char* memory_block, size_t sizeInBytes)
+	{
+		((std::ifstream*)m_pFile)->read(memory_block, sizeInBytes);
+		return (size_t)((std::ifstream*)m_pFile)->gcount();
+	}
+
+	bool FileReader::EndOfFile() const
+	{
+		return ((std::ifstream*)m_pFile)->eof();
 	}
 }

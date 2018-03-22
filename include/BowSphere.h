@@ -4,30 +4,28 @@
 
 #include "BowVector3.h"
 
-namespace Bow {
-	namespace Core {
+namespace bow {
 
-		template <typename T> class Sphere
+	template <typename T> class Sphere
+	{
+	public:
+		Vector3<T>	Center;
+		T			Radius;
+
+		Sphere()
 		{
-		public:
-			Vector3<T>	Center;
-			T			Radius;
+			Origin = Direction = Vector3<T>();
+		}
 
-			Sphere()
-			{
-				Origin = Direction = Vector3<T>();
-			}
+		Sphere(const Vector3<T> center, T radius)
+		{
+			Center = center, Radius = radius;
+		}
 
-			Sphere(const Vector3<T> center, T radius)
-			{
-				Center = center, Radius = radius;
-			}
-
-			inline void Set(Vector3<T> _center, T radius)
-			{
-				Center = center, Radius = radius;
-			}
-		};
-		/*----------------------------------------------------------------*/
-	}
+		inline void Set(Vector3<T> _center, T radius)
+		{
+			Center = center, Radius = radius;
+		}
+	};
+	/*----------------------------------------------------------------*/
 }

@@ -4,7 +4,7 @@
 
 #include "BowVector2.h"
 
-namespace Bow {
+namespace bow {
 	namespace Core {
 
 		template<typename T>

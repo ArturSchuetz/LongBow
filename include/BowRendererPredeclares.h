@@ -1,135 +1,134 @@
 #pragma once
 #include "BowPrerequisites.h"
 
-namespace Bow {
-	namespace Renderer{
+namespace bow {
 
-		class Camera;
-		class RenderDeviceManager;
-			enum class API : char;
+	class Camera;
+	class RenderDeviceManager;
+		enum class RenderDeviceAPI : char;
 
-		////////////////////////////////////////////////////
-		// Buffer
+	////////////////////////////////////////////////////
+	// Buffer
 
-		enum class BufferHint : char;
-		enum class PixelBufferHint : char;
-		enum class IndexBufferDatatype : char;
+	enum class BufferHint : char;
+	enum class PixelBufferHint : char;
+	enum class IndexBufferDatatype : char;
 
-		struct VertexBufferAttribute;
-			enum class ComponentDatatype : char;
+	struct VertexBufferAttribute;
+		enum class ComponentDatatype : char;
 
-		typedef std::shared_ptr<VertexBufferAttribute> VertexBufferAttributePtr;
-		typedef std::unordered_map<unsigned int, VertexBufferAttributePtr> VertexBufferAttributeMap;
+	typedef std::shared_ptr<VertexBufferAttribute> VertexBufferAttributePtr;
+	typedef std::unordered_map<unsigned int, VertexBufferAttributePtr> VertexBufferAttributeMap;
 
-		////////////////////////////////////////////////////
-		// Shader
+	////////////////////////////////////////////////////
+	// Shader
 
-		struct ShaderVertexAttribute;
-			enum class ShaderVertexAttributeType : char;
-		typedef std::shared_ptr<ShaderVertexAttribute> ShaderVertexAttributePtr;
-		typedef std::unordered_map<std::string, ShaderVertexAttributePtr> ShaderVertexAttributeMap;
+	struct ShaderVertexAttribute;
+		enum class ShaderVertexAttributeType : char;
+	typedef std::shared_ptr<ShaderVertexAttribute> ShaderVertexAttributePtr;
+	typedef std::unordered_map<std::string, ShaderVertexAttributePtr> ShaderVertexAttributeMap;
 
 
-		////////////////////////////////////////////////////
-		// Clearstate
+	////////////////////////////////////////////////////
+	// Clearstate
 
-		struct ClearState;
-			typedef enum TYPE_ClearBuffers  ClearBuffers;
+	struct ClearState;
+		typedef enum TYPE_ClearBuffers  ClearBuffers;
 
-		////////////////////////////////////////////////////
-		// RenderState
+	////////////////////////////////////////////////////
+	// RenderState
 		
-		struct RenderState;
-			enum class ProgramPointSize : char;
-			enum class RasterizationMode : char;
-			struct Blending;
-				enum class SourceBlendingFactor : char;
-				enum class DestinationBlendingFactor : char;
-				enum class BlendEquation : char;
-			struct ColorMask;
-			struct DepthRange;
-			struct DepthTest;
-				enum class DepthTestFunction : char;
-			struct FaceCulling;
-				enum class CullFace : char;
-				enum class WindingOrder : char;
-			struct PrimitiveRestart;
-			struct ScissorTest;
-			struct StencilTest;
-			struct StencilTestFace;
-				enum class StencilOperation : char;
-				enum class StencilTestFunction : char;
+	struct RenderState;
+		enum class ProgramPointSize : char;
+		enum class RasterizationMode : char;
+		struct Blending;
+			enum class SourceBlendingFactor : char;
+			enum class DestinationBlendingFactor : char;
+			enum class BlendEquation : char;
+		struct ColorMask;
+		struct DepthRange;
+		struct DepthTest;
+			enum class DepthTestFunction : char;
+		struct FaceCulling;
+			enum class CullFace : char;
+			enum class WindingOrder : char;
+		struct PrimitiveRestart;
+		struct ScissorTest;
+		struct StencilTest;
+		struct StencilTestFace;
+			enum class StencilOperation : char;
+			enum class StencilTestFunction : char;
 
-		////////////////////////////////////////////////////
-		// INTERFACES
+	////////////////////////////////////////////////////
+	// INTERFACES
 
-				////////////////////////////////////////////////////
-				// Buffer
-				class IIndexBuffer;
-				typedef std::shared_ptr<IIndexBuffer> IndexBufferPtr;
+			////////////////////////////////////////////////////
+			// Buffer
+			class IIndexBuffer;
+			typedef std::shared_ptr<IIndexBuffer> IndexBufferPtr;
 
-				class IReadPixelBuffer;
-				typedef std::shared_ptr<IReadPixelBuffer> ReadPixelBufferPtr;
+			class IReadPixelBuffer;
+			typedef std::shared_ptr<IReadPixelBuffer> ReadPixelBufferPtr;
 
-				class IVertexBuffer;
-				typedef std::shared_ptr<IVertexBuffer> VertexBufferPtr;
+			class IVertexBuffer;
+			typedef std::shared_ptr<IVertexBuffer> VertexBufferPtr;
 
-				class IWritePixelBuffer;
-				typedef std::shared_ptr<IWritePixelBuffer> WritePixelBufferPtr;
+			class IWritePixelBuffer;
+			typedef std::shared_ptr<IWritePixelBuffer> WritePixelBufferPtr;
 
-				////////////////////////////////////////////////////
-				// FrameBuffer
-				class IColorAttachments;
-				typedef std::shared_ptr<IColorAttachments> ColorAttachmentsPtr;
+			////////////////////////////////////////////////////
+			// FrameBuffer
+			class IColorAttachments;
+			typedef std::shared_ptr<IColorAttachments> ColorAttachmentsPtr;
 
-				class IFramebuffer;
-				typedef std::shared_ptr<IFramebuffer> FramebufferPtr;
+			class IFramebuffer;
+			typedef std::shared_ptr<IFramebuffer> FramebufferPtr;
 
-				////////////////////////////////////////////////////
-				// Mesh
-				class MeshBuffers;
-				typedef std::shared_ptr<MeshBuffers> MeshBufferPtr;
+			////////////////////////////////////////////////////
+			// Mesh
+			class MeshBuffers;
+			typedef std::shared_ptr<MeshBuffers> MeshBufferPtr;
 
-				////////////////////////////////////////////////////
-				// VertexArray
-				class IVertexArray;
-				typedef std::shared_ptr<IVertexArray> VertexArrayPtr;
+			////////////////////////////////////////////////////
+			// VertexArray
+			class IVertexArray;
+			typedef std::shared_ptr<IVertexArray> VertexArrayPtr;
 
-				////////////////////////////////////////////////////
-				// Shader
-				class IFragmentOutputs;
-				typedef std::shared_ptr<IFragmentOutputs> FragmentOutputsPtr;
+			////////////////////////////////////////////////////
+			// Shader
+			class IFragmentOutputs;
+			typedef std::shared_ptr<IFragmentOutputs> FragmentOutputsPtr;
 
-				class IShaderProgram;
-				typedef std::shared_ptr<IShaderProgram> ShaderProgramPtr;
+			class IShaderProgram;
+			typedef std::shared_ptr<IShaderProgram> ShaderProgramPtr;
 
-				////////////////////////////////////////////////////
-				// Textures
+			////////////////////////////////////////////////////
+			// Textures
 
-				struct Texture2DDescription;
-					enum class TextureFormat : char;
+			struct Texture2DDescription;
+				enum class TextureFormat : char;
 
-				class ITexture2D;
-					enum class ImageDatatype : char;
-					enum class ImageFormat : char;
-				typedef std::shared_ptr<ITexture2D> Texture2DPtr;
+			class ITexture2D;
+				enum class ImageDatatype : char;
+				enum class ImageFormat : char;
+			typedef std::shared_ptr<ITexture2D> Texture2DPtr;
 
-				class ITextureSampler;
-					enum class TextureMinificationFilter : char;
-					enum class TextureMagnificationFilter : char;
-					enum class TextureWrap : char;
-				typedef std::shared_ptr<ITextureSampler> TextureSamplerPtr;
+			class ITextureSampler;
+				enum class TextureMinificationFilter : char;
+				enum class TextureMagnificationFilter : char;
+				enum class TextureWrap : char;
+			typedef std::shared_ptr<ITextureSampler> TextureSamplerPtr;
 
-			class IGraphicsWindow;
-			typedef std::shared_ptr<IGraphicsWindow> GraphicsWindowPtr;
+		class IGraphicsWindow;
+		typedef std::shared_ptr<IGraphicsWindow> GraphicsWindowPtr;
 
-			class IRenderContext;
-				enum class PrimitiveType : char;
-				struct Viewport;
-			typedef std::shared_ptr<IRenderContext> RenderContextPtr;
+		class IRenderContext;
+			enum class PrimitiveType : char;
+			struct Viewport;
+		typedef std::shared_ptr<IRenderContext> RenderContextPtr;
 
-			class IRenderDevice;
-				enum class WindowType : char;
-			typedef std::shared_ptr<IRenderDevice> RenderDevicePtr;
-	}
+		class IRenderDevice;
+			enum class WindowType : char;
+		typedef std::shared_ptr<IRenderDevice> RenderDevicePtr;
 }
+

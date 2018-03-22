@@ -1,5 +1,5 @@
 #include "BowRenderer.h"
-#include "BowBitmap.h"
+#include "BowResources.h"
 
 #include <cstdint>
 #include <windows.h>
@@ -9,9 +9,7 @@
 
 #include "resource.h"
 
-using namespace Bow;
-using namespace Core;
-using namespace Renderer;
+using namespace bow;
 
 std::string LoadShaderFromResouce(int name)
 {
@@ -24,20 +22,20 @@ std::string LoadShaderFromResouce(int name)
 int main()
 {
 	// Creating Render Device
-	RenderDevicePtr DeviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(API::OpenGL3x);
-	if (DeviceOGL == nullptr)
+	RenderDevicePtr deviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(RenderDeviceAPI::OpenGL3x);
+	if (deviceOGL == nullptr)
 	{
 		return 0;
 	}
 
 	// Creating Window
-	GraphicsWindowPtr WindowOGL = DeviceOGL->VCreateWindow(800, 600, "Mesh Rendering Sample", WindowType::Windowed);
-	if (WindowOGL == nullptr)
+	GraphicsWindowPtr windowOGL = deviceOGL->VCreateWindow(800, 600, "Mesh Rendering Sample", WindowType::Windowed);
+	if (windowOGL == nullptr)
 	{
 		return 0;
 	}
-	RenderContextPtr ContextOGL = WindowOGL->VGetContext();
-	ShaderProgramPtr ShaderProgram = DeviceOGL->VCreateShaderProgram(LoadShaderFromResouce(IDS_VERTEXSHADER), LoadShaderFromResouce(IDS_FRAGMENTSHADER));
+	RenderContextPtr contextOGL = windowOGL->VGetContext();
+	ShaderProgramPtr ShaderProgram = deviceOGL->VCreateShaderProgram(LoadShaderFromResouce(IDS_VERTEXSHADER), LoadShaderFromResouce(IDS_FRAGMENTSHADER));
 
 	///////////////////////////////////////////////////////////////////
 	// Vertex Array from Mesh
@@ -67,7 +65,7 @@ int main()
 	indices->Values[2] = 2;
 	mesh.Indices = IndicesBasePtr(indices);
 
-	VertexArrayPtr VertexArray = ContextOGL->VCreateVertexArray(mesh, ShaderProgram->VGetVertexAttributes(), BufferHint::StaticDraw);
+	VertexArrayPtr VertexArray = contextOGL->VCreateVertexArray(mesh, ShaderProgram->VGetVertexAttributes(), BufferHint::StaticDraw);
 
 	///////////////////////////////////////////////////////////////////
 	// ClearState and Color
@@ -77,30 +75,24 @@ int main()
 
 	///////////////////////////////////////////////////////////////////
 	// Camera
-	Vector3<float> Position = Vector3<float>(0.0f, 0.0f, 5.0f);
+
+	Vector3<float> Position = Vector3<float>(0.0f, 0.0f, 2.0f);
 	Vector3<float> LookAt = Vector3<float>(0.0f, 0.0f, 0.0f);
 	Vector3<float> UpVector = Vector3<float>(0.0f, 1.0f, 0.0f);
 
-	Camera camera(Position, LookAt, UpVector, WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
+	Camera camera(Position, LookAt, UpVector, windowOGL->VGetWidth(), windowOGL->VGetHeight());
 
 	///////////////////////////////////////////////////////////////////
 	// Textures
 
-	Texture2DPtr texture;
+	ImagePtr image = ImageManager::GetInstance().Load("../Data/Textures/test.png");
+	Texture2DPtr texture = deviceOGL->VCreateTexture2D(image);
 
-	Core::Bitmap bitmap;
-	bitmap.LoadFile("../Data/Textures/test.jpg");
-
-	if (bitmap.GetSizeInBytes() / (bitmap.GetHeight() * bitmap.GetWidth()) == 3)
-		texture = DeviceOGL->VCreateTexture2D(&bitmap, Renderer::TextureFormat::RedGreenBlue8);
-	else
-		texture = DeviceOGL->VCreateTexture2D(&bitmap, Renderer::TextureFormat::RedGreenBlueAlpha8);
-
-	TextureSamplerPtr sampler = DeviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Clamp, TextureWrap::Clamp);
+	TextureSamplerPtr sampler = deviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Clamp, TextureWrap::Clamp);
 
 	int TexID = 0;
-	ContextOGL->VSetTexture(TexID, texture);
-	ContextOGL->VSetTextureSampler(TexID, sampler);
+	contextOGL->VSetTexture(TexID, texture);
+	contextOGL->VSetTextureSampler(TexID, sampler);
 
 	///////////////////////////////////////////////////////////////////
 	// Uniforms
@@ -117,26 +109,26 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Gameloop
 
-	Core::Matrix3D<float> worldMat;
+	Matrix3D<float> worldMat;
 	worldMat.Translate(Vector3<float>(0.0f, 0.0f, 0.0f));
 
 	BasicTimer timer;
-	while (!WindowOGL->VShouldClose())
+	while (!windowOGL->VShouldClose())
 	{
 		// =======================================================
 		// Render Frame
 
-		ContextOGL->VClear(clearState);
+		contextOGL->VClear(clearState);
 		worldMat.RotateY(0.5f * timer.GetDelta());
 
-		ContextOGL->VSetViewport(Viewport(0, 0, WindowOGL->VGetWidth(), WindowOGL->VGetHeight()));
-		camera.SetResolution(WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
-		ShaderProgram->VSetUniform("u_ModelViewProj", (Core::Matrix4x4<float>)camera.CalculateWorldViewProjection(worldMat));
+		contextOGL->VSetViewport(Viewport(0, 0, windowOGL->VGetWidth(), windowOGL->VGetHeight()));
+		camera.SetResolution(windowOGL->VGetWidth(), windowOGL->VGetHeight());
+		ShaderProgram->VSetUniform("u_ModelViewProj", (Matrix4x4<float>)camera.CalculateWorldViewProjection(worldMat));
 
-		ContextOGL->VDraw(PrimitiveType::Triangles, 0, 3, VertexArray, ShaderProgram, renderState);
+		contextOGL->VDraw(PrimitiveType::Triangles, VertexArray, ShaderProgram, renderState);
 
-		ContextOGL->VSwapBuffers();
-		WindowOGL->VPollWindowEvents();
+		contextOGL->VSwapBuffers();
+		windowOGL->VPollWindowEvents();
 		// =======================================================
 
 		timer.Update();

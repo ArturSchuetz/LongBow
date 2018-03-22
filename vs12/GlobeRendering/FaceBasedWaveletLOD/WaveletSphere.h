@@ -17,9 +17,9 @@ public:
 	~WaveletSphere();
 
 	void GenerateData(unsigned int subdivisions);
-	void Init(Bow::Renderer::ShaderProgramPtr shaderProgram);
-	void Update(float deltaTime, Bow::Renderer::Camera* camera);
-	void Render(Bow::Renderer::RenderContextPtr renderContext, Bow::Renderer::Texture2DPtr texture, Bow::Renderer::TextureSamplerPtr sampler, Bow::Renderer::Camera* camera, bool renderFilled = true);
+	void Init(bow::ShaderProgramPtr shaderProgram);
+	void Update(float deltaTime, bow::Camera* camera);
+	void Render(bow::RenderContextPtr renderContext, bow::Texture2DPtr texture, bow::TextureSamplerPtr sampler, bow::Camera* camera, bool renderFilled = true);
 
 	bool m_realtime;
 	bool m_interpolateFaces;
@@ -29,11 +29,11 @@ public:
 
 private:
 	void CalculateWaveletCoefficients(int numberOfSubdivisions);
-	void CaluclateWaveletCoefficientsRecustive(WaveletFace* face, int level, const Bow::Core::Clipmap* heighMap, std::ofstream* outputFile);
+	void CaluclateWaveletCoefficientsRecustive(WaveletFace* face, int level, const bow::Clipmap* heighMap, std::ofstream* outputFile);
 	
-	void CaluclateScalarCoefficientsRecustive(WaveletFace* triangle, Bow::Core::Frustum<double>* frustum, Bow::Renderer::Camera* camera, Bow::Core::Vector3<float> position, int minLevel, int maxLevel, float threshold, std::ifstream* outputFile);
+	void CaluclateScalarCoefficientsRecustive(WaveletFace* triangle, bow::Frustum<double>* frustum, bow::Camera* camera, bow::Vector3<float> position, int minLevel, int maxLevel, float threshold, std::ifstream* outputFile);
 
-	void RecursRender(WaveletFace* face, Bow::Core::VertexAttributeFloatVec4 *positionsAttribute, Bow::Core::VertexAttributeFloatVec3 *normalsAttribute);
+	void RecursRender(WaveletFace* face, bow::VertexAttributeFloatVec4 *positionsAttribute, bow::VertexAttributeFloatVec3 *normalsAttribute);
 
 	WaveletFace*	m_Faces;
 
@@ -54,9 +54,9 @@ private:
 	// Rendering stuff (Not important for Algorithm)
 	bool							m_isDirty;
 
-	Bow::Renderer::ShaderProgramPtr m_shaderProgram;
-	Bow::Renderer::VertexArrayPtr	m_VertexArray;
+	bow::ShaderProgramPtr m_shaderProgram;
+	bow::VertexArrayPtr	m_VertexArray;
 
-	Bow::Core::Matrix3D<float>		m_objectWorldMat;
-	Bow::Renderer::RenderState		m_renderState;
+	bow::Matrix3D<float>		m_objectWorldMat;
+	bow::RenderState		m_renderState;
 };

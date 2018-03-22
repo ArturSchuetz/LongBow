@@ -4,34 +4,32 @@
 
 #include "BowRendererPredeclares.h"
 
-namespace Bow {
-	namespace Input {
+namespace bow {
 
-		enum class API : char
-		{
-			DirectInput
-		};
+	enum class InputDeviceAPI : char
+	{
+		DirectInput
+	};
 
-		//! \brief InputDeviceManager is a singleton and creates input devices. 
-		class InputDeviceManager
-		{
-		public:
-			~InputDeviceManager(void);
+	//! \brief InputDeviceManager is a singleton and creates input devices. 
+	class InputDeviceManager
+	{
+	public:
+		~InputDeviceManager(void);
 
-			static InputDeviceManager& GetInstance();
+		static InputDeviceManager& GetInstance();
 
-			KeyboardPtr CreateKeyboardObject(Renderer::GraphicsWindowPtr window);
-			MousePtr CreateMouseObject(Renderer::GraphicsWindowPtr window);
+		KeyboardPtr CreateKeyboardObject(GraphicsWindowPtr window);
+		MousePtr CreateMouseObject(GraphicsWindowPtr window);
 
-		protected:
-			InputDeviceManager(){}
+	protected:
+		InputDeviceManager(){}
 
-		private:
-			InputDevicePtr GetOrCreateDevice(API api);
-			void ReleaseDevice(API api);
+	private:
+		InputDevicePtr GetOrCreateDevice(InputDeviceAPI api);
+		void ReleaseDevice(InputDeviceAPI api);
 
-			InputDeviceManager(const InputDeviceManager&){}; //!< You shall not copy
-			InputDeviceManager& operator=(const InputDeviceManager&) { return *this; }
-		};
-	}
+		InputDeviceManager(const InputDeviceManager&){}; //!< You shall not copy
+		InputDeviceManager& operator=(const InputDeviceManager&) { return *this; }
+	};
 }

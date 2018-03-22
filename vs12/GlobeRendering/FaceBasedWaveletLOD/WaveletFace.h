@@ -10,7 +10,7 @@ public:
 	void Release();
 
 	float GetArea();
-	Bow::Core::Vector3<float> GetFaceNormal(float height);
+	bow::Vector3<float> GetFaceNormal(float height);
 	void SetEdges(std::shared_ptr<WaveletEdge<float>> e0, std::shared_ptr<WaveletEdge<float>> e1, std::shared_ptr<WaveletEdge<float>> e2);
 	void CreateChildren(float wavelet1, float wavelet2, float wavelet3);
 	void ReleaseChildren();
@@ -35,6 +35,6 @@ public:
 	WaveletFace	*m_T3;
 
 private:
-	Bow::Core::Matrix4x4<float> CalculateAnalysisMatrix();
-	Bow::Core::Matrix4x4<float> CalculateSynthesisMatrix();
+	bow::Matrix4x4<float> CalculateAnalysisMatrix();
+	bow::Matrix4x4<float> CalculateSynthesisMatrix();
 };

@@ -4,30 +4,28 @@
 
 #include "IBowRenderContext.h" // For WindingOrder
 
-namespace Bow {
-	namespace Renderer{
+namespace bow {
 
-		enum class CullFace : char
+	enum class CullFace : char
+	{
+		Front,
+		Back,
+		FrontAndBack
+	};
+
+	struct FaceCulling
+	{
+	public:
+		FaceCulling()
 		{
-			Front,
-			Back,
-			FrontAndBack
-		};
+			Enabled = true;
+			Face = CullFace::Back;
+			FrontFaceWindingOrder = WindingOrder::Counterclockwise;
+		}
 
-		struct FaceCulling
-		{
-		public:
-			FaceCulling()
-			{
-				Enabled = true;
-				Face = CullFace::Back;
-				FrontFaceWindingOrder = WindingOrder::Counterclockwise;
-			}
+		bool Enabled;
+		CullFace Face;
+		WindingOrder FrontFaceWindingOrder;
+	};
 
-			bool Enabled;
-			CullFace Face;
-			WindingOrder FrontFaceWindingOrder;
-		};
-
-	}
 }

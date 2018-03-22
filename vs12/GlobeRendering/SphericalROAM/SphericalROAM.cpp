@@ -34,7 +34,7 @@ void waitForEndOfFrame(std::chrono::duration<double, std::milli> frameduration)
 int main()
 {
 	Application app;
-	Core::BasicTimer timer;
+	BasicTimer timer;
 	if (app.Init())
 	{
 		while (app.IsRunning())

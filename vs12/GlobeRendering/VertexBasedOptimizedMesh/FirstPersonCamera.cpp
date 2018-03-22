@@ -7,7 +7,7 @@ const float thetaEps = 0.01f;
 const float Pi = 3.141592f;
 
 // Konstruktor: Default Werte setzen
-FirstPersonCamera::FirstPersonCamera(const Bow::Core::Vector3<double>& cameraPosition, const Bow::Core::Vector3<double>& lookAtPoint, const Bow::Core::Vector3<double>& worldUp, unsigned int width, unsigned int height)
+FirstPersonCamera::FirstPersonCamera(const bow::Vector3<double>& cameraPosition, const bow::Vector3<double>& lookAtPoint, const bow::Vector3<double>& worldUp, unsigned int width, unsigned int height)
 	: Renderer::Camera(cameraPosition, lookAtPoint, worldUp, width, height),
 	m_Position(cameraPosition),
 	m_Up(worldUp)
@@ -27,7 +27,7 @@ FirstPersonCamera::~FirstPersonCamera()
 
 void FirstPersonCamera::MoveForward(float deltaTime)
 {
-	Core::Vector3<float> delta = m_Dir * m_Speed * (float)deltaTime;
+	Vector3<float> delta = m_Dir * m_Speed * (float)deltaTime;
 	m_Position += delta;
 
 	SetViewLookAt(m_Position, m_Position + m_Dir, m_Up);
@@ -35,7 +35,7 @@ void FirstPersonCamera::MoveForward(float deltaTime)
 
 void FirstPersonCamera::MoveBackward(float deltaTime)
 {
-	Core::Vector3<float> delta = m_Dir * m_Speed * (float)deltaTime;
+	Vector3<float> delta = m_Dir * m_Speed * (float)deltaTime;
 	m_Position -= delta;
 
 	SetViewLookAt(m_Position, m_Position + m_Dir, m_Up);
@@ -43,7 +43,7 @@ void FirstPersonCamera::MoveBackward(float deltaTime)
 
 void FirstPersonCamera::MoveRight(float deltaTime)
 {
-	Core::Vector3<float> vcTemp, vcUp;
+	Vector3<float> vcTemp, vcUp;
 
 	// calculate up vector
 	float fDot = DotP(m_Up, m_Dir);
@@ -55,7 +55,7 @@ void FirstPersonCamera::MoveRight(float deltaTime)
 	// if length too small take normal y axis as up vector
 	if (fL < 1e-6f)
 	{
-		Core::Vector3<float> vcY;
+		Vector3<float> vcY;
 		vcY.Set(0.0f, 1.0f, 0.0f);
 
 		vcTemp = m_Dir * m_Dir.y;
@@ -81,9 +81,9 @@ void FirstPersonCamera::MoveRight(float deltaTime)
 	vcUp /= fL;
 
 	// build right vector using cross product
-	Core::Vector3<float> vcRight(Core::CrossP(m_Dir, vcUp));
+	Vector3<float> vcRight(CrossP(m_Dir, vcUp));
 
-	Core::Vector3<float> delta = vcRight * m_Speed * (float)deltaTime;
+	Vector3<float> delta = vcRight * m_Speed * (float)deltaTime;
 	m_Position += delta;
 
 	SetViewLookAt(m_Position, m_Position + m_Dir, m_Up);
@@ -91,7 +91,7 @@ void FirstPersonCamera::MoveRight(float deltaTime)
 
 void FirstPersonCamera::MoveLeft(float deltaTime)
 {
-	Core::Vector3<float> vcTemp, vcUp;
+	Vector3<float> vcTemp, vcUp;
 
 	// calculate up vector
 	float fDot = DotP(m_Up, m_Dir);
@@ -103,7 +103,7 @@ void FirstPersonCamera::MoveLeft(float deltaTime)
 	// if length too small take normal y axis as up vector
 	if (fL < 1e-6f)
 	{
-		Core::Vector3<float> vcY;
+		Vector3<float> vcY;
 		vcY.Set(0.0f, 1.0f, 0.0f);
 
 		vcTemp = m_Dir * m_Dir.y;
@@ -129,9 +129,9 @@ void FirstPersonCamera::MoveLeft(float deltaTime)
 	vcUp /= fL;
 
 	// build right vector using cross product
-	Core::Vector3<float> vcRight(Core::CrossP(m_Dir, vcUp));
+	Vector3<float> vcRight(CrossP(m_Dir, vcUp));
 
-	Core::Vector3<float> delta = vcRight * m_Speed * (float)deltaTime;
+	Vector3<float> delta = vcRight * m_Speed * (float)deltaTime;
 	m_Position -= delta;
 
 	SetViewLookAt(m_Position, m_Position + m_Dir, m_Up);
@@ -139,7 +139,7 @@ void FirstPersonCamera::MoveLeft(float deltaTime)
 
 void FirstPersonCamera::MoveUp(float deltaTime)
 {
-	Core::Vector3<float> delta = m_Up * m_Speed * (float)deltaTime;
+	Vector3<float> delta = m_Up * m_Speed * (float)deltaTime;
 	m_Position += delta;
 
 	SetViewLookAt(m_Position, m_Position + m_Dir, m_Up);
@@ -147,7 +147,7 @@ void FirstPersonCamera::MoveUp(float deltaTime)
 
 void FirstPersonCamera::MoveDown(float deltaTime)
 {
-	Core::Vector3<float> delta = m_Up * m_Speed * (float)deltaTime;
+	Vector3<float> delta = m_Up * m_Speed * (float)deltaTime;
 	m_Position -= delta;
 
 	SetViewLookAt(m_Position, m_Position + m_Dir, m_Up);

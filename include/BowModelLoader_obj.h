@@ -7,7 +7,7 @@
 #include "BowMesh.h"
 #include "BowSubMesh.h"
 
-namespace Bow {
+namespace bow {
 	namespace Core {
 
 		// ---------------------------------------------------------------------------

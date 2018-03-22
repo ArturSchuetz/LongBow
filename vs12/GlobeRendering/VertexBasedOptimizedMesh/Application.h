@@ -41,7 +41,7 @@ private:
 
 	float				m_moveSpeed;
 	FirstPersonCamera	*m_camera;
-	Core::Vector2<long> m_lastCursorPosition;
+	Vector2<long> m_lastCursorPosition;
 
 	bool				m_renderFilled;
 	WaveletSphere		m_Sphere;

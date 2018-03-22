@@ -12,9 +12,7 @@
 
 #include "resource.h"
 
-using namespace Bow;
-using namespace Core;
-using namespace Renderer;
+using namespace bow;
 
 std::string LoadShaderFromResouce(int name)
 {
@@ -27,29 +25,72 @@ std::string LoadShaderFromResouce(int name)
 int main()
 {
 	// Creating Render Device
-	RenderDevicePtr DeviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(API::OpenGL3x);
-	if (DeviceOGL == nullptr)
+	RenderDevicePtr deviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(RenderDeviceAPI::OpenGL3x);
+	if (deviceOGL == nullptr)
 	{
 		return 0;
 	}
 
 	// Creating Window
-	GraphicsWindowPtr WindowOGL = DeviceOGL->VCreateWindow(800, 600, "Mesh Rendering Sample", WindowType::Windowed);
-	if (WindowOGL == nullptr)
+	GraphicsWindowPtr windowOGL = deviceOGL->VCreateWindow(800, 600, "Mesh Rendering Sample", WindowType::Windowed);
+	if (windowOGL == nullptr)
 	{
 		return 0;
 	}
-	RenderContextPtr ContextOGL = WindowOGL->VGetContext();
-	ShaderProgramPtr ShaderProgram = DeviceOGL->VCreateShaderProgram(LoadShaderFromResouce(IDS_VERTEXSHADER), LoadShaderFromResouce(IDS_FRAGMENTSHADER));
+	RenderContextPtr contextOGL = windowOGL->VGetContext();
+	ShaderProgramPtr shaderProgram = deviceOGL->VCreateShaderProgram(LoadShaderFromResouce(IDS_VERTEXSHADER), LoadShaderFromResouce(IDS_FRAGMENTSHADER));
 
 	///////////////////////////////////////////////////////////////////
 	// Vertex Array from Mesh
 
-	MeshPtr mesh = MeshManager::GetInstance().Load("../Data/sponza.obj");
+	MeshPtr mesh = MeshManager::GetInstance().Load("../Data/models/Corvette-F3/Corvette-F3.obj");
+	std::vector<SubMesh*> subMeshes = mesh->GetSubMeshes();
+	std::vector<std::string> files = mesh->GetMaterialFiles();
 
-	MeshAttribute meshAttr = mesh->CreateAttribute("in_Position", "in_Normal", "in_TexCoord");
+	std::map<std::string, Texture2DPtr> diffuseTextures;
+	std::map<std::string, Texture2DPtr> normalTextures;
+	for (unsigned int i = 0; i < files.size(); i++)
+	{
+		MaterialCollectionPtr materialCollection = MaterialManager::GetInstance().Load(files[i]);
+		std::size_t foundPos = materialCollection->VGetName().find_last_of("/");
+		std::string filePath = "";
+		if (foundPos >= 0)
+		{
+			filePath = materialCollection->VGetName().substr(0, foundPos + 1);
+		}
 
-	VertexArrayPtr VertexArray = ContextOGL->VCreateVertexArray(meshAttr, ShaderProgram->VGetVertexAttributes(), BufferHint::StaticDraw);
+		std::vector<Material*> materials = materialCollection->GetMaterials();
+		for (unsigned int j = 0; j < materials.size(); j++)
+		{
+			if (!materials[j]->diffuse_texname.empty())
+			{
+				ImagePtr image = ImageManager::GetInstance().Load(filePath + materials[j]->diffuse_texname);
+				diffuseTextures.insert(std::pair<std::string, Texture2DPtr>(materials[j]->name, deviceOGL->VCreateTexture2D(image)));
+			}
+
+			if (!materials[j]->bump_texname.empty())
+			{
+				ImagePtr image = ImageManager::GetInstance().Load(filePath + materials[j]->bump_texname);
+				normalTextures.insert(std::pair<std::string, Texture2DPtr>(materials[j]->name, deviceOGL->VCreateTexture2D(image)));
+			}
+		}
+	}
+
+	MeshAttribute meshAttr = mesh->CreateAttribute("in_Position", "in_Normal", "in_Tangent", "in_Bitangent", "in_TexCoord");
+	VertexArrayPtr vertexArray = contextOGL->VCreateVertexArray(meshAttr, shaderProgram->VGetVertexAttributes(), BufferHint::StaticDraw);
+
+	int diffuseTexID = 0;
+	int normalTexID = 1;
+
+	TextureSamplerPtr sampler = deviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Clamp, TextureWrap::Clamp);
+	contextOGL->VSetTextureSampler(diffuseTexID, sampler);
+	contextOGL->VSetTextureSampler(normalTexID, sampler);
+
+	///////////////////////////////////////////////////////////////////
+	// Uniforms
+
+	shaderProgram->VSetUniform("diffuseTex", diffuseTexID);
+	shaderProgram->VSetUniform("normalTex", normalTexID);
 
 	///////////////////////////////////////////////////////////////////
 	// ClearState and Color
@@ -60,23 +101,23 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Camera
 
-	Core::Vector3<float> Position = Core::Vector3<float>(0.0f, 0.0f, -3.0f);
-	Core::Vector3<float> LookAt = Core::Vector3<float>(0.0f, 0.0f, 0.0f);
-	Core::Vector3<float> UpVector = Core::Vector3<float>(0.0f, 1.0f, 0.0f);
+	Vector3<float> Position = Vector3<float>(0.0f, 800.0f, -2000.0f);
+	Vector3<float> LookAt = Vector3<float>(0.0f, 0.0f, 0.0f);
+	Vector3<float> UpVector = Vector3<float>(0.0f, 1.0f, 0.0f);
 
-	FirstPersonCamera camera = FirstPersonCamera(Position, LookAt, UpVector, WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
+	FirstPersonCamera camera = FirstPersonCamera(Position, LookAt, UpVector, windowOGL->VGetWidth(), windowOGL->VGetHeight());
 	camera.SetClippingPlanes(0.1, 10000.0);
 
 	///////////////////////////////////////////////////////////////////
 	// Input
 
-	Input::KeyboardPtr keyboard = Input::InputDeviceManager::GetInstance().CreateKeyboardObject(WindowOGL);
+	KeyboardPtr keyboard = InputDeviceManager::GetInstance().CreateKeyboardObject(windowOGL);
 	if (keyboard == nullptr)
 	{
 		return false;
 	}
 
-	Input::MousePtr mouse = Input::InputDeviceManager::GetInstance().CreateMouseObject(WindowOGL);
+	MousePtr mouse = InputDeviceManager::GetInstance().CreateMouseObject(windowOGL);
 	if (mouse == nullptr)
 	{
 		return false;
@@ -86,46 +127,56 @@ int main()
 	// RenderState
 
 	RenderState renderState;
-	renderState.RasterizationMode = RasterizationMode::Line;
+	renderState.RasterizationMode = RasterizationMode::Fill;
 
 	///////////////////////////////////////////////////////////////////
 	// Gameloop
 
-	Core::Matrix3D<float> worldMat;
+	Matrix3D<float> worldMat;
 	worldMat.Translate(Vector3<float>(0.0f, 0.0f, 0.0f));
 
 	BasicTimer timer;
 	float m_moveSpeed;
-	Core::Vector2<long> lastCursorPosition;
+	Vector2<long> lastCursorPosition;
 
-	while (!WindowOGL->VShouldClose())
+	while (!windowOGL->VShouldClose())
 	{
 		// =======================================================
 		// Render Frame
 
-		ContextOGL->VClear(clearState);
+		contextOGL->VClear(clearState);
 
-		ContextOGL->VSetViewport(Viewport(0, 0, WindowOGL->VGetWidth(), WindowOGL->VGetHeight()));
-		camera.SetResolution(WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
-		ShaderProgram->VSetUniform("u_ModelViewProj", (Core::Matrix4x4<float>)camera.CalculateWorldViewProjection(worldMat));
+		contextOGL->VSetViewport(Viewport(0, 0, windowOGL->VGetWidth(), windowOGL->VGetHeight()));
+		camera.SetResolution(windowOGL->VGetWidth(), windowOGL->VGetHeight());
 
-		ContextOGL->VDraw(PrimitiveType::Triangles, 0, meshAttr.Indices->Size(), VertexArray, ShaderProgram, renderState);
+		shaderProgram->VSetUniform("u_ModelView", (Matrix4x4<float>)camera.CalculateWorldView(worldMat));
+		shaderProgram->VSetUniform("u_View", (Matrix4x4<float>)camera.CalculateView());
+		shaderProgram->VSetUniform("u_Proj", (Matrix4x4<float>)camera.CalculateProjection());
 
-		ContextOGL->VSwapBuffers();
-		WindowOGL->VPollWindowEvents();
+		for (unsigned int i = 0; i < subMeshes.size(); i++)
+		{
+			std::string name = subMeshes[i]->GetMaterialName();
+
+			contextOGL->VSetTexture(diffuseTexID, diffuseTextures[name]);
+			contextOGL->VSetTexture(normalTexID, normalTextures[name]);
+
+			contextOGL->VDraw(PrimitiveType::Triangles, subMeshes[i]->GetStartIndex(), subMeshes[i]->GetNumIndices(), vertexArray, shaderProgram, renderState);
+		}
+
+		contextOGL->VSwapBuffers();
+
 		// =======================================================
 
 		timer.Update();
 
-		WindowOGL->VPollWindowEvents();
 		keyboard->VUpdate();
 		mouse->VUpdate();
 
 		m_moveSpeed = 10000.0;
 
-		if (keyboard->VIsPressed(Input::Key::K_W))
+		if (keyboard->VIsPressed(Key::K_W))
 		{
-			if (keyboard->VIsPressed(Input::Key::K_LSHIFT))
+			if (keyboard->VIsPressed(Key::K_LSHIFT))
 			{
 				camera.MoveForward(m_moveSpeed * (float)timer.GetDelta() * 2);
 			}
@@ -135,41 +186,41 @@ int main()
 			}
 		}
 
-		if (keyboard->VIsPressed(Input::Key::K_S))
+		if (keyboard->VIsPressed(Key::K_S))
 		{
 			camera.MoveBackward(m_moveSpeed * (float)timer.GetDelta());
 		}
 
-		if (keyboard->VIsPressed(Input::Key::K_D))
+		if (keyboard->VIsPressed(Key::K_D))
 		{
 			camera.MoveRight(m_moveSpeed * (float)timer.GetDelta());
 		}
 
-		if (keyboard->VIsPressed(Input::Key::K_A))
+		if (keyboard->VIsPressed(Key::K_A))
 		{
 			camera.MoveLeft(m_moveSpeed * (float)timer.GetDelta());
 		}
 
-		if (keyboard->VIsPressed(Input::Key::K_SPACE))
+		if (keyboard->VIsPressed(Key::K_SPACE))
 		{
 			camera.MoveUp(m_moveSpeed * (float)timer.GetDelta());
 		}
 
-		if (keyboard->VIsPressed(Input::Key::K_LCONTROL))
+		if (keyboard->VIsPressed(Key::K_LCONTROL))
 		{
 			camera.MoveDown(m_moveSpeed * (float)timer.GetDelta());
 		}
 
-		if (mouse->VIsPressed(Input::MouseButton::MOFS_BUTTON1))
+		if (mouse->VIsPressed(MouseButton::MOFS_BUTTON1))
 		{
-			WindowOGL->VHideCursor();
-			Core::Vector3<long> moveVec = mouse->VGetRelativePosition();
+			windowOGL->VHideCursor();
+			Vector3<long> moveVec = mouse->VGetRelativePosition();
 			camera.rotate((float)moveVec.x, (float)moveVec.y);
 			mouse->VSetCursorPosition(lastCursorPosition.x, lastCursorPosition.y);
 		}
 		else
 		{
-			WindowOGL->VShowCursor();
+			windowOGL->VShowCursor();
 		}
 
 		lastCursorPosition = mouse->VGetAbsolutePosition();

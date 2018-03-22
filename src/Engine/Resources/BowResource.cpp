@@ -1,99 +1,86 @@
 #include "BowResources.h"
 #include "BowResource.h"
 
-namespace Bow {
-	namespace Core {
+namespace bow {
+	
+	Resource::Resource(ResourceManager* creator, const std::string& name, ResourceHandle handle)
+		: m_creator(creator)
+		, m_name(name)
+		, m_handle(handle)
+		, m_sizeInBytes(0)
+		, m_loadingState(LoadingState::LOADSTATE_UNLOADED)
+		, m_stateCount(0)
+	{
+	}
 
-		Resource::Resource(ResourceManager* creator, const std::string& name, ResourceHandle handle)
-			: m_creator(creator)
-			, m_name(name)
-			, m_handle(handle)
-			, m_sizeInBytes(0)
-			, m_loadingState(LoadingState::LOADSTATE_UNLOADED)
-			, m_stateCount(0)
+	Resource::~Resource() 
+	{
+		VUnload();
+	}
+
+	void Resource::VPrepare(void)
+	{
+		// quick check that avoids any synchronisation
+		if (m_loadingState != LoadingState::LOADSTATE_UNLOADED)
 		{
+			return;
 		}
 
-		void Resource::VPrepare(void)
-		{
-			// quick check that avoids any synchronisation
-			LoadingState old = m_loadingState;
-			if (old != LoadingState::LOADSTATE_UNLOADED && old != LoadingState::LOADSTATE_PREPARING)
-			{
-				return;
-			}
+		VPrepareImpl();
 
+		m_loadingState = LoadingState::LOADSTATE_PREPARED;
+	}
+
+	void Resource::VLoad(void)
+	{
+		if (m_loadingState != LoadingState::LOADSTATE_UNLOADED && m_loadingState != LoadingState::LOADSTATE_PREPARED)
+		{
+			return;
+		}
+
+		if (m_loadingState == LoadingState::LOADSTATE_UNLOADED)
+		{
 			VPrepareImpl();
-
-			m_loadingState = LoadingState::LOADSTATE_PREPARED;
 		}
 
-		void Resource::VLoad(void)
+		VPreLoadImpl();
+
+		VLoadImpl();
+
+		VPostLoadImpl();
+
+		m_loadingState = LoadingState::LOADSTATE_LOADED;
+	}
+
+	void Resource::VUnload(void)
+	{
+		if (m_loadingState != LoadingState::LOADSTATE_LOADED && m_loadingState != LoadingState::LOADSTATE_PREPARED)
 		{
-			LoadingState old = m_loadingState;
-
-			if (old != LoadingState::LOADSTATE_UNLOADED && old != LoadingState::LOADSTATE_PREPARED && old != LoadingState::LOADSTATE_LOADING)
-			{
-				return;
-			}
-
-			if (old == LoadingState::LOADSTATE_UNLOADED)
-			{
-				VPrepareImpl();
-			}
-
-			VPreLoadImpl();
-
-			VLoadImpl();
-
-			VPostLoadImpl();
-
-			m_loadingState = LoadingState::LOADSTATE_LOADED;
+			return;
 		}
 
-		void Resource::VUnload(void)
+		if (m_loadingState == LoadingState::LOADSTATE_PREPARED)
 		{
-			LoadingState old = m_loadingState;
-			if (old != LoadingState::LOADSTATE_LOADED && old != LoadingState::LOADSTATE_PREPARED)
-			{
-				return;
-			}
-
-			if (old != LoadingState::LOADSTATE_UNLOADING)
-			{
-				return;
-			}
-
-			if (old == LoadingState::LOADSTATE_PREPARED) 
-			{
-				VUnprepareImpl();
-			}
-			else 
-			{
-				VPreUnloadImpl();
-				VUnloadImpl();
-				VPostUnloadImpl();
-			}
-
-			m_loadingState = LoadingState::LOADSTATE_UNLOADED;
+			VUnprepareImpl();
 		}
-
-		void Resource::_dirtyState()
+		else if (m_loadingState == LoadingState::LOADSTATE_LOADED)
 		{
-			// don't worry about threading here, count only ever increases so 
-			// doesn't matter if we get a lost increment (one is enough)
-			++m_stateCount;
+			VPreUnloadImpl();
+
+			VUnloadImpl();
+
+			VPostUnloadImpl();
+
+			VUnprepareImpl();
 		}
 
-		size_t Resource::VCalculateSize(void) const
-		{
-			size_t memSize = 0;
-			memSize += sizeof(ResourceManager);
-			memSize += sizeof(ResourceHandle);
-			memSize += m_name.size() * sizeof(char);
-			memSize += sizeof(size_t);
-			memSize += sizeof(LoadingState);
-			return memSize;
-		}
+		m_loadingState = LoadingState::LOADSTATE_UNLOADED;
+	}
+
+	void Resource::_dirtyState()
+	{
+		// don't worry about threading here, count only ever increases so 
+		// doesn't matter if we get a lost increment (one is enough)
+		++m_stateCount;
 	}
 }

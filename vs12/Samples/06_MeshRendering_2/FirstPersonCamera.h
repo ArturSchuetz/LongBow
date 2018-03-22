@@ -2,13 +2,13 @@
 #include "BowRenderer.h"
 #include "BowCore.h"
 
-class FirstPersonCamera : public Bow::Renderer::Camera
+class FirstPersonCamera : public bow::Camera
 {
 public:
-	FirstPersonCamera(const Bow::Core::Vector3<double>& cameraPosition, const Bow::Core::Vector3<double>& lookAtPoint, const Bow::Core::Vector3<double>& worldUp, unsigned int width, unsigned int height);
+	FirstPersonCamera(const bow::Vector3<double>& cameraPosition, const bow::Vector3<double>& lookAtPoint, const bow::Vector3<double>& worldUp, unsigned int width, unsigned int height);
 	~FirstPersonCamera();
 
-	Bow::Core::Vector3<float> GetPosition() {
+	bow::Vector3<float> GetPosition() {
 		return m_Position;
 	};
 
@@ -23,9 +23,9 @@ public:
 private:
 	void calcViewDirection();
 
-	Bow::Core::Vector3<float> m_Position;
-	Bow::Core::Vector3<float> m_Dir;
-	Bow::Core::Vector3<float> m_Up;
+	bow::Vector3<float> m_Position;
+	bow::Vector3<float> m_Dir;
+	bow::Vector3<float> m_Up;
 
 	float m_Theta, m_Phi;       // Blickrichtung als (theta,phi) Winkel
 

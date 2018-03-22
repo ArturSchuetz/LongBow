@@ -5,7 +5,7 @@
 #include "BowMath.h"
 #include "BowResource.h"
 
-namespace Bow {
+namespace bow {
 	namespace Core {
 
 		// ---------------------------------------------------------------------------

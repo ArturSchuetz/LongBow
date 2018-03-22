@@ -2,34 +2,33 @@
 #include "BowPrerequisites.h"
 #include "BowPlatformPredeclares.h"
 
-namespace Bow {
-	namespace Platform {
+namespace bow {
 
-		class FileReader
-		{
-		public:
-			FileReader();
-			~FileReader();
+	class FileReader
+	{
+	public:
+		FileReader();
+		~FileReader();
 
-			bool Open(const char* filePath);
+		bool Open(const char* filePath);
 
-			void Close();
+		void Close();
 
-			size_t GetSizeOfFile();
+		size_t GetSizeOfFile();
 
-			unsigned long Tell();
+		unsigned long Tell();
 
-			void Seek(size_t offset);
+		void Seek(size_t offset);
 
-			void Skip(long count);
+		void Skip(long count);
 
-			size_t Read(char* memory_block, size_t sizeInBytes);
+		size_t Read(char* memory_block, size_t sizeInBytes);
 
-			bool EndOfFile() const;
+		bool EndOfFile() const;
 
-		private:
-			void* m_pFile;
-		};
-		/*----------------------------------------------------------------*/
-	}
+	private:
+		void* m_pFile;
+	};
+	/*----------------------------------------------------------------*/
 }
+

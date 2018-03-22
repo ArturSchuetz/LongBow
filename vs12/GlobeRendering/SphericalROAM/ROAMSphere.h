@@ -18,16 +18,16 @@ public:
 	ROAMSphere();
 	~ROAMSphere();
 
-	void Init(Bow::Renderer::RenderContextPtr context, Bow::Renderer::ShaderProgramPtr shaderProgramm, Bow::Renderer::Texture2DPtr texture, Bow::Renderer::TextureSamplerPtr sampler, const char* heighMapPath);
+	void Init(bow::RenderContextPtr context, bow::ShaderProgramPtr shaderProgramm, bow::Texture2DPtr texture, bow::TextureSamplerPtr sampler, const char* heighMapPath);
 	void Reset();
 	void ToggleRenderMode();
-	void Tessellate(Bow::Core::Vector3<float> vPosition, float fMaxError);
-	void Render(Bow::Renderer::RenderContextPtr context, Bow::Renderer::Camera* camera);
+	void Tessellate(bow::Vector3<float> vPosition, float fMaxError);
+	void Render(bow::RenderContextPtr context, bow::Camera* camera);
 
 private:
 	void							BuildCube();
-	void							RecursRender(ROAMTriangle* triangle, Bow::Core::VertexAttributeFloatVec3 *attribute);
-	void							RecursTessellate(ROAMTriangle* triangle, Bow::Core::Vector3<float> vPosition, float fMaxError);
+	void							RecursRender(ROAMTriangle* triangle, bow::VertexAttributeFloatVec3 *attribute);
+	void							RecursTessellate(ROAMTriangle* triangle, bow::Vector3<float> vPosition, float fMaxError);
 	void							Split(ROAMTriangle *tri);
 	ROAMTriangle*					AllocateTri();
 
@@ -44,10 +44,10 @@ private:
 	// ==========================================================================================
 	// Rendering stuff (Not important for Algorithm)
 
-	Bow::Renderer::RenderContextPtr	m_renderContext;
-	Bow::Renderer::ShaderProgramPtr	m_shaderProgram;
-	Bow::Renderer::Texture2DPtr		m_terrainDiffuseTexture;
+	bow::RenderContextPtr	m_renderContext;
+	bow::ShaderProgramPtr	m_shaderProgram;
+	bow::Texture2DPtr		m_terrainDiffuseTexture;
 
-	Bow::Core::Matrix3D<float>		m_objectWorldMat;
-	Bow::Renderer::RenderState		m_renderState;
+	bow::Matrix3D<float>		m_objectWorldMat;
+	bow::RenderState		m_renderState;
 };

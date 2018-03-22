@@ -4,7 +4,7 @@
 
 struct FIBITMAP;
 
-namespace Bow {
+namespace bow {
 	namespace Core {
 
 		class Bitmap

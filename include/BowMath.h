@@ -8,20 +8,24 @@
 
 #include "BowQuaternion.h"
 
+#include "BowMatrix.h"
 #include "BowMatrix2D.h"
-#include "BowMatrix2x2.h"
 #include "BowMatrix3D.h"
+#include "BowMatrix3x3.h"
 #include "BowMatrix4x4.h"
 
+#include "BowSVD.h"
+#include "BowAABB.h"
 #include "BowPlane.h"
 #include "BowRay.h"
 #include "BowSphere.h"
 #include "BowTriangle.h"
 #include "BowFrustum.h"
+#include "BowTransform.h"
 
-namespace Bow 
+namespace bow
 {
-	namespace Math
+	namespace math
 	{
 		//Taken from 'From Quaterninon to Matrix and Back', J.M.P. van Waveren, February 27th 2005
 		static float Sqrt(float x) {

@@ -1,14 +1,12 @@
 #include "BowRenderer.h"
-#include "BowBitmap.h"
+#include "BowResources.h"
 
 #include <cstdint>
 #include <windows.h>
 
 #include "resource.h"
 
-using namespace Bow;
-using namespace Core;
-using namespace Renderer;
+using namespace bow;
 
 std::string LoadShaderFromResouce(int name)
 {
@@ -21,21 +19,21 @@ std::string LoadShaderFromResouce(int name)
 int main()
 {
 	// Creating Render Device
-	RenderDevicePtr DeviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(API::OpenGL3x);
-	if (DeviceOGL == nullptr)
+	RenderDevicePtr deviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(RenderDeviceAPI::OpenGL3x);
+	if (deviceOGL == nullptr)
 	{
 		return 0;
 	}
 
 	// Creating Window
-	GraphicsWindowPtr WindowOGL = DeviceOGL->VCreateWindow(800, 800, "Textures Sample", WindowType::Windowed);
-	if (WindowOGL == nullptr)
+	GraphicsWindowPtr windowOGL = deviceOGL->VCreateWindow(800, 800, "Textures Sample", WindowType::Windowed);
+	if (windowOGL == nullptr)
 	{
 		return 0;
 	}
 
-	RenderContextPtr ContextOGL = WindowOGL->VGetContext();
-	ShaderProgramPtr ShaderProgram = DeviceOGL->VCreateShaderProgram(LoadShaderFromResouce(IDS_VERTEXSHADER), LoadShaderFromResouce(IDS_FRAGMENTSHADER));
+	RenderContextPtr contextOGL = windowOGL->VGetContext();
+	ShaderProgramPtr ShaderProgram = deviceOGL->VCreateShaderProgram(LoadShaderFromResouce(IDS_VERTEXSHADER), LoadShaderFromResouce(IDS_FRAGMENTSHADER));
 
 	///////////////////////////////////////////////////////////////////
 	// ClearState and Color
@@ -52,7 +50,7 @@ int main()
 	vertices[2] = Vector2<float>(1.0f, -1.0f);
 
 	// Create vertex position buffer and fill with informations
-	VertexBufferPtr PositionBuffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector2<float>) * 3);
+	VertexBufferPtr PositionBuffer = deviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector2<float>) * 3);
 	PositionBuffer->VCopyFromSystemMemory(vertices, 0, sizeof(Vector2<float>) * 3);
 
 	// Define buffer as vertexattribute for shaders
@@ -64,35 +62,28 @@ int main()
 	texcoor[2] = Vector2<float>(1.0f, 0.0f);
 
 	// Create vertex texturecoodinate buffer and fill with informations
-	VertexBufferPtr TextureCoordBuffer = DeviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector2<float>) * 3);
+	VertexBufferPtr TextureCoordBuffer = deviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector2<float>) * 3);
 	TextureCoordBuffer->VCopyFromSystemMemory(texcoor, 0, sizeof(Vector2<float>) * 3);
 
 	// Define buffer as vertexattribute for shaders
 	VertexBufferAttributePtr TextureCoordAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(TextureCoordBuffer, ComponentDatatype::Float, 2));
 
 	// create VertexArray and connect attributeBuffers with location
-	VertexArrayPtr VertexArray = ContextOGL->VCreateVertexArray();
+	VertexArrayPtr VertexArray = contextOGL->VCreateVertexArray();
 	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_Position")->Location, PositionAttribute);
 	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_TexCoord")->Location, TextureCoordAttribute);
 
 	///////////////////////////////////////////////////////////////////
 	// Textures
 
-	Texture2DPtr texture;
+	ImagePtr image = ImageManager::GetInstance().Load("../Data/Textures/test.png");
+	Texture2DPtr texture = deviceOGL->VCreateTexture2D(image);
 
-	Core::Bitmap bitmap;
-	bitmap.LoadFile("../Data/Textures/test.jpg");
-
-	if (bitmap.GetSizeInBytes() / (bitmap.GetHeight() * bitmap.GetWidth()) == 3)
-		texture = DeviceOGL->VCreateTexture2D(&bitmap, Renderer::TextureFormat::RedGreenBlue8);
-	else
-		texture = DeviceOGL->VCreateTexture2D(&bitmap, Renderer::TextureFormat::RedGreenBlueAlpha8);
-
-	TextureSamplerPtr sampler = DeviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Clamp, TextureWrap::Clamp);
+	TextureSamplerPtr sampler = deviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Clamp, TextureWrap::Clamp);
 
 	int TexID = 0;
-	ContextOGL->VSetTexture(TexID, texture);
-	ContextOGL->VSetTextureSampler(TexID, sampler);
+	contextOGL->VSetTexture(TexID, texture);
+	contextOGL->VSetTextureSampler(TexID, sampler);
 
 	///////////////////////////////////////////////////////////////////
 	// Uniforms
@@ -106,16 +97,16 @@ int main()
 	renderState.FaceCulling.Enabled = false;
 	renderState.DepthTest.Enabled = false;
 
-	while (!WindowOGL->VShouldClose())
+	while (!windowOGL->VShouldClose())
 	{
 		// Clear Backbuffer to our ClearState
-		ContextOGL->VClear(clearState);
+		contextOGL->VClear(clearState);
 
-		ContextOGL->VSetViewport(Viewport(0, 0, WindowOGL->VGetWidth(), WindowOGL->VGetHeight()));
-		ContextOGL->VDraw(PrimitiveType::Triangles, 0, 3, VertexArray, ShaderProgram, renderState);
+		contextOGL->VSetViewport(Viewport(0, 0, windowOGL->VGetWidth(), windowOGL->VGetHeight()));
+		contextOGL->VDraw(PrimitiveType::Triangles, VertexArray, ShaderProgram, renderState);
 
-		ContextOGL->VSwapBuffers();
-		WindowOGL->VPollWindowEvents();
+		contextOGL->VSwapBuffers();
+		windowOGL->VPollWindowEvents();
 	}
 	return 0;
 }

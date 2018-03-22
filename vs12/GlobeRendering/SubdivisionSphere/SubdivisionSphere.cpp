@@ -125,7 +125,7 @@ int main()
 
 	Texture2DPtr texture;
 	
-	Core::Bitmap bitmap;
+	Bitmap bitmap;
 	bitmap.LoadFile("../Data/Textures/NASA/world_topo_bathy_200411_3x5400x2700.jpg");
 
 	if (bitmap.GetSizeInBytes() / (bitmap.GetHeight() * bitmap.GetWidth()) == 3)
@@ -159,7 +159,7 @@ int main()
 	bool currentlyNormalized = !g_normalize;
 	VertexArrayPtr VertexArray = VertexArrayPtr(nullptr); 
 
-	Core::Matrix3D<float> worldMat;
+	Matrix3D<float> worldMat;
 	worldMat.Translate(Vector3<float>(0.0f, 0.0f, 0.0f));
 	worldMat.RotateX(-(M_PI * 0.5f));
 	worldMat.RotateZ((M_PI * 0.00f));
@@ -290,7 +290,7 @@ int main()
 
 		ContextOGL->VSetViewport(Viewport(0, 0, WindowOGL->VGetWidth(), WindowOGL->VGetHeight()));
 		camera.SetResolution(WindowOGL->VGetWidth(), WindowOGL->VGetHeight());
-		ShaderProgram->VSetUniform("u_ModelViewProj", (Core::Matrix4x4<float>)camera.CalculateWorldViewProjection(worldMat));
+		ShaderProgram->VSetUniform("u_ModelViewProj", (Matrix4x4<float>)camera.CalculateWorldViewProjection(worldMat));
 
 		ContextOGL->VDraw(PrimitiveType::Triangles, VertexArray, ShaderProgram, renderState);
 

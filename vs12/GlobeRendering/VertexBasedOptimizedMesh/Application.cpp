@@ -67,7 +67,7 @@ bool Application::Init(void)
 	///////////////////////////////////////////////////////////////////
 	// ClearState and Color
 
-	m_clearState.Color = Core::ColorRGBA(0.392f, 0.584f, 0.929f, 1.0f);
+	m_clearState.Color = ColorRGBA(0.392f, 0.584f, 0.929f, 1.0f);
 
 	///////////////////////////////////////////////////////////////////
 	// RenderState
@@ -82,9 +82,9 @@ void Application::PrepareScene(void)
 	///////////////////////////////////////////////////////////////////
 	// Camera
 
-	Core::Vector3<float> Position = Core::Vector3<float>(0.0f, 0.0f, -3.0f);
-	Core::Vector3<float> LookAt = Core::Vector3<float>(0.0f, 0.0f, 0.0f);
-	Core::Vector3<float> UpVector = Core::Vector3<float>(0.0f, 1.0f, 0.0f);
+	Vector3<float> Position = Vector3<float>(0.0f, 0.0f, -3.0f);
+	Vector3<float> LookAt = Vector3<float>(0.0f, 0.0f, 0.0f);
+	Vector3<float> UpVector = Vector3<float>(0.0f, 1.0f, 0.0f);
 
 	m_camera = new FirstPersonCamera(Position, LookAt, UpVector, m_window->VGetWidth(), m_window->VGetHeight());
 	m_camera->SetClippingPlanes(0.01, 1000.0);
@@ -95,7 +95,7 @@ void Application::PrepareScene(void)
 
 	Renderer::Texture2DPtr terrainDiffuseTexture;
 
-	Core::Bitmap bitmap;
+	Bitmap bitmap;
 	bitmap.LoadFile("../Data/Textures/NASA/world_topo_bathy_200411_3x5400x2700.jpg");
 
 	if (bitmap.GetSizeInBytes() / (bitmap.GetHeight() * bitmap.GetWidth()) == 3)
@@ -176,7 +176,7 @@ void Application::Update(float deltaTime)
 	if (m_mouse->VIsPressed(Input::MouseButton::MOFS_BUTTON1))
 	{
 		m_window->VHideCursor();
-		Core::Vector3<long> moveVec = m_mouse->VGetRelativePosition();
+		Vector3<long> moveVec = m_mouse->VGetRelativePosition();
 		m_camera->rotate((float)moveVec.x, (float)moveVec.y);
 		m_mouse->VSetCursorPosition(m_lastCursorPosition.x, m_lastCursorPosition.y);
 	}

@@ -4,14 +4,13 @@
 
 #include "BowLogger.h"
 
-#include "BowModelLoader_obj.h"
-
-#include "BowResource.h"
-#include "BowBitmap.h"
-#include "BowClipmap.h"
-#include "BowTexture.h"
+//#include "BowResource.h"
+#include "BowImage.h"
 #include "BowMesh.h"
-#include "BowSubMesh.h"
+#include "BowPointCloud.h"
 
-#include "BowResourceManager.h"
+//#include "BowResourceManager.h"
+#include "BowImageManager.h"
 #include "BowMeshManager.h"
+#include "BowMaterialManager.h"
+#include "BowPointCloudManager.h"

@@ -7,7 +7,7 @@ class WaveletFace;
 template <typename T> class WaveletVertex
 {
 public:
-	WaveletVertex(const Bow::Core::Vector3<T>& vec)
+	WaveletVertex(const bow::Vector3<T>& vec)
 	{
 		SetVertex(vec);
 		m_isDirty = true;
@@ -15,7 +15,7 @@ public:
 
 	WaveletVertex(const T& p0, const T& p1, const T& p2)
 	{
-		SetVertex(Bow::Core::Vector3<T>(p0, p1, p2));
+		SetVertex(bow::Vector3<T>(p0, p1, p2));
 		m_isDirty = true;
 	}
 
@@ -49,7 +49,7 @@ public:
 		m_isDirty = true;
 	}
 
-	Bow::Core::Vector3<T> GetVertex(float height = -1.0f)
+	bow::Vector3<T> GetVertex(float height = -1.0f)
 	{
 		if (height < 0.0f)
 		{
@@ -61,7 +61,7 @@ public:
 		}
 	}
 
-	void SetVertex(const Bow::Core::Vector3<T>& vec)
+	void SetVertex(const bow::Vector3<T>& vec)
 	{
 		m_Vector = vec;
 	}
@@ -108,7 +108,7 @@ public:
 	}
 
 private:
-	Bow::Core::Vector3<T> m_Vector;
+	bow::Vector3<T> m_Vector;
 	std::vector<WaveletFace*> m_faces;
 	T m_Height;
 	bool m_isDirty;
@@ -211,7 +211,7 @@ public:
 		{
 			if (m_center->GetHeight() == 0.0f)
 			{
-				Bow::Core::Vector3<T> targetPosition = ((m_p1->GetVertex(height) + m_p2->GetVertex(height)) * 0.5);
+				bow::Vector3<T> targetPosition = ((m_p1->GetVertex(height) + m_p2->GetVertex(height)) * 0.5);
 				m_center->SetVertex(targetPosition);
 				m_center->SetHeight(0.0f);
 			}

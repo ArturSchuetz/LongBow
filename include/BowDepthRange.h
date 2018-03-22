@@ -2,22 +2,20 @@
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"
 
-namespace Bow {
-	namespace Renderer{
+namespace bow {
 
-		struct DepthRange
+	struct DepthRange
+	{
+	public:
+
+		DepthRange()
 		{
-		public:
+			Near = 0.0;
+			Far = 1.0;
+		}
 
-			DepthRange()
-			{
-				Near = 0.0;
-				Far = 1.0;
-			}
+		double Near;
+		double Far;
+	};
 
-			double Near;
-			double Far;
-		};
-
-	}
 }

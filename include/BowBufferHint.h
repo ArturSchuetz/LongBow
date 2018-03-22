@@ -2,22 +2,20 @@
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"
 
-namespace Bow {
-	namespace Renderer{
+namespace bow {
 
-		enum class BufferHint : char
-		{
-			None,
-			StreamDraw,
-			StreamRead,
-			StreamCopy,
-			StaticDraw,
-			StaticRead,
-			StaticCopy,
-			DynamicDraw,
-			DynamicRead,
-			DynamicCopy,
-		};
+	enum class BufferHint : char
+	{
+		None,
+		StreamDraw,
+		StreamRead,
+		StreamCopy,
+		StaticDraw,
+		StaticRead,
+		StaticCopy,
+		DynamicDraw,
+		DynamicRead,
+		DynamicCopy,
+	};
 
-	}
 }

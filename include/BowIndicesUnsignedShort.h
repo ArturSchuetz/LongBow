@@ -6,19 +6,17 @@
 
 #include <list>
 
-namespace Bow {
-	namespace Core {
+namespace bow {
 
-		struct IndicesUnsignedShort : IIndicesBase
-		{
-		public:
-			IndicesUnsignedShort();
-			IndicesUnsignedShort(int capacity);
-			~IndicesUnsignedShort();
+	struct IndicesUnsignedShort : IIndicesBase
+	{
+	public:
+		IndicesUnsignedShort();
+		IndicesUnsignedShort(int capacity);
+		~IndicesUnsignedShort();
 
-			unsigned int Size();
-			std::vector<unsigned short> Values;
-		};
+		unsigned int Size();
+		std::vector<unsigned short> Values;
+	};
 
-	}
 }

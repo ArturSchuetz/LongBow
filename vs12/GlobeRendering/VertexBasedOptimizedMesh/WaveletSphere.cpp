@@ -1,11 +1,11 @@
 #include "WaveletSphere.h"
 #include "BowBitmap.h"
 
-Bow::Core::Bitmap g_map;
+bow::Bitmap g_map;
 
 WaveletSphere::WaveletSphere()
 {
-	m_objectWorldMat.Translate(Bow::Core::Vector3<float>(0.0f, 0.0f, 0.0f));
+	m_objectWorldMat.Translate(bow::Vector3<float>(0.0f, 0.0f, 0.0f));
 	m_objectWorldMat.RotateX(-(M_PI * 0.5f));
 
 	m_isDirty = true;
@@ -15,7 +15,7 @@ WaveletSphere::~WaveletSphere()
 {
 }
 
-void WaveletSphere::Init(Bow::Renderer::ShaderProgramPtr shaderProgram, const char* heighMapPath)
+void WaveletSphere::Init(bow::ShaderProgramPtr shaderProgram, const char* heighMapPath)
 {
 	g_map.LoadFile(heighMapPath);
 	m_HeightMap = g_map.GetData();
@@ -45,46 +45,46 @@ void WaveletSphere::Init(Bow::Renderer::ShaderProgramPtr shaderProgram, const ch
 	}
 }
 
-void WaveletSphere::Render(Bow::Renderer::RenderContextPtr renderContext, Bow::Renderer::Camera* camera, bool renderFilled)
+void WaveletSphere::Render(bow::RenderContextPtr renderContext, bow::Camera* camera, bool renderFilled)
 {
 	if (m_isDirty)
 	{
-		Bow::Core::MeshAttribute mesh;
+		bow::MeshAttribute mesh;
 
-		Bow::Core::VertexAttributeFloatVec3 *positionsAttribute = new Bow::Core::VertexAttributeFloatVec3("in_Position");
-		mesh.AddAttribute(Bow::Core::VertexAttributePtr(positionsAttribute));
+		bow::VertexAttributeFloatVec3 *positionsAttribute = new bow::VertexAttributeFloatVec3("in_Position");
+		mesh.AddAttribute(bow::VertexAttributePtr(positionsAttribute));
 		positionsAttribute->Values = m_Positions;
 
-		Bow::Core::VertexAttributeFloat *heightAttribute = new Bow::Core::VertexAttributeFloat("in_Height");
-		mesh.AddAttribute(Bow::Core::VertexAttributePtr(heightAttribute));
+		bow::VertexAttributeFloat *heightAttribute = new bow::VertexAttributeFloat("in_Height");
+		mesh.AddAttribute(bow::VertexAttributePtr(heightAttribute));
 		heightAttribute->Values = m_Values;
 
-		Bow::Core::IndicesUnsignedInt *indices = new Bow::Core::IndicesUnsignedInt();
-		mesh.Indices = Bow::Core::IndicesBasePtr(indices);
+		bow::IndicesUnsignedInt *indices = new bow::IndicesUnsignedInt();
+		mesh.Indices = bow::IndicesBasePtr(indices);
 		
 		for (unsigned int i = 0; i < m_RootTriangles.size(); ++i)
 		{
 			RecursRender(&(m_RootTriangles[i]), indices);
 		}
 
-		m_VertexArray = renderContext->VCreateVertexArray(mesh, m_shaderProgram->VGetVertexAttributes(), Bow::Renderer::BufferHint::StaticDraw);
+		m_VertexArray = renderContext->VCreateVertexArray(mesh, m_shaderProgram->VGetVertexAttributes(), bow::BufferHint::StaticDraw);
 		m_isDirty = false;
 	}
 
-	Bow::Core::Matrix3D<float> modelViewProj = (Bow::Core::Matrix3D<float>)camera->CalculateWorldViewProjection(m_objectWorldMat);
-	m_shaderProgram->VSetUniform("u_ModelViewProj", (Bow::Core::Matrix4x4<float>)modelViewProj);
+	bow::Matrix3D<float> modelViewProj = (bow::Matrix3D<float>)camera->CalculateWorldViewProjection(m_objectWorldMat);
+	m_shaderProgram->VSetUniform("u_ModelViewProj", (bow::Matrix4x4<float>)modelViewProj);
 	m_shaderProgram->VSetUniform("u_terrainHeight", 0.3f);
 
 	if (renderFilled)
 	{
-		m_renderState.RasterizationMode = Bow::Renderer::RasterizationMode::Fill;
+		m_renderState.RasterizationMode = bow::RasterizationMode::Fill;
 	}
 	else
 	{
-		m_renderState.RasterizationMode = Bow::Renderer::RasterizationMode::Line;
+		m_renderState.RasterizationMode = bow::RasterizationMode::Line;
 	}
 
-	renderContext->VDraw(Bow::Renderer::PrimitiveType::Triangles, m_VertexArray, m_shaderProgram, m_renderState);
+	renderContext->VDraw(bow::PrimitiveType::Triangles, m_VertexArray, m_shaderProgram, m_renderState);
 }
 
 void WaveletSphere::Update(float deltaTime)
@@ -99,18 +99,18 @@ void WaveletSphere::ComputeFromIcosahedron(int numberOfSubdivisions)
 	const double X = 0.525731112119133606;
 	const double Z = 0.850650808352039932;
 
-	Bow::Core::Vector3<double> v0 = Bow::Core::Vector3<double>(-X, 0.0, Z); v0.Normalize();
-	Bow::Core::Vector3<double> v1 = Bow::Core::Vector3<double>(X, 0.0, Z); v1.Normalize();
-	Bow::Core::Vector3<double> v2 = Bow::Core::Vector3<double>(-X, 0.0, -Z); v2.Normalize();
-	Bow::Core::Vector3<double> v3 = Bow::Core::Vector3<double>(X, 0.0, -Z); v3.Normalize();
-	Bow::Core::Vector3<double> v4 = Bow::Core::Vector3<double>(0.0, Z, X); v4.Normalize();
-	Bow::Core::Vector3<double> v5 = Bow::Core::Vector3<double>(0.0, Z, -X); v5.Normalize();
-	Bow::Core::Vector3<double> v6 = Bow::Core::Vector3<double>(0.0, -Z, X); v6.Normalize();
-	Bow::Core::Vector3<double> v7 = Bow::Core::Vector3<double>(0.0, -Z, -X); v7.Normalize();
-	Bow::Core::Vector3<double> v8 = Bow::Core::Vector3<double>(Z, X, 0.0); v8.Normalize();
-	Bow::Core::Vector3<double> v9 = Bow::Core::Vector3<double>(-Z, X, 0.0); v9.Normalize();
-	Bow::Core::Vector3<double> v10 = Bow::Core::Vector3<double>(Z, -X, 0.0); v10.Normalize();
-	Bow::Core::Vector3<double> v11 = Bow::Core::Vector3<double>(-Z, -X, 0.0); v11.Normalize();
+	bow::Vector3<double> v0 = bow::Vector3<double>(-X, 0.0, Z); v0.Normalize();
+	bow::Vector3<double> v1 = bow::Vector3<double>(X, 0.0, Z); v1.Normalize();
+	bow::Vector3<double> v2 = bow::Vector3<double>(-X, 0.0, -Z); v2.Normalize();
+	bow::Vector3<double> v3 = bow::Vector3<double>(X, 0.0, -Z); v3.Normalize();
+	bow::Vector3<double> v4 = bow::Vector3<double>(0.0, Z, X); v4.Normalize();
+	bow::Vector3<double> v5 = bow::Vector3<double>(0.0, Z, -X); v5.Normalize();
+	bow::Vector3<double> v6 = bow::Vector3<double>(0.0, -Z, X); v6.Normalize();
+	bow::Vector3<double> v7 = bow::Vector3<double>(0.0, -Z, -X); v7.Normalize();
+	bow::Vector3<double> v8 = bow::Vector3<double>(Z, X, 0.0); v8.Normalize();
+	bow::Vector3<double> v9 = bow::Vector3<double>(-Z, X, 0.0); v9.Normalize();
+	bow::Vector3<double> v10 = bow::Vector3<double>(Z, -X, 0.0); v10.Normalize();
+	bow::Vector3<double> v11 = bow::Vector3<double>(-Z, -X, 0.0); v11.Normalize();
 
 	m_Positions.push_back(v0);
 	m_Positions.push_back(v1);
@@ -156,9 +156,9 @@ void WaveletSphere::Subdivide(WaveletTriangle *triangle, int level)
 {
 	if (level > 0)
 	{
-		Bow::Core::Vector3<float> vec1 = (m_Positions[triangle->m_VertexIndices[0]] + m_Positions[triangle->m_VertexIndices[1]]) * 0.5;
-		Bow::Core::Vector3<float> vec2 = (m_Positions[triangle->m_VertexIndices[1]] + m_Positions[triangle->m_VertexIndices[2]]) * 0.5;
-		Bow::Core::Vector3<float> vec3 = (m_Positions[triangle->m_VertexIndices[2]] + m_Positions[triangle->m_VertexIndices[0]]) * 0.5;
+		bow::Vector3<float> vec1 = (m_Positions[triangle->m_VertexIndices[0]] + m_Positions[triangle->m_VertexIndices[1]]) * 0.5;
+		bow::Vector3<float> vec2 = (m_Positions[triangle->m_VertexIndices[1]] + m_Positions[triangle->m_VertexIndices[2]]) * 0.5;
+		bow::Vector3<float> vec3 = (m_Positions[triangle->m_VertexIndices[2]] + m_Positions[triangle->m_VertexIndices[0]]) * 0.5;
 
 		vec1.Normalize();
 		vec2.Normalize();
@@ -190,7 +190,7 @@ void WaveletSphere::Subdivide(WaveletTriangle *triangle, int level)
 	}
 }
 
-void WaveletSphere::RecursRender(WaveletTriangle* triangle, Bow::Core::IndicesUnsignedInt *indices)
+void WaveletSphere::RecursRender(WaveletTriangle* triangle, bow::IndicesUnsignedInt *indices)
 {
 	if (triangle->HasChildren() && !triangle->ChildrenAreWavelets())
 	{
@@ -252,22 +252,22 @@ void WaveletSphere::FillData(WaveletTriangle* triangle)
 	if (!triangle->HasChildren())
 	{
 		double PI = 3.1415926535897931;
-		Bow::Core::Vector2<double> texCoord;
+		bow::Vector2<double> texCoord;
 		int x, y, index;
 
-		texCoord = Bow::Core::Vector2<double>((atan2(m_Positions[triangle->m_VertexIndices[0]].y, m_Positions[triangle->m_VertexIndices[0]].x) / (PI * 2.0)) + 0.5, (asin(m_Positions[triangle->m_VertexIndices[0]].z) / PI) + 0.5);
+		texCoord = bow::Vector2<double>((atan2(m_Positions[triangle->m_VertexIndices[0]].y, m_Positions[triangle->m_VertexIndices[0]].x) / (PI * 2.0)) + 0.5, (asin(m_Positions[triangle->m_VertexIndices[0]].z) / PI) + 0.5);
 		x = (int)(texCoord.x * (double)m_MapWidth);
 		y = (int)(texCoord.y * (double)m_MapHeight);
 		index = x + y * m_MapWidth;
 		m_Values[triangle->m_VertexIndices[0]] = (float)m_HeightMap[index % m_MapSize] / (float)255;
 
-		texCoord = Bow::Core::Vector2<double>((atan2(m_Positions[triangle->m_VertexIndices[1]].y, m_Positions[triangle->m_VertexIndices[1]].x) / (PI * 2.0)) + 0.5, (asin(m_Positions[triangle->m_VertexIndices[1]].z) / PI) + 0.5);
+		texCoord = bow::Vector2<double>((atan2(m_Positions[triangle->m_VertexIndices[1]].y, m_Positions[triangle->m_VertexIndices[1]].x) / (PI * 2.0)) + 0.5, (asin(m_Positions[triangle->m_VertexIndices[1]].z) / PI) + 0.5);
 		x = (int)(texCoord.x * (double)m_MapWidth);
 		y = (int)(texCoord.y * (double)m_MapHeight);
 		index = x + y * m_MapWidth;
 		m_Values[triangle->m_VertexIndices[1]] = (float)m_HeightMap[index % m_MapSize] / (float)255;
 
-		texCoord = Bow::Core::Vector2<double>((atan2(m_Positions[triangle->m_VertexIndices[2]].y, m_Positions[triangle->m_VertexIndices[2]].x) / (PI * 2.0)) + 0.5, (asin(m_Positions[triangle->m_VertexIndices[2]].z) / PI) + 0.5);
+		texCoord = bow::Vector2<double>((atan2(m_Positions[triangle->m_VertexIndices[2]].y, m_Positions[triangle->m_VertexIndices[2]].x) / (PI * 2.0)) + 0.5, (asin(m_Positions[triangle->m_VertexIndices[2]].z) / PI) + 0.5);
 		x = (int)(texCoord.x * (double)m_MapWidth);
 		y = (int)(texCoord.y * (double)m_MapHeight);
 		index = x + y * m_MapWidth;

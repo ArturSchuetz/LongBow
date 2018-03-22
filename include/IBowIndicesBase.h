@@ -2,32 +2,30 @@
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"
 
-namespace Bow {
-	namespace Core {
+namespace bow {
 
-		enum class IndicesType : char
+	enum class IndicesType : char
+	{
+		UnsignedShort,
+		UnsignedInt
+	};
+
+	class IIndicesBase
+	{
+	protected:
+		IIndicesBase(IndicesType type) : Type(type)
 		{
-			UnsignedShort,
-			UnsignedInt
-		};
+		}
 
-		class IIndicesBase
-		{
-		protected:
-			IIndicesBase(IndicesType type) : Type(type)
-			{
-			}
+	public:
+		virtual ~IIndicesBase(){}
 
-		public:
-			virtual ~IIndicesBase(){}
+		virtual unsigned int Size() = 0;
 
-			virtual unsigned int Size() = 0;
+	public:
+		const IndicesType Type;
+	};
 
-		public:
-			const IndicesType Type;
-		};
+	typedef std::shared_ptr<IIndicesBase> IndicesBasePtr;
 
-		typedef std::shared_ptr<IIndicesBase> IndicesBasePtr;
-
-	}
 }

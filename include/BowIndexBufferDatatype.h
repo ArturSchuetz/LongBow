@@ -2,14 +2,12 @@
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"
 
-namespace Bow {
-	namespace Renderer{
+namespace bow {
 
-		enum class IndexBufferDatatype : char
-		{
-			UnsignedShort,
-			UnsignedInt
-		};
+	enum class IndexBufferDatatype : char
+	{
+		UnsignedShort,
+		UnsignedInt
+	};
 
-	}
 }

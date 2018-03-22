@@ -2,29 +2,27 @@
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"
 
-namespace Bow {
-	namespace Renderer{
+namespace bow {
 
-		class MeshBuffers
+	class MeshBuffers
+	{
+	public:
+		MeshBuffers() : m_vertexBufferAttributes(), IndexBuffer(nullptr){}
+		~MeshBuffers(){}
+
+		VertexBufferAttributeMap GetAttributes() { return m_vertexBufferAttributes; }
+		void SetAttribute(unsigned int location, VertexBufferAttributePtr vertexBufferAttribute)
 		{
-		public:
-			MeshBuffers() : m_vertexBufferAttributes(), IndexBuffer(nullptr){}
-			~MeshBuffers(){}
+			if (m_vertexBufferAttributes.find(location) == m_vertexBufferAttributes.end())
+				m_vertexBufferAttributes[location] = vertexBufferAttribute;
+			else
+				m_vertexBufferAttributes.insert(std::pair<unsigned int, VertexBufferAttributePtr>(location, vertexBufferAttribute));
+		}
 
-			VertexBufferAttributeMap GetAttributes() { return m_vertexBufferAttributes; }
-			void SetAttribute(unsigned int location, VertexBufferAttributePtr vertexBufferAttribute)
-			{
-				if (m_vertexBufferAttributes.find(location) == m_vertexBufferAttributes.end())
-					m_vertexBufferAttributes[location] = vertexBufferAttribute;
-				else
-					m_vertexBufferAttributes.insert(std::pair<unsigned int, VertexBufferAttributePtr>(location, vertexBufferAttribute));
-			}
+		IndexBufferPtr IndexBuffer;
 
-			IndexBufferPtr IndexBuffer;
+	private:
+		VertexBufferAttributeMap m_vertexBufferAttributes;
+	};
 
-		private:
-			VertexBufferAttributeMap m_vertexBufferAttributes;
-		};
-
-	}
 }

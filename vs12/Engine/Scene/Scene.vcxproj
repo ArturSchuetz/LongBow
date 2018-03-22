@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D262FFD1-A4C1-45C1-9716-0ABED28C8B08}</ProjectGuid>
-    <RootNamespace>Scene</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <RootNamespace>Resources</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -69,33 +69,34 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IntDir>..\..\..\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <OutDir>..\..\..\lib\$(Platform)\</OutDir>
+    <IntDir>..\..\..\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IntDir>..\..\..\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <OutDir>..\..\..\lib\$(Platform)\</OutDir>
+    <IntDir>..\..\..\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IntDir>..\..\..\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <OutDir>..\..\..\lib\$(Platform)\</OutDir>
+    <IntDir>..\..\..\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IntDir>..\..\..\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <OutDir>..\..\..\lib\$(Platform)\</OutDir>
+    <IntDir>..\..\..\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Lib>
       <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Renderer_d.lib</AdditionalDependencies>
+      <AdditionalDependencies>Resources_d.lib;RenderDevice_d.lib;CoreSystems_d.lib;ThirdParty_d.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -103,11 +104,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\dependencies\FreeImage\$(Platform);</AdditionalIncludeDirectories>
     </ClCompile>
     <Lib>
       <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Renderer_d.lib</AdditionalDependencies>
+      <AdditionalDependencies>Core_d.lib;FreeImage.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -117,7 +118,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -125,7 +127,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Renderer.lib</AdditionalDependencies>
+      <AdditionalDependencies>Resources.lib;RenderDevice.lib;CoreSystems.lib;ThirdParty.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -135,7 +137,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\dependencies\FreeImage\$(Platform);</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -143,18 +145,9 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>..\..\..\lib\$(Platform);</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Renderer.lib</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib;FreeImage.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\include\BowScene.h" />
-    <ClInclude Include="..\..\..\include\BowScenePredeclares.h" />
-    <ClInclude Include="..\..\..\include\IBowRenderStrategy.h" />
-    <ClInclude Include="..\..\..\include\BowSceneGraph.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\src\Engine\Scene\BowSceneGraph.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

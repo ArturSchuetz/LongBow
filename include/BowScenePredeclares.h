@@ -2,7 +2,7 @@
 #include "BowPrerequisites.h"
 #include "BowScenePredeclares.h"
 
-namespace Bow {
+namespace bow {
 	namespace Scene{
 
 		////////////////////////////////////////////////////
