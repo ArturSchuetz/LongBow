@@ -1,23 +1,27 @@
 #pragma once
 #include "BowPrerequisites.h"
+#include "BowCorePredeclares.h"
+#include "BowRendererPredeclares.h"
+#include "BowD3D12RenderDevicePredeclares.h"
 
 #include "IBowRenderDevice.h"
 
+#include <d3d12.h>
+#include <dxgi1_6.h>
 
 namespace bow {
 
-	typedef std::shared_ptr<class OGLGraphicsWindow> OGLGraphicsWindowPtr;
-	typedef std::unordered_map<unsigned int, OGLGraphicsWindowPtr> OGLGraphicsWindowMap;
-
-	class DirectX12RenderDevice : public IRenderDevice
+	class D3DRenderDevice : public IRenderDevice
 	{
+		friend class D3DRenderContext;
 	public:
-		DirectX12RenderDevice(void);
-		~DirectX12RenderDevice(void);
+		D3DRenderDevice(void);
+		~D3DRenderDevice(void);
 
 		// =========================================================================
 		// INIT/RELEASE STUFF:
 		// =========================================================================
+
 		bool Initialize(void);
 		void VRelease(void);
 
@@ -26,6 +30,7 @@ namespace bow {
 		// =========================================================================
 		// SHADER STUFF:
 		// =========================================================================
+
 		ShaderProgramPtr		VCreateShaderProgramFromFile(const std::string& VertexShaderFilename, const std::string& FragementShaderFilename);
 		ShaderProgramPtr		VCreateShaderProgramFromFile(const std::string& VertexShaderFilename, const std::string& GeometryShaderFilename, const std::string& FragementShaderFilename);
 
@@ -45,11 +50,16 @@ namespace bow {
 
 	private:
 		//you shall not copy
-		DirectX12RenderDevice(DirectX12RenderDevice&) {}
-		DirectX12RenderDevice& operator=(const DirectX12RenderDevice&) { return *this; }
+		D3DRenderDevice(D3DRenderDevice&) {}
+		D3DRenderDevice& operator=(const D3DRenderDevice&) { return *this; }
+
+		ComPtr<ID3D12Device2>	m_D3D12device;
+		ComPtr<IDXGIFactory4>	m_factory;
+
+		HINSTANCE m_hInstance;
+		bool m_useWarpDevice;
+		bool m_initialized;
 	};
 
-	typedef std::shared_ptr<DirectX12RenderDevice> OGLRenderDevicePtr;
-	typedef std::unordered_map<unsigned int, DirectX12RenderDevice> OGLRenderDeviceMap;
 
 }

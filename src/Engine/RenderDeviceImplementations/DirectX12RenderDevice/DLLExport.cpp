@@ -1,5 +1,5 @@
 #include "BowLogger.h"
-#include "BowDirectX12RenderDevice.h"
+#include "BowD3D12RenderDevice.h"
 
 namespace bow {
 
@@ -7,7 +7,7 @@ namespace bow {
 	{
 		// set the new instance of the logger to prevent the creation of a new one inside this dll
 		EventLogger::SetInstance(logger);
-		DirectX12RenderDevice* device = new DirectX12RenderDevice();
+		D3DRenderDevice* device = new D3DRenderDevice();
 
 		if (!device->Initialize())
 		{
