@@ -54,7 +54,6 @@ namespace bow {
 		D3DRenderDevice& operator=(const D3DRenderDevice&) { return *this; }
 
 		ComPtr<ID3D12Device2>	m_D3D12device;
-		ComPtr<IDXGIFactory4>	m_factory;
 
 		HINSTANCE m_hInstance;
 		bool m_useWarpDevice;

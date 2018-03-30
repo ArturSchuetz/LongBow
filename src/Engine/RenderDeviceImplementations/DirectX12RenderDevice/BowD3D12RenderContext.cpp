@@ -23,182 +23,68 @@ namespace bow {
 
 	D3DRenderContext::D3DRenderContext(HWND hWnd, D3DRenderDevice* parent) :
 		m_swapChain(nullptr),
+		m_backBuffers(),
 		m_commandQueue(nullptr),
-		m_RTVDescriptorHeap(nullptr),
-		m_rtvDescriptorSize(0),
+		m_rtvDescriptorHeap(nullptr),
 		m_pipelineState(nullptr),
+		m_commandAllocators(),
 		m_commandList(nullptr),
-		m_frameIndex(0),
 		m_fence(nullptr),
-		m_FenceValue(0),
-		m_fenceEvent(NULL),
+		m_fenceValue(0),
+		m_fenceEvent(nullptr),
+		m_rtvDescriptorSize(0),
+		m_currentBackBufferIndex(0),
 		m_hWnd(hWnd),
 		m_parentDevice(parent),
-		m_initialized(false)
+		m_initialized(false),
+		m_VSync(true),
+		m_TearingSupported(false)
 	{
 
 	}
 
 	bool D3DRenderContext::Initialize(unsigned int width, unsigned int height)
 	{
-		HRESULT hresult;
+		m_TearingSupported = CheckTearingSupport();
 
-		// Describe and create the command queue.
-		D3D12_COMMAND_QUEUE_DESC queueDesc = {};
-		queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
-		queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
-
-		hresult = m_parentDevice->m_D3D12device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&m_commandQueue));
-		if (FAILED(hresult))
-		{
-			std::string errorMsg = toErrorString(hresult);
-			LOG_ERROR(std::string(std::string("CreateCommandQueue: ") + errorMsg).c_str());
+		m_commandQueue = CreateCommandQueue(m_parentDevice->m_D3D12device, D3D12_COMMAND_LIST_TYPE_DIRECT);
+		if (m_commandQueue == nullptr)
 			return false;
-		}
 
-		// Describe and create the swap chain.
-		DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-		swapChainDesc.BufferCount = m_frameCount;
-		swapChainDesc.Width = width;
-		swapChainDesc.Height = height;
-		swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-		swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
-		swapChainDesc.SampleDesc.Count = 1;
-
-		ComPtr<IDXGISwapChain1> swapChain = nullptr;
-		hresult = m_parentDevice->m_factory->CreateSwapChainForHwnd(
-			m_commandQueue.Get(),		// Swap chain needs the queue so that it can force a flush on it.
-			m_hWnd,
-			&swapChainDesc,
-			nullptr,
-			nullptr,
-			&swapChain
-		);
-		if (FAILED(hresult))
-		{
-			std::string errorMsg = toErrorString(hresult);
-			LOG_ERROR(std::string(std::string("CreateSwapChainForHwnd: ") + errorMsg).c_str());
+		m_swapChain = CreateSwapChain(m_hWnd, m_commandQueue, width, height, m_bufferCount);
+		if (m_swapChain == nullptr)
 			return false;
-		}
 
-		// This sample does not support fullscreen transitions.
-		hresult = m_parentDevice->m_factory->MakeWindowAssociation(m_hWnd, DXGI_MWA_NO_ALT_ENTER);
-		if (FAILED(hresult))
-		{
-			std::string errorMsg = toErrorString(hresult);
-			LOG_ERROR(std::string(std::string("MakeWindowAssociation: ") + errorMsg).c_str());
+		m_currentBackBufferIndex = m_swapChain->GetCurrentBackBufferIndex();
+
+		m_rtvDescriptorHeap = CreateDescriptorHeap(m_parentDevice->m_D3D12device, D3D12_DESCRIPTOR_HEAP_TYPE_RTV, m_bufferCount);
+		if (m_rtvDescriptorHeap == nullptr)
 			return false;
-		}
 
-		hresult = swapChain.As(&m_swapChain);
-		if (FAILED(hresult))
+		m_rtvDescriptorSize = m_parentDevice->m_D3D12device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+
+		UpdateBackBuffers();
+		
+		for (UINT n = 0; n < m_bufferCount; n++)
 		{
-			std::string errorMsg = toErrorString(hresult);
-			LOG_ERROR(errorMsg.c_str());
-			return false;
-		}
-
-		m_frameIndex = m_swapChain->GetCurrentBackBufferIndex();
-
-		// Create descriptor heaps.
-		{
-			// Describe and create a render target view (RTV) descriptor heap.
-			D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-			rtvHeapDesc.NumDescriptors = m_frameCount;
-			rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-			rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-
-			hresult = m_parentDevice->m_D3D12device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&m_RTVDescriptorHeap));
-			if (FAILED(hresult))
-			{
-				std::string errorMsg = toErrorString(hresult);
-				LOG_ERROR(std::string(std::string("CreateDescriptorHeap: ") + errorMsg).c_str());
-				return false;
-			}
-
-			m_rtvDescriptorSize = m_parentDevice->m_D3D12device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-		}
-
-		// Create frame resources.
-		{
-			CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_RTVDescriptorHeap->GetCPUDescriptorHandleForHeapStart());
-
-			// Create a RTV for each frame.
-			for (UINT n = 0; n < m_frameCount; n++)
-			{
-				ComPtr<ID3D12Resource> backBuffer;
-				hresult = m_swapChain->GetBuffer(n, IID_PPV_ARGS(&backBuffer));
-				if (FAILED(hresult))
-				{
-					std::string errorMsg = toErrorString(hresult);
-					LOG_ERROR(std::string(std::string("MakeWindowAssociation: ") + errorMsg).c_str());
-					return false;
-				}
-
-				m_parentDevice->m_D3D12device->CreateRenderTargetView(backBuffer.Get(), nullptr, rtvHandle);
-
-				m_renderTargets[n] = backBuffer;
-
-				rtvHandle.Offset(1, m_rtvDescriptorSize);
-			}
+			m_commandAllocators[n] = CreateCommandAllocator(m_parentDevice->m_D3D12device, D3D12_COMMAND_LIST_TYPE_DIRECT);
 		}
 		
-		for (UINT n = 0; n < m_frameCount; n++)
-		{
-			ComPtr<ID3D12CommandAllocator> commandAllocator;
-			hresult = m_parentDevice->m_D3D12device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator));
-			if (FAILED(hresult))
-			{
-				std::string errorMsg = toErrorString(hresult);
-				LOG_ERROR(std::string(std::string("CreateCommandAllocator: ") + errorMsg).c_str());
-				return false;
-			}
-			m_CommandAllocators[n] = commandAllocator;
-		}
-		
-		// Create the command list.
-		hresult = m_parentDevice->m_D3D12device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_CommandAllocators[m_frameIndex].Get(), nullptr, IID_PPV_ARGS(&m_commandList));
-		if (FAILED(hresult))
-		{
-			std::string errorMsg = toErrorString(hresult);
-			LOG_ERROR(std::string(std::string("CreateCommandAllocator: ") + errorMsg).c_str());
+		m_commandList = CreateCommandList(m_parentDevice->m_D3D12device, m_commandAllocators[m_currentBackBufferIndex], D3D12_COMMAND_LIST_TYPE_DIRECT);
+		if (m_commandList == nullptr)
 			return false;
-		}
-
-		// Command lists are created in the recording state, but there is nothing
-		// to record yet. The main loop expects it to be closed, so close it now.
-		hresult = m_commandList->Close();
-		if (FAILED(hresult))
-		{
-			std::string errorMsg = toErrorString(hresult);
-			LOG_ERROR(std::string(std::string("Close: ") + errorMsg).c_str());
-			return false;
-		}
 
 		// Create synchronization objects.
-		{
-			hresult = m_parentDevice->m_D3D12device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence));
-			if (FAILED(hresult))
-			{
-				std::string errorMsg = toErrorString(hresult);
-				LOG_ERROR(std::string(std::string("CreateFence: ") + errorMsg).c_str());
-				return false;
-			}
+		m_fence = CreateFence(m_parentDevice->m_D3D12device);
+		if (m_fence == nullptr)
+			return false;
 
-			// Create an event handle to use for frame synchronization.
-			m_fenceEvent = ::CreateEvent(nullptr, FALSE, FALSE, nullptr);
-			if (m_fenceEvent == nullptr)
-			{
-				hresult = HRESULT_FROM_WIN32(GetLastError());
-				if (FAILED(hresult))
-				{
-					std::string errorMsg = toErrorString(hresult);
-					LOG_ERROR(errorMsg.c_str());
-					return false;
-				}
-			}
-		}
+		// Create an event handle to use for frame synchronization.
+		m_fenceEvent = CreateEventHandle();
+		if (m_fenceEvent == nullptr)
+			return false;
+
+		m_initialized = true;
 		return true;
 	}
 
@@ -209,25 +95,7 @@ namespace bow {
 
 	void D3DRenderContext::VRelease(void)
 	{
-		m_FrameFenceValues[m_frameIndex] = ++m_FenceValue;
-		HRESULT hresult = m_commandQueue->Signal(m_fence.Get(), m_FrameFenceValues[m_frameIndex]);
-		if (FAILED(hresult))
-		{
-			std::string errorMsg = toErrorString(hresult);
-			LOG_ERROR(std::string(std::string("Signal: ") + errorMsg).c_str());
-		}
-
-		std::chrono::milliseconds duration = std::chrono::milliseconds::max();
-		if (m_fence->GetCompletedValue() < m_FenceValue)
-		{
-			m_fence->SetEventOnCompletion(m_FenceValue, m_fenceEvent);
-			if (FAILED(hresult))
-			{
-				std::string errorMsg = toErrorString(hresult);
-				LOG_ERROR(std::string(std::string("SetEventOnCompletion: ") + errorMsg).c_str());
-			}
-			::WaitForSingleObject(m_fenceEvent, static_cast<DWORD>(duration.count()));
-		}
+		Flush();
 		::CloseHandle(m_fenceEvent);
 	}
 
@@ -253,22 +121,20 @@ namespace bow {
 
 	void D3DRenderContext::VClear(ClearState clearState)
 	{
-		auto commandAllocator = m_CommandAllocators[m_frameIndex];
-		auto backBuffer = m_renderTargets[m_frameIndex];
+		auto commandAllocator = m_commandAllocators[m_currentBackBufferIndex];
+		auto backBuffer = m_backBuffers[m_currentBackBufferIndex];
 
+		// Before any commands can be recorded into the command list, the command allocatorand command list needs to be reset to its inital state
 		commandAllocator->Reset();
 		m_commandList->Reset(commandAllocator.Get(), nullptr);
 
-		// Clear the render target.
-		{
-			CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(backBuffer.Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+		// ensure that resource is in correct state before using them (Transition from Present to RenderTarget has to be completed)
+		CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(backBuffer.Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+		m_commandList->ResourceBarrier(1, &barrier);
 
-			m_commandList->ResourceBarrier(1, &barrier);
-
-			CD3DX12_CPU_DESCRIPTOR_HANDLE rtv(m_RTVDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), m_frameIndex, m_rtvDescriptorSize);
-
-			m_commandList->ClearRenderTargetView(rtv, clearState.Color.a, 0, nullptr);
-		}
+		// Fetch renderTargetView from renderTargetViewDescriptorHeap by offset (m_currentBackBufferIndex) and stride size (m_rtvDescriptorSize)
+		CD3DX12_CPU_DESCRIPTOR_HANDLE renderTargetView(m_rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), m_currentBackBufferIndex, m_rtvDescriptorSize);
+		m_commandList->ClearRenderTargetView(renderTargetView, clearState.Color.a, 0, nullptr);
 	}
 
 	void D3DRenderContext::VDraw(PrimitiveType primitiveType, VertexArrayPtr vertexArray, ShaderProgramPtr shaderProgram, RenderState renderState)
@@ -320,11 +186,13 @@ namespace bow {
 	{
 		HRESULT hresult;
 
-		auto backBuffer = m_renderTargets[m_frameIndex];
+		auto backBuffer = m_backBuffers[m_currentBackBufferIndex];
 
+		// ensure that resource is in correct state before using them (Transition from RenderTarget to Present has to be completed)
 		CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(backBuffer.Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 		m_commandList->ResourceBarrier(1, &barrier);
 
+		// This method must be called on the command list before executed on the command queue
 		hresult = m_commandList->Close();
 		if (FAILED(hresult))
 		{
@@ -332,40 +200,102 @@ namespace bow {
 			LOG_ERROR(std::string(std::string("Close: ") + errorMsg).c_str());
 		}
 
+		// The command list is executed. ExecuteCommandLists only takes a list of command lists to be executed
 		ID3D12CommandList* const commandLists[] = {
 			m_commandList.Get()
 		};
 		m_commandQueue->ExecuteCommandLists(_countof(commandLists), commandLists);
 
-		m_FrameFenceValues[m_frameIndex] = ++m_FenceValue;
-		hresult = m_commandQueue->Signal(m_fence.Get(), m_FrameFenceValues[m_frameIndex]);
-		if (FAILED(hresult))
-		{
-			std::string errorMsg = toErrorString(hresult);
-			LOG_ERROR(std::string(std::string("Signal: ") + errorMsg).c_str());
-		}
+		// Signal is inserted to stall the CPU thread until any resources are finished being used
+		m_frameFenceValues[m_currentBackBufferIndex] = Signal(m_commandQueue, m_fence, m_fenceValue);
 
-		hresult = m_swapChain->Present(1, 0);
+		UINT syncInterval = m_VSync ? 1 : 0;
+		UINT presentFlags = m_TearingSupported && !m_VSync ? DXGI_PRESENT_ALLOW_TEARING : 0;
+
+		// Present the back buffer to the screen
+		hresult = m_swapChain->Present(syncInterval, presentFlags);
 		if (FAILED(hresult))
 		{
 			std::string errorMsg = toErrorString(hresult);
 			LOG_ERROR(std::string(std::string("Present: ") + errorMsg).c_str());
 		}
 
-		m_frameIndex = m_swapChain->GetCurrentBackBufferIndex();
+		// after presenting, the index of the current back buffer is updated
+		m_currentBackBufferIndex = m_swapChain->GetCurrentBackBufferIndex();
 
-		std::chrono::milliseconds duration = std::chrono::milliseconds::max();
-		if (m_fence->GetCompletedValue() < m_FrameFenceValues[m_frameIndex])
+		// Before overwriting the contents of the current back buffer with the content of the next frame, the CPU thread is stalled
+		WaitForFenceValue(m_fence, m_frameFenceValues[m_currentBackBufferIndex], m_fenceEvent);
+	}
+
+	// -------------------------------------------------------------------------------------- //
+	// PRIVATE METHODS
+	// -------------------------------------------------------------------------------------- //
+
+	void D3DRenderContext::Resize(unsigned int width, unsigned int height)
+	{
+		HRESULT hresult;
+
+		// Flush the GPU queue to make sure the swap chain's back buffers
+		// are not being referenced by an in-flight command list.
+		Flush();
+
+		for (int i = 0; i < m_bufferCount; ++i)
 		{
-			hresult = m_fence->SetEventOnCompletion(m_FrameFenceValues[m_frameIndex], m_fenceEvent);
+			// Any references to the back buffers must be released
+			// before the swap chain can be resized.
+			m_backBuffers[i].Reset();
+			m_frameFenceValues[i] = m_frameFenceValues[m_currentBackBufferIndex];
+		}
+
+		DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
+		hresult = m_swapChain->GetDesc(&swapChainDesc);
+		if (FAILED(hresult))
+		{
+			std::string errorMsg = toErrorString(hresult);
+			LOG_ERROR(std::string(std::string("GetDesc: ") + errorMsg).c_str());
+		}
+
+		hresult = m_swapChain->ResizeBuffers(m_bufferCount, width, height, swapChainDesc.BufferDesc.Format, swapChainDesc.Flags);
+		if (FAILED(hresult))
+		{
+			std::string errorMsg = toErrorString(hresult);
+			LOG_ERROR(std::string(std::string("ResizeBuffers: ") + errorMsg).c_str());
+		}
+
+		m_currentBackBufferIndex = m_swapChain->GetCurrentBackBufferIndex();
+
+		UpdateBackBuffers();
+	}
+
+	void D3DRenderContext::UpdateBackBuffers()
+	{
+		// Create frame resources.
+		CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart());
+
+		// Create a RTV for each frame.
+		for (UINT nBuffer = 0; nBuffer < m_bufferCount; nBuffer++)
+		{
+			ComPtr<ID3D12Resource> backBuffer;
+			HRESULT hresult = m_swapChain->GetBuffer(nBuffer, IID_PPV_ARGS(&backBuffer));
 			if (FAILED(hresult))
 			{
 				std::string errorMsg = toErrorString(hresult);
-				LOG_ERROR(std::string(std::string("SetEventOnCompletion: ") + errorMsg).c_str());
+				LOG_ERROR(std::string(std::string("GetBuffer: ") + errorMsg).c_str());
+				return;
 			}
 
-			::WaitForSingleObject(m_fenceEvent, static_cast<DWORD>(duration.count()));
+			m_parentDevice->m_D3D12device->CreateRenderTargetView(backBuffer.Get(), nullptr, rtvHandle);
+
+			m_backBuffers[nBuffer] = backBuffer;
+
+			rtvHandle.Offset(1, m_rtvDescriptorSize);
 		}
+	}
+
+	void D3DRenderContext::Flush()
+	{
+		uint64_t fenceValueForSignal = Signal(m_commandQueue, m_fence, m_fenceValue);
+		WaitForFenceValue(m_fence, fenceValueForSignal, m_fenceEvent);
 	}
 
 }

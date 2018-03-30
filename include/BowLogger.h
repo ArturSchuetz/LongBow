@@ -7,6 +7,7 @@
 // Chose one of this LogLevels to define LOG_LEVEL
 #define LOG_LEVEL_ALL 0
 #define LOG_LEVEL_TRACE 1
+#define LOG_LEVEL_INFO 2
 #define LOG_LEVEL_WARNING 3
 #define LOG_LEVEL_ERROR 4
 #define LOG_LEVEL_OFF 5
@@ -16,7 +17,7 @@
 #ifdef _DEBUG
 #define LOG_LEVEL	LOG_LEVEL_TRACE
 #else
-#define LOG_LEVEL	LOG_LEVEL_WARNING
+#define LOG_LEVEL	LOG_LEVEL_INFO
 #endif
 #endif
 
@@ -24,6 +25,12 @@
 #define LOG_TRACE	bow::EventLogger::GetInstance().LogTrace
 #else
 #define LOG_TRACE
+#endif
+
+#if LOG_LEVEL <= LOG_LEVEL_INFO
+#define LOG_INFO	bow::EventLogger::GetInstance().LogInfo
+#else
+#define LOG_INFO
 #endif
 
 #if LOG_LEVEL <= LOG_LEVEL_WARNING
@@ -105,6 +112,14 @@ namespace bow
 		* \param text	Der Logtext der in die Die Datei und in die Konsole ausgegeben werden soll.
 		**/
 		void LogTrace(const char* text, ...);
+
+		/**
+		* \~german
+		* \brief	Schreibt etwas in die Log Datei und in jeden verfügbaren Output.
+		*
+		* \param text	Der Logtext der in die Die Datei und in die Konsole ausgegeben werden soll.
+		**/
+		void LogInfo(const char* text, ...);
 
 		/**
 		* \~german

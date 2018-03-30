@@ -10,4 +10,3 @@
 #include <chrono>
 
 #pragma warning( disable : 4996)
-#define LOG_LEVEL 0

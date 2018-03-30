@@ -75,7 +75,6 @@ namespace bow
 		m_initialized = false;
 	}
 
-
 	void EventLogger::LogTrace(const char* text, ...)
 	{
 		if (!IsInitialized())
@@ -102,6 +101,31 @@ namespace bow
 		LogOutput(buffer2);
 	}
 
+	void EventLogger::LogInfo(const char* text, ...)
+	{
+		if (!IsInitialized())
+			return;
+
+		char buffer[MAX_DEBUG_LINE_LEN];
+
+		va_list args;
+		va_start(args, text);
+
+#if defined(WINVER) || defined(_XBOX)
+		int buf = _vsnprintf_s(buffer, MAX_DEBUG_LINE_LEN, text, args);
+#else
+		int buf = vsnprintf(buffer, MAX_DEBUG_LINE_LEN, text, args);
+#endif
+
+		assert((buf >= 0) && (buf < MAX_DEBUG_LINE_LEN));
+		va_end(args);
+
+		// Log output to debug windows and/or disk depending on options
+		char buffer2[MAX_DEBUG_LINE_LEN];
+		strcpy_s(buffer2, MAX_DEBUG_LINE_LEN, "INFO: ");
+		strcpy_s(buffer2 + 6, MAX_DEBUG_LINE_LEN - 6, buffer);
+		LogOutput(buffer2);
+	}
 
 	void EventLogger::LogWarning(const char* text, ...)
 	{
@@ -185,6 +209,8 @@ namespace bow
 
 #ifdef _DEBUG
 		DebugOutput(buffer);
+#else
+		std::cout << buffer << std::endl;
 #endif
 	}
 

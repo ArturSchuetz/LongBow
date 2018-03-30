@@ -20,9 +20,9 @@ namespace bow {
 	extern std::wstring string2widestring(const std::string& s);
 	extern std::string toErrorString(HRESULT hresult);
 
-	D3DRenderDevice::D3DRenderDevice(void) : 
+	D3DRenderDevice::D3DRenderDevice(void) :
 		m_D3D12device(nullptr),
-		m_useWarpDevice(true),
+		m_useWarpDevice(false),
 		m_initialized(false)
 	{
 		m_hInstance = GetModuleHandle(NULL);
@@ -38,11 +38,13 @@ namespace bow {
 		HRESULT hresult;
 
 		UINT dxgiFactoryFlags = 0;
+		ComPtr<IDXGIFactory4> factory;
 #if defined(_DEBUG)
+		ComPtr<ID3D12Debug> debugController = nullptr;
+
 		// Enable the debug layer (requires the Graphics Tools "optional feature").
 		// NOTE: Enabling the debug layer after device creation will invalidate the active device.
 		{
-			ComPtr<ID3D12Debug> debugController = nullptr;
 			hresult = D3D12GetDebugInterface(IID_PPV_ARGS(&debugController));
 			if (SUCCEEDED(hresult))
 			{
@@ -54,8 +56,10 @@ namespace bow {
 		}
 #endif
 
-		ComPtr<IDXGIAdapter4> dxgiAdapter4;
-		hresult = CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&m_factory));
+		ComPtr<IDXGIAdapter1> dxgiAdapter1 = nullptr;
+		ComPtr<IDXGIAdapter4> dxgiAdapter4 = nullptr;
+
+		hresult = CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&factory));
 		if (FAILED(hresult))
 		{
 			std::string errorMsg = toErrorString(hresult);
@@ -65,48 +69,79 @@ namespace bow {
 
 		if (m_useWarpDevice)
 		{
-			ComPtr<IDXGIAdapter> warpAdapter = nullptr;
-			hresult = m_factory->EnumWarpAdapter(IID_PPV_ARGS(&warpAdapter));
+			hresult = factory->EnumWarpAdapter(IID_PPV_ARGS(&dxgiAdapter1));
 			if (FAILED(hresult))
 			{
 				std::string errorMsg = toErrorString(hresult);
 				LOG_ERROR(std::string(std::string("EnumWarpAdapter: ") + errorMsg).c_str());
 				return false;
 			}
-			warpAdapter.As(&dxgiAdapter4);
+
+			DXGI_ADAPTER_DESC1 dxgiAdapterDesc1;
+			dxgiAdapter1->GetDesc1(&dxgiAdapterDesc1);
+			LOG_INFO(std::string("Using WARP Device: " + widestring2string(dxgiAdapterDesc1.Description)).c_str());
+			LOG_INFO(std::string("\t\tDedicated Video Memory:  " + std::to_string(dxgiAdapterDesc1.DedicatedVideoMemory / 1024 / 1024) + " MB").c_str());
+			LOG_INFO(std::string("\t\tDedicated System Memory: " + std::to_string(dxgiAdapterDesc1.DedicatedSystemMemory / 1024 / 1024) + " MB").c_str());
+			LOG_INFO(std::string("\t\tShared System Memory:    " + std::to_string(dxgiAdapterDesc1.SharedSystemMemory / 1024 / 1024) + " MB").c_str());
+
+			hresult = dxgiAdapter1.As(&dxgiAdapter4);
+			if (FAILED(hresult))
+			{
+				std::string errorMsg = toErrorString(hresult);
+				LOG_ERROR(std::string(std::string("dxgiAdapter1.As: ") + errorMsg).c_str());
+				return false;
+			}
 		}
 		else
 		{
-			ComPtr<IDXGIAdapter1> hardwareAdapter = nullptr;
+			SIZE_T maxDedicatedVideoMemory = 0;
+			ComPtr<IDXGIAdapter1> choosedDevice = nullptr;
+			LOG_INFO("Graphics Devices found:");
+			for (UINT i = 0; factory->EnumAdapters1(i, &dxgiAdapter1) != DXGI_ERROR_NOT_FOUND; ++i)
 			{
-				IDXGIAdapter1** ppAdapter = &hardwareAdapter;
-				*ppAdapter = nullptr;
+				DXGI_ADAPTER_DESC1 dxgiAdapterDesc1;
+				dxgiAdapter1->GetDesc1(&dxgiAdapterDesc1);
+				LOG_INFO(std::string("\t" + widestring2string(dxgiAdapterDesc1.Description) + ":").c_str());
+				LOG_INFO(std::string("\t\tDedicated Video Memory:  " + std::to_string(dxgiAdapterDesc1.DedicatedVideoMemory / 1024 / 1024) + " MB").c_str());
+				LOG_INFO(std::string("\t\tDedicated System Memory: " + std::to_string(dxgiAdapterDesc1.DedicatedSystemMemory / 1024 / 1024) + " MB").c_str());
+				LOG_INFO(std::string("\t\tShared System Memory:    " + std::to_string(dxgiAdapterDesc1.SharedSystemMemory / 1024 / 1024) + " MB").c_str());
 
-				IDXGIAdapter1* adapter;
-				for (UINT adapterIndex = 0; DXGI_ERROR_NOT_FOUND != m_factory->EnumAdapters1(adapterIndex, &adapter); ++adapterIndex)
+				// Check to see if the adapter can create a D3D12 device without actually 
+				// creating it. The adapter with the largest dedicated video memory
+				// is favored.
+
+				hresult = D3D12CreateDevice(dxgiAdapter1.Get(), D3D_FEATURE_LEVEL_11_0, __uuidof(ID3D12Device), nullptr);
+				if (SUCCEEDED(hresult))
 				{
-					DXGI_ADAPTER_DESC1 desc;
-					adapter->GetDesc1(&desc);
-
-					if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
+					if ((dxgiAdapterDesc1.Flags & DXGI_ADAPTER_FLAG_SOFTWARE) == 0 && dxgiAdapterDesc1.DedicatedVideoMemory > maxDedicatedVideoMemory)
 					{
-						// Don't select the Basic Render Driver adapter.
-						// If you want a software adapter, pass in "/warp" on the command line.
-						continue;
-					}
+						maxDedicatedVideoMemory = dxgiAdapterDesc1.DedicatedVideoMemory;
+						choosedDevice = dxgiAdapter1;
 
-					// Check to see if the adapter supports Direct3D 12, but don't create the
-					// actual device yet.
-					hresult = D3D12CreateDevice(adapter, D3D_FEATURE_LEVEL_11_0, _uuidof(ID3D12Device), nullptr);
-					if (SUCCEEDED(hresult))
-					{
-						break;
+						hresult = dxgiAdapter1.As(&dxgiAdapter4);
+						if (FAILED(hresult))
+						{
+							std::string errorMsg = toErrorString(hresult);
+							LOG_ERROR(std::string(std::string("dxgiAdapter1.As: ") + errorMsg).c_str());
+							return false;
+						}
 					}
 				}
-				*ppAdapter = adapter;
 			}
 
-			hardwareAdapter.As(&dxgiAdapter4);
+			if (dxgiAdapter4 == nullptr)
+			{
+				// If no hardware device was found, warp should be used
+				m_useWarpDevice = true;
+				// retry with warp devices
+				return Initialize();
+			}
+			else
+			{
+				DXGI_ADAPTER_DESC1 dxgiAdapterDesc1;
+				choosedDevice->GetDesc1(&dxgiAdapterDesc1);
+				LOG_INFO(std::string("Using HARDWARE Device: " + widestring2string(dxgiAdapterDesc1.Description)).c_str());
+			}
 		}
 
 		hresult = D3D12CreateDevice(dxgiAdapter4.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&m_D3D12device));
@@ -119,12 +154,12 @@ namespace bow {
 
 		// Enable debug messages in debug mode.
 #if defined(_DEBUG)
-		ComPtr<ID3D12InfoQueue> pInfoQueue;
-		if (SUCCEEDED(m_D3D12device.As(&pInfoQueue)))
+		ComPtr<ID3D12InfoQueue> infoQueue = nullptr;
+		if (SUCCEEDED(m_D3D12device.As(&infoQueue)))
 		{
-			pInfoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, TRUE);
-			pInfoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, TRUE);
-			pInfoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, TRUE);
+			infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, TRUE);
+			infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, TRUE);
+			infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, TRUE);
 
 			// Suppress whole categories of messages
 			//D3D12_MESSAGE_CATEGORY Categories[] = {};
@@ -150,7 +185,7 @@ namespace bow {
 			NewFilter.DenyList.NumIDs = _countof(DenyIds);
 			NewFilter.DenyList.pIDList = DenyIds;
 
-			hresult = pInfoQueue->PushStorageFilter(&NewFilter);
+			hresult = infoQueue->PushStorageFilter(&NewFilter);
 			if (FAILED(hresult))
 			{
 				std::string errorMsg = toErrorString(hresult);

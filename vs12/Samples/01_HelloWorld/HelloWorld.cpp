@@ -1,4 +1,5 @@
 #include "BowRenderer.h"
+#include "BowInput.h"
 
 #include <cstdint>
 #include <windows.h>
@@ -28,11 +29,24 @@ int main()
 	clearState.Color = ColorRGBA(0.392f, 0.584f, 0.929f, 1.0f);
 
 	///////////////////////////////////////////////////////////////////
+	// Input
+
+	KeyboardPtr keyboard = InputDeviceManager::GetInstance().CreateKeyboardObject(windowOGL);
+	if (keyboard == nullptr)
+	{
+		return false;
+	}
+
+	///////////////////////////////////////////////////////////////////
 	// Gameloop
 	auto contextOGL = windowOGL->VGetContext();
 
 	while (!windowOGL->VShouldClose())
 	{
+		keyboard->VUpdate();
+		if (keyboard->VIsPressed(Key::K_ESCAPE))
+			break;
+
 		// Clear Backbuffer to our ClearState
 		contextOGL->VClear(clearState);
 

@@ -68,6 +68,9 @@
     <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12RenderContext_DXHelper.cpp">
+      <Filter>Source Files\Device</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\d3dx12.h">

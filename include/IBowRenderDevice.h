@@ -11,6 +11,7 @@ namespace bow {
 	enum class WindowType : char
 	{
 		Windowed = 0,
+		FullscreenBorderlessWindow,
 		Fullscreen
 	};
 

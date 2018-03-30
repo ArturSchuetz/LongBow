@@ -85,7 +85,7 @@ namespace bow {
 
 		Viewport			m_viewport;
 
-		ColorRGBA		m_clearColor;
+		ColorRGBA			m_clearColor;
 		float				m_clearDepth;
 		int					m_clearStencil;
 

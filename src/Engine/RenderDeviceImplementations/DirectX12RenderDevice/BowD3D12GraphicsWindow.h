@@ -10,6 +10,7 @@ namespace bow {
 
 	class D3DGraphicsWindow : public IGraphicsWindow
 	{
+		friend class D3DRenderContext;
 	public:
 		D3DGraphicsWindow();
 		~D3DGraphicsWindow(void);
@@ -39,15 +40,20 @@ namespace bow {
 		D3DGraphicsWindow(D3DGraphicsWindow&) {}
 		D3DGraphicsWindow& operator=(const D3DGraphicsWindow&) { return *this; }
 
+		void Resize(unsigned int width, unsigned int height);
+		void SetFullscreen(bool fullscreen);
+
 		static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 		D3DRenderDevice*	m_ParentDevice;
 		D3DRenderContextPtr m_Context;
 
-		int m_width;
-		int m_height;
+		unsigned int m_width;
+		unsigned int m_height;
 
-		HWND m_hwnd;
+		HWND m_hwnd; 
+		RECT m_windowRect;
 		bool m_shouldClose;
+		bool m_fullScreen;
 	};
 }
