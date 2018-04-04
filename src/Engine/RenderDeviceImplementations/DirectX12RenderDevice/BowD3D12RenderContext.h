@@ -65,8 +65,14 @@ namespace bow {
 		// Buffer and RenderTargets
 		ComPtr<IDXGISwapChain4>				m_swapChain;
 		ComPtr<ID3D12Resource>				m_backBuffers[m_numBuffers];
-		ComPtr<ID3D12DescriptorHeap>		m_rtvDescriptorHeap;
-		UINT								m_rtvDescriptorSize;
+		ComPtr<ID3D12Resource>				m_depthBuffers[m_numBuffers];
+
+		ComPtr<ID3D12DescriptorHeap>		m_renderTargetViewDescriptorHeap;
+		UINT								m_renderTargetViewDescriptorSize;
+
+		ComPtr<ID3D12DescriptorHeap>		m_depthStencilViewDescriptorHeap;
+		UINT								m_depthStencilViewDescriptorSize;
+
 		UINT								m_currentBackBufferIndex;
 
 		// Render Command Management
@@ -82,6 +88,9 @@ namespace bow {
 
 		D3D12_VIEWPORT	m_viewport;
 		D3D12_RECT		m_scissorRect;
+
+		unsigned int m_width;
+		unsigned int m_height;
 
 		HWND						m_hWnd;
 		D3DRenderDevice*			m_parentDevice;
