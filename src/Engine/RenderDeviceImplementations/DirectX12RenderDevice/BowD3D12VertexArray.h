@@ -35,6 +35,8 @@ namespace bow {
 	private:
 		D3DVertexBufferAttributes	m_Attributes;
 		D3DIndexBufferPtr			m_indexBuffer;
+
+		bool						m_dirtyIndexBuffer;
 		int							m_maximumArrayIndex;
 	};
 }

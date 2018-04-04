@@ -3,6 +3,7 @@
 
 #include "IBowRenderContext.h"
 
+#include "BowIndexBufferDatatype.h"
 #include "BowComponentDatatype.h"
 #include "BowShaderVertexAttribute.h"
 
@@ -50,6 +51,20 @@ namespace bow {
 
 		LOG_FATAL("PrimitiveType does not exist.");
 		return D3D_PRIMITIVE_TOPOLOGY_UNDEFINED;
+	}
+
+
+	DXGI_FORMAT D3DTypeConverter::To(IndexBufferDatatype dataType)
+	{
+		switch (dataType)
+		{
+		case IndexBufferDatatype::UnsignedShort:
+			return DXGI_FORMAT::DXGI_FORMAT_R16_UINT;
+		case IndexBufferDatatype::UnsignedInt:
+			return DXGI_FORMAT::DXGI_FORMAT_R32_UINT;
+		}
+		LOG_FATAL("DXGI format does not exist.");
+		return DXGI_FORMAT::DXGI_FORMAT_UNKNOWN;
 	}
 
 

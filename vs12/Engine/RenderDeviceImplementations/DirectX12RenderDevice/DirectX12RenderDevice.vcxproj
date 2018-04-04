@@ -170,6 +170,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12FragmentOutputs.cpp" />
     <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12GraphicsWindow.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12IndexBuffer.cpp" />
     <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12RenderContext.cpp" />
     <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12RenderDevice_Resources.cpp" />
     <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12RenderDevice.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="..\..\..\..\include\BowPrerequisites.h" />
     <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12FragmentOutputs.h" />
     <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12GraphicsWindow.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12IndexBuffer.h" />
     <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12RenderContext.h" />
     <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12RenderDevice.h" />
     <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12RenderDevicePredeclares.h" />

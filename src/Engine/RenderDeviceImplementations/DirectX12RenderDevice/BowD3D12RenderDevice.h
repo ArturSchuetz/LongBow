@@ -16,6 +16,7 @@ namespace bow {
 	class D3DRenderDevice : public IRenderDevice
 	{
 		friend class D3DRenderContext;
+		friend class D3DIndexBuffer;
 		friend class D3DVertexBuffer;
 	public:
 		D3DRenderDevice(void);

@@ -89,6 +89,9 @@
     <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12RenderDevice_Resources.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12IndexBuffer.cpp">
+      <Filter>Source Files\Device\Buffer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\d3dx12.h">
@@ -126,6 +129,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12VertexBufferAttributes.h">
       <Filter>Header Files\Device\Context\VertexArray</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12IndexBuffer.h">
+      <Filter>Header Files\Device\Buffer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

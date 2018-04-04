@@ -1,16 +1,13 @@
 #include "BowD3D12VertexArray.h"
 #include "BowLogger.h"
 
-#include "IBowIndexBuffer.h"
-
 #include "BowVertexBufferAttribute.h"
 #include "BowShaderVertexAttribute.h"
-#include "BowD3D12VertexBufferAttributes.h"
-
+#include "BowD3D12IndexBuffer.h"
 
 namespace bow {
 
-	D3DVertexArray::D3DVertexArray() : m_maximumArrayIndex(0)
+	D3DVertexArray::D3DVertexArray() : m_dirtyIndexBuffer(false), m_maximumArrayIndex(0)
 	{
 
 	}
@@ -39,17 +36,21 @@ namespace bow {
 
 	IndexBufferPtr D3DVertexArray::VGetIndexBuffer()
 	{
-		LOG_FATAL("Not yet implemented!");
-		return IndexBufferPtr(nullptr);
+		return std::dynamic_pointer_cast<IIndexBuffer>(m_indexBuffer);
 	}
 
-	void D3DVertexArray::VSetIndexBuffer(IndexBufferPtr pointer)
+	void D3DVertexArray::VSetIndexBuffer(IndexBufferPtr indexBufferPtr)
 	{
-		LOG_FATAL("Not yet implemented!");
+		m_indexBuffer = std::dynamic_pointer_cast<D3DIndexBuffer>(indexBufferPtr);
+		m_dirtyIndexBuffer = true;
 	}
 
 	int D3DVertexArray::GetMaximumArrayIndex()
 	{
+		if (m_indexBuffer != nullptr)
+		{
+			return m_indexBuffer->GetCount() - 1;
+		}
 		return m_maximumArrayIndex;
 	}
 

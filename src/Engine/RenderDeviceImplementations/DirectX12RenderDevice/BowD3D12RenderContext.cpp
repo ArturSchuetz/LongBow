@@ -10,6 +10,7 @@
 #include "BowD3D12RenderDevice.h"
 #include "BowD3D12VertexArray.h"
 #include "BowD3D12VertexBuffer.h"
+#include "BowD3D12IndexBuffer.h"
 #include "BowD3D12TypeConverter.h"
 
 // DirectX 12 specific headers.
@@ -41,6 +42,8 @@ namespace bow {
 	extern std::string widestring2string(const std::wstring& wstr);
 	extern std::wstring string2widestring(const std::string& s);
 	extern std::string toErrorString(HRESULT hresult);
+
+	D3DRenderContext* D3DRenderContext::m_currentContext;
 
 	D3DRenderContext::D3DRenderContext(HWND hWnd, D3DRenderDevice* parent) :
 		m_swapChain(nullptr),
@@ -164,6 +167,12 @@ namespace bow {
 
 	void D3DRenderContext::VClear(ClearState clearState)
 	{
+		if (m_currentContext != this)
+		{
+			//glfwMakeContextCurrent(m_window);
+			m_currentContext = this;
+		}
+
 		HRESULT hresult;
 
 		// Before any commands can be recorded into the command list, the command allocatorand command list needs to be reset to its inital state
@@ -210,21 +219,45 @@ namespace bow {
 
 	void D3DRenderContext::VDraw(PrimitiveType primitiveType, VertexArrayPtr vertexArray, ShaderProgramPtr shaderProgram, RenderState renderState)
 	{
-		VDraw(primitiveType, 0, std::dynamic_pointer_cast<D3DVertexArray>(vertexArray)->GetMaximumArrayIndex() + 1, vertexArray, shaderProgram, renderState);
+		if (m_currentContext != this)
+		{
+			//glfwMakeContextCurrent(m_window);
+			m_currentContext = this;
+		}
+
+		Draw(primitiveType, 0, std::dynamic_pointer_cast<D3DVertexArray>(vertexArray)->GetMaximumArrayIndex() + 1, vertexArray, shaderProgram, renderState);
 	}
 
 	void D3DRenderContext::VDraw(PrimitiveType primitiveType, int offset, int count, VertexArrayPtr vertexArray, ShaderProgramPtr shaderProgram, RenderState renderState)
 	{
+		if (m_currentContext != this)
+		{
+			//glfwMakeContextCurrent(m_window);
+			m_currentContext = this;
+		}
+
+		Draw(primitiveType, offset, count, vertexArray, shaderProgram, renderState);
+	}
+
+	void D3DRenderContext::VDrawLine(const bow::Vector3<float> &start, const bow::Vector3<float> &end)
+	{
+
+	}
+
+	void D3DRenderContext::Draw(PrimitiveType primitiveType, int offset, int count, VertexArrayPtr vertexArray, ShaderProgramPtr shaderProgram, RenderState renderState)
+	{
 		HRESULT hresult;
+
+		D3DVertexArrayPtr d3dvertexarray = std::dynamic_pointer_cast<D3DVertexArray>(vertexArray);
 
 		CD3DX12_CPU_DESCRIPTOR_HANDLE renderTargetView(m_renderTargetViewDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), m_currentBackBufferIndex, m_renderTargetViewDescriptorSize);
 		CD3DX12_CPU_DESCRIPTOR_HANDLE depthStencilView(m_depthStencilViewDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), m_currentBackBufferIndex, m_depthStencilViewDescriptorSize);
 
 		D3DShaderProgramPtr d3d12shaderProgram = std::dynamic_pointer_cast<D3DShaderProgram>(shaderProgram);
-		ComPtr<ID3D12PipelineState> pipelineState = d3d12shaderProgram->GetPipelineState(vertexArray);
+		ComPtr<ID3D12PipelineState> pipelineState = d3d12shaderProgram->GetPipelineState(d3dvertexarray);
 		ComPtr<ID3D12RootSignature> rootsignature = d3d12shaderProgram->GetRootSignature();
 
-		auto attributes = vertexArray->VGetAttributes();
+		auto attributes = d3dvertexarray->VGetAttributes();
 		std::vector<D3D12_VERTEX_BUFFER_VIEW> bufferViews(attributes.size());
 		for (unsigned int i = 0; i < attributes.size(); i++)
 		{
@@ -233,6 +266,17 @@ namespace bow {
 			bufferViews[i].SizeInBytes = vertexBuffer->VGetSizeInBytes();
 			bufferViews[i].StrideInBytes = attributes[i]->GetStrideInBytes();
 		};
+
+		D3DIndexBufferPtr d3dindexBuffer = std::dynamic_pointer_cast<D3DIndexBuffer>(d3dvertexarray->VGetIndexBuffer());
+
+		// Create index buffer view.
+		D3D12_INDEX_BUFFER_VIEW indexBufferView;
+		if (d3dindexBuffer != nullptr)
+		{
+			indexBufferView.BufferLocation = d3dindexBuffer->GetGPUVirtualAddress();
+			indexBufferView.Format = D3DTypeConverter::To(d3dindexBuffer->GetDatatype());
+			indexBufferView.SizeInBytes = d3dindexBuffer->VGetSizeInBytes();
+		}
 
 		hresult = m_commandAllocators[m_currentBackBufferIndex]->Reset();
 		if (FAILED(hresult))
@@ -259,7 +303,21 @@ namespace bow {
 
 		m_commandList->OMSetRenderTargets(1, &renderTargetView, FALSE, &depthStencilView);
 
-		m_commandList->DrawInstanced(count, 1, offset, 0);
+		if (d3dindexBuffer != nullptr)
+		{
+			if (offset == 0 && count == d3dvertexarray->GetMaximumArrayIndex() + 1)
+			{
+				m_commandList->DrawIndexedInstanced(d3dindexBuffer->GetCount(), 1, offset, 0, 0);
+			}
+			else
+			{
+				m_commandList->DrawIndexedInstanced(count, 1, offset, 0, 0);
+			}
+		}
+		else
+		{
+			m_commandList->DrawInstanced(count, 1, offset, 0);
+		}
 
 		hresult = m_commandList->Close();
 		if (FAILED(hresult))
@@ -275,16 +333,6 @@ namespace bow {
 		m_directCommandQueue->ExecuteCommandLists(_countof(commandLists), commandLists);
 
 		Flush();
-	}
-
-	void D3DRenderContext::VDrawLine(const bow::Vector3<float> &start, const bow::Vector3<float> &end)
-	{
-
-	}
-
-	void D3DRenderContext::Draw(PrimitiveType primitiveType, int offset, int count, VertexArrayPtr vertexArray, ShaderProgramPtr shaderProgram, RenderState renderState)
-	{
-
 	}
 
 	void D3DRenderContext::VSetTexture(int location, Texture2DPtr texture)
