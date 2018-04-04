@@ -47,10 +47,6 @@ namespace bow {
 
 	int D3DVertexArray::GetMaximumArrayIndex()
 	{
-		if (m_indexBuffer != nullptr)
-		{
-			return m_indexBuffer->GetCount() - 1;
-		}
 		return m_maximumArrayIndex;
 	}
 
