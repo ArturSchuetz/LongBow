@@ -13,6 +13,23 @@ namespace bow {
 	class D3DRenderContext;
 	typedef std::shared_ptr<D3DRenderContext> D3DRenderContextPtr;
 
+	class D3DVertexBuffer;
+	typedef std::shared_ptr<D3DVertexBuffer> D3DVertexBufferPtr;
+
+	class D3DShaderProgram;
+	typedef std::shared_ptr<D3DShaderProgram> D3DShaderProgramPtr;
+	
+	class D3DFragmentOutputs;
+	typedef std::shared_ptr<D3DFragmentOutputs> D3DFragmentOutputsPtr;
+
+	class D3DIndexBuffer;
+	typedef std::shared_ptr<D3DIndexBuffer> D3DIndexBufferPtr;
+
+	class D3DVertexArray;
+	typedef std::shared_ptr<D3DVertexArray> D3DVertexArrayPtr;
+
+	typedef std::unordered_map<unsigned int, VertexBufferAttributePtr> D3DVertexBufferAttributeMap;
+
 }
 
 #define WIN32_LEAN_AND_MEAN

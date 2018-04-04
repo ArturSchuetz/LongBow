@@ -42,7 +42,7 @@ namespace bow {
 
 		if (linkStatus == 0)
 		{
-			LOG_ERROR(VGetLog().c_str());
+			LOG_ERROR(GetLog().c_str());
 			m_ready = false;
 		}
 		else
@@ -64,21 +64,6 @@ namespace bow {
 	}
 
 
-	std::string	OGLShaderProgram::VGetLog()
-	{
-		char* buffer;
-		GLint length, result;
-
-		/* get the shader info log */
-		glGetProgramiv(m_ShaderProgramHandle, GL_INFO_LOG_LENGTH, &length);
-		buffer = (char*)malloc(length);
-
-		glGetProgramInfoLog(m_ShaderProgramHandle, length, &result, buffer);
-
-		return std::string(buffer);
-	}
-
-
 	ShaderVertexAttributePtr OGLShaderProgram::VGetVertexAttribute(std::string name)
 	{
 		return m_shaderVertexAttributes[name];
@@ -96,6 +81,24 @@ namespace bow {
 		return (*m_fragmentOutputs)[name];
 	}
 
+	void OGLShaderProgram::NotifyDirty(ICleanable* value)
+	{
+		m_dirtyUniforms.push_back(value);
+	}
+
+	std::string	OGLShaderProgram::GetLog()
+	{
+		char* buffer;
+		GLint length, result;
+
+		/* get the shader info log */
+		glGetProgramiv(m_ShaderProgramHandle, GL_INFO_LOG_LENGTH, &length);
+		buffer = (char*)malloc(length);
+
+		glGetProgramInfoLog(m_ShaderProgramHandle, length, &result, buffer);
+
+		return std::string(buffer);
+	}
 
 	unsigned int OGLShaderProgram::GetProgram()
 	{
@@ -108,7 +111,6 @@ namespace bow {
 		glUseProgram(m_ShaderProgramHandle);
 	}
 
-
 	void OGLShaderProgram::Clean()
 	{
 		for (auto it = m_dirtyUniforms.begin(); it != m_dirtyUniforms.end(); it++)
@@ -118,16 +120,9 @@ namespace bow {
 		m_dirtyUniforms.clear();
 	}
 
-
 	bool OGLShaderProgram::IsReady()
 	{
 		return m_ready;
-	}
-
-
-	void OGLShaderProgram::NotifyDirty(ICleanable* value)
-	{
-		m_dirtyUniforms.push_back(value);
 	}
 
 	// =====================================================================
@@ -280,7 +275,6 @@ namespace bow {
 		}
 		return uniforms;
 	}
-
 
 	static bool IsMatrix(UniformType type)
 	{

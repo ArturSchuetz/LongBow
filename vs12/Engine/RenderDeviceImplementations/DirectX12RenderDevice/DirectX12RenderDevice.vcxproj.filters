@@ -68,8 +68,26 @@
     <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12RenderContext_DXHelper.cpp">
-      <Filter>Source Files\Device</Filter>
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12VertexBuffer.cpp">
+      <Filter>Source Files\Device\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12TypeConverter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12ShaderProgram.cpp">
+      <Filter>Source Files\Device\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12FragmentOutputs.cpp">
+      <Filter>Source Files\Device\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12VertexArray.cpp">
+      <Filter>Source Files\Device\Context\VertexArray</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12VertexBufferAttributes.cpp">
+      <Filter>Source Files\Device\Context\VertexArray</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12RenderDevice_Resources.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -90,6 +108,24 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12RenderDevicePredeclares.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12VertexBuffer.h">
+      <Filter>Header Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12TypeConverter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12ShaderProgram.h">
+      <Filter>Header Files\Device\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12FragmentOutputs.h">
+      <Filter>Header Files\Device\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12VertexArray.h">
+      <Filter>Header Files\Device\Context\VertexArray</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12VertexBufferAttributes.h">
+      <Filter>Header Files\Device\Context\VertexArray</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

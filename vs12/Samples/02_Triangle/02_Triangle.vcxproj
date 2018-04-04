@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -184,6 +184,14 @@
   <ItemGroup>
     <None Include="BaseFragmentShader.frag" />
     <None Include="BaseVertexShader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BasePixelShader.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="BaseVertexShader.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

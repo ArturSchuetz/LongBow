@@ -329,7 +329,7 @@ namespace bow {
 		glGetProgramiv(m_boundShaderProgram->GetProgram(), GL_VALIDATE_STATUS, &validateStatus);
 		if (validateStatus == 0)
 		{
-			LOG_ERROR("Shader program validation failed: %s", m_boundShaderProgram->VGetLog().c_str());
+			LOG_ERROR("Shader program validation failed: %s", m_boundShaderProgram->GetLog().c_str());
 		}
 #endif
 	}

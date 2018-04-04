@@ -186,6 +186,8 @@ namespace bow
 		void DebugOutput(const char* buffer);
 #endif
 
+		void LogAssertAndShowWindow(const char* text, ...);
+
 		bool            m_initialized;	//!< 'true' if the logger is ready		
 		std::ofstream   m_logStream;	//!< Logfile stream on Harddisk
 	};

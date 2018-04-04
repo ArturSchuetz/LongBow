@@ -176,18 +176,13 @@ namespace bow
 		strcpy_s(buffer2, MAX_DEBUG_LINE_LEN, "ERROR: ");
 		strcpy_s(buffer2 + 7, MAX_DEBUG_LINE_LEN - 7, buffer);
 		LogOutput(buffer2);
-#if defined(_WIN32)
-		MessageBoxA(NULL, buffer, "LongBow - ERROR", MB_OK | MB_ICONERROR);
-#else
-		std::cerr << "An exception has occured: " << buffer << std::endl;
-#endif
 	}
 
 	void EventLogger::LogAssert(bool contidion, const char* file, long line, const char* description)
 	{
 		if (!contidion)
 		{
-			LogError(std::string(std::string(description) + std::string(" - in file %s at line %u.")).c_str(), file, line);
+			LogAssertAndShowWindow(std::string(std::string(description) + std::string(" - in file %s at line %u.")).c_str(), file, line);
 
 #ifdef _DEBUG
 			assert(contidion);
@@ -195,6 +190,37 @@ namespace bow
 		}
 	}
 
+	void EventLogger::LogAssertAndShowWindow(const char* text, ...)
+	{
+		if (!IsInitialized())
+			return;
+
+		char buffer[MAX_DEBUG_LINE_LEN];
+		va_list args;
+		va_start(args, text);
+
+#if defined(WINVER) || defined(_XBOX)
+		int buf = _vsnprintf_s(buffer, MAX_DEBUG_LINE_LEN, text, args);
+#else
+		int buf = vsnprintf(buffer, MAX_DEBUG_LINE_LEN, text, args);
+#endif
+
+		assert((buf >= 0) && (buf < MAX_DEBUG_LINE_LEN));
+		va_end(args);
+
+		// Log output to debug windows and/or disk depending on options
+		char buffer2[MAX_DEBUG_LINE_LEN];
+		strcpy_s(buffer2, MAX_DEBUG_LINE_LEN, "FATAL ERROR: ");
+		strcpy_s(buffer2 + 7, MAX_DEBUG_LINE_LEN - 7, buffer);
+		LogOutput(buffer2);
+
+#if defined(_WIN32)
+		MessageBoxA(NULL, buffer, "LongBow - FATAL ERROR", MB_OK | MB_ICONERROR);
+#else
+		std::cerr << "An exception has occured: " << buffer << std::endl;
+#endif
+
+	}
 
 	void EventLogger::LogOutput(char* buffer)
 	{

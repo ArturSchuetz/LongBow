@@ -68,8 +68,7 @@ namespace bow {
 		int windowY = std::max<int>(0, (screenHeight - windowHeight) / 2);
 
 		// Create the window and store a handle to it.
-		m_hwnd = CreateWindowExW(
-			NULL,
+		m_hwnd = CreateWindowW(
 			windowClass.lpszClassName,
 			string2widestring(title).c_str(),
 			WS_OVERLAPPEDWINDOW,
@@ -248,46 +247,50 @@ namespace bow {
 		{
 			case WM_SYSKEYDOWN:
 			case WM_KEYDOWN:
-			{
-				bool alt = (::GetAsyncKeyState(VK_MENU) & 0x8000) != 0;
-
-				switch (wParam)
 				{
-				case VK_RETURN:
-				case VK_F11:
-					if (alt) {
-						window->SetFullscreen(!window->m_fullScreen);
+					bool alt = (::GetAsyncKeyState(VK_MENU) & 0x8000) != 0;
+
+					switch (wParam)
+					{
+					case VK_RETURN:
+						if (alt) {
+					case VK_F11:
+							window->SetFullscreen(!window->m_fullScreen);
+						}
 					}
-					break;
 				}
-			}
-			break;
+				break;
+			// The default window procedure will play a system notification sound 
+			// when pressing the Alt+Enter keyboard combination if this message is 
+			// not handled.
+			case WM_SYSCHAR:
+				break;
 			case WM_CREATE:
-			{
-				// Save the DXSample* passed in to CreateWindow.
-				LPCREATESTRUCT pCreateStruct = reinterpret_cast<LPCREATESTRUCT>(lParam);
-				SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pCreateStruct->lpCreateParams));
-				return 0;
-			}
-			break;
+				{
+					// Save the DXSample* passed in to CreateWindow.
+					LPCREATESTRUCT pCreateStruct = reinterpret_cast<LPCREATESTRUCT>(lParam);
+					SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pCreateStruct->lpCreateParams));
+					return 0;
+				}
+				break;
 			case WM_SIZE:
-			{
-				RECT clientRect = {};
-				::GetClientRect(hWnd, &clientRect);
+				{
+					RECT clientRect = {};
+					::GetClientRect(hWnd, &clientRect);
 
-				window->Resize(clientRect.right - clientRect.left, clientRect.bottom - clientRect.top);
-				return 0;
-			}
-			break;
-
+					window->Resize(clientRect.right - clientRect.left, clientRect.bottom - clientRect.top);
+					return 0;
+				}
+				break;
 			case WM_DESTROY:
-			{
-				PostQuitMessage(0);
-				window->m_shouldClose = true;
-				return 0;
-			}
+				{
+					PostQuitMessage(0);
+					window->m_shouldClose = true;
+					return 0;
+				}
 			default:
 				return ::DefWindowProcW(hWnd, message, wParam, lParam);
+				break;
 		}
 	}
 }

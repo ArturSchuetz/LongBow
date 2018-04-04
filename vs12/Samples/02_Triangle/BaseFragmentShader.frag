@@ -1,11 +1,10 @@
 #version 130
  
-precision highp float; // needed only for version 1.30
+in vec4 var_color;
 
-uniform vec3 u_color;
-out vec4 out_Color;
+out vec3 out_Color;
  
 void main(void)
 {
-    out_Color = vec4(u_color, 1.0);
+    out_Color = var_color.rgb;
 }

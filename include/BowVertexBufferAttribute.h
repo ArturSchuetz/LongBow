@@ -73,6 +73,4 @@ namespace bow {
 		int						m_strideInBytes;
 	};
 
-	typedef std::shared_ptr<VertexBufferAttribute> VertexBufferAttributePtr;
-	typedef std::unordered_map<unsigned int, VertexBufferAttributePtr> VertexBufferAttributeMap;
 }

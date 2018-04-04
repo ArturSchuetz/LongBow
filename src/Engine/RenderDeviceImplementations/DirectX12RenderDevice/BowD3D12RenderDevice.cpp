@@ -6,6 +6,8 @@
 #include "IBowTexture2D.h"
 
 #include "BowD3D12GraphicsWindow.h"
+#include "BowD3D12VertexBuffer.h"
+#include "BowD3D12ShaderProgram.h"
 
 // DirectX 12 specific headers.
 #include <d3d12.h>
@@ -21,7 +23,10 @@ namespace bow {
 	extern std::string toErrorString(HRESULT hresult);
 
 	D3DRenderDevice::D3DRenderDevice(void) :
-		m_D3D12device(nullptr),
+		m_d3d12device(nullptr),
+		m_copyCommandQueue(nullptr),
+		m_copyFence(nullptr),
+		m_copyFenceValue(0),
 		m_useWarpDevice(false),
 		m_initialized(false)
 	{
@@ -53,6 +58,11 @@ namespace bow {
 				// Enable additional debug layers.
 				dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 			}
+			else
+			{
+				std::string errorMsg = toErrorString(hresult);
+				LOG_ERROR(std::string(std::string("D3D12GetDebugInterface: ") + errorMsg).c_str());
+			}
 		}
 #endif
 
@@ -63,7 +73,7 @@ namespace bow {
 		if (FAILED(hresult))
 		{
 			std::string errorMsg = toErrorString(hresult);
-			LOG_ERROR(std::string(std::string("EnumWarpAdapter: ") + errorMsg).c_str());
+			LOG_ERROR(std::string(std::string("CreateDXGIFactory2: ") + errorMsg).c_str());
 			return false;
 		}
 
@@ -73,12 +83,18 @@ namespace bow {
 			if (FAILED(hresult))
 			{
 				std::string errorMsg = toErrorString(hresult);
-				LOG_ERROR(std::string(std::string("EnumWarpAdapter: ") + errorMsg).c_str());
+				LOG_ERROR(std::string(std::string("factory->EnumWarpAdapter: ") + errorMsg).c_str());
 				return false;
 			}
 
 			DXGI_ADAPTER_DESC1 dxgiAdapterDesc1;
-			dxgiAdapter1->GetDesc1(&dxgiAdapterDesc1);
+			hresult = dxgiAdapter1->GetDesc1(&dxgiAdapterDesc1);
+			if (FAILED(hresult))
+			{
+				std::string errorMsg = toErrorString(hresult);
+				LOG_ERROR(std::string(std::string("dxgiAdapter1->GetDesc1: ") + errorMsg).c_str());
+			}
+
 			LOG_INFO(std::string("Using WARP Device: " + widestring2string(dxgiAdapterDesc1.Description)).c_str());
 			LOG_INFO(std::string("\t\tDedicated Video Memory:  " + std::to_string(dxgiAdapterDesc1.DedicatedVideoMemory / 1024 / 1024) + " MB").c_str());
 			LOG_INFO(std::string("\t\tDedicated System Memory: " + std::to_string(dxgiAdapterDesc1.DedicatedSystemMemory / 1024 / 1024) + " MB").c_str());
@@ -101,6 +117,12 @@ namespace bow {
 			{
 				DXGI_ADAPTER_DESC1 dxgiAdapterDesc1;
 				dxgiAdapter1->GetDesc1(&dxgiAdapterDesc1);
+				if (FAILED(hresult))
+				{
+					std::string errorMsg = toErrorString(hresult);
+					LOG_ERROR(std::string(std::string("dxgiAdapter1->GetDesc1: ") + errorMsg).c_str());
+				}
+
 				LOG_INFO(std::string("\t" + widestring2string(dxgiAdapterDesc1.Description) + ":").c_str());
 				LOG_INFO(std::string("\t\tDedicated Video Memory:  " + std::to_string(dxgiAdapterDesc1.DedicatedVideoMemory / 1024 / 1024) + " MB").c_str());
 				LOG_INFO(std::string("\t\tDedicated System Memory: " + std::to_string(dxgiAdapterDesc1.DedicatedSystemMemory / 1024 / 1024) + " MB").c_str());
@@ -144,7 +166,7 @@ namespace bow {
 			}
 		}
 
-		hresult = D3D12CreateDevice(dxgiAdapter4.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&m_D3D12device));
+		hresult = D3D12CreateDevice(dxgiAdapter4.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&m_d3d12device));
 		if (FAILED(hresult))
 		{
 			std::string errorMsg = toErrorString(hresult);
@@ -155,7 +177,7 @@ namespace bow {
 		// Enable debug messages in debug mode.
 #if defined(_DEBUG)
 		ComPtr<ID3D12InfoQueue> infoQueue = nullptr;
-		if (SUCCEEDED(m_D3D12device.As(&infoQueue)))
+		if (SUCCEEDED(m_d3d12device.As(&infoQueue)))
 		{
 			infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, TRUE);
 			infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, TRUE);
@@ -189,13 +211,31 @@ namespace bow {
 			if (FAILED(hresult))
 			{
 				std::string errorMsg = toErrorString(hresult);
-				LOG_ERROR(std::string(std::string("PushStorageFilter: ") + errorMsg).c_str());
+				LOG_ERROR(std::string(std::string("infoQueue->PushStorageFilter: ") + errorMsg).c_str());
 				return false;
 			}
 		}
 #endif
+        return PrepareCommandQueue();
+	}
 
-        return true;
+
+	bool D3DRenderDevice::PrepareCommandQueue()
+	{
+		m_copyCommandQueue = D3DRenderDevice::CreateCommandQueue(m_d3d12device, D3D12_COMMAND_LIST_TYPE_COPY);
+		if (m_copyCommandQueue == nullptr)
+			return false;		
+
+		m_copyFence = D3DRenderDevice::CreateFence(m_d3d12device);
+		if (m_copyFence == nullptr)
+			return false;
+
+		// Create an event handle to use for frame synchronization.
+		m_copyFenceEvent = D3DRenderDevice::CreateEventHandle();
+		if (m_copyFenceEvent == nullptr)
+			return false;
+
+		return true;
 	}
 
 	void D3DRenderDevice::VRelease(void)
@@ -225,22 +265,101 @@ namespace bow {
 
 	ShaderProgramPtr D3DRenderDevice::VCreateShaderProgramFromFile(const std::string& VertexShaderFilename, const std::string& FragementShaderFilename)
 	{
-		return ShaderProgramPtr(nullptr);
+		//Open file
+		std::string vshaderString;
+		std::ifstream vsourceFile(VertexShaderFilename.c_str());
+
+		//Source file loaded
+		if (vsourceFile)
+		{
+			//Get shader source
+			vshaderString.assign((std::istreambuf_iterator< char >(vsourceFile)), std::istreambuf_iterator<char>());
+
+			//Open file
+			std::string fshaderString;
+			std::ifstream fsourceFile(FragementShaderFilename.c_str());
+
+			if (fsourceFile)
+			{
+				//Get shader source
+				fshaderString.assign((std::istreambuf_iterator< char >(fsourceFile)), std::istreambuf_iterator<char>());
+				return VCreateShaderProgram(vshaderString, fshaderString);
+			}
+			else
+			{
+				LOG_ERROR("Could not open Shader from File");
+				return D3DShaderProgramPtr();
+			}
+		}
+		else
+		{
+			LOG_ERROR("Could not open Shader from File");
+			return D3DShaderProgramPtr();
+		}
 	}
 
 	ShaderProgramPtr D3DRenderDevice::VCreateShaderProgramFromFile(const std::string& VertexShaderFilename, const std::string& GeometryShaderFilename, const std::string& FragementShaderFilename)
 	{
-		return ShaderProgramPtr(nullptr);
+		//Open file
+		std::string vshaderString;
+		std::ifstream vsourceFile(VertexShaderFilename.c_str());
+
+		//Source file loaded
+		if (vsourceFile)
+		{
+			//Get shader source
+			vshaderString.assign((std::istreambuf_iterator<char>(vsourceFile)), std::istreambuf_iterator<char>());
+
+			//Open file
+			std::string gshaderString;
+			std::ifstream gsourceFile(GeometryShaderFilename.c_str());
+
+			if (gsourceFile)
+			{
+				//Get shader source
+				gshaderString.assign((std::istreambuf_iterator<char>(gsourceFile)), std::istreambuf_iterator<char>());
+
+				//Open file
+				std::string fshaderString;
+				std::ifstream fsourceFile(FragementShaderFilename.c_str());
+
+				if (fsourceFile)
+				{
+					//Get shader source
+					fshaderString.assign((std::istreambuf_iterator<char>(fsourceFile)), std::istreambuf_iterator<char>());
+					return VCreateShaderProgram(vshaderString, gshaderString, fshaderString);
+				}
+				else
+				{
+					LOG_ERROR("Could not open Shader from File");
+					return D3DShaderProgramPtr(nullptr);
+				}
+			}
+			else
+			{
+				LOG_ERROR("Could not open Shader from File");
+				return D3DShaderProgramPtr(nullptr);
+			}
+		}
+		else
+		{
+			LOG_ERROR("Could not open Shader from File");
+			return D3DShaderProgramPtr(nullptr);
+		}
 	}
 
 	ShaderProgramPtr D3DRenderDevice::VCreateShaderProgram(const std::string& VertexShaderSource, const std::string& FragementShaderSource)
 	{
-		return ShaderProgramPtr(nullptr);
+		D3DShaderProgram *shaderProgram = new D3DShaderProgram();
+		shaderProgram->Initialize(m_d3d12device, VertexShaderSource, FragementShaderSource);
+		return ShaderProgramPtr(shaderProgram);
 	}
 
 	ShaderProgramPtr D3DRenderDevice::VCreateShaderProgram(const std::string& VertexShaderSource, const std::string& GeometryShaderSource, const std::string& FragementShaderSource)
 	{
-		return ShaderProgramPtr(nullptr);
+		D3DShaderProgram *shaderProgram = new D3DShaderProgram();
+		shaderProgram->Initialize(m_d3d12device, VertexShaderSource, FragementShaderSource);
+		return ShaderProgramPtr(shaderProgram);
 	}
 
 	MeshBufferPtr D3DRenderDevice::VCreateMeshBuffers(MeshAttribute mesh, ShaderVertexAttributeMap shaderAttributes, BufferHint usageHint)
@@ -250,7 +369,7 @@ namespace bow {
 
 	VertexBufferPtr	D3DRenderDevice::VCreateVertexBuffer(BufferHint usageHint, int sizeInBytes)
 	{
-		return VertexBufferPtr(nullptr);
+		return D3DVertexBufferPtr(new D3DVertexBuffer(this, usageHint, sizeInBytes));
 	}
 
 	IndexBufferPtr D3DRenderDevice::VCreateIndexBuffer(BufferHint usageHint, IndexBufferDatatype dataType, int sizeInBytes)
@@ -276,6 +395,97 @@ namespace bow {
 	TextureSamplerPtr D3DRenderDevice::VCreateTexture2DSampler(TextureMinificationFilter minificationFilter, TextureMagnificationFilter magnificationFilter, TextureWrap wrapS, TextureWrap wrapT, float maximumAnistropy)
 	{
 		return TextureSamplerPtr(nullptr);
+	}
+
+	ComPtr<ID3D12GraphicsCommandList2> D3DRenderDevice::GetCopyCommandList()
+	{
+		HRESULT hresult;
+		ID3D12CommandAllocator* allocator;
+		ComPtr<ID3D12GraphicsCommandList2> commandList;
+
+		if (!m_availableCopyCommandAllocatorsQueue.empty() && IsFenceComplete(m_copyFence, m_availableCopyCommandAllocatorsQueue.front().first))
+		{
+			allocator = m_availableCopyCommandAllocatorsQueue.front().second;
+			m_availableCopyCommandAllocatorsQueue.pop();
+
+			hresult = allocator->Reset();
+			if (FAILED(hresult))
+			{
+				std::string errorMsg = toErrorString(hresult);
+				LOG_ERROR(std::string(std::string("commandAllocator->Reset: ") + errorMsg).c_str());
+			}
+		}
+		else
+		{
+			ComPtr<ID3D12CommandAllocator> newAllocator = CreateCommandAllocator(m_d3d12device, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_COPY);
+			m_allAllocators.push_back(newAllocator);
+			allocator = newAllocator.Get();
+		}
+
+		if (!m_availableCopyCommandListsQueue.empty())
+		{
+			commandList = m_availableCopyCommandListsQueue.front();
+			m_availableCopyCommandListsQueue.pop();
+
+			hresult = commandList->Reset(allocator, nullptr);
+			if (FAILED(hresult))
+			{
+				std::string errorMsg = toErrorString(hresult);
+				LOG_ERROR(std::string(std::string("commandList->Reset: ") + errorMsg).c_str());
+			}
+		}
+		else
+		{
+			commandList = CreateCommandList(m_d3d12device, allocator, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_COPY);
+		}
+
+		// Associate the command allocator with the command list so that it can be
+		// retrieved when the command list is executed.
+		hresult = commandList->SetPrivateDataInterface(__uuidof(ID3D12CommandAllocator), allocator);
+		if (FAILED(hresult))
+		{
+			std::string errorMsg = toErrorString(hresult);
+			LOG_ERROR(std::string(std::string("commandList->SetPrivateDataInterface: ") + errorMsg).c_str());
+		}
+
+		return commandList;
+	}
+
+	uint64_t D3DRenderDevice::ExecuteCopyCommandList(ComPtr<ID3D12GraphicsCommandList2> commandList)
+	{
+		HRESULT hresult;
+		hresult = commandList->Close();
+		if (FAILED(hresult))
+		{
+			std::string errorMsg = toErrorString(hresult);
+			LOG_ERROR(std::string(std::string("Close: ") + errorMsg).c_str());
+		}
+
+		ID3D12CommandAllocator* commandAllocator;
+		UINT dataSize = sizeof(commandAllocator);
+		hresult = commandList->GetPrivateData(__uuidof(ID3D12CommandAllocator), &dataSize, &commandAllocator);
+		if (FAILED(hresult))
+		{
+			std::string errorMsg = toErrorString(hresult);
+			LOG_ERROR(std::string(std::string("commandList->GetPrivateData: ") + errorMsg).c_str());
+		}
+
+		ID3D12CommandList* const ppCommandLists[] = {
+			commandList.Get()
+		};
+
+		m_copyCommandQueue->ExecuteCommandLists(1, ppCommandLists);
+		uint64_t fenceValue = D3DRenderDevice::Signal(m_copyCommandQueue, m_copyFence, m_copyFenceValue);
+
+		m_availableCopyCommandAllocatorsQueue.emplace(std::pair<uint64_t, ID3D12CommandAllocator*>(fenceValue, commandAllocator));
+		m_availableCopyCommandListsQueue.push(commandList);
+
+		return fenceValue;
+	}
+
+	void D3DRenderDevice::WaitForCopyFenceValue(uint64_t fanceValue)
+	{
+		return WaitForFenceValue(m_copyFence, fanceValue, m_copyFenceEvent);
 	}
 
 }

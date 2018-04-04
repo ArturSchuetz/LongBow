@@ -29,7 +29,9 @@ namespace bow {
 		OGLShaderProgram(const std::string& vertexShaderSource, const std::string& geometryShaderSource, const std::string& fragmentShaderSource);
 		~OGLShaderProgram();
 
-		std::string					VGetLog();
+		// ===========================================
+		// IShaderProgram Functions
+		// ===========================================
 
 		ShaderVertexAttributePtr	VGetVertexAttribute(std::string name);
 		ShaderVertexAttributeMap	VGetVertexAttributes();
@@ -54,8 +56,14 @@ namespace bow {
 		void VSetUniformMatrix(const char* name, float* matrix, unsigned int matrix_size);
 
 		// ===========================================
-		// New Functions
+		// ICleanableObserver Functions
 		// ===========================================
+
+		void NotifyDirty(ICleanable* value);
+
+		// ===========================================
+
+		std::string GetLog();
 		unsigned int GetProgram();
 
 		void Bind();
@@ -63,23 +71,18 @@ namespace bow {
 
 		bool IsReady();
 
-		void NotifyDirty(ICleanable* value);
-
 	private:
 		OGLShaderProgram(OGLShaderProgram&){}
 		OGLShaderProgram& operator=(const OGLShaderProgram&) { return *this; }
+
 
 		void SetUniformI(const char* name, int*, int arrayLength);
 		void SetUniformUI(const char* name, unsigned int*, int arrayLength);
 		void SetUniformF(const char* name, float*, int arrayLength);
 		void SetUniform(const char* name, void*, PrimitiveDatatype, int arrayLength);
 
-		std::string				GetProgramInfoLog();
-
 		ShaderVertexAttributeMap	FindVertexAttributes(unsigned int Program);
 		UniformMap					FindUniforms(unsigned int program);
-
-		bool					IsMatrix(UniformType type);
 
 		OGLShaderObjectPtr		m_vertexShader;
 		OGLShaderObjectPtr		m_geometryShader;

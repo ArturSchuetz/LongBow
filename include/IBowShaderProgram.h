@@ -11,7 +11,6 @@ namespace bow {
 	public:
 		virtual ~IShaderProgram(){}
 
-		virtual std::string					VGetLog() = 0;
 		virtual ShaderVertexAttributePtr	VGetVertexAttribute(std::string name) = 0;
 		virtual ShaderVertexAttributeMap	VGetVertexAttributes() = 0;
 		virtual int							VGetFragmentOutputLocation(std::string name) = 0;

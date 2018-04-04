@@ -31,6 +31,12 @@
     <None Include="BaseVertexShader.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="BaseVertexShader.hlsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="BasePixelShader.hlsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Triangle.cpp">

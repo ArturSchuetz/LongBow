@@ -130,5 +130,6 @@ namespace bow {
 		class IRenderDevice;
 			enum class WindowType : char;
 		typedef std::shared_ptr<IRenderDevice> RenderDevicePtr;
+
 }
 
