@@ -185,7 +185,12 @@
     <None Include="BaseVertexShader.vert" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Texture.bmp" />
+    <None Include="BasePixelShader.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="BaseVertexShader.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

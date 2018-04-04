@@ -18,8 +18,10 @@ std::string LoadShaderFromResouce(int name)
 
 int main()
 {
+	RenderDeviceAPI deviceApi = RenderDeviceAPI::DirectX12;
+
 	// Creating Render Device
-	RenderDevicePtr deviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(RenderDeviceAPI::OpenGL3x);
+	RenderDevicePtr deviceOGL = RenderDeviceManager::GetInstance().GetOrCreateDevice(deviceApi);
 	if (deviceOGL == nullptr)
 	{
 		return 0;
@@ -33,7 +35,15 @@ int main()
 	}
 
 	RenderContextPtr contextOGL = windowOGL->VGetContext();
-	ShaderProgramPtr ShaderProgram = deviceOGL->VCreateShaderProgram(LoadShaderFromResouce(IDS_VERTEXSHADER), LoadShaderFromResouce(IDS_FRAGMENTSHADER));
+	ShaderProgramPtr shaderProgram;
+	if (deviceApi == RenderDeviceAPI::OpenGL3x)
+	{
+		shaderProgram = deviceOGL->VCreateShaderProgram(LoadShaderFromResouce(IDS_VERTEXSHADER), LoadShaderFromResouce(IDS_FRAGMENTSHADER));
+	}
+	else if (deviceApi == RenderDeviceAPI::DirectX12)
+	{
+		shaderProgram = deviceOGL->VCreateShaderProgram(LoadShaderFromResouce(IDS_HLSLVERTEXSHADER), LoadShaderFromResouce(IDS_HLSLPIXELSHADER));
+	}
 
 	///////////////////////////////////////////////////////////////////
 	// ClearState and Color
@@ -44,17 +54,19 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Vertex Array
 
-	Vector2<float> vertices[3];
-	vertices[0] = Vector2<float>(0.0f, 1.0f);
-	vertices[1] = Vector2<float>(-1.0f, -1.0f);
-	vertices[2] = Vector2<float>(1.0f, -1.0f);
+	float aspectRatio = static_cast<float>(800) / static_cast<float>(600);
+
+	Vector3<float> vertices[3];
+	vertices[0] = Vector3<float>(0.0f, 0.25f * aspectRatio, 0.0f);
+	vertices[1] = Vector3<float>(0.25f, -0.25f * aspectRatio, 0.0f);
+	vertices[2] = Vector3<float>(-0.25f, -0.25f * aspectRatio, 0.0f);
 
 	// Create vertex position buffer and fill with informations
-	VertexBufferPtr PositionBuffer = deviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector2<float>) * 3);
-	PositionBuffer->VCopyFromSystemMemory(vertices, 0, sizeof(Vector2<float>) * 3);
+	VertexBufferPtr PositionBuffer = deviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector3<float>) * 3);
+	PositionBuffer->VCopyFromSystemMemory(vertices, 0, sizeof(Vector3<float>) * 3);
 
 	// Define buffer as vertexattribute for shaders
-	VertexBufferAttributePtr PositionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(PositionBuffer, ComponentDatatype::Float, 2));
+	VertexBufferAttributePtr positionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(PositionBuffer, ComponentDatatype::Float, 2));
 
 	Vector2<float> texcoor[3];
 	texcoor[0] = Vector2<float>(0.5f, 1.0f);
@@ -66,12 +78,20 @@ int main()
 	TextureCoordBuffer->VCopyFromSystemMemory(texcoor, 0, sizeof(Vector2<float>) * 3);
 
 	// Define buffer as vertexattribute for shaders
-	VertexBufferAttributePtr TextureCoordAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(TextureCoordBuffer, ComponentDatatype::Float, 2));
+	VertexBufferAttributePtr textureCoordAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(TextureCoordBuffer, ComponentDatatype::Float, 2));
 
 	// create VertexArray and connect attributeBuffers with location
-	VertexArrayPtr VertexArray = contextOGL->VCreateVertexArray();
-	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_Position")->Location, PositionAttribute);
-	VertexArray->VSetAttribute(ShaderProgram->VGetVertexAttribute("in_TexCoord")->Location, TextureCoordAttribute);
+	VertexArrayPtr vertexArray = contextOGL->VCreateVertexArray();
+	if (deviceApi == RenderDeviceAPI::OpenGL3x)
+	{
+		vertexArray->VSetAttribute(shaderProgram->VGetVertexAttribute("in_Position")->Location, positionAttribute);
+		vertexArray->VSetAttribute(shaderProgram->VGetVertexAttribute("in_TexCoord")->Location, textureCoordAttribute);
+	}
+	else if (deviceApi == RenderDeviceAPI::DirectX12)
+	{
+		vertexArray->VSetAttribute(shaderProgram->VGetVertexAttribute("POSITION0"), positionAttribute);
+		vertexArray->VSetAttribute(shaderProgram->VGetVertexAttribute("TEXCOORD0"), textureCoordAttribute);
+	}
 
 	///////////////////////////////////////////////////////////////////
 	// Textures
@@ -88,7 +108,7 @@ int main()
 	///////////////////////////////////////////////////////////////////
 	// Uniforms
 
-	ShaderProgram->VSetUniform("diffuseTex", TexID);
+	shaderProgram->VSetUniform("diffuseTex", TexID);
 
 	///////////////////////////////////////////////////////////////////
 	// RenderState
@@ -103,7 +123,7 @@ int main()
 		contextOGL->VClear(clearState);
 
 		contextOGL->VSetViewport(Viewport(0, 0, windowOGL->VGetWidth(), windowOGL->VGetHeight()));
-		contextOGL->VDraw(PrimitiveType::Triangles, VertexArray, ShaderProgram, renderState);
+		contextOGL->VDraw(PrimitiveType::Triangles, vertexArray, shaderProgram, renderState);
 
 		contextOGL->VSwapBuffers();
 		windowOGL->VPollWindowEvents();

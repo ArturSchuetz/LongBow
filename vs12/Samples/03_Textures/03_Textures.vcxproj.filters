@@ -38,8 +38,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Texture.bmp">
+    <FxCompile Include="BasePixelShader.hlsl">
       <Filter>Resource Files</Filter>
-    </Image>
+    </FxCompile>
+    <FxCompile Include="BaseVertexShader.hlsl">
+      <Filter>Resource Files</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
