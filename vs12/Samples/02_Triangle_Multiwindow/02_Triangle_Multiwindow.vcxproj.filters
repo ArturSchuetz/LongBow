@@ -15,14 +15,14 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="Resource.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="BaseFragmentShader.frag">
@@ -31,15 +31,15 @@
     <None Include="BaseVertexShader.vert">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="BasePixelShader.hlsl">
+    <None Include="BaseVertexShader.hlsl">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="BaseVertexShader.hlsl">
+    <None Include="BasePixelShader.hlsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Textures.cpp">
+    <ClCompile Include="Triangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
