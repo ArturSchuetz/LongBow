@@ -59,7 +59,6 @@ namespace bow {
 		void UpdateBackBuffers();
 		void Flush();
 
-		static D3DRenderContext*	m_currentContext;
 		static const UINT			m_numBuffers = 2;
 
 		// Buffer and RenderTargets
@@ -97,6 +96,8 @@ namespace bow {
 		bool						m_initialized;
 		bool						m_VSync;
 		bool						m_TearingSupported;
+
+		D3DTextureUnitsPtr			m_textureUnits;
 	};
 
 }

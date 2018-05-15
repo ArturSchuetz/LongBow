@@ -17,7 +17,7 @@ namespace bow {
 		void Release();
 
 	private:
-		MemoryManager(const MemoryManager&){}; // You shall not copy
+		MemoryManager(const MemoryManager&){}; // You shall not direct
 		MemoryManager& operator=(const MemoryManager&) { return *this; }
 	};
 

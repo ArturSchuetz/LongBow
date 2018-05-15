@@ -104,7 +104,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\..\..\..\lib\$(Platform)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>CoreSystems_d.lib;RenderDevice_d.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Resources_d.lib;CoreSystems_d.lib;RenderDevice_d.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -121,7 +121,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\..\..\..\lib\$(Platform)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>CoreSystems_d.lib;RenderDevice_d.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Resources_d.lib;CoreSystems_d.lib;RenderDevice_d.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -143,7 +143,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>..\..\..\..\lib\$(Platform)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>CoreSystems.lib;RenderDevice.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Resources.lib;CoreSystems.lib;RenderDevice.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -164,37 +164,53 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>..\..\..\..\lib\$(Platform)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>CoreSystems.lib;RenderDevice.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Resources.lib;CoreSystems.lib;RenderDevice.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12ConstantBuffer.cpp" />
     <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12FragmentOutputs.cpp" />
     <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12GraphicsWindow.cpp" />
     <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12IndexBuffer.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12PixelBuffer.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12ReadPixelBuffer.cpp" />
     <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12RenderContext.cpp" />
     <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12RenderDevice_Resources.cpp" />
     <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12RenderDevice.cpp" />
     <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12ShaderProgram.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12Texture2D.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12TextureSampler.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12TextureUnit.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12TextureUnits.cpp" />
     <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12TypeConverter.cpp" />
     <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12Utils.cpp" />
     <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12VertexArray.cpp" />
     <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12VertexBuffer.cpp" />
     <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12VertexBufferAttributes.cpp" />
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12WritePixelBuffer.cpp" />
     <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\DLLExport.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\include\BowPrerequisites.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12ConstantBuffer.h" />
     <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12FragmentOutputs.h" />
     <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12GraphicsWindow.h" />
     <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12IndexBuffer.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12PixelBuffer.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12ReadPixelBuffer.h" />
     <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12RenderContext.h" />
     <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12RenderDevice.h" />
     <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12RenderDevicePredeclares.h" />
     <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12ShaderProgram.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12Texture2D.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12TextureSampler.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12TextureUnit.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12TextureUnits.h" />
     <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12TypeConverter.h" />
     <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12VertexArray.h" />
     <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12VertexBuffer.h" />
     <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12VertexBufferAttributes.h" />
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12WritePixelBuffer.h" />
     <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\d3dx12.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

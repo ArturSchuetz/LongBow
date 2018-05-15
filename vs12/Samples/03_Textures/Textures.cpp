@@ -28,7 +28,7 @@ int main()
 	}
 
 	// Creating Window
-	GraphicsWindowPtr windowOGL = deviceOGL->VCreateWindow(800, 800, "Textures Sample", WindowType::Windowed);
+	GraphicsWindowPtr windowOGL = deviceOGL->VCreateWindow(800, 600, "Textures Sample", WindowType::Windowed);
 	if (windowOGL == nullptr)
 	{
 		return 0;
@@ -62,11 +62,11 @@ int main()
 	vertices[2] = Vector3<float>(-0.25f, -0.25f * aspectRatio, 0.0f);
 
 	// Create vertex position buffer and fill with informations
-	VertexBufferPtr PositionBuffer = deviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector3<float>) * 3);
-	PositionBuffer->VCopyFromSystemMemory(vertices, 0, sizeof(Vector3<float>) * 3);
+	VertexBufferPtr positionBuffer = deviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector3<float>) * 3);
+	positionBuffer->VCopyFromSystemMemory(vertices, 0, sizeof(Vector3<float>) * 3);
 
 	// Define buffer as vertexattribute for shaders
-	VertexBufferAttributePtr positionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(PositionBuffer, ComponentDatatype::Float, 2));
+	VertexBufferAttributePtr positionAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(positionBuffer, ComponentDatatype::Float, 3));
 
 	Vector2<float> texcoor[3];
 	texcoor[0] = Vector2<float>(0.5f, 1.0f);
@@ -74,11 +74,11 @@ int main()
 	texcoor[2] = Vector2<float>(1.0f, 0.0f);
 
 	// Create vertex texturecoodinate buffer and fill with informations
-	VertexBufferPtr TextureCoordBuffer = deviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector2<float>) * 3);
-	TextureCoordBuffer->VCopyFromSystemMemory(texcoor, 0, sizeof(Vector2<float>) * 3);
+	VertexBufferPtr textureCoordBuffer = deviceOGL->VCreateVertexBuffer(BufferHint::StaticDraw, sizeof(Vector2<float>) * 3);
+	textureCoordBuffer->VCopyFromSystemMemory(texcoor, 0, sizeof(Vector2<float>) * 3);
 
 	// Define buffer as vertexattribute for shaders
-	VertexBufferAttributePtr textureCoordAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(TextureCoordBuffer, ComponentDatatype::Float, 2));
+	VertexBufferAttributePtr textureCoordAttribute = VertexBufferAttributePtr(new VertexBufferAttribute(textureCoordBuffer, ComponentDatatype::Float, 2));
 
 	// create VertexArray and connect attributeBuffers with location
 	VertexArrayPtr vertexArray = contextOGL->VCreateVertexArray();
@@ -98,17 +98,16 @@ int main()
 
 	ImagePtr image = ImageManager::GetInstance().Load("../Data/Textures/test.png");
 	Texture2DPtr texture = deviceOGL->VCreateTexture2D(image);
-
 	TextureSamplerPtr sampler = deviceOGL->VCreateTexture2DSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Clamp, TextureWrap::Clamp);
 
-	int TexID = 0;
-	contextOGL->VSetTexture(TexID, texture);
-	contextOGL->VSetTextureSampler(TexID, sampler);
+	int textureRegister = 0;
+	contextOGL->VSetTexture(textureRegister, texture);
+	contextOGL->VSetTextureSampler(textureRegister, sampler);
 
 	///////////////////////////////////////////////////////////////////
 	// Uniforms
 
-	shaderProgram->VSetUniform("diffuseTex", TexID);
+	shaderProgram->VSetUniform("diffuseTex", textureRegister);
 
 	///////////////////////////////////////////////////////////////////
 	// RenderState

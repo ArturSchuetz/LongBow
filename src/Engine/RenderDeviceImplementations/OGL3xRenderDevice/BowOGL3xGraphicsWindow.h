@@ -40,7 +40,7 @@ namespace bow {
 	private:
 		static void ResizeCallback(GLFWwindow* window, int width, int height);
 
-		//you shall not copy
+		//you shall not direct
 		OGLGraphicsWindow(OGLGraphicsWindow&) : m_Context(nullptr), m_ParentDevice(nullptr){}
 		OGLGraphicsWindow& operator=(const OGLGraphicsWindow&) { return *this; }
 

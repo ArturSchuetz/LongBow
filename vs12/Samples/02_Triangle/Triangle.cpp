@@ -97,12 +97,17 @@ int main()
 	renderState.FaceCulling.Enabled = false;
 	renderState.DepthTest.Enabled = false;
 
+	Vector4<float> offset(0.0, 0.0, 0.0, 0.0);
 	while (!windowOGL->VShouldClose())
 	{
+		offset.x += 0.0001f;
+
 		// Clear Backbuffer to our ClearState
 		contextOGL->VClear(clearState);
 
 		contextOGL->VSetViewport(Viewport(0, 0, windowOGL->VGetWidth(), windowOGL->VGetHeight()));
+
+		shaderProgram->VSetUniform("offset", offset);
 		contextOGL->VDraw(PrimitiveType::Triangles, vertexArray, shaderProgram, renderState);
 
 		contextOGL->VSwapBuffers();

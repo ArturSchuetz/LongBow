@@ -30,6 +30,7 @@ namespace bow {
 		m_window(window), 
 		m_initialized(false)
 	{
+
 	}
 
 
@@ -100,11 +101,24 @@ namespace bow {
 
 	VertexArrayPtr OGLRenderContext::VCreateVertexArray(MeshAttribute mesh, ShaderVertexAttributeMap shaderAttributes, BufferHint usageHint)
 	{
+		if (m_currentContext != this)
+		{
+			glfwMakeContextCurrent(m_window);
+			m_currentContext = this;
+		}
+
 		return VCreateVertexArray(m_device->VCreateMeshBuffers(mesh, shaderAttributes, usageHint));
 	}
 
+
 	VertexArrayPtr OGLRenderContext::VCreateVertexArray(MeshBufferPtr meshBuffers)
 	{
+		if (m_currentContext != this)
+		{
+			glfwMakeContextCurrent(m_window);
+			m_currentContext = this;
+		}
+
 		VertexArrayPtr vertexArray = VCreateVertexArray();
 		if (meshBuffers->IndexBuffer != nullptr)
 		{
@@ -123,12 +137,24 @@ namespace bow {
 
 	VertexArrayPtr OGLRenderContext::VCreateVertexArray()
 	{
+		if (m_currentContext != this)
+		{
+			glfwMakeContextCurrent(m_window);
+			m_currentContext = this;
+		}
+
 		return VertexArrayPtr(new OGLVertexArray());
 	}
 
 
 	FramebufferPtr OGLRenderContext::VCreateFramebuffer()
 	{
+		if (m_currentContext != this)
+		{
+			glfwMakeContextCurrent(m_window);
+			m_currentContext = this;
+		}
+
 		return OGLFramebufferPtr(new OGLFramebuffer());
 	}
 
@@ -201,8 +227,15 @@ namespace bow {
 		Draw(primitiveType, offset, count, vertexArray, shaderProgram, renderState);
 	}
 
+
 	void OGLRenderContext::VDrawLine(const bow::Vector3<float> &start, const bow::Vector3<float> &end)
 	{
+		if (m_currentContext != this)
+		{
+			glfwMakeContextCurrent(m_window);
+			m_currentContext = this;
+		}
+
 		m_textureUnits->Clean();
 
 		glFlush();
@@ -214,8 +247,15 @@ namespace bow {
 		glEnd();
 	}
 
+
 	void OGLRenderContext::Draw(PrimitiveType primitiveType, int offset, int count, VertexArrayPtr vertexArray, ShaderProgramPtr shaderProgram, RenderState renderState)
 	{
+		if (m_currentContext != this)
+		{
+			glfwMakeContextCurrent(m_window);
+			m_currentContext = this;
+		}
+
 		m_textureUnits->Clean();
 
 		glFlush();
@@ -241,6 +281,7 @@ namespace bow {
 		}
 	}
 
+
 	void OGLRenderContext::VSetTexture(int location, Texture2DPtr texture)
 	{
 		LOG_ASSERT(location < m_textureUnits->GetMaxTextureUnits(), "TextureUnit does not Exist");
@@ -253,10 +294,12 @@ namespace bow {
 		m_textureUnits->SetSampler(location, std::dynamic_pointer_cast<OGLTextureSampler>(sampler));
 	}
 
+
 	void OGLRenderContext::VSetFramebuffer(FramebufferPtr framebufer)
 	{
 		m_setFramebuffer = std::dynamic_pointer_cast<OGLFramebuffer>(framebufer);
 	}
+
 
 	void OGLRenderContext::VSetViewport(Viewport viewport)
 	{

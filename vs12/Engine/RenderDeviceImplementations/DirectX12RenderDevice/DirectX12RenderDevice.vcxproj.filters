@@ -92,6 +92,30 @@
     <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12IndexBuffer.cpp">
       <Filter>Source Files\Device\Buffer</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12Texture2D.cpp">
+      <Filter>Source Files\Device\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12TextureSampler.cpp">
+      <Filter>Source Files\Device\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12ReadPixelBuffer.cpp">
+      <Filter>Source Files\Device\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12WritePixelBuffer.cpp">
+      <Filter>Source Files\Device\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12PixelBuffer.cpp">
+      <Filter>Source Files\Device\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12TextureUnits.cpp">
+      <Filter>Source Files\Device\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12TextureUnit.cpp">
+      <Filter>Source Files\Device\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12ConstantBuffer.cpp">
+      <Filter>Source Files\Device\Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\d3dx12.h">
@@ -132,6 +156,30 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12IndexBuffer.h">
       <Filter>Header Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12Texture2D.h">
+      <Filter>Header Files\Device\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12TextureSampler.h">
+      <Filter>Header Files\Device\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12ReadPixelBuffer.h">
+      <Filter>Header Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12WritePixelBuffer.h">
+      <Filter>Header Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12PixelBuffer.h">
+      <Filter>Header Files\Device\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12TextureUnits.h">
+      <Filter>Header Files\Device\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12TextureUnit.h">
+      <Filter>Header Files\Device\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\Engine\RenderDeviceImplementations\DirectX12RenderDevice\BowD3D12ConstantBuffer.h">
+      <Filter>Header Files\Device\Shader</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

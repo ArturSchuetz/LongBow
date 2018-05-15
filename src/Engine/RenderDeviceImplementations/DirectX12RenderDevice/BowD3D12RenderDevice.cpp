@@ -2,12 +2,23 @@
 #include "BowCore.h"
 #include "BowResources.h"
 #include "BowLogger.h"
-
-#include "IBowTexture2D.h"
+#include "BowD3D12TypeConverter.h"
 
 #include "BowD3D12GraphicsWindow.h"
-#include "BowD3D12VertexBuffer.h"
 #include "BowD3D12ShaderProgram.h"
+#include "BowShaderVertexAttribute.h"
+#include "BowVertexBufferAttribute.h"
+#include "IBowVertexAttribute.h"
+
+#include "IBowIndicesBase.h"
+#include "BowD3D12IndexBuffer.h"
+#include "BowD3D12VertexBuffer.h"
+#include "BowD3D12PixelBuffer.h"
+#include "BowD3D12WritePixelBuffer.h"
+#include "BowD3D12ReadPixelBuffer.h"
+
+#include "BowD3D12Texture2D.h"
+#include "BowD3D12TextureSampler.h"
 
 // DirectX 12 specific headers.
 #include <d3d12.h>
@@ -24,9 +35,6 @@ namespace bow {
 
 	D3DRenderDevice::D3DRenderDevice(void) :
 		m_d3d12device(nullptr),
-		m_copyCommandQueue(nullptr),
-		m_copyFence(nullptr),
-		m_copyFenceValue(0),
 		m_useWarpDevice(false),
 		m_initialized(false)
 	{
@@ -216,31 +224,31 @@ namespace bow {
 			}
 		}
 #endif
-        return PrepareCommandQueue();
-	}
-
-
-	bool D3DRenderDevice::PrepareCommandQueue()
-	{
-		m_copyCommandQueue = D3DRenderDevice::CreateCommandQueue(m_d3d12device, D3D12_COMMAND_LIST_TYPE_COPY);
-		if (m_copyCommandQueue == nullptr)
-			return false;		
-
-		m_copyFence = D3DRenderDevice::CreateFence(m_d3d12device);
-		if (m_copyFence == nullptr)
-			return false;
-
-		// Create an event handle to use for frame synchronization.
-		m_copyFenceEvent = D3DRenderDevice::CreateEventHandle();
-		if (m_copyFenceEvent == nullptr)
-			return false;
-
-		return true;
+		m_copyCommandLists = new CommandQueueCollection(m_d3d12device, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_COPY);
+		m_directCommandLists = new CommandQueueCollection(m_d3d12device, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT);
+		m_computeCommandLists = new CommandQueueCollection(m_d3d12device, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_COMPUTE);
+        return m_copyCommandLists->Initialize() && m_directCommandLists->Initialize() && m_computeCommandLists->Initialize();
 	}
 
 	void D3DRenderDevice::VRelease(void)
 	{    
+		if (m_copyCommandLists != nullptr)
+		{
+			delete m_copyCommandLists; 
+			m_copyCommandLists = nullptr;
+		}
 
+		if (m_directCommandLists != nullptr)
+		{
+			delete m_directCommandLists;
+			m_directCommandLists = nullptr;
+		}
+
+		if (m_computeCommandLists != nullptr)
+		{
+			delete m_computeCommandLists;
+			m_computeCommandLists = nullptr;
+		}
 	}
 
 	GraphicsWindowPtr D3DRenderDevice::VCreateWindow(int width, int height, const std::string& title, WindowType type)
@@ -374,39 +382,118 @@ namespace bow {
 
 	IndexBufferPtr D3DRenderDevice::VCreateIndexBuffer(BufferHint usageHint, IndexBufferDatatype dataType, int sizeInBytes)
 	{
-		return IndexBufferPtr(nullptr);
+		return D3DIndexBufferPtr(new D3DIndexBuffer(this, usageHint, dataType, sizeInBytes));
 	}
 
 	WritePixelBufferPtr D3DRenderDevice::VCreateWritePixelBuffer(PixelBufferHint usageHint, int sizeInBytes)
 	{
-		return WritePixelBufferPtr(nullptr);
+		return D3DWritePixelBufferPtr(new D3DWritePixelBuffer(this, usageHint, sizeInBytes));
 	}
 
 	Texture2DPtr D3DRenderDevice::VCreateTexture2D(Texture2DDescription description)
 	{
-		return Texture2DPtr(nullptr);
+		return D3DTexture2DPtr(new D3DTexture2D(this, description));
 	}
 
 	Texture2DPtr D3DRenderDevice::VCreateTexture2D(ImagePtr image)
 	{
-		return Texture2DPtr(nullptr);
+		if (image->GetSizeInBytes() == 0)
+			return Texture2DPtr(nullptr);
+
+		TextureFormat format;
+		if (image->GetSizeInBytes() / (image->GetHeight() * image->GetWidth()) == 3)
+			format = TextureFormat::RedGreenBlue8;
+		else
+			format = TextureFormat::RedGreenBlueAlpha8;
+
+		D3DTexture2DPtr textureD3D = D3DTexture2DPtr(new D3DTexture2D(this, Texture2DDescription(image->GetWidth(), image->GetHeight(), format, true)));
+
+		Texture2DPtr texture = std::dynamic_pointer_cast<ITexture2D>(textureD3D);
+		texture->VCopyFromSystemMemory(image->GetData(), D3DTypeConverter::TextureToImageFormat(format), ImageDatatype::UnsignedByte);
+
+		return texture;
 	}
 
 	TextureSamplerPtr D3DRenderDevice::VCreateTexture2DSampler(TextureMinificationFilter minificationFilter, TextureMagnificationFilter magnificationFilter, TextureWrap wrapS, TextureWrap wrapT, float maximumAnistropy)
 	{
-		return TextureSamplerPtr(nullptr);
+		return D3DTextureSamplerPtr(new D3DTextureSampler(minificationFilter, magnificationFilter, wrapS, wrapT, maximumAnistropy));
 	}
 
 	ComPtr<ID3D12GraphicsCommandList2> D3DRenderDevice::GetCopyCommandList()
+	{
+		return m_copyCommandLists->GetCommandList();
+	}
+
+	ComPtr<ID3D12GraphicsCommandList2> D3DRenderDevice::GetDirectCommandList()
+	{
+		return m_directCommandLists->GetCommandList();
+	}
+
+	ComPtr<ID3D12GraphicsCommandList2> D3DRenderDevice::GetComputeCommandList()
+	{
+		return m_computeCommandLists->GetCommandList();
+	}
+
+	uint64_t D3DRenderDevice::ExecuteCopyCommandList(ComPtr<ID3D12GraphicsCommandList2> commandList)
+	{
+		return m_copyCommandLists->ExecuteCommandList(commandList);
+	}
+
+	uint64_t D3DRenderDevice::ExecuteDirectCommandList(ComPtr<ID3D12GraphicsCommandList2> commandList)
+	{
+		return m_directCommandLists->ExecuteCommandList(commandList);
+	}
+
+	uint64_t D3DRenderDevice::ExecuteComputeCommandList(ComPtr<ID3D12GraphicsCommandList2> commandList)
+	{
+		return m_computeCommandLists->ExecuteCommandList(commandList);
+	}
+
+	void D3DRenderDevice::WaitForCopyFenceValue(uint64_t fanceValue)
+	{
+		return m_copyCommandLists->WaitForFenceValue(fanceValue);
+	}
+
+	void D3DRenderDevice::WaitForDirectFenceValue(uint64_t fanceValue)
+	{
+		return m_directCommandLists->WaitForFenceValue(fanceValue);
+	}
+
+	void D3DRenderDevice::WaitForComputeFenceValue(uint64_t fanceValue)
+	{
+		return m_computeCommandLists->WaitForFenceValue(fanceValue);
+	}
+
+	// ====================================================================
+	// CommandQueueCollection
+	// ====================================================================
+
+	bool CommandQueueCollection::Initialize()
+	{
+		m_commandQueue = D3DRenderDevice::CreateCommandQueue(m_d3d12device, m_commandListType);
+		if (m_commandQueue == nullptr)
+			return false;
+
+		m_fence = D3DRenderDevice::CreateFence(m_d3d12device);
+		if (m_fence == nullptr)
+			return false;
+
+		// Create an event handle to use for frame synchronization.
+		m_fenceEvent = D3DRenderDevice::CreateEventHandle();
+		if (m_fenceEvent == nullptr)
+			return false;
+	}
+
+	ComPtr<ID3D12GraphicsCommandList2> CommandQueueCollection::GetCommandList()
 	{
 		HRESULT hresult;
 		ID3D12CommandAllocator* allocator;
 		ComPtr<ID3D12GraphicsCommandList2> commandList;
 
-		if (!m_availableCopyCommandAllocatorsQueue.empty() && IsFenceComplete(m_copyFence, m_availableCopyCommandAllocatorsQueue.front().first))
+		if (!m_availableCommandAllocatorsQueue.empty() && D3DRenderDevice::IsFenceComplete(m_fence, m_availableCommandAllocatorsQueue.front().first))
 		{
-			allocator = m_availableCopyCommandAllocatorsQueue.front().second;
-			m_availableCopyCommandAllocatorsQueue.pop();
+			allocator = m_availableCommandAllocatorsQueue.front().second;
+			m_availableCommandAllocatorsQueue.pop();
 
 			hresult = allocator->Reset();
 			if (FAILED(hresult))
@@ -417,15 +504,15 @@ namespace bow {
 		}
 		else
 		{
-			ComPtr<ID3D12CommandAllocator> newAllocator = CreateCommandAllocator(m_d3d12device, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_COPY);
+			ComPtr<ID3D12CommandAllocator> newAllocator = D3DRenderDevice::CreateCommandAllocator(m_d3d12device, m_commandListType);
 			m_allAllocators.push_back(newAllocator);
 			allocator = newAllocator.Get();
 		}
 
-		if (!m_availableCopyCommandListsQueue.empty())
+		if (!m_availableCommandListsQueue.empty())
 		{
-			commandList = m_availableCopyCommandListsQueue.front();
-			m_availableCopyCommandListsQueue.pop();
+			commandList = m_availableCommandListsQueue.front();
+			m_availableCommandListsQueue.pop();
 
 			hresult = commandList->Reset(allocator, nullptr);
 			if (FAILED(hresult))
@@ -436,7 +523,7 @@ namespace bow {
 		}
 		else
 		{
-			commandList = CreateCommandList(m_d3d12device, allocator, D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_COPY);
+			commandList = D3DRenderDevice::CreateCommandList(m_d3d12device, allocator, m_commandListType);
 		}
 
 		// Associate the command allocator with the command list so that it can be
@@ -451,7 +538,7 @@ namespace bow {
 		return commandList;
 	}
 
-	uint64_t D3DRenderDevice::ExecuteCopyCommandList(ComPtr<ID3D12GraphicsCommandList2> commandList)
+	uint64_t CommandQueueCollection::ExecuteCommandList(ComPtr<ID3D12GraphicsCommandList2> commandList)
 	{
 		HRESULT hresult;
 		hresult = commandList->Close();
@@ -474,18 +561,18 @@ namespace bow {
 			commandList.Get()
 		};
 
-		m_copyCommandQueue->ExecuteCommandLists(1, ppCommandLists);
-		uint64_t fenceValue = D3DRenderDevice::Signal(m_copyCommandQueue, m_copyFence, m_copyFenceValue);
+		m_commandQueue->ExecuteCommandLists(1, ppCommandLists);
+		uint64_t fenceValue = D3DRenderDevice::Signal(m_commandQueue, m_fence, m_fenceValue);
 
-		m_availableCopyCommandAllocatorsQueue.emplace(std::pair<uint64_t, ID3D12CommandAllocator*>(fenceValue, commandAllocator));
-		m_availableCopyCommandListsQueue.push(commandList);
+		m_availableCommandAllocatorsQueue.emplace(std::pair<uint64_t, ID3D12CommandAllocator*>(fenceValue, commandAllocator));
+		m_availableCommandListsQueue.push(commandList);
 
 		return fenceValue;
 	}
 
-	void D3DRenderDevice::WaitForCopyFenceValue(uint64_t fanceValue)
+	void CommandQueueCollection::WaitForFenceValue(uint64_t fanceValue)
 	{
-		return WaitForFenceValue(m_copyFence, fanceValue, m_copyFenceEvent);
+		return D3DRenderDevice::WaitForFenceValue(m_fence, fanceValue, m_fenceEvent);
 	}
 
 }

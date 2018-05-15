@@ -2,6 +2,7 @@
 #include "BowCore.h"
 #include "BowResources.h"
 #include "BowLogger.h"
+#include "BowOGL3xTypeConverter.h"
 
 #include "BowOGL3xGraphicsWindow.h"
 #include "BowOGL3xShaderProgram.h"
@@ -11,7 +12,6 @@
 
 #include "IBowIndicesBase.h"
 #include "BowOGL3xIndexBuffer.h"
-
 #include "BowOGL3xVertexBuffer.h"
 #include "BowOGL3xWritePixelBuffer.h"
 
@@ -20,8 +20,6 @@
 
 #include "BowOGL3xTexture2D.h"
 #include "BowOGL3xTextureSampler.h"
-
-#include "BowOGL3xTypeConverter.h"
 
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>

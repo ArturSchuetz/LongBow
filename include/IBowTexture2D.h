@@ -1,6 +1,7 @@
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"
+#include "BowLogger.h"
 
 namespace bow {
 
@@ -312,5 +313,250 @@ namespace bow {
 
 		virtual Texture2DDescription VGetDescription() = 0;
 	};
+
+
+	inline int NumberOfChannels(ImageFormat format)
+	{
+		switch (format)
+		{
+		case ImageFormat::StencilIndex:
+			return 1;
+		case ImageFormat::DepthComponent:
+			return 1;
+		case ImageFormat::Red:
+			return 1;
+		case ImageFormat::Green:
+			return 1;
+		case ImageFormat::Blue:
+			return 1;
+		case ImageFormat::RedGreenBlue:
+			return 3;
+		case ImageFormat::RedGreenBlueAlpha:
+			return 4;
+		case ImageFormat::BlueGreenRed:
+			return 3;
+		case ImageFormat::BlueGreenRedAlpha:
+			return 4;
+		case ImageFormat::RedGreen:
+			return 2;
+		case ImageFormat::RedGreenInteger:
+			return 2;
+		case ImageFormat::DepthStencil:
+			return 2;
+		case ImageFormat::RedInteger:
+			return 1;
+		case ImageFormat::GreenInteger:
+			return 1;
+		case ImageFormat::BlueInteger:
+			return 1;
+		case ImageFormat::RedGreenBlueInteger:
+			return 3;
+		case ImageFormat::RedGreenBlueAlphaInteger:
+			return 4;
+		case ImageFormat::BlueGreenRedInteger:
+			return 3;
+		case ImageFormat::BlueGreenRedAlphaInteger:
+			return 4;
+		}
+
+		LOG_FATAL("ImageFormat does not exist.");
+		return -1;
+	}
+
+
+	inline unsigned int SizeInBytes(TextureFormat dataType)
+	{
+		switch (dataType)
+		{
+		case TextureFormat::RedGreenBlue8:
+			return (8 * 3) / 8;
+		case TextureFormat::RedGreenBlue16:
+			return (16 * 3) / 8;
+		case TextureFormat::RedGreenBlueAlpha8:
+			return (8 * 4) / 8;
+		case TextureFormat::RedGreenBlue10A2:
+			return ((10 * 3) + 2) / 8;
+		case TextureFormat::RedGreenBlueAlpha16:
+			return (16 * 4) / 8;
+		case TextureFormat::Depth16:
+			return (16) / 8;
+		case TextureFormat::Depth24:
+			return (24) / 8;
+		case TextureFormat::Red8:
+			return (8) / 8;
+		case TextureFormat::Red16:
+			return (16) / 8;
+		case TextureFormat::RedGreen8:
+			return (8 * 2) / 8;
+		case TextureFormat::RedGreen16:
+			return (16 * 2) / 8;
+		case TextureFormat::Red16f:
+			return (16) / 8;
+		case TextureFormat::Red32f:
+			return (32) / 8;
+		case TextureFormat::RedGreen16f:
+			return (16 * 2) / 8;
+		case TextureFormat::RedGreen32f:
+			return (32 * 2) / 8;
+		case TextureFormat::Red8i:
+			return (8 * 1) / 8;
+		case TextureFormat::Red8ui:
+			return (8 * 1) / 8;
+		case TextureFormat::Red16i:
+			return (16 * 1) / 8;
+		case TextureFormat::Red16ui:
+			return (16 * 1) / 8;
+		case TextureFormat::Red32i:
+			return (32 * 1) / 8;
+		case TextureFormat::Red32ui:
+			return (32 * 1) / 8;
+		case TextureFormat::RedGreen8i:
+			return (8 * 2) / 8;
+		case TextureFormat::RedGreen8ui:
+			return (8 * 2) / 8;
+		case TextureFormat::RedGreen16i:
+			return (16 * 2) / 8;
+		case TextureFormat::RedGreen16ui:
+			return (16 * 2) / 8;
+		case TextureFormat::RedGreen32i:
+			return (32 * 2) / 8;
+		case TextureFormat::RedGreen32ui:
+			return (32 * 2) / 8;
+		case TextureFormat::RedGreenBlueAlpha32f:
+			return (32 * 4) / 8;
+		case TextureFormat::RedGreenBlue32f:
+			return (32 * 3) / 8;
+		case TextureFormat::RedGreenBlueAlpha16f:
+			return (16 * 4) / 8;
+		case TextureFormat::RedGreenBlue16f:
+			return (16 * 3) / 8;
+		case TextureFormat::Red11fGreen11fBlue10f:
+			return (11 + 11 + 10) / 8;
+		case TextureFormat::RedGreenBlue9E5:
+			return ((9 * 3) + 5) / 8;
+		case TextureFormat::SRedGreenBlue8:
+			return (8 * 3) / 8;
+		case TextureFormat::SRedGreenBlue8Alpha8:
+			return (8 * 4) / 8;
+		case TextureFormat::Depth32f:
+			return (32 * 1) / 8;
+		case TextureFormat::Depth32fStencil8:
+			return (32 + 8) / 8;
+		case TextureFormat::RedGreenBlueAlpha32ui:
+			return (32 * 4) / 8;
+		case TextureFormat::RedGreenBlue32ui:
+			return (32 * 3) / 8;
+		case TextureFormat::RedGreenBlueAlpha16ui:
+			return (16 * 4) / 8;
+		case TextureFormat::RedGreenBlue16ui:
+			return (16 * 3) / 8;
+		case TextureFormat::RedGreenBlueAlpha8ui:
+			return (8 * 4) / 8;
+		case TextureFormat::RedGreenBlue8ui:
+			return (8 * 3) / 8;
+		case TextureFormat::RedGreenBlueAlpha32i:
+			return (32 * 4) / 8;
+		case TextureFormat::RedGreenBlue32i:
+			return (32 * 3) / 8;
+		case TextureFormat::RedGreenBlueAlpha16i:
+			return (16 * 4) / 8;
+		case TextureFormat::RedGreenBlue16i:
+			return (16 * 3) / 8;
+		case TextureFormat::RedGreenBlueAlpha8i:
+			return (8 * 4) / 8;
+		case TextureFormat::RedGreenBlue8i:
+			return (8 * 3) / 8;
+		}
+
+		LOG_FATAL("TextureFormat does not exist.");
+		return -1;
+	}
+
+	inline int SizeInBytes(ImageDatatype dataType)
+	{
+		switch (dataType)
+		{
+		case ImageDatatype::Byte:
+			return 1;
+		case ImageDatatype::UnsignedByte:
+			return 1;
+		case ImageDatatype::Short:
+			return 2;
+		case ImageDatatype::UnsignedShort:
+			return 2;
+		case ImageDatatype::Int:
+			return 4;
+		case ImageDatatype::UnsignedInt:
+			return 4;
+		case ImageDatatype::Float:
+			return 4;
+		case ImageDatatype::HalfFloat:
+			return 2;
+		case ImageDatatype::UnsignedByte332:
+			return 1;
+		case ImageDatatype::UnsignedShort4444:
+			return 2;
+		case ImageDatatype::UnsignedShort5551:
+			return 2;
+		case ImageDatatype::UnsignedInt8888:
+			return 4;
+		case ImageDatatype::UnsignedInt1010102:
+			return 4;
+		case ImageDatatype::UnsignedByte233Reversed:
+			return 1;
+		case ImageDatatype::UnsignedShort565:
+			return 2;
+		case ImageDatatype::UnsignedShort565Reversed:
+			return 2;
+		case ImageDatatype::UnsignedShort4444Reversed:
+			return 2;
+		case ImageDatatype::UnsignedShort1555Reversed:
+			return 2;
+		case ImageDatatype::UnsignedInt8888Reversed:
+			return 4;
+		case ImageDatatype::UnsignedInt2101010Reversed:
+			return 4;
+		case ImageDatatype::UnsignedInt248:
+			return 4;
+		case ImageDatatype::UnsignedInt10F11F11FReversed:
+			return 4;
+		case ImageDatatype::UnsignedInt5999Reversed:
+			return 4;
+		case ImageDatatype::Float32UnsignedInt248Reversed:
+			return 4;
+		}
+
+		LOG_FATAL("ImageDatatype does not exist.");
+		return -1;
+	}
+
+
+	inline void VerifyRowAlignment(int rowAlignment)
+	{
+		if ((rowAlignment != 1) &&
+			(rowAlignment != 2) &&
+			(rowAlignment != 4) &&
+			(rowAlignment != 8))
+		{
+			LOG_FATAL("rowAlignment does not exist.");
+		}
+	}
+
+
+	inline bool IsPowerOfTwo(unsigned int i)
+	{
+		return (i != 0) && ((i & (i - 1)) == 0);
+	}
+
+
+	inline int RequiredSizeInBytes(int width, int height, ImageFormat format, ImageDatatype dataType, int rowAlignment)
+	{
+		int rowSize = width * NumberOfChannels(format) * SizeInBytes(dataType);
+
+		int remainder = (rowSize % rowAlignment);
+		rowSize += (rowAlignment - remainder) % rowAlignment;
+
+		return rowSize * height;
+	}
 
 }

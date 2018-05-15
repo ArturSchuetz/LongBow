@@ -29,7 +29,7 @@ namespace bow {
 		RenderDeviceManager(){}
 
 	private:
-		RenderDeviceManager(const RenderDeviceManager&){}; //!< You shall not copy
+		RenderDeviceManager(const RenderDeviceManager&){}; //!< You shall not direct
 		RenderDeviceManager& operator=(const RenderDeviceManager&) { return *this; }
 	};
 }

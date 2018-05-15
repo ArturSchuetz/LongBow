@@ -13,11 +13,46 @@
 
 namespace bow {
 
+	class CommandQueueCollection
+	{
+	public:
+		CommandQueueCollection(ComPtr<ID3D12Device2> d3d12device, D3D12_COMMAND_LIST_TYPE type) :
+			m_commandQueue(nullptr),
+			m_fence(nullptr),
+			m_fenceValue(0),
+			m_d3d12device(d3d12device.Get()),
+			m_commandListType(type)
+		{ }
+
+		bool Initialize();
+
+		ComPtr<ID3D12GraphicsCommandList2>	GetCommandList();
+		uint64_t							ExecuteCommandList(ComPtr<ID3D12GraphicsCommandList2> commandList);
+		void								WaitForFenceValue(uint64_t fanceValue);
+
+	private:
+		ComPtr<ID3D12CommandQueue>	m_commandQueue;
+		ComPtr<ID3D12Fence>			m_fence;
+		UINT64						m_fenceValue;
+		HANDLE						m_fenceEvent;
+
+		ID3D12Device2* m_d3d12device;
+
+		// FanceValue-AllocatorIndex Pair
+		std::queue<std::pair<uint64_t, ID3D12CommandAllocator*>>	m_availableCommandAllocatorsQueue;
+		std::queue<ComPtr<ID3D12GraphicsCommandList2>>				m_availableCommandListsQueue;
+
+		// Please do not access this list. This is just to keep the reference counter alive
+		std::vector<ComPtr<ID3D12CommandAllocator>>					m_allAllocators;
+		const D3D12_COMMAND_LIST_TYPE								m_commandListType;
+	};
+
 	class D3DRenderDevice : public IRenderDevice
 	{
 		friend class D3DRenderContext;
 		friend class D3DIndexBuffer;
 		friend class D3DVertexBuffer;
+		friend class D3DTexture2D;
 	public:
 		D3DRenderDevice(void);
 		~D3DRenderDevice(void);
@@ -58,10 +93,17 @@ namespace bow {
 
 		// Get an available command list from the command queue.
 		ComPtr<ID3D12GraphicsCommandList2> GetCopyCommandList();
+		ComPtr<ID3D12GraphicsCommandList2> GetDirectCommandList();
+		ComPtr<ID3D12GraphicsCommandList2> GetComputeCommandList();
+
 		// Returns the fence value to wait for for this command list.
 		uint64_t ExecuteCopyCommandList(ComPtr<ID3D12GraphicsCommandList2> commandList);
+		uint64_t ExecuteDirectCommandList(ComPtr<ID3D12GraphicsCommandList2> commandList);
+		uint64_t ExecuteComputeCommandList(ComPtr<ID3D12GraphicsCommandList2> commandList);
 
 		void WaitForCopyFenceValue(uint64_t fanceValue);
+		void WaitForDirectFenceValue(uint64_t fanceValue);
+		void WaitForComputeFenceValue(uint64_t fanceValue);
 
 		// ==========================
 		// Static Helper Functions
@@ -88,21 +130,11 @@ namespace bow {
 		D3DRenderDevice(D3DRenderDevice&) {}
 		D3DRenderDevice& operator=(const D3DRenderDevice&) { return *this; }
 
-		bool PrepareCommandQueue();
-
 		ComPtr<ID3D12Device2>		m_d3d12device;
 
-		ComPtr<ID3D12CommandQueue>	m_copyCommandQueue;
-		ComPtr<ID3D12Fence>			m_copyFence;
-		UINT64						m_copyFenceValue;
-		HANDLE						m_copyFenceEvent;
-
-		// FanceValue-AllocatorIndex Pair
-		std::queue<std::pair<uint64_t, ID3D12CommandAllocator*>>	m_availableCopyCommandAllocatorsQueue;
-		std::queue<ComPtr<ID3D12GraphicsCommandList2>>				m_availableCopyCommandListsQueue;
-
-		// Please do not access this list. This is just to keep the reference counter alive
-		std::vector<ComPtr<ID3D12CommandAllocator>> m_allAllocators;
+		CommandQueueCollection*	m_copyCommandLists;
+		CommandQueueCollection*	m_directCommandLists;
+		CommandQueueCollection*	m_computeCommandLists;
 
 		HINSTANCE m_hInstance;
 		bool m_useWarpDevice;

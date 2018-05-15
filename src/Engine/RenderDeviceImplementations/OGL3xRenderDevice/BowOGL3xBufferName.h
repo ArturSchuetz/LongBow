@@ -12,7 +12,7 @@ namespace bow {
 		unsigned int GetValue();
 
 	private:
-		// You shall not copy"
+		// You shall not direct"
 		OGLBufferName(const OGLBufferName &obj){}
 		unsigned int m_value;
 	};

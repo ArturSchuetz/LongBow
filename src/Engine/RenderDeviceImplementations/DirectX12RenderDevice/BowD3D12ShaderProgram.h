@@ -8,6 +8,7 @@
 #include "IBowCleanableObserver.h"
 
 #include "BowD3D12FragmentOutputs.h"
+#include "BowD3D12ConstantBuffer.h"
 
 #include <d3d12.h>
 #include <dxgi1_6.h>
@@ -61,6 +62,7 @@ namespace bow {
 		// ===========================================
 
 		void NotifyDirty(ICleanable* value);
+		void BindBuffers(ComPtr<ID3D12GraphicsCommandList> commandList);
 
 		// ===========================================
 
@@ -71,6 +73,7 @@ namespace bow {
 		D3DShaderProgram(D3DShaderProgram&) {}
 		D3DShaderProgram& operator=(const D3DShaderProgram&) { return *this; }
 
+		void FindRootSignature();
 		ShaderVertexAttributeMap FindVertexAttributes();
 		D3DFragmentOutputs FindFragmentOutputs();
 
@@ -80,11 +83,16 @@ namespace bow {
 		ComPtr<ID3D12RootSignature> m_rootSignature;
 		ComPtr<ID3D12PipelineState> m_pipelineState;
 
+		std::vector<std::shared_ptr<D3DConstantBuffer>>				m_constantBuffers;
+		std::map<std::string, std::pair<char*, UINT>>				m_variables;
+		std::map<std::string, std::shared_ptr<D3DConstantBuffer>>	m_buffersByVariables;
+
 		ShaderVertexAttributeMap m_shaderVertexAttributes;
 		D3DFragmentOutputs m_fragmentOutputs;
 
 		ID3D12Device2* m_device;
-		bool m_ready; 
+		bool m_ready;
+
 	};
 
 }

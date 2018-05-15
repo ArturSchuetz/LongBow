@@ -1,17 +1,23 @@
 #include "BowD3D12RenderContext.h"
 #include "BowLogger.h"
+#include "BowD3D12TypeConverter.h"
 
 #include "BowVertexBufferAttribute.h"
 #include "BowMeshAttribute.h"
+
 #include "BowClearState.h"
 
-#include "BowD3D12VertexBufferAttributes.h"
 #include "BowD3D12ShaderProgram.h"
+#include "BowD3D12VertexBufferAttributes.h"
+
+#include "BowD3D12Texture2D.h"
+#include "BowD3D12TextureUnits.h"
+#include "BowD3D12TextureSampler.h"
+
 #include "BowD3D12RenderDevice.h"
 #include "BowD3D12VertexArray.h"
 #include "BowD3D12VertexBuffer.h"
 #include "BowD3D12IndexBuffer.h"
-#include "BowD3D12TypeConverter.h"
 
 // DirectX 12 specific headers.
 #include <d3d12.h>
@@ -31,19 +37,11 @@
 #undef max
 #endif
 
-struct Vertex
-{
-	float position[3];
-	float color[4];
-};
-
 namespace bow {
 
 	extern std::string widestring2string(const std::wstring& wstr);
 	extern std::wstring string2widestring(const std::string& s);
 	extern std::string toErrorString(HRESULT hresult);
-
-	D3DRenderContext* D3DRenderContext::m_currentContext;
 
 	D3DRenderContext::D3DRenderContext(HWND hWnd, D3DRenderDevice* parent) :
 		m_swapChain(nullptr),
@@ -67,6 +65,7 @@ namespace bow {
 	{
 
 	}
+
 
 	bool D3DRenderContext::Initialize(unsigned int width, unsigned int height)
 	{
@@ -130,14 +129,18 @@ namespace bow {
 		m_viewport = CD3DX12_VIEWPORT(0.0f, 0.0f, static_cast<float>(width), static_cast<float>(height));
 		m_scissorRect = CD3DX12_RECT(0, 0, LONG_MAX, LONG_MAX);
 
+		m_textureUnits = D3DTextureUnitsPtr(new D3DTextureUnits(m_parentDevice));
+
 		m_initialized = true;
 		return true;
 	}
+
 
 	D3DRenderContext::~D3DRenderContext(void)
 	{
 		VRelease();
 	}
+
 
 	void D3DRenderContext::VRelease(void)
 	{
@@ -145,34 +148,33 @@ namespace bow {
 		::CloseHandle(m_fenceEvent);
 	}
 
+
 	VertexArrayPtr D3DRenderContext::VCreateVertexArray(MeshAttribute mesh, ShaderVertexAttributeMap shaderAttributes, BufferHint usageHint)
 	{
 		return VertexArrayPtr(nullptr);
 	}
+
 
 	VertexArrayPtr D3DRenderContext::VCreateVertexArray(MeshBufferPtr meshBuffers)
 	{
 		return VertexArrayPtr(nullptr);
 	}
 
+
 	VertexArrayPtr D3DRenderContext::VCreateVertexArray()
 	{
 		return VertexArrayPtr(new D3DVertexArray());
 	}
+
 
 	FramebufferPtr D3DRenderContext::VCreateFramebuffer()
 	{
 		return FramebufferPtr(nullptr);
 	}
 
+
 	void D3DRenderContext::VClear(ClearState clearState)
 	{
-		if (m_currentContext != this)
-		{
-			//glfwMakeContextCurrent(m_window);
-			m_currentContext = this;
-		}
-
 		HRESULT hresult;
 
 		// Before any commands can be recorded into the command list, the command allocatorand command list needs to be reset to its inital state
@@ -217,41 +219,30 @@ namespace bow {
 		Flush();
 	}
 
+
 	void D3DRenderContext::VDraw(PrimitiveType primitiveType, VertexArrayPtr vertexArray, ShaderProgramPtr shaderProgram, RenderState renderState)
 	{
-		if (m_currentContext != this)
-		{
-			//glfwMakeContextCurrent(m_window);
-			m_currentContext = this;
-		}
-
 		Draw(primitiveType, 0, std::dynamic_pointer_cast<D3DVertexArray>(vertexArray)->GetMaximumArrayIndex() + 1, vertexArray, shaderProgram, renderState);
 	}
 
+
 	void D3DRenderContext::VDraw(PrimitiveType primitiveType, int offset, int count, VertexArrayPtr vertexArray, ShaderProgramPtr shaderProgram, RenderState renderState)
 	{
-		if (m_currentContext != this)
-		{
-			//glfwMakeContextCurrent(m_window);
-			m_currentContext = this;
-		}
-
 		Draw(primitiveType, offset, count, vertexArray, shaderProgram, renderState);
 	}
+
 
 	void D3DRenderContext::VDrawLine(const bow::Vector3<float> &start, const bow::Vector3<float> &end)
 	{
 
 	}
 
+
 	void D3DRenderContext::Draw(PrimitiveType primitiveType, int offset, int count, VertexArrayPtr vertexArray, ShaderProgramPtr shaderProgram, RenderState renderState)
 	{
 		HRESULT hresult;
 
 		D3DVertexArrayPtr d3dvertexarray = std::dynamic_pointer_cast<D3DVertexArray>(vertexArray);
-
-		CD3DX12_CPU_DESCRIPTOR_HANDLE renderTargetView(m_renderTargetViewDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), m_currentBackBufferIndex, m_renderTargetViewDescriptorSize);
-		CD3DX12_CPU_DESCRIPTOR_HANDLE depthStencilView(m_depthStencilViewDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), m_currentBackBufferIndex, m_depthStencilViewDescriptorSize);
 
 		D3DShaderProgramPtr d3d12shaderProgram = std::dynamic_pointer_cast<D3DShaderProgram>(shaderProgram);
 		ComPtr<ID3D12PipelineState> pipelineState = d3d12shaderProgram->GetPipelineState(d3dvertexarray);
@@ -292,16 +283,20 @@ namespace bow {
 			LOG_ERROR(std::string(std::string("m_commandList->Reset: ") + errorMsg).c_str());
 		}
 
+		// Viewport needs to be reattached whenever a command list is reset
 		m_commandList->SetGraphicsRootSignature(rootsignature.Get());
-
-
-		m_commandList->IASetPrimitiveTopology(D3DTypeConverter::To(primitiveType));
-		m_commandList->IASetVertexBuffers(0, bufferViews.size(), &bufferViews[0]);
+		d3d12shaderProgram->BindBuffers(m_commandList);
 
 		m_commandList->RSSetViewports(1, &m_viewport);
 		m_commandList->RSSetScissorRects(1, &m_scissorRect);
 
+		// Indicate that the back buffer is to be used as a render target
+		CD3DX12_CPU_DESCRIPTOR_HANDLE renderTargetView(m_renderTargetViewDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), m_currentBackBufferIndex, m_renderTargetViewDescriptorSize);
+		CD3DX12_CPU_DESCRIPTOR_HANDLE depthStencilView(m_depthStencilViewDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), m_currentBackBufferIndex, m_depthStencilViewDescriptorSize);
 		m_commandList->OMSetRenderTargets(1, &renderTargetView, FALSE, &depthStencilView);
+
+		m_commandList->IASetPrimitiveTopology(D3DTypeConverter::To(primitiveType));
+		m_commandList->IASetVertexBuffers(0, bufferViews.size(), &bufferViews[0]);
 
 		if (d3dindexBuffer != nullptr)
 		{
@@ -335,20 +330,26 @@ namespace bow {
 		Flush();
 	}
 
+
 	void D3DRenderContext::VSetTexture(int location, Texture2DPtr texture)
 	{
+		LOG_ASSERT(location < m_textureUnits->GetMaxTextureUnits(), "TextureUnit does not Exist");
 
+		m_textureUnits->SetTexture(location, std::dynamic_pointer_cast<D3DTexture2D>(texture));
 	}
+
 
 	void D3DRenderContext::VSetTextureSampler(int location, TextureSamplerPtr sampler)
 	{
-
+		m_textureUnits->SetSampler(location, std::dynamic_pointer_cast<D3DTextureSampler>(sampler));
 	}
+
 
 	void D3DRenderContext::VSetFramebuffer(FramebufferPtr framebufer)
 	{
 
 	}
+
 
 	void D3DRenderContext::VSetViewport(Viewport viewport)
 	{
@@ -356,10 +357,12 @@ namespace bow {
 		m_scissorRect = CD3DX12_RECT(static_cast<LONG>(viewport.x), static_cast<LONG>(viewport.y), static_cast<LONG>(viewport.width), static_cast<LONG>(viewport.height));
 	}
 
+
 	Viewport D3DRenderContext::VGetViewport(void)
 	{
 		return Viewport(static_cast<int>(m_viewport.TopLeftX), static_cast<int>(m_viewport.TopLeftY), static_cast<int>(m_viewport.Width), static_cast<int>(m_viewport.Height));
 	}
+
 
 	void D3DRenderContext::VSwapBuffers(bool vsync)
 	{
@@ -463,6 +466,7 @@ namespace bow {
 		UpdateBackBuffers();
 	}
 
+
 	void D3DRenderContext::UpdateBackBuffers()
 	{
 		// Create frame resources.
@@ -522,6 +526,7 @@ namespace bow {
 			dsvHandle.Offset(1, m_depthStencilViewDescriptorSize);
 		}
 	}
+
 
 	void D3DRenderContext::Flush()
 	{

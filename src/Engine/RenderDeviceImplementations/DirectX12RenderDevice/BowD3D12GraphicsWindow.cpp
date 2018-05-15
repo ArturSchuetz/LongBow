@@ -12,7 +12,6 @@
 // D3D12 extension library.
 #include "d3dx12.h"
 
-
 namespace bow {
 
 	extern std::string widestring2string(const std::wstring& wstr);

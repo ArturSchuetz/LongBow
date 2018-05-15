@@ -58,7 +58,7 @@ namespace bow {
 		void	VSwapBuffers(bool vsync);
 
 	private:
-		//you shall not copy
+		//you shall not direct
 		OGLRenderContext(OGLRenderContext&){}
 		OGLRenderContext& operator=(const OGLRenderContext&) { return *this; }
 

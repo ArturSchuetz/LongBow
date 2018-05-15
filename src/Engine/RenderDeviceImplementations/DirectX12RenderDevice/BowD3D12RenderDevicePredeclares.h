@@ -30,6 +30,27 @@ namespace bow {
 
 	typedef std::unordered_map<unsigned int, VertexBufferAttributePtr> D3DVertexBufferAttributeMap;
 
+	class D3DTextureSampler;
+	typedef std::shared_ptr<D3DTextureSampler> D3DTextureSamplerPtr;
+
+	class D3DTexture2D;
+	typedef std::shared_ptr<D3DTexture2D> D3DTexture2DPtr;
+
+	class D3DTextureUnit;
+	typedef std::shared_ptr<D3DTextureUnit> D3DTextureUnitPtr;
+
+	class D3DTextureUnits;
+	typedef std::shared_ptr<D3DTextureUnits> D3DTextureUnitsPtr;
+
+	class D3DFramebuffer;
+	typedef std::shared_ptr<D3DFramebuffer> D3DFramebufferPtr;
+
+	class D3DReadPixelBuffer;
+	typedef std::shared_ptr<D3DReadPixelBuffer> D3DReadPixelBufferPtr;
+
+	class D3DWritePixelBuffer;
+	typedef std::shared_ptr<D3DWritePixelBuffer> D3DWritePixelBufferPtr;
+
 }
 
 #define WIN32_LEAN_AND_MEAN

@@ -156,7 +156,7 @@ namespace bow
 		EventLogger();
 
 	private:
-		EventLogger(const EventLogger&){}; // You shall not copy
+		EventLogger(const EventLogger&){}; // You shall not direct
 		EventLogger& operator=(const EventLogger&) { return *this; }
 
 		/**
