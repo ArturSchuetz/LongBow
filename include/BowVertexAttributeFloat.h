@@ -1,3 +1,8 @@
+/**
+ * @file BowVertexAttributeFloat.h
+ * @brief Declarations for BowVertexAttributeFloat.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"

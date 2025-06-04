@@ -1,3 +1,8 @@
+/**
+ * @file BowTexture.h
+ * @brief Declarations for BowTexture.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowResourcesPredeclares.h"

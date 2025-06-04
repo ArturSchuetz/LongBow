@@ -1,3 +1,8 @@
+/**
+ * @file BowDefaultSceneManager.h
+ * @brief Declarations for BowDefaultSceneManager.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 

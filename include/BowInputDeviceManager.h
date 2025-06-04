@@ -1,3 +1,8 @@
+/**
+ * @file BowInputDeviceManager.h
+ * @brief Declarations for BowInputDeviceManager.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowInputPredeclares.h"

@@ -1,3 +1,8 @@
+/**
+ * @file BowGameFoundationPredeclares.h
+ * @brief Declarations for BowGameFoundationPredeclares.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 

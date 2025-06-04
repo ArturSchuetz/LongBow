@@ -1,3 +1,8 @@
+/**
+ * @file BowLogger.h
+ * @brief Declarations for BowLogger.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"
@@ -54,8 +59,8 @@ namespace bow
 	* \~german
 	* \brief	Zeichnet die Ereignisse innerhalb der Engine auf.
 	*
-	* Der EvnetLogger ermöglicht verschiedene Ereignisse aufzuzeichnen und auf mehreren Ausgabeflächen gleichzeitig auszugeben.
-	* Jeder Logeintrag wird sofort in eine Datei gestreamt und alle Logs sind auch nach einem Absturz verfügbar.
+	* Der EvnetLogger ermÃ¶glicht verschiedene Ereignisse aufzuzeichnen und auf mehreren AusgabeflÃ¤chen gleichzeitig auszugeben.
+	* Jeder Logeintrag wird sofort in eine Datei gestreamt und alle Logs sind auch nach einem Absturz verfÃ¼gbar.
 	**/
 	class EventLogger
 	{
@@ -67,7 +72,7 @@ namespace bow
 		* \brief	Diese Funktion sollte aufgerufen werden falls die geladene DLL in die selbe Log-Datei schreiben soll.
 		*			Wenn man mit Dynamic Link Libraries arbeitet, dann funktionieren Singletons nicht innerhalb der DLL und
 		*			es werden in jeder DLL eigene instanzen erstellt. Um das zu verhindern muss man die Instanz des Loggers
-		*			aus dem Programm in die DLL einschleusen. Mit dieser Funktion wird die Instanz des Singletons verändert.
+		*			aus dem Programm in die DLL einschleusen. Mit dieser Funktion wird die Instanz des Singletons verÃ¤ndert.
 		*
 		* \param newInstance	Die neu zu setzende Instanz der Singleton
 		**/
@@ -99,7 +104,7 @@ namespace bow
 
 		/**
 		* \~german
-		* \brief	Gibt auskunft darüber ob der Logger bereit ist.
+		* \brief	Gibt auskunft darÃ¼ber ob der Logger bereit ist.
 		*
 		* \return	'true' wenn die Logdatei initialisiert wurde.
 		**/
@@ -107,7 +112,7 @@ namespace bow
 
 		/**
 		* \~german
-		* \brief	Schreibt etwas in die Log Datei und in jeden verfügbaren Output.
+		* \brief	Schreibt etwas in die Log Datei und in jeden verfÃ¼gbaren Output.
 		*
 		* \param text	Der Logtext der in die Die Datei und in die Konsole ausgegeben werden soll.
 		**/
@@ -115,7 +120,7 @@ namespace bow
 
 		/**
 		* \~german
-		* \brief	Schreibt etwas in die Log Datei und in jeden verfügbaren Output.
+		* \brief	Schreibt etwas in die Log Datei und in jeden verfÃ¼gbaren Output.
 		*
 		* \param text	Der Logtext der in die Die Datei und in die Konsole ausgegeben werden soll.
 		**/
@@ -123,7 +128,7 @@ namespace bow
 
 		/**
 		* \~german
-		* \brief	Schreibt etwas in die Log Datei und in jeden verfügbaren Output.
+		* \brief	Schreibt etwas in die Log Datei und in jeden verfÃ¼gbaren Output.
 		*
 		* \param text	Der Logtext der in die Die Datei und in die Konsole ausgegeben werden soll.
 		**/
@@ -131,7 +136,7 @@ namespace bow
 
 		/**
 		* \~german
-		* \brief	Schreibt etwas in die Log Datei und in jeden verfügbaren Output und zeigt zudem noch eine Fehler Messagebox an um den Nutzer über den Fehler zu informieren.
+		* \brief	Schreibt etwas in die Log Datei und in jeden verfÃ¼gbaren Output und zeigt zudem noch eine Fehler Messagebox an um den Nutzer Ã¼ber den Fehler zu informieren.
 		*
 		* \param text	Der Logtext der in die Die Datei und in die Konsole ausgegeben werden soll.
 		**/
@@ -139,14 +144,14 @@ namespace bow
 
 		/**
 		* \~german
-		* \brief	Schreibt etwas in die Log Datei und in jeden verfügbaren Output und zeigt zudem noch eine Fehler Messagebox an um den Nutzer über den Fehler zu informieren. 
-		*			Außerdem wird ein Assert ausgelöst und der Code stoppt an der Stelle.
+		* \brief	Schreibt etwas in die Log Datei und in jeden verfÃ¼gbaren Output und zeigt zudem noch eine Fehler Messagebox an um den Nutzer Ã¼ber den Fehler zu informieren. 
+		*			AuÃŸerdem wird ein Assert ausgelÃ¶st und der Code stoppt an der Stelle.
 		*
-		* \param contidion	Bedingung unter der der Assert ausgelöst wurd: 'true' = Assert wird ausgelöst.
+		* \param contidion	Bedingung unter der der Assert ausgelÃ¶st wurd: 'true' = Assert wird ausgelÃ¶st.
 		*
-		* \param file	Dateiname der Quellcode-Datei indem der Assert ausgelöst wurde
+		* \param file	Dateiname der Quellcode-Datei indem der Assert ausgelÃ¶st wurde
 		*
-		* \param line	Zeile des Quellcodes an dem der Assert ausgelöst wurde
+		* \param line	Zeile des Quellcodes an dem der Assert ausgelÃ¶st wurde
 		*
 		* \param description	Beschreibung des Fehlers
 		**/

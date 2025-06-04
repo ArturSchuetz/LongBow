@@ -1,3 +1,8 @@
+/**
+ * @file IBowShaderProgram.h
+ * @brief Declarations for IBowShaderProgram.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"

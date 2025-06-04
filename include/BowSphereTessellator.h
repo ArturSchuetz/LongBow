@@ -1,3 +1,8 @@
+/**
+ * @file BowSphereTessellator.h
+ * @brief Declarations for BowSphereTessellator.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"

@@ -1,3 +1,8 @@
+/**
+ * @file BowMeshRendererComponent.h
+ * @brief Declarations for BowMeshRendererComponent.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowGameFoundationPredeclares.h"

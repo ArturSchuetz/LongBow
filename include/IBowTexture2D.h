@@ -1,3 +1,8 @@
+/**
+ * @file IBowTexture2D.h
+ * @brief Declarations for IBowTexture2D.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"

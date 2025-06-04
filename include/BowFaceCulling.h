@@ -1,3 +1,8 @@
+/**
+ * @file BowFaceCulling.h
+ * @brief Declarations for BowFaceCulling.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"

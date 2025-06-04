@@ -1,3 +1,8 @@
+/**
+ * @file BowCorePredeclares.h
+ * @brief Declarations for BowCorePredeclares.
+ */
+
 #pragma once
 
 namespace bow {

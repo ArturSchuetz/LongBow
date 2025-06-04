@@ -1,3 +1,8 @@
+/**
+ * @file BowSphere.h
+ * @brief Declarations for BowSphere.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"

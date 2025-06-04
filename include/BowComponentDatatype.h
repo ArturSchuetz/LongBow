@@ -1,3 +1,8 @@
+/**
+ * @file BowComponentDatatype.h
+ * @brief Declarations for BowComponentDatatype.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"

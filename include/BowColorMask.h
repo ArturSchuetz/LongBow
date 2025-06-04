@@ -1,3 +1,8 @@
+/**
+ * @file BowColorMask.h
+ * @brief Declarations for BowColorMask.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"

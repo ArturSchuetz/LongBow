@@ -1,3 +1,8 @@
+/**
+ * @file IBowColorAttachments.h
+ * @brief Declarations for IBowColorAttachments.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"

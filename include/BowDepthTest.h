@@ -1,3 +1,8 @@
+/**
+ * @file BowDepthTest.h
+ * @brief Declarations for BowDepthTest.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"

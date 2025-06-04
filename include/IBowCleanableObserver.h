@@ -1,3 +1,8 @@
+/**
+ * @file IBowCleanableObserver.h
+ * @brief Declarations for IBowCleanableObserver.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"

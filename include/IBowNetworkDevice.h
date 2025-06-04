@@ -1,3 +1,8 @@
+/**
+ * @file IBowNetworkDevice.h
+ * @brief Declarations for IBowNetworkDevice.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowNetworkPredeclares.h"

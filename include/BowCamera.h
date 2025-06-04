@@ -1,3 +1,8 @@
+/**
+ * @file BowCamera.h
+ * @brief Declarations for BowCamera.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"

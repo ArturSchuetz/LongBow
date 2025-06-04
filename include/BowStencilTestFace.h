@@ -1,3 +1,8 @@
+/**
+ * @file BowStencilTestFace.h
+ * @brief Declarations for BowStencilTestFace.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"

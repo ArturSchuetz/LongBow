@@ -1,3 +1,8 @@
+/**
+ * @file BowMatrix3D.h
+ * @brief Declarations for BowMatrix3D.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"

@@ -1,3 +1,8 @@
+/**
+ * @file BowScenePredeclares.h
+ * @brief Declarations for BowScenePredeclares.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowScenePredeclares.h"

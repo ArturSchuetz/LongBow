@@ -1,3 +1,8 @@
+/**
+ * @file BowActorComponent.h
+ * @brief Declarations for BowActorComponent.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowGameFoundationPredeclares.h"

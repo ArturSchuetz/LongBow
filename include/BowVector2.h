@@ -1,3 +1,8 @@
+/**
+ * @file BowVector2.h
+ * @brief Declarations for BowVector2.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"

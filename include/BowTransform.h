@@ -1,3 +1,8 @@
+/**
+ * @file BowTransform.h
+ * @brief Declarations for BowTransform.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"

@@ -1,3 +1,8 @@
+/**
+ * @file IBowSceneNode.h
+ * @brief Declarations for IBowSceneNode.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowScenePredeclares.h"

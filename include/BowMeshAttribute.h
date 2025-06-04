@@ -1,3 +1,8 @@
+/**
+ * @file BowMeshAttribute.h
+ * @brief Declarations for BowMeshAttribute.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"

@@ -1,3 +1,8 @@
+/**
+ * @file BowPlane.h
+ * @brief Declarations for BowPlane.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"

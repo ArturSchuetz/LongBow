@@ -1,3 +1,8 @@
+/**
+ * @file BowIndicesUnsignedInt.h
+ * @brief Declarations for BowIndicesUnsignedInt.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"

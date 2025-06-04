@@ -1,3 +1,8 @@
+/**
+ * @file IBowMouse.h
+ * @brief Declarations for IBowMouse.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowInputPredeclares.h"

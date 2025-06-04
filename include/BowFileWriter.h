@@ -1,3 +1,8 @@
+/**
+ * @file BowFileWriter.h
+ * @brief Declarations for BowFileWriter.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowPlatformPredeclares.h"

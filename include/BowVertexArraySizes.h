@@ -1,3 +1,8 @@
+/**
+ * @file BowVertexArraySizes.h
+ * @brief Declarations for BowVertexArraySizes.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"

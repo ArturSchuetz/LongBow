@@ -1,3 +1,8 @@
+/**
+ * @file BowVertexBufferAttribute.h
+ * @brief Declarations for BowVertexBufferAttribute.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"

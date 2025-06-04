@@ -1,3 +1,8 @@
+/**
+ * @file IBowGraphicsWindow.h
+ * @brief Declarations for IBowGraphicsWindow.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"

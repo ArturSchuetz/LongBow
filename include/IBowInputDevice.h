@@ -1,3 +1,8 @@
+/**
+ * @file IBowInputDevice.h
+ * @brief Declarations for IBowInputDevice.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowInputPredeclares.h"

@@ -1,3 +1,8 @@
+/**
+ * @file BowDepthRange.h
+ * @brief Declarations for BowDepthRange.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"
