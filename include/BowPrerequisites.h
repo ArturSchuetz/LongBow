@@ -1,3 +1,8 @@
+/**
+ * @file BowPrerequisites.h
+ * @brief Declarations for BowPrerequisites.
+ */
+
 #pragma once
 #include <iostream>
 #include <algorithm>

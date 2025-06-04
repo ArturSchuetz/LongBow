@@ -1,3 +1,8 @@
+/**
+ * @file IBowWritePixelBuffer.h
+ * @brief Declarations for IBowWritePixelBuffer.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"

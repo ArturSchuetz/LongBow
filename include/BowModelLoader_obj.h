@@ -1,3 +1,8 @@
+/**
+ * @file BowModelLoader_obj.h
+ * @brief Declarations for BowModelLoader_obj.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowResourcesPredeclares.h"

@@ -1,3 +1,8 @@
+/**
+ * @file BowImageManager.h
+ * @brief Declarations for BowImageManager.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"

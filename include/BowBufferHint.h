@@ -1,3 +1,8 @@
+/**
+ * @file BowBufferHint.h
+ * @brief Declarations for BowBufferHint.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"

@@ -1,3 +1,8 @@
+/**
+ * @file BowPointCloud.h
+ * @brief Declarations for BowPointCloud.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowResourcesPredeclares.h"

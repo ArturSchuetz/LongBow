@@ -1,3 +1,8 @@
+/**
+ * @file IBowIndexBuffer.h
+ * @brief Declarations for IBowIndexBuffer.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"

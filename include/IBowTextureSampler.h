@@ -1,3 +1,8 @@
+/**
+ * @file IBowTextureSampler.h
+ * @brief Declarations for IBowTextureSampler.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"

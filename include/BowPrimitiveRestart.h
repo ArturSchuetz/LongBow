@@ -1,3 +1,8 @@
+/**
+ * @file BowPrimitiveRestart.h
+ * @brief Declarations for BowPrimitiveRestart.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"

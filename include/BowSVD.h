@@ -1,3 +1,8 @@
+/**
+ * @file BowSVD.h
+ * @brief Declarations for BowSVD.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"

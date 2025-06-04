@@ -1,3 +1,8 @@
+/**
+ * @file BowResource.h
+ * @brief Declarations for BowResource.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowResourcesPredeclares.h"

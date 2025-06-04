@@ -1,3 +1,8 @@
+/**
+ * @file BowNetworkPredeclares.h
+ * @brief Declarations for BowNetworkPredeclares.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 

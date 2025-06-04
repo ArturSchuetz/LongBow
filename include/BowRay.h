@@ -1,3 +1,8 @@
+/**
+ * @file BowRay.h
+ * @brief Declarations for BowRay.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"

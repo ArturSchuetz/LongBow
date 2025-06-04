@@ -1,3 +1,8 @@
+/**
+ * @file BowAABB.h
+ * @brief Declarations for BowAABB.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"

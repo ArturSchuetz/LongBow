@@ -1,3 +1,8 @@
+/**
+ * @file BowScissorTest.h
+ * @brief Declarations for BowScissorTest.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"

@@ -1,3 +1,8 @@
+/**
+ * @file IBowIndicesBase.h
+ * @brief Declarations for IBowIndicesBase.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"

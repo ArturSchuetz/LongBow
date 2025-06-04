@@ -1,3 +1,8 @@
+/**
+ * @file IBowRenderDevice.h
+ * @brief Declarations for IBowRenderDevice.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"

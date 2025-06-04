@@ -1,3 +1,8 @@
+/**
+ * @file BowNetworkDeviceManager.h
+ * @brief Declarations for BowNetworkDeviceManager.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowNetworkPredeclares.h"

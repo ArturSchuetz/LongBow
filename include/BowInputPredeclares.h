@@ -1,3 +1,8 @@
+/**
+ * @file BowInputPredeclares.h
+ * @brief Declarations for BowInputPredeclares.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 

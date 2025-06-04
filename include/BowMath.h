@@ -1,3 +1,8 @@
+/**
+ * @file BowMath.h
+ * @brief Declarations for BowMath.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"

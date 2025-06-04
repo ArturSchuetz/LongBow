@@ -1,3 +1,8 @@
+/**
+ * @file BowBitmap.h
+ * @brief Declarations for BowBitmap.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowResourcesPredeclares.h"

@@ -1,3 +1,8 @@
+/**
+ * @file BowPlatform.h
+ * @brief Declarations for BowPlatform.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowPlatformPredeclares.h"

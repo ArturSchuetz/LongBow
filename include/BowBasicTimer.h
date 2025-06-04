@@ -1,3 +1,8 @@
+/**
+ * @file BowBasicTimer.h
+ * @brief Declarations for BowBasicTimer.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"

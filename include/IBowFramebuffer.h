@@ -1,3 +1,8 @@
+/**
+ * @file IBowFramebuffer.h
+ * @brief Declarations for IBowFramebuffer.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"

@@ -1,3 +1,8 @@
+/**
+ * @file BowBlending.h
+ * @brief Declarations for BowBlending.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"

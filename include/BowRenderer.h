@@ -1,3 +1,8 @@
+/**
+ * @file BowRenderer.h
+ * @brief Declarations for BowRenderer.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"

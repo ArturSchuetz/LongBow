@@ -1,3 +1,8 @@
+/**
+ * @file BowTriangle.h
+ * @brief Declarations for BowTriangle.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"

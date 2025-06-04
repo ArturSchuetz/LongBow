@@ -1,3 +1,8 @@
+/**
+ * @file IBowRenderContext.h
+ * @brief Declarations for IBowRenderContext.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"

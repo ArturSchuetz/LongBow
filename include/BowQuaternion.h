@@ -1,3 +1,8 @@
+/**
+ * @file BowQuaternion.h
+ * @brief Declarations for BowQuaternion.
+ */
+
 #pragma once
 #include "BowMath.h"
 

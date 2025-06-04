@@ -1,3 +1,8 @@
+/**
+ * @file IBowKeyboard.h
+ * @brief Declarations for IBowKeyboard.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowInputPredeclares.h"

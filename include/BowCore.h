@@ -1,3 +1,8 @@
+/**
+ * @file BowCore.h
+ * @brief Declarations for BowCore.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"

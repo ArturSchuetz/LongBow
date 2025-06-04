@@ -1,3 +1,8 @@
+/**
+ * @file BowFrustum.h
+ * @brief Declarations for BowFrustum.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"

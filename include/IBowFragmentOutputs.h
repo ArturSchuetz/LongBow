@@ -1,3 +1,8 @@
+/**
+ * @file IBowFragmentOutputs.h
+ * @brief Declarations for IBowFragmentOutputs.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowRendererPredeclares.h"

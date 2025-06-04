@@ -1,3 +1,8 @@
+/**
+ * @file IBowVertexAttribute.h
+ * @brief Declarations for IBowVertexAttribute.
+ */
+
 #pragma once
 #include "BowPrerequisites.h"
 #include "BowCorePredeclares.h"
