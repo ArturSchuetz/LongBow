@@ -263,11 +263,13 @@ namespace bow {
 			\param q Quaternion to normalize.
 			\return Normalized quaternion to the length of one. 
 		*/
-		inline Quaternion Normalize(const Quaternion& q)
-		{
-			double length = std::sqrt(Dot(q, q));
-			return (1.0 / std::sqrt(Dot(q, q))) * q;
-		}
+               inline Quaternion Normalize(const Quaternion& q)
+               {
+                       double length = std::sqrt(Dot(q, q));
+                       if (length == 0.0)
+                               return q;
+                       return (1.0 / length) * q;
+               }
 
 		//! Matrices here are [row][column], row major.
 		/*!
