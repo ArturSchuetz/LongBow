@@ -1,6 +1,8 @@
 #pragma once
 #include "BowMath.h"
 
+namespace bow { namespace math { static float Sqrt(float); static double Sqrt(double); } }
+
 #include <algorithm>
 
 namespace bow {

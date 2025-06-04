@@ -12,20 +12,22 @@ namespace bow {
 		Vector3<T>	Center;
 		T			Radius;
 
-		Sphere()
-		{
-			Origin = Direction = Vector3<T>();
-		}
+               Sphere()
+               {
+                       Center = Vector3<T>();
+                       Radius = 0;
+               }
 
 		Sphere(const Vector3<T> center, T radius)
 		{
 			Center = center, Radius = radius;
 		}
 
-		inline void Set(Vector3<T> _center, T radius)
-		{
-			Center = center, Radius = radius;
-		}
+               inline void Set(Vector3<T> _center, T radius)
+               {
+                       Center = _center;
+                       Radius = radius;
+               }
 	};
 	/*----------------------------------------------------------------*/
 }

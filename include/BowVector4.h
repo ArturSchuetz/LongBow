@@ -190,14 +190,14 @@ namespace bow {
 
 	// Cross product calculation for a 3D Vector
 	template <typename T> 
-	inline Vector4<T> CrossP(const Vector4<T>& v1, const Vector4<T>& v2)
-	{
-		return Vector4<T>(
-			v1.y * other.z - v1.z * other.y,
-			v1.z * other.x - v1.x * other.z,
-			v1.x * other.y - v1.y * other.x,
-			1.0f);
-	}
+       inline Vector4<T> CrossP(const Vector4<T>& v1, const Vector4<T>& v2)
+       {
+               return Vector4<T>(
+                       v1.y * v2.z - v1.z * v2.y,
+                       v1.z * v2.x - v1.x * v2.z,
+                       v1.x * v2.y - v1.y * v2.x,
+                       1.0f);
+       }
 
 	template<typename C>
 	inline std::ostream& operator << (std::ostream& str, const Vector4<C>& vec)

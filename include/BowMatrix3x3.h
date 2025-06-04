@@ -160,15 +160,15 @@ namespace bow {
 		}
 
 		template <typename C>
-		inline Matrix3x3 operator * (const C& _scalar) const
-		{
-			T scalar = (T)_scalar;
-			return Matrix3x3(
-				_11 * scalar, _12 * scalar, _13 * scalar,
-				_21 * scalar, _22 * scalar, _23 * scalar,
-				_31 * scalar, _32 * scalar, _33 * scalar,
-			);
-		}
+               inline Matrix3x3 operator * (const C& _scalar) const
+               {
+                       T scalar = (T)_scalar;
+                       return Matrix3x3(
+                               _11 * scalar, _12 * scalar, _13 * scalar,
+                               _21 * scalar, _22 * scalar, _23 * scalar,
+                               _31 * scalar, _32 * scalar, _33 * scalar
+                       );
+               }
 
 		template <typename C>
 		inline void operator *= (const Matrix3x3<C>& other)

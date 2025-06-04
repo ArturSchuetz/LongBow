@@ -123,7 +123,7 @@ namespace bow {
 			assert(NumColumns() == rhs.NumColumns() && NumRows() == rhs.NumRows());
 			assert(m_data != nullptr);
 
-			Matrix result(m_NumRows, m_NumColumns);
+                       Matrix<T> result(m_NumRows, m_NumColumns);
 
 			unsigned int numElements = NumElements();
 			for (unsigned int i = 0; i < numElements; ++i)
@@ -140,7 +140,7 @@ namespace bow {
 			assert(NumColumns() == rhs.NumColumns() && NumRows() == rhs.NumRows());
 			assert(m_data != nullptr);
 
-			Matrix result(m_NumRows, m_NumColumns);
+                       Matrix<T> result(m_NumRows, m_NumColumns);
 
 			unsigned int numElements = NumElements();
 			for (unsigned int i = 0; i < numElements; ++i)
@@ -157,7 +157,7 @@ namespace bow {
 			assert((*this).NumColumns() == rhs.NumRows());
 			assert(m_data != nullptr);
 
-			Matrix result = Matrix((*this).NumRows(), rhs.NumColumns());
+                       Matrix<T> result = Matrix<T>((*this).NumRows(), rhs.NumColumns());
 			T* columnB = new T[rhs.NumRows()];
 
 			// For each row of the resulting matrix
@@ -189,7 +189,7 @@ namespace bow {
 		{
 			assert(m_data != nullptr);
 
-			Matrix result(m_NumRows, m_NumColumns);
+                       Matrix<T> result(m_NumRows, m_NumColumns);
 
 			unsigned int numElements = NumElements();
 			for (unsigned int i = 0; i < numElements; ++i)
@@ -204,7 +204,7 @@ namespace bow {
 		{
 			assert(m_data != nullptr);
 
-			Matrix result(m_NumRows, m_NumColumns);
+                       Matrix<T> result(m_NumRows, m_NumColumns);
 
 			unsigned int numElements = NumElements();
 			for (unsigned int i = 0; i < numElements; ++i)
@@ -280,7 +280,7 @@ namespace bow {
 			// Check for same size. Includes transposed tag check.
 			assert(NumColumns() == rhs.NumColumns() && NumRows() == rhs.NumRows());
 
-			Matrix result(NumRows(), NumColumns());
+			Matrix<T> result(NumRows(), NumColumns());
 
 			for (unsigned int row = 0; row < NumRows(); ++row)
 			{
@@ -298,7 +298,7 @@ namespace bow {
 			// Check for same size. Includes transposed tag check.
 			assert(NumColumns() == rhs.NumColumns() && NumRows() == rhs.NumRows());
 
-			Matrix result(NumRows(), NumColumns());
+			Matrix<T> result(NumRows(), NumColumns());
 
 			for (unsigned int row = 0; row < NumRows(); ++row)
 			{
@@ -315,7 +315,7 @@ namespace bow {
 			// Check for same size. Includes transposed tag check.
 			assert(NumRows() == rhs.NumRows() && NumColumns() == rhs.NumColumns());
 
-			Matrix result(NumRows(), NumColumns());
+			Matrix<T> result(NumRows(), NumColumns());
 
 			for (unsigned int row = 0; row < NumRows(); ++row)
 			{
@@ -332,7 +332,7 @@ namespace bow {
 		{
 			assert(m_mat.NumColumns() == rhs.m_mat.NumColumns() && m_mat.NumRows() == rhs.m_mat.NumRows());
 
-			Matrix result(NumRows(), NumColumns());
+			Matrix<T> result(NumRows(), NumColumns());
 
 			for (unsigned int row = 0; row < NumRows(); ++row)
 			{
@@ -349,7 +349,7 @@ namespace bow {
 			// Check whether operation is allowed. Includes transposition.
 			assert(NumColumns() == rhs.NumRows());
 
-			Matrix prod = Matrix((*this).NumRows(), rhs.NumColumns());
+                       Matrix<T> prod((*this).NumRows(), rhs.NumColumns());
 
 			// Distinguish 4 cases: AB, A'B, AB' and A'B'.
 			// Default to (,) operator for now.
@@ -375,7 +375,7 @@ namespace bow {
 			// Check whether operation is allowed. Includes transposition.
 			assert(NumColumns() == rhs.NumRows());
 
-			Matrix prod = Matrix((*this).NumRows(), rhs.NumColumns());
+                       Matrix<T> prod((*this).NumRows(), rhs.NumColumns());
 
 			// Distinguish 4 cases: AB, A'B, AB' and A'B'.
 			// Default to (,) operator for now.
@@ -397,7 +397,7 @@ namespace bow {
 
 		inline Matrix<T> operator * (T rhs) const
 		{
-			Matrix result(NumRows(), NumColumns());
+			Matrix<T> result(NumRows(), NumColumns());
 
 			for (unsigned int row = 0; row < NumRows(); ++row)
 			{
@@ -412,7 +412,7 @@ namespace bow {
 
 		inline Matrix<T> operator / (T rhs) const
 		{
-			Matrix result(NumRows(), NumColumns());
+			Matrix<T> result(NumRows(), NumColumns());
 
 			for (unsigned int row = 0; row < NumRows(); ++row)
 			{

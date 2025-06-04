@@ -76,10 +76,10 @@ namespace bow {
 			y = -y;
 		}
 
-		inline Vector2 operator - () const
-		{
-			return Vector2(-x, -y, -z);
-		}
+               inline Vector2 operator - () const
+               {
+                       return Vector2(-x, -y);
+               }
 
 		inline void operator += (const Vector2& other)
 		{

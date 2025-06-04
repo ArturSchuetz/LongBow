@@ -4,6 +4,7 @@
 
 #include "BowVector3.h"
 #include "BowVector4.h"
+#include <cstring>
 
 namespace bow {
 
