@@ -2,6 +2,8 @@
 
 #include <DirectX11RenderDevice/Device/BowD3D11GraphicsWindow.h>
 #include <DirectX11RenderDevice/Device/Buffer/BowD3D11IndexBuffer.h>
+#include <DirectX11RenderDevice/Device/Buffer/BowD3D11StorageBuffer.h>
+#include <DirectX11RenderDevice/Device/Shader/BowD3D11ComputeShaderProgram.h>
 #include <DirectX11RenderDevice/Device/Shader/BowD3D11ShaderProgram.h>
 #include <DirectX11RenderDevice/Device/Textures/BowD3D11Texture2D.h>
 #include <DirectX11RenderDevice/Device/Textures/BowD3D11TextureSampler.h>
@@ -203,11 +205,12 @@ std::unique_ptr<IRayTracingShaderProgram> D3D11RenderDevice::VCreateRayTracingSh
     return nullptr;
 }
 
-ComputeShaderProgramPtr D3D11RenderDevice::VCreateComputeShaderProgram(const std::string &)
+ComputeShaderProgramPtr D3D11RenderDevice::VCreateComputeShaderProgram(const std::string &computeShaderSource)
 {
     FN("D3D11RenderDevice::VCreateComputeShaderProgram");
-    ReportMissing("compute shaders");
-    return nullptr;
+
+    D3D11ComputeShaderProgramPtr program = D3D11ComputeShaderProgramPtr(new D3D11ComputeShaderProgram(m_device.Get(), m_deviceContext.Get(), computeShaderSource));
+    return program->IsReady() ? program : nullptr;
 }
 
 ShaderProgramPtr D3D11RenderDevice::VCreateShaderProgram(const std::string &VertexShaderSource, const std::string &FragementShaderSource)
@@ -269,11 +272,11 @@ UniformBufferPtr D3D11RenderDevice::VCreateUniformBuffer(BufferHint usageHint, i
     return D3D11UniformBufferPtr(new D3D11UniformBuffer(m_device.Get(), m_deviceContext.Get(), usageHint, sizeInBytes, data));
 }
 
-StorageBufferPtr D3D11RenderDevice::VCreateStorageBuffer(BufferHint, int, void *)
+StorageBufferPtr D3D11RenderDevice::VCreateStorageBuffer(BufferHint usageHint, int sizeInBytes, void *data)
 {
     FN("D3D11RenderDevice::VCreateStorageBuffer");
-    ReportMissing("storage buffers");
-    return nullptr;
+
+    return D3D11StorageBufferPtr(new D3D11StorageBuffer(m_device.Get(), m_deviceContext.Get(), usageHint, sizeInBytes, data));
 }
 
 Texture2DPtr D3D11RenderDevice::VCreateTexture2D(Texture2DDescription description)

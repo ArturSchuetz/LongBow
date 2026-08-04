@@ -113,6 +113,22 @@ ShaderTranslator::Result ShaderTranslator::ToHLSL(const std::string &source, Sta
             }
         }
 
+        for (const spirv_cross::Resource &block : resources.storage_buffers)
+        {
+            const uint32_t binding = hlslCompiler.get_decoration(block.id, spv::DecorationBinding);
+            // The instance name is what a caller binds by; the block type name
+            // is the fallback when the block was declared without one.
+            std::string name = hlslCompiler.get_name(block.id);
+            if (name.empty())
+            {
+                name = hlslCompiler.get_name(block.base_type_id);
+            }
+            if (!name.empty())
+            {
+                result.storageBlockNames[binding] = name;
+            }
+        }
+
         result.hlsl = hlslCompiler.compile();
         result.ok = true;
     }

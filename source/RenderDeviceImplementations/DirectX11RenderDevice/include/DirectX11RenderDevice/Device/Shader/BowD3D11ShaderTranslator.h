@@ -45,6 +45,14 @@ class ShaderTranslator
             original names are read out of the SPIR-V before that happens.
         */
         std::unordered_map<uint32_t, std::string> attributeNames;
+
+        //! Binding point to the storage block name the GLSL used.
+        /*!
+            SPIRV-Cross renames storage blocks too when it emits HLSL. The
+            binding point survives the translation, so it is what the reflected
+            resources are matched on afterwards.
+        */
+        std::unordered_map<uint32_t, std::string> storageBlockNames;
     };
 
     //! Translates GLSL to Shader Model 5.0 HLSL, or passes HLSL through.

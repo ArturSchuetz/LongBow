@@ -1,5 +1,6 @@
 #include <DirectX11RenderDevice/Device/Shader/BowD3D11ShaderResourceBindings.h>
 
+#include <DirectX11RenderDevice/Device/Buffer/BowD3D11StorageBuffer.h>
 #include <DirectX11RenderDevice/Device/Buffer/BowD3D11UniformBuffer.h>
 #include <DirectX11RenderDevice/Device/Textures/BowD3D11Texture2D.h>
 #include <DirectX11RenderDevice/Device/Textures/BowD3D11TextureSampler.h>
@@ -9,7 +10,7 @@
 namespace bow
 {
 
-D3D11ShaderResourceBindings::D3D11ShaderResourceBindings() : m_textures(), m_uniformBuffers() {}
+D3D11ShaderResourceBindings::D3D11ShaderResourceBindings() : m_textures(), m_uniformBuffers(), m_storageBuffers() {}
 
 D3D11ShaderResourceBindings::~D3D11ShaderResourceBindings() {}
 
@@ -27,11 +28,18 @@ void D3D11ShaderResourceBindings::VSetBuffer(const char *name, UniformBufferPtr 
     m_uniformBuffers[name] = buffer;
 }
 
-void D3D11ShaderResourceBindings::VSetBuffer(const char *name, StorageBufferPtr /*storageBuffer*/)
+void D3D11ShaderResourceBindings::VSetBuffer(const char *name, StorageBufferPtr storageBuffer)
 {
     FN("D3D11ShaderResourceBindings::VSetBuffer");
 
-    LOG_ERROR("DirectX 11: storage buffers are not implemented yet, ignoring '%s'.", name);
+    D3D11StorageBufferPtr buffer = std::dynamic_pointer_cast<D3D11StorageBuffer>(storageBuffer);
+    if (buffer == nullptr)
+    {
+        LOG_ERROR("Storage buffer bound to '%s' was not created by the DirectX 11 device.", name);
+        return;
+    }
+
+    m_storageBuffers[name] = buffer;
 }
 
 void D3D11ShaderResourceBindings::VSetTexture(const char *name, Texture2DPtr texture, TextureSamplerPtr sampler)

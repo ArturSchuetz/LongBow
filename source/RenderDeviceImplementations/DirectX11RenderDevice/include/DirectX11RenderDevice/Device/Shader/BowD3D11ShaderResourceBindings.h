@@ -12,6 +12,7 @@ namespace bow
 typedef std::shared_ptr<class D3D11Texture2D> D3D11Texture2DPtr;
 typedef std::shared_ptr<class D3D11TextureSampler> D3D11TextureSamplerPtr;
 typedef std::shared_ptr<class D3D11UniformBuffer> D3D11UniformBufferPtr;
+typedef std::shared_ptr<class D3D11StorageBuffer> D3D11StorageBufferPtr;
 
 //! What DirectX 11 has instead of a descriptor set.
 /*!
@@ -41,6 +42,7 @@ class D3D11ShaderResourceBindings : public IShaderResourceBindings
 
     const std::unordered_map<std::string, TextureBinding> &GetTextures() const { return m_textures; }
     const std::unordered_map<std::string, D3D11UniformBufferPtr> &GetUniformBuffers() const { return m_uniformBuffers; }
+    const std::unordered_map<std::string, D3D11StorageBufferPtr> &GetStorageBuffers() const { return m_storageBuffers; }
 
   private:
     D3D11ShaderResourceBindings(const D3D11ShaderResourceBindings &) = delete;
@@ -48,6 +50,7 @@ class D3D11ShaderResourceBindings : public IShaderResourceBindings
 
     std::unordered_map<std::string, TextureBinding> m_textures;
     std::unordered_map<std::string, D3D11UniformBufferPtr> m_uniformBuffers;
+    std::unordered_map<std::string, D3D11StorageBufferPtr> m_storageBuffers;
 };
 
 typedef std::shared_ptr<D3D11ShaderResourceBindings> D3D11ShaderResourceBindingsPtr;
