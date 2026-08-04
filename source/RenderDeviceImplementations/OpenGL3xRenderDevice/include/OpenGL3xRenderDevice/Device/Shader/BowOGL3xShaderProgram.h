@@ -14,9 +14,8 @@ typedef std::shared_ptr<class OGLShaderProgramName> OGLShaderProgramNamePtr;
 typedef std::shared_ptr<class OGLShaderObject> OGLShaderObjectPtr;
 typedef std::shared_ptr<class OGLFragmentOutputs> OGLFragmentOutputsPtr;
 
-class IOGLShaderResource;
 enum class ShaderResourceType : char;
-typedef std::shared_ptr<class IOGLShaderResource> OGLShaderResourcePtr;
+typedef std::shared_ptr<class OGLShaderResource> OGLShaderResourcePtr;
 typedef std::unordered_map<std::string, OGLShaderResourcePtr> ShaderResourceMap;
 
 class OGLShaderProgram : public IShaderProgram

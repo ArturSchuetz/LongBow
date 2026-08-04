@@ -2,9 +2,12 @@
 
 #include <OpenGL3xRenderDevice/BowOGL3xTypeConverter.h>
 #include <OpenGL3xRenderDevice/Device/Buffer/BowOGL3xIndexBuffer.h>
+#include <OpenGL3xRenderDevice/Device/Buffer/BowOGL3xStorageBuffer.h>
+#include <OpenGL3xRenderDevice/Device/Buffer/BowOGL3xUniformBuffer.h>
 #include <OpenGL3xRenderDevice/Device/Context/FrameBuffer/BowOGL3xFramebuffer.h>
 #include <OpenGL3xRenderDevice/Device/Context/VertexAttributeBindings/BowOGL3xVertexAttributeBindings.h>
 #include <OpenGL3xRenderDevice/Device/Shader/BowOGL3xShaderProgram.h>
+#include <OpenGL3xRenderDevice/Device/Shader/BowOGL3xShaderResourceBindings.h>
 #include <OpenGL3xRenderDevice/Device/Textures/BowOGL3xTexture2D.h>
 #include <OpenGL3xRenderDevice/Device/Textures/BowOGL3xTextureSampler.h>
 #include <OpenGL3xRenderDevice/Device/Textures/BowOGL3xTextureUnits.h>
@@ -288,9 +291,10 @@ void OGLRenderContext::VDraw(PrimitiveType primitiveType, uint32_t offset, uint3
 
     ApplyRenderState(renderState);
     ApplyVertexAttributeBindings(vertexAttributeBindings);
-    LOG_FATAL("ApplyShaderResourceBindings not implemented!");
-    // ApplyShaderResourceBindings(shaderResourceBindings);
+    // The program has to be current before its sampler uniforms can be
+    // assigned, so the resource bindings are applied after it, not before.
     ApplyShaderProgram(shaderProgram);
+    ApplyShaderResourceBindings(shaderResourceBindings, shaderProgram);
 
     Draw(primitiveType, offset, count, vertexAttributeBindings, shaderProgram, renderState);
 }
@@ -457,6 +461,91 @@ void OGLRenderContext::ApplyVertexAttributeBindings(VertexAttributeBindingsPtr v
     OGLVertexAttributeBindingsPtr oglVertexAttributeBindings = std::dynamic_pointer_cast<OGLVertexAttributeBindings>(vertexAttributeBindings);
     oglVertexAttributeBindings->Bind();
     oglVertexAttributeBindings->Clean();
+}
+
+void OGLRenderContext::ApplyShaderResourceBindings(ShaderResourceBindingsPtr shaderResourceBindings, ShaderProgramPtr shaderProgram)
+{
+    FN("OGLRenderContext::ApplyShaderResourceBindings");
+    OPTICK_EVENT();
+
+    if (shaderResourceBindings == nullptr)
+    {
+        return;
+    }
+
+    OGLShaderResourceBindingsPtr bindings = std::dynamic_pointer_cast<OGLShaderResourceBindings>(shaderResourceBindings);
+    OGLShaderProgramPtr program = std::dynamic_pointer_cast<OGLShaderProgram>(shaderProgram);
+    if (bindings == nullptr || program == nullptr)
+    {
+        LOG_ERROR("Resource bindings or shader program were not created by the OpenGL device.");
+        return;
+    }
+
+    const uint32_t programHandle = program->GetProgram();
+    const int maxTextureUnits = m_textureUnits->GetMaxTextureUnits();
+
+    // Texture units are handed out in the order the bindings were recorded.
+    // OpenGL addresses a sampler by the unit its uniform points at, so the
+    // assignment only has to be consistent within one draw.
+    int nextTextureUnit = 0;
+
+    for (const auto &entry : bindings->GetTextures())
+    {
+        LOG_TRACE("glGetUniformLocation");
+        const GLint location = glGetUniformLocation(programHandle, entry.first.c_str());
+        if (location < 0)
+        {
+            LOG_WARNING("Shader has no sampler named '%s'; the bound texture is ignored.", entry.first.c_str());
+            continue;
+        }
+
+        if (nextTextureUnit >= maxTextureUnits)
+        {
+            LOG_ERROR("Out of texture units: this GPU offers %d and the draw needs more.", maxTextureUnits);
+            break;
+        }
+
+        m_textureUnits->SetTexture(nextTextureUnit, entry.second.texture);
+        if (entry.second.sampler != nullptr)
+        {
+            m_textureUnits->SetSampler(nextTextureUnit, entry.second.sampler);
+        }
+
+        LOG_TRACE("glUniform1i");
+        glUniform1i(location, nextTextureUnit);
+
+        ++nextTextureUnit;
+    }
+
+    for (const auto &entry : bindings->GetUniformBuffers())
+    {
+        LOG_TRACE("glGetUniformBlockIndex");
+        const GLuint blockIndex = glGetUniformBlockIndex(programHandle, entry.first.c_str());
+        if (blockIndex == GL_INVALID_INDEX)
+        {
+            LOG_WARNING("Shader has no uniform block named '%s'; the bound buffer is ignored.", entry.first.c_str());
+            continue;
+        }
+
+        LOG_TRACE("glUniformBlockBinding");
+        glUniformBlockBinding(programHandle, blockIndex, blockIndex);
+        entry.second->Bind(blockIndex);
+    }
+
+    for (const auto &entry : bindings->GetStorageBuffers())
+    {
+        LOG_TRACE("glGetProgramResourceIndex");
+        const GLuint blockIndex = glGetProgramResourceIndex(programHandle, GL_SHADER_STORAGE_BLOCK, entry.first.c_str());
+        if (blockIndex == GL_INVALID_INDEX)
+        {
+            LOG_WARNING("Shader has no storage block named '%s'; the bound buffer is ignored.", entry.first.c_str());
+            continue;
+        }
+
+        LOG_TRACE("glShaderStorageBlockBinding");
+        glShaderStorageBlockBinding(programHandle, blockIndex, blockIndex);
+        entry.second->Bind(blockIndex);
+    }
 }
 
 void OGLRenderContext::ApplyShaderProgram(ShaderProgramPtr shaderProgram)

@@ -1,5 +1,7 @@
 #include <OpenGL3xRenderDevice/Device/Shader/BowOGL3xComputeShaderProgram.h>
 
+#include <OpenGL3xRenderDevice/Device/Shader/BowOGL3xShaderResourceBindings.h>
+
 #include <OpenGL3xRenderDevice/BowOGL3xTypeConverter.h>
 #include <OpenGL3xRenderDevice/Device/BowOGL3xRenderContext.h>
 #include <OpenGL3xRenderDevice/Device/Buffer/BowOGL3xStorageBuffer.h>
@@ -82,12 +84,12 @@ OGLComputeShaderProgram::~OGLComputeShaderProgram()
 
 ShaderResourceBindingsPtr OGLComputeShaderProgram::VCreateComputeResourceBindingObjects()
 {
-    FN("OGLComputeShaderProgram::OGLComputeShaderProgram");
+    FN("OGLComputeShaderProgram::VCreateComputeResourceBindingObjects");
     OPTICK_EVENT();
 
-    LOG_FATAL("Not yet implemented!");
-
-    return nullptr;
+    // As in the graphics path, there is no driver-side object to allocate:
+    // OpenGL binds against the program that is current at dispatch time.
+    return OGLShaderResourceBindingsPtr(new OGLShaderResourceBindings());
 }
 
 void OGLComputeShaderProgram::VDispatch(ShaderResourceBindingsPtr shaderResourceBindings, uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ)
@@ -114,6 +116,43 @@ void OGLComputeShaderProgram::VDispatch(ShaderResourceBindingsPtr shaderResource
     }
 
     Bind();
+
+    // Buffers handed in through the resource bindings are bound against the
+    // block index the program reports for them, so a caller can address them
+    // by the name used in the shader instead of a hardcoded slot.
+    OGLShaderResourceBindingsPtr bindings = std::dynamic_pointer_cast<OGLShaderResourceBindings>(shaderResourceBindings);
+    if (bindings != nullptr)
+    {
+        for (const auto &entry : bindings->GetStorageBuffers())
+        {
+            LOG_TRACE("glGetProgramResourceIndex");
+            const GLuint blockIndex = glGetProgramResourceIndex(m_ShaderProgramHandle, GL_SHADER_STORAGE_BLOCK, entry.first.c_str());
+            if (blockIndex == GL_INVALID_INDEX)
+            {
+                LOG_WARNING("Compute shader has no storage block named '%s'; the bound buffer is ignored.", entry.first.c_str());
+                continue;
+            }
+
+            LOG_TRACE("glShaderStorageBlockBinding");
+            glShaderStorageBlockBinding(m_ShaderProgramHandle, blockIndex, blockIndex);
+            entry.second->Bind(blockIndex);
+        }
+
+        for (const auto &entry : bindings->GetUniformBuffers())
+        {
+            LOG_TRACE("glGetUniformBlockIndex");
+            const GLuint blockIndex = glGetUniformBlockIndex(m_ShaderProgramHandle, entry.first.c_str());
+            if (blockIndex == GL_INVALID_INDEX)
+            {
+                LOG_WARNING("Compute shader has no uniform block named '%s'; the bound buffer is ignored.", entry.first.c_str());
+                continue;
+            }
+
+            LOG_TRACE("glUniformBlockBinding");
+            glUniformBlockBinding(m_ShaderProgramHandle, blockIndex, blockIndex);
+            entry.second->Bind(blockIndex);
+        }
+    }
 
     LOG_TRACE("glDispatchCompute");
     glDispatchCompute(groupCountX, groupCountY, groupCountZ);

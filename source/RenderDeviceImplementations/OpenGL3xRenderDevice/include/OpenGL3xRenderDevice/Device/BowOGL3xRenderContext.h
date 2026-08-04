@@ -73,6 +73,7 @@ class OGLRenderContext : public IRenderContext
     void Draw(PrimitiveType primitiveType, uint32_t offset, uint32_t count, VertexAttributeBindingsPtr vertexAttributeBindings, ShaderProgramPtr shaderProgram, RenderState renderState);
 
     void ApplyVertexAttributeBindings(VertexAttributeBindingsPtr vertexAttributeBindings);
+    void ApplyShaderResourceBindings(ShaderResourceBindingsPtr shaderResourceBindings, ShaderProgramPtr shaderProgram);
     void ApplyShaderProgram(ShaderProgramPtr shaderProgram);
     void ApplyFramebuffer();
 

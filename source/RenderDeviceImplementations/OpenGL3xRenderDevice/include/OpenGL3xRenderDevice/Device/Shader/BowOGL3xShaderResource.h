@@ -28,7 +28,7 @@ enum class ShaderResourceType : char
 class OGLShaderResource
 {
   public:
-    OGLShaderResource(uint32_t binding, std::string name, size_t sizeInBytes, ShaderResourceType type) {}
+    OGLShaderResource(uint32_t binding, std::string name, size_t sizeInBytes, ShaderResourceType type) : m_binding(binding), m_name(std::move(name)), m_sizeInBytes(sizeInBytes), m_type(type) {}
     ~OGLShaderResource() {}
 
     uint32_t GetBinding() const
