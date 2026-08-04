@@ -1,5 +1,12 @@
 # TODO
 
+> **Arbeitsvereinbarung: den kompletten Plan durcharbeiten, Stufe 1 bis Stufe 10.**
+> Nicht zwischendurch aufhören, nicht nach einer Stufe einen Statusbericht schreiben,
+> nicht fragen, ob weitergemacht werden soll. Häufig committen, damit nichts verloren geht.
+> Gemeldet wird, wenn alles fertig ist — oder wenn eine Entscheidung ansteht, die nur
+> der Auftraggeber treffen kann. Die Reihenfolge der Stufen darf ich selbst wählen,
+> Stufen überspringen oder anhalten nicht.
+
 Umbau von LongBow zu einem öffentlich präsentierbaren, CMake-basierten Projekt mit **zwei**
 Renderer-Schnittstellen. Branch: `modernize/cmake-merge`.
 
