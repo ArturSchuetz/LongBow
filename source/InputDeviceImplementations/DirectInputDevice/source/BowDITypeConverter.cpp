@@ -1,0 +1,261 @@
+#include <DirectInputDevice/BowDITypeConverter.h>
+
+
+
+namespace bow
+{
+
+uint32_t DITypeConverter::To(Key key)
+{
+    FN("DITypeConverter::To");
+
+    switch (key)
+    {
+    case Key::K_SPACE:
+        return DIK_SPACE;
+    case Key::K_APOSTROPHE:
+        return DIK_APOSTROPHE;
+    case Key::K_COMMA:
+        return DIK_COMMA;
+    case Key::K_MINUS:
+        return DIK_MINUS;
+    case Key::K_PERIOD:
+        return DIK_PERIOD;
+    case Key::K_SLASH:
+        return DIK_SLASH;
+    case Key::K_0:
+        return DIK_0;
+    case Key::K_1:
+        return DIK_1;
+    case Key::K_2:
+        return DIK_2;
+    case Key::K_3:
+        return DIK_3;
+    case Key::K_4:
+        return DIK_4;
+    case Key::K_5:
+        return DIK_5;
+    case Key::K_6:
+        return DIK_6;
+    case Key::K_7:
+        return DIK_7;
+    case Key::K_8:
+        return DIK_8;
+    case Key::K_9:
+        return DIK_9;
+    case Key::K_SEMICOLON:
+        return DIK_SEMICOLON;
+    case Key::K_EQUAL:
+        return DIK_EQUALS;
+    case Key::K_A:
+        return DIK_A;
+    case Key::K_B:
+        return DIK_B;
+    case Key::K_C:
+        return DIK_C;
+    case Key::K_D:
+        return DIK_D;
+    case Key::K_E:
+        return DIK_E;
+    case Key::K_F:
+        return DIK_F;
+    case Key::K_G:
+        return DIK_G;
+    case Key::K_H:
+        return DIK_H;
+    case Key::K_I:
+        return DIK_I;
+    case Key::K_J:
+        return DIK_J;
+    case Key::K_K:
+        return DIK_K;
+    case Key::K_L:
+        return DIK_L;
+    case Key::K_M:
+        return DIK_M;
+    case Key::K_N:
+        return DIK_N;
+    case Key::K_O:
+        return DIK_O;
+    case Key::K_P:
+        return DIK_P;
+    case Key::K_Q:
+        return DIK_Q;
+    case Key::K_R:
+        return DIK_R;
+    case Key::K_S:
+        return DIK_S;
+    case Key::K_T:
+        return DIK_T;
+    case Key::K_U:
+        return DIK_U;
+    case Key::K_V:
+        return DIK_V;
+    case Key::K_W:
+        return DIK_W;
+    case Key::K_X:
+        return DIK_X;
+    case Key::K_Y:
+        return DIK_Y;
+    case Key::K_Z:
+        return DIK_Z;
+    case Key::K_LEFT_BRACKET:
+        return DIK_LBRACKET;
+    case Key::K_BACKSLASH:
+        return DIK_BACKSLASH;
+    case Key::K_RIGHT_BRACKET:
+        return DIK_RBRACKET;
+    case Key::K_GRAVE_ACCENT:
+        return DIK_GRAVE;
+    case Key::K_ESCAPE:
+        return DIK_ESCAPE;
+    case Key::K_ENTER:
+        return DIK_RETURN;
+    case Key::K_TAB:
+        return DIK_TAB;
+    case Key::K_BACKSPACE:
+        return DIK_BACKSPACE;
+    case Key::K_INSERT:
+        return DIK_INSERT;
+    case Key::K_DELETE:
+        return DIK_DELETE;
+    case Key::K_RIGHT:
+        return DIK_RIGHT;
+    case Key::K_LEFT:
+        return DIK_LEFT;
+    case Key::K_DOWN:
+        return DIK_DOWN;
+    case Key::K_UP:
+        return DIK_UP;
+    case Key::K_PAGE_UP:
+        return DIK_PGUP;
+    case Key::K_PAGE_DOWN:
+        return DIK_PGDN;
+    case Key::K_HOME:
+        return DIK_HOME;
+    case Key::K_END:
+        return DIK_END;
+    case Key::K_CAPS_LOCK:
+        return DIK_CAPSLOCK;
+    case Key::K_SCROLL_LOCK:
+        return DIK_SCROLL;
+    case Key::K_NUM_LOCK:
+        return DIK_NUMLOCK;
+    case Key::K_PAUSE:
+        return DIK_PAUSE;
+    case Key::K_F1:
+        return DIK_F1;
+    case Key::K_F2:
+        return DIK_F2;
+    case Key::K_F3:
+        return DIK_F3;
+    case Key::K_F4:
+        return DIK_F4;
+    case Key::K_F5:
+        return DIK_F5;
+    case Key::K_F6:
+        return DIK_F6;
+    case Key::K_F7:
+        return DIK_F7;
+    case Key::K_F8:
+        return DIK_F8;
+    case Key::K_F9:
+        return DIK_F9;
+    case Key::K_F10:
+        return DIK_F10;
+    case Key::K_F11:
+        return DIK_F11;
+    case Key::K_F12:
+        return DIK_F12;
+    case Key::K_F13:
+        return DIK_F13;
+    case Key::K_F14:
+        return DIK_F14;
+    case Key::K_F15:
+        return DIK_F15;
+    case Key::K_KP_0:
+        return DIK_NUMPAD0;
+    case Key::K_KP_1:
+        return DIK_NUMPAD1;
+    case Key::K_KP_2:
+        return DIK_NUMPAD2;
+    case Key::K_KP_3:
+        return DIK_NUMPAD3;
+    case Key::K_KP_4:
+        return DIK_NUMPAD4;
+    case Key::K_KP_5:
+        return DIK_NUMPAD5;
+    case Key::K_KP_6:
+        return DIK_NUMPAD6;
+    case Key::K_KP_7:
+        return DIK_NUMPAD7;
+    case Key::K_KP_8:
+        return DIK_NUMPAD8;
+    case Key::K_KP_9:
+        return DIK_NUMPAD9;
+    case Key::K_KP_DECIMAL:
+        return DIK_NUMPADPERIOD;
+    case Key::K_KP_DIVIDE:
+        return DIK_DIVIDE;
+    case Key::K_KP_MULTIPLY:
+        return DIK_NUMPADSTAR;
+    case Key::K_KP_SUBTRACT:
+        return DIK_SUBTRACT;
+    case Key::K_KP_ADD:
+        return DIK_ADD;
+    case Key::K_KP_ENTER:
+        return DIK_NUMPADENTER;
+    case Key::K_KP_EQUAL:
+        return DIK_NUMPADEQUALS;
+    case Key::K_LEFT_SHIFT:
+        return DIK_LSHIFT;
+    case Key::K_LEFT_CONTROL:
+        return DIK_LCONTROL;
+    case Key::K_LEFT_ALT:
+        return DIK_LALT;
+    case Key::K_RIGHT_SHIFT:
+        return DIK_RSHIFT;
+    case Key::K_RIGHT_CONTROL:
+        return DIK_RCONTROL;
+    case Key::K_RIGHT_ALT:
+        return DIK_RALT;
+    }
+
+    LOG_FATAL("Key does not exist.");
+    return -1;
+}
+
+uint32_t DITypeConverter::To(MouseButton btn)
+{
+    FN("DITypeConverter::To");
+
+    switch (btn)
+    {
+    case MouseButton::MOFS_BUTTON0:
+        return 0;
+    case MouseButton::MOFS_BUTTON1:
+        return 1;
+    case MouseButton::MOFS_BUTTON2:
+        return 2;
+    case MouseButton::MOFS_BUTTON3:
+        return 3;
+    case MouseButton::MOFS_BUTTON4:
+        return 4;
+    case MouseButton::MOFS_BUTTON5:
+        return 5;
+    case MouseButton::MOFS_BUTTON6:
+        return 6;
+    case MouseButton::MOFS_BUTTON7:
+        return 7;
+    case MouseButton::MOFS_BUTTON_LEFT:
+        return 0;
+    case MouseButton::MOFS_BUTTON_RIGHT:
+        return 1;
+    case MouseButton::MOFS_BUTTON_MIDDLE:
+        return 2;
+    }
+
+    LOG_FATAL("Button does not exist.");
+    return -1;
+}
+} // namespace bow

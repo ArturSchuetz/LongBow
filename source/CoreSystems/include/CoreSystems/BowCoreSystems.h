@@ -1,0 +1,17 @@
+#pragma once
+#include "CoreSystems/BowCorePredeclares.h"
+#include "CoreSystems/CoreSystems_api.h"
+
+#include "CoreSystems/BowBasicTimer.h"
+#include "CoreSystems/BowLogger.h"
+#include "CoreSystems/BowMath.h"
+#include "CoreSystems/BowUtils.h"
+#include "CoreSystems/Geometry/BowMeshAttribute.h"
+#include "CoreSystems/Geometry/BowSphereTessellator.h"
+#include "CoreSystems/Geometry/Indices/BowIndicesUnsignedInt.h"
+#include "CoreSystems/Geometry/Indices/BowIndicesUnsignedShort.h"
+#include "CoreSystems/Geometry/Indices/BowTriangleIndicesUnsignedInt.h"
+#include "CoreSystems/Geometry/VertexAttributes/BowVertexAttributeFloat.h"
+#include "CoreSystems/Geometry/VertexAttributes/BowVertexAttributeFloatVec2.h"
+#include "CoreSystems/Geometry/VertexAttributes/BowVertexAttributeFloatVec3.h"
+#include "CoreSystems/Geometry/VertexAttributes/BowVertexAttributeFloatVec4.h"
