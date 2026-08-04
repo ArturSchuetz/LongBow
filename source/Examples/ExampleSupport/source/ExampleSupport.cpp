@@ -36,6 +36,11 @@ bool ParseBackendName(const std::string &name, RenderDeviceAPI &api)
         api = RenderDeviceAPI::OpenGL3x;
         return true;
     }
+    if (lowered == "directx11" || lowered == "dx11" || lowered == "d3d11")
+    {
+        api = RenderDeviceAPI::DirectX11;
+        return true;
+    }
     if (lowered == "directx12" || lowered == "dx12" || lowered == "d3d12")
     {
         api = RenderDeviceAPI::DirectX12;
@@ -86,7 +91,7 @@ RenderDeviceAPI SelectBackend(int argc, char *argv[], RenderDeviceAPI fallback)
     RenderDeviceAPI api = fallback;
     if (!ParseBackendName(requested, api))
     {
-        LOG_WARNING("Unknown backend '%s', falling back to %s. Expected one of: opengl, directx12, vulkan.", requested.c_str(), BackendName(fallback));
+        LOG_WARNING("Unknown backend '%s', falling back to %s. Expected one of: opengl, directx11, directx12, vulkan.", requested.c_str(), BackendName(fallback));
         return fallback;
     }
 
@@ -99,6 +104,8 @@ const char *BackendName(RenderDeviceAPI api)
     {
     case RenderDeviceAPI::OpenGL3x:
         return "OpenGL 3.x";
+    case RenderDeviceAPI::DirectX11:
+        return "DirectX 11";
     case RenderDeviceAPI::DirectX12:
         return "DirectX 12";
     case RenderDeviceAPI::Vulkan:

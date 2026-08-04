@@ -21,55 +21,59 @@ Branch: `modernize/cmake-merge`. Ziel-Repo bleibt `github.com/ArturSchuetz/LongB
 | CMake-/Modul-Struktur | `long-bow-engine` | `source/<Modul>/include/<Modul>/` |
 | OpenGL 3.x | `Time-Of-Flight-Sensor-Simulation` (67 Dateien, inkl. ImGui) + Compute/UBO/SSBO aus `long-bow-engine` | groß |
 | DirectX 12 | **dieses Repo** (41 Dateien) | groß, unfertig |
-| DirectX 11 | `Time-Of-Flight-Sensor-Simulation` (21 Dateien) | mittel |
+| DirectX 11 | **nirgends vorhanden** — neu geschrieben, siehe unten | groß |
 | Vulkan | `long-bow-engine` (79 Dateien, inkl. Raytracing) | groß |
 | Beispiele | `long-bow-engine` (00–09) | mittel |
 | Globe-Rendering-Apps | `spherical-wavelets-for-globe-rendering` (11 Apps) | optional |
 
 ## Testmatrix (Stand: alle Beispiele × alle Backends, Debug-Build)
 
-Ausgeführt mit `LONGBOW_BACKEND=<api>`, 12 s Timeout, Klassifikation über den Log.
+| Beispiel | OpenGL 4.5 | DirectX 11 | DirectX 12 | Vulkan |
+|---|---|---|---|---|
+| 01_Input | läuft (kein Rendering, so gewollt) | Fenster ok, Input über GLFW | Rumpf | rendert |
+| 02_HelloWorld | **rendert** | **präsentiert** | Rumpf | rendert |
+| 03_Triangle | **rendert** | braucht Buffer/Shader | Rumpf | rendert |
+| 04_Cube | **rendert** | braucht Buffer/Shader | Rumpf | rendert |
+| 05_Textures | **rendert** | braucht Texturen | Rumpf | rendert |
+| 06_MeshRendering | **rendert** | braucht Buffer/Shader | Rumpf | rendert |
+| 07_Framebuffer | **rendert** | braucht Framebuffer | Rumpf | rendert |
+| 08_ComputeShader | **rechnet korrekt** | kein Compute in DX11-Rumpf | Rumpf | rechnet |
+| 09_PathTracing | kein RT in OpenGL (korrekt) | kein RT in DX11 (korrekt) | Rumpf | rendert |
 
-| Beispiel | OpenGL 3.x | DirectX 12 | Vulkan |
-|---|---|---|---|
-| 01_Input | läuft (kein Rendering, so gewollt) | Stub | rendert |
-| 02_HelloWorld | **rendert** | Stub | rendert |
-| 03_Triangle | Resource-Bindings fehlen | Stub | rendert |
-| 04_Cube | Resource-Bindings fehlen | Stub | rendert |
-| 05_Textures | Resource-Bindings fehlen | Stub | rendert |
-| 06_MeshRendering | Resource-Bindings fehlen | Stub | rendert |
-| 07_Framebuffer | Resource-Bindings fehlen | Stub | rendert |
-| 08_ComputeShader | Compute fehlt | Stub | rendert |
-| 09_PathTracing | kein Raytracing in OpenGL (korrekt) | Stub | rendert |
+**OpenGL 9/9 · Vulkan 9/9.** Alle Shader linken, keine Treiber-Diagnostik.
 
-**Vulkan 9/9. OpenGL 2/9. DirectX 12 0/9.**
+DirectX 11 ist neu geschrieben (es gab nirgends eine lauffähige Implementierung, siehe unten).
+Gerät, Fenster, Swap Chain, Clear und Present laufen — 02_HelloWorld präsentiert fehlerfrei.
 
-DirectX 12 scheitert immer an derselben Stelle: `VCreateWindow` in
-`BowDirectX12RenderDevice.cpp:93` ist `LOG_FATAL("Not yet implemented!")`. Das aus
-`long-bow-engine` übernommene DX12-Backend besteht aus **vier Dateien** — es ist ein Rumpf.
-Die substanzielle 41-Dateien-Implementierung lag im alten Baum dieses Repos und ist über die
-Git-Historie erreichbar (`git show 2635b41:src/Engine/RenderDeviceImplementations/DirectX12RenderDevice/`).
-Sie implementiert allerdings die alte API (`IBowVertexArray`) und muss portiert werden.
+DirectX 12 bleibt vorerst liegen: das übernommene Backend ist ein Rumpf aus vier Dateien.
+
+### Warum DirectX 11 neu geschrieben werden musste
+
+Die vermeintliche DX11-Implementierung in `Time-Of-Flight-Sensor-Simulation` und
+`Masterthesis_Project` (je 1836 Zeilen) ist keine:
+
+- sie referenziert `BowD3D11VertexBuffer.h`, `BowD3D11ShaderProgram.h`, `BowD3D11Texture2D.h`,
+  `BowD3D11VertexArray.h`, Framebuffer, Uniform, IndexBuffer, WritePixelBuffer — **keine dieser
+  Dateien existiert in irgendeinem Repo**
+- ihr Render-Kontext ruft `glDrawRangeElements`, `glDrawArrays` und
+  `ImGui_ImplOpenGL3_RenderDrawData` auf: es ist der OpenGL-Kontext mit umbenannter Klasse
+- sie inkludiert `d3dx11.h`, von Microsoft entfernt und im aktuellen Windows SDK nicht vorhanden
+- TOFs eigene CMakeLists nennt sie „currently unreachable" und baut sie nicht
 
 ## Nächste Session
 
-- [ ] `dependencies/` löschen (22 MB vorgebautes GLEW/GLFW für Windows, wird durch FetchContent
-      ersetzt und von nichts mehr referenziert). Mein Löschversuch wurde vom
-      Berechtigungs-Klassifikator blockiert — muss von Hand passieren:
-      `git rm -r dependencies`
-- [ ] **OpenGL lauffähig machen** — es fehlen genau fünf Funktionen in
-      `OpenGL3xRenderDevice/source/Device/Shader/BowOGL3xShaderProgram.cpp`, alle mit
-      `LOG_FATAL("Not yet Implemented")`. OpenGL initialisiert sonst sauber durch (GLFW, GLEW,
-      Shader-Compile, Attribut-Reflection) und bricht erst bei `VCreateResourceBindingObjects` ab:
-    - `VCreateResourceBindingObjects()` (Zeile 116)
-    - `FindShaderResources(uint32_t program)` (237) — Uniforms/Sampler/UBOs reflektieren
-    - `VSetTexture(name, texture, sampler)` (345)
-    - `VSetPushConstants(name, data, offset, size)` (352) — auf Uniforms abbilden
-    - `VSetPushConstants(shaderStage, data, offset, size)` (359)
-- [ ] **DirectX 12 portieren** — das übernommene Backend ist ein Rumpf aus vier Dateien.
-      Die echte Implementierung aus der Historie holen und auf die neue API heben
-      (`IBowVertexArray` → `IBowVertexAttributeBindings`, Resource Bindings, Push Constants)
-- [ ] DirectX 11 aus TOF portieren
+- [ ] `dependencies/` löschen (22 MB vorgebautes GLEW/GLFW, von nichts mehr referenziert).
+      Mein Löschversuch wurde vom Berechtigungs-Klassifikator blockiert: `git rm -r dependencies`
+- [ ] **DirectX 11 fertig bauen** — Gerät, Fenster, Swap Chain, Clear und Present laufen.
+      Es fehlen, in dieser Reihenfolge:
+    - Vertex- und Index-Buffer (`ID3D11Buffer`)
+    - Shader-Programm: HLSL über `D3DCompile`, Input Layout aus der Vertex-Shader-Reflection
+    - Vertex Attribute Bindings (`IASetVertexBuffers` + `ID3D11InputLayout`)
+    - Draw-Pfad und Render-States (Rasterizer/Blend/DepthStencil-State-Objekte)
+    - Texturen und Sampler, dann Shader Resource Bindings
+    - Framebuffer (Render-Target-Texturen)
+- [ ] Beispiele-Shader: die Beispiele liefern GLSL. Für DX11 braucht es entweder HLSL-Varianten
+      oder eine Übersetzung (SPIRV-Cross kann GLSL → HLSL und liegt im Vulkan SDK)
 
 ## Offen
 
@@ -83,15 +87,9 @@ Sie implementiert allerdings die alte API (`IBowVertexArray`) und muss portiert 
       "WARNING: Logger instance already exists, but it is different from the one passed as argument"
 
 ### Phase 3 — Backends
-- [ ] DirectX 11 aus TOF übernehmen
 - [ ] DirectX 12 tatsächlich lauffähig — baut, aber `VCreateBottomLevelAccelerationStructure`
       und `VCreateTopLevelAccelerationStructure` melden "Not yet implemented"
 - [ ] Bestes OpenGL aus TOF (67 Dateien, inkl. Dear ImGui) gegen den jetzigen Stand abgleichen
-- [ ] Backend zur Laufzeit wählbar machen (Kommandozeile/Env) statt fest einkompiliert —
-      aktuell steht in jedem Beispiel `RenderDeviceAPI::Vulkan` im Quelltext
-- [ ] Absolute Pfade aus den Beispielen entfernen, z. B.
-      `F:/Projects/masterthesis/data/Scenes/Sponza/...` in `05_Textures/main.cpp`
-- [ ] `05_Textures` erzeugt Textur und Sampler, bindet sie aber nie — Beispiel unvollständig
 
 ### Phase 4 — Bugs aus dem Altbestand
 - [ ] `NetworkDeviceManager` lädt `NetworkDevice[_d].dll`, gebaut wird `WinSockNetworkDevice[_d].dll`
@@ -99,8 +97,6 @@ Sie implementiert allerdings die alte API (`IBowVertexArray`) und muss portiert 
       beide existieren nicht
 - [ ] `GameFoundation` hat Quellen und ein `.vcxproj`, ist aber in keiner Solution
 - [ ] `Scene`-Projekt ist in der Solution, enthält aber keine Quelldatei
-- [ ] `math::Sqrt` in `BowMath.h` ist der Quake-Trick für die **inverse** Wurzel, wird aber als
-      `Sqrt` zurückgegeben; `double`-Overload puned zusätzlich durch `long`
 - [ ] `Doxyfile`: absolute Pfade einer fremden Maschine (`C:/Users/Greg/...`)
 - [ ] `Viewport::operator==` vergleicht `x` gegen alle Felder statt Feld gegen Feld
       (`IBowRenderContext.h`)

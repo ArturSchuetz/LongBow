@@ -4,6 +4,7 @@
 #include <CoreSystems/BowLogger.h>
 
 #include <queue>
+#include <string>
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -39,93 +40,70 @@ RenderDeviceManager &RenderDeviceManager::GetInstance()
     return instance;
 }
 
+namespace
+{
+
+//! Base filename of the plugin implementing each backend.
+/*!
+    The debug build appends a "d", matching the DEBUG_POSTFIX the CMake sets on
+    every plugin target. Adding a backend means adding a line here and a case
+    to RenderDeviceAPI, nothing else.
+*/
+const char *PluginName(RenderDeviceAPI api)
+{
+    switch (api)
+    {
+    case RenderDeviceAPI::DirectX11:
+        return "DirectX11RenderDevice";
+    case RenderDeviceAPI::DirectX12:
+        return "DirectX12RenderDevice";
+    case RenderDeviceAPI::OpenGL3x:
+        return "OpenGL3xRenderDevice";
+    case RenderDeviceAPI::Vulkan:
+        return "VulkanRenderDevice";
+    }
+    return nullptr;
+}
+
+} // namespace
+
 RenderDevicePtr RenderDeviceManager::CreateDevice(RenderDeviceAPI api, uint32_t deviceHandle)
 {
     FN("RenderDeviceManager::CreateDevice");
-    HMODULE hDLL = NULL;
-    switch (api)
-    {
-    case RenderDeviceAPI::DirectX12:
-    {
-#ifdef _DEBUG
-        hDLL = LoadLibrary("DirectX12RenderDeviced.dll");
-#else
-        hDLL = LoadLibrary("DirectX12RenderDevice.dll");
-#endif
-        if (!hDLL)
-        {
-#ifdef _DEBUG
-            LOG_ERROR("Could not find DirectX12RenderDeviced.dll!");
-#else
-            LOG_ERROR("Could not find DirectX12RenderDevice.dll!");
-#endif
-            DWORD errorCode = GetLastError();
-            LOG_ERROR("LoadLibrary failed with error code: %s", std::to_string(errorCode).c_str());
 
-            return RenderDevicePtr(nullptr);
-        }
-    }
-    break;
-    case RenderDeviceAPI::OpenGL3x:
-    {
-#ifdef _DEBUG
-        hDLL = LoadLibrary("OpenGL3xRenderDeviced.dll");
-#else
-        hDLL = LoadLibrary("OpenGL3xRenderDevice.dll");
-#endif
-        if (!hDLL)
-        {
-#ifdef _DEBUG
-            LOG_ERROR("Could not find OpenGL3xRenderDeviced.dll!");
-#else
-            LOG_ERROR("Could not find OpenGL3xRenderDevice.dll!");
-#endif
-            DWORD errorCode = GetLastError();
-            LOG_ERROR("LoadLibrary failed with error code: %s", std::to_string(errorCode).c_str());
-
-            return RenderDevicePtr(nullptr);
-        }
-    }
-    break;
-    case RenderDeviceAPI::Vulkan:
-    {
-#ifdef _DEBUG
-        hDLL = LoadLibrary("VulkanRenderDeviced.dll");
-#else
-        hDLL = LoadLibrary("VulkanRenderDevice.dll");
-#endif
-        if (!hDLL)
-        {
-#ifdef _DEBUG
-            LOG_ERROR("Could not find VulkanRenderDeviced.dll!");
-#else
-            LOG_ERROR("Could not find VulkanRenderDevice.dll!");
-#endif
-            DWORD errorCode = GetLastError();
-            LOG_ERROR("LoadLibrary failed with error code: %s", std::to_string(errorCode).c_str());
-
-            return RenderDevicePtr(nullptr);
-        }
-    }
-    break;
-    default:
+    const char *pluginName = PluginName(api);
+    if (pluginName == nullptr)
     {
         LOG_ERROR("Renderer API is not supported!");
         return RenderDevicePtr(nullptr);
     }
-    break;
+
+#ifdef _DEBUG
+    const std::string libraryName = std::string(pluginName) + "d.dll";
+#else
+    const std::string libraryName = std::string(pluginName) + ".dll";
+#endif
+
+    HMODULE hDLL = LoadLibrary(libraryName.c_str());
+    if (!hDLL)
+    {
+        LOG_ERROR("Could not load %s (error code %s).", libraryName.c_str(), std::to_string(GetLastError()).c_str());
+        return RenderDevicePtr(nullptr);
     }
 
-    CREATERENDERDEVICE _CreateRenderDevice = 0;
+    CREATERENDERDEVICE _CreateRenderDevice = (CREATERENDERDEVICE)GetProcAddress(hDLL, "CreateRenderDevice");
+    if (_CreateRenderDevice == nullptr)
+    {
+        // Previously called through unconditionally, so a plugin that loaded
+        // but exported nothing crashed instead of reporting itself.
+        LOG_ERROR("%s does not export CreateRenderDevice.", libraryName.c_str());
+        return RenderDevicePtr(nullptr);
+    }
 
-    // Zeiger auf die dll Funktion 'CreateRenderDevice'
-    _CreateRenderDevice = (CREATERENDERDEVICE)GetProcAddress(hDLL, "CreateRenderDevice");
     IRenderDevice *pDevice = _CreateRenderDevice(EventLogger::GetInstance(), deviceHandle);
-
-    // aufruf der dll Create-Funktionc
     if (pDevice == nullptr)
     {
-        LOG_ERROR("Could not create Render Device from DLL!");
+        LOG_ERROR("Could not create Render Device from %s!", libraryName.c_str());
         return RenderDevicePtr(nullptr);
     }
 
