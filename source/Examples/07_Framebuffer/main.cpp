@@ -6,6 +6,8 @@
 #include <CoreSystems/BowBasicTimer.h>
 #include <CoreSystems/BowLogger.h>
 
+#include <ExampleSupport/ExampleSupport.h>
+
 #include <optick.h>
 
 #include <iostream>
@@ -53,7 +55,7 @@ void SaveImageToDisk(void *data, uint32_t width, uint32_t height, const std::str
     file.close();
 }
 
-int main(int /*argc*/, char * /*argv[]*/)
+int main(int argc, char *argv[])
 {
     FN("main");
 
@@ -62,7 +64,10 @@ int main(int /*argc*/, char * /*argv[]*/)
     ///////////////////////////////////////////////////////////////////
     // Creating Render Device and Window
 
-    bow::RenderDevicePtr device = bow::RenderDeviceManager::GetInstance().CreateDevice(bow::RenderDeviceAPI::Vulkan);
+    bow::RenderDeviceAPI backend = bow::examples::SelectBackend(argc, argv);
+    LOG_INFO("Render backend: %s", bow::examples::BackendName(backend));
+
+    bow::RenderDevicePtr device = bow::RenderDeviceManager::GetInstance().CreateDevice(backend);
     if (device == nullptr)
     {
         LOG_ERROR("Could not create device!");
@@ -182,7 +187,7 @@ int main(int /*argc*/, char * /*argv[]*/)
     ///////////////////////////////////////////////////////////////////
     // Textures
 
-    bow::Texture2DPtr texture = device->VCreateTexture2D(bow::ImageManager::GetInstance().Load("D:/OneDrive/Bilder/testImage.bmp"));
+    bow::Texture2DPtr texture = device->VCreateTexture2D(bow::ImageManager::GetInstance().Load(bow::examples::DataPath("Textures/test.bmp")));
     bow::TextureSamplerPtr sampler = device->VCreateTexture2DSampler(bow::TextureMinificationFilter::Linear, bow::TextureMagnificationFilter::Linear, bow::TextureWrap::Clamp, bow::TextureWrap::Clamp);
 
     ///////////////////////////////////////////////////////////////////

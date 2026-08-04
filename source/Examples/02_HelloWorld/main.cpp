@@ -3,11 +3,13 @@
 
 #include <CoreSystems/BowLogger.h>
 
+#include <ExampleSupport/ExampleSupport.h>
+
 #include <optick.h>
 
 #include <iostream>
 
-int main(int /*argc*/, char * /*argv[]*/)
+int main(int argc, char *argv[])
 {
     FN("main");
 
@@ -16,7 +18,10 @@ int main(int /*argc*/, char * /*argv[]*/)
     LOG_TRACE("Hello World!");
 
     // Creating Render Device
-    bow::RenderDevicePtr device = bow::RenderDeviceManager::GetInstance().CreateDevice(bow::RenderDeviceAPI::Vulkan);
+    bow::RenderDeviceAPI backend = bow::examples::SelectBackend(argc, argv);
+    LOG_INFO("Render backend: %s", bow::examples::BackendName(backend));
+
+    bow::RenderDevicePtr device = bow::RenderDeviceManager::GetInstance().CreateDevice(backend);
     if (device == nullptr)
     {
         std::cout << "Could not create device!" << std::endl;

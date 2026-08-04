@@ -5,5 +5,6 @@ longbow_add_executable(04_Cube
         LongBow::RenderDevice
         LongBow::InputDevice
         LongBow::Profiler
+        LongBow::ExampleSupport
     FOLDER "Examples"
 )

@@ -4,17 +4,22 @@
 
 #include <CoreSystems/BowLogger.h>
 
+#include <ExampleSupport/ExampleSupport.h>
+
 #include <optick.h>
 
 #include <iostream>
 
-int main(int /*argc*/, char * /*argv[]*/)
+int main(int argc, char *argv[])
 {
     FN("main");
 
     OPTICK_APP("Input Sample");
 
-    bow::RenderDevicePtr renderDevice = bow::RenderDeviceManager::GetInstance().CreateDevice(bow::RenderDeviceAPI::DirectX12);
+    bow::RenderDeviceAPI backend = bow::examples::SelectBackend(argc, argv);
+    LOG_INFO("Render backend: %s", bow::examples::BackendName(backend));
+
+    bow::RenderDevicePtr renderDevice = bow::RenderDeviceManager::GetInstance().CreateDevice(backend);
     if (renderDevice == nullptr)
     {
         LOG_ERROR("Failed to create Render Device!");

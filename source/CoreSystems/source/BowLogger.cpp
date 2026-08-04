@@ -1,6 +1,7 @@
 #include "CoreSystems/BowLogger.h"
 
 #include <assert.h>
+#include <cstdlib>
 #include <cstring>
 #include <iostream>
 #include <memory>
@@ -27,7 +28,7 @@ EventLogger::~EventLogger() { Release(); }
 
 EventLogger::EventLogger(const EventLogger &other) : m_callStack(), m_previousStackLevel(0), m_initialized(other.m_initialized)
 {
-    // Falls die Log-Datei bereits geöffnet ist, öffne sie erneut
+    // Falls die Log-Datei bereits geï¿½ffnet ist, ï¿½ffne sie erneut
     if (other.m_logStream.is_open())
     {
         m_logStream.open("log.txt",
@@ -191,6 +192,14 @@ void EventLogger::LogError(const char *text, ...)
     LogOutput(buffer2);
 }
 
+bool EventLogger::InteractiveErrorsDisabled()
+{
+    // Evaluated once: a fatal error can fire from any thread, and the answer
+    // cannot change over the lifetime of the process.
+    static const bool disabled = std::getenv("LONGBOW_NO_ERROR_DIALOG") != nullptr;
+    return disabled;
+}
+
 void EventLogger::LogAssert(bool contidion, const char *file, long line, const char *description)
 {
     if (!contidion)
@@ -198,7 +207,13 @@ void EventLogger::LogAssert(bool contidion, const char *file, long line, const c
         LogAssertAndShowWindow(std::string(std::string(description) + std::string(" - in file %s at line %u.")).c_str(), file, line);
 
 #ifdef _DEBUG
-        assert(contidion);
+        // Both the message box and this assert block until someone clicks
+        // them away, which is useless in a test run, on a build server, or in
+        // any other unattended context.
+        if (!InteractiveErrorsDisabled())
+        {
+            assert(contidion);
+        }
 #endif
     }
 }
@@ -293,7 +308,14 @@ void EventLogger::LogAssertAndShowWindow(const char *text, ...)
     LogOutput(buffer2);
 
 #if defined(_WIN32)
-    MessageBoxA(NULL, buffer, "LongBow - FATAL ERROR", MB_OK | MB_ICONERROR);
+    if (!InteractiveErrorsDisabled())
+    {
+        MessageBoxA(NULL, buffer, "LongBow - FATAL ERROR", MB_OK | MB_ICONERROR);
+    }
+    else
+    {
+        std::cerr << "An exception has occured: " << buffer << std::endl;
+    }
 #else
     std::cerr << "An exception has occured: " << buffer << std::endl;
 #endif

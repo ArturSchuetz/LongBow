@@ -5,5 +5,6 @@ longbow_add_executable(08_ComputeShader
         LongBow::RenderDevice
         LongBow::InputDevice
         LongBow::Profiler
+        LongBow::ExampleSupport
     FOLDER "Examples"
 )

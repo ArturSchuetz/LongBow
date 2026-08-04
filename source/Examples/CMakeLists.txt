@@ -4,6 +4,8 @@
 # none of them links a backend directly -- the plugins just have to be built
 # and sit next to the executable.
 
+add_subdirectory(ExampleSupport)
+
 add_subdirectory(00_TimerTest)
 add_subdirectory(01_Input)
 add_subdirectory(02_HelloWorld)

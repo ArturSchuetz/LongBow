@@ -6,6 +6,8 @@
 #include <CoreSystems/BowBasicTimer.h>
 #include <CoreSystems/BowLogger.h>
 
+#include <ExampleSupport/ExampleSupport.h>
+
 #include <optick.h>
 
 #include <iostream>
@@ -37,14 +39,17 @@ void main() {
 }
 )";
 
-int main(int /*argc*/, char * /*argv[]*/)
+int main(int argc, char *argv[])
 {
     FN("main");
 
     OPTICK_APP("Textures Sample");
 
     // Creating Render Device
-    bow::RenderDevicePtr device = bow::RenderDeviceManager::GetInstance().CreateDevice(bow::RenderDeviceAPI::Vulkan);
+    bow::RenderDeviceAPI backend = bow::examples::SelectBackend(argc, argv);
+    LOG_INFO("Render backend: %s", bow::examples::BackendName(backend));
+
+    bow::RenderDevicePtr device = bow::RenderDeviceManager::GetInstance().CreateDevice(backend);
     if (device == nullptr)
     {
         return 0;
@@ -127,7 +132,7 @@ int main(int /*argc*/, char * /*argv[]*/)
     ///////////////////////////////////////////////////////////////////
     // Textures
 
-    bow::Texture2DPtr texture = device->VCreateTexture2D(bow::ImageManager::GetInstance().Load("F:/Projects/masterthesis/data/Scenes/Sponza/textures/vase_plant_mask.png"));
+    bow::Texture2DPtr texture = device->VCreateTexture2D(bow::ImageManager::GetInstance().Load(bow::examples::DataPath("Textures/test.png")));
     bow::TextureSamplerPtr sampler = device->VCreateTexture2DSampler(bow::TextureMinificationFilter::Linear, bow::TextureMagnificationFilter::Linear, bow::TextureWrap::Clamp, bow::TextureWrap::Clamp);
 
     ///////////////////////////////////////////////////////////////////

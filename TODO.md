@@ -26,6 +26,31 @@ Branch: `modernize/cmake-merge`. Ziel-Repo bleibt `github.com/ArturSchuetz/LongB
 | Beispiele | `long-bow-engine` (00–09) | mittel |
 | Globe-Rendering-Apps | `spherical-wavelets-for-globe-rendering` (11 Apps) | optional |
 
+## Testmatrix (Stand: alle Beispiele × alle Backends, Debug-Build)
+
+Ausgeführt mit `LONGBOW_BACKEND=<api>`, 12 s Timeout, Klassifikation über den Log.
+
+| Beispiel | OpenGL 3.x | DirectX 12 | Vulkan |
+|---|---|---|---|
+| 01_Input | läuft (kein Rendering, so gewollt) | Stub | rendert |
+| 02_HelloWorld | **rendert** | Stub | rendert |
+| 03_Triangle | Resource-Bindings fehlen | Stub | rendert |
+| 04_Cube | Resource-Bindings fehlen | Stub | rendert |
+| 05_Textures | Resource-Bindings fehlen | Stub | rendert |
+| 06_MeshRendering | Resource-Bindings fehlen | Stub | rendert |
+| 07_Framebuffer | Resource-Bindings fehlen | Stub | rendert |
+| 08_ComputeShader | Compute fehlt | Stub | rendert |
+| 09_PathTracing | kein Raytracing in OpenGL (korrekt) | Stub | rendert |
+
+**Vulkan 9/9. OpenGL 2/9. DirectX 12 0/9.**
+
+DirectX 12 scheitert immer an derselben Stelle: `VCreateWindow` in
+`BowDirectX12RenderDevice.cpp:93` ist `LOG_FATAL("Not yet implemented!")`. Das aus
+`long-bow-engine` übernommene DX12-Backend besteht aus **vier Dateien** — es ist ein Rumpf.
+Die substanzielle 41-Dateien-Implementierung lag im alten Baum dieses Repos und ist über die
+Git-Historie erreichbar (`git show 2635b41:src/Engine/RenderDeviceImplementations/DirectX12RenderDevice/`).
+Sie implementiert allerdings die alte API (`IBowVertexArray`) und muss portiert werden.
+
 ## Nächste Session
 
 - [ ] `dependencies/` löschen (22 MB vorgebautes GLEW/GLFW für Windows, wird durch FetchContent
@@ -41,6 +66,9 @@ Branch: `modernize/cmake-merge`. Ziel-Repo bleibt `github.com/ArturSchuetz/LongB
     - `VSetTexture(name, texture, sampler)` (345)
     - `VSetPushConstants(name, data, offset, size)` (352) — auf Uniforms abbilden
     - `VSetPushConstants(shaderStage, data, offset, size)` (359)
+- [ ] **DirectX 12 portieren** — das übernommene Backend ist ein Rumpf aus vier Dateien.
+      Die echte Implementierung aus der Historie holen und auf die neue API heben
+      (`IBowVertexArray` → `IBowVertexAttributeBindings`, Resource Bindings, Push Constants)
 - [ ] DirectX 11 aus TOF portieren
 
 ## Offen

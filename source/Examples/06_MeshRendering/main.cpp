@@ -7,6 +7,8 @@
 
 #include <CoreSystems/BowCoreSystems.h>
 
+#include <ExampleSupport/ExampleSupport.h>
+
 #include <optick.h>
 
 #include <iostream>
@@ -94,22 +96,25 @@ struct Material
 
 int main(int argc, char *argv[])
 {
-    if (argc < 2)
+    const char *meshArgument = bow::examples::PositionalArgument(argc, argv, 0);
+    if (meshArgument == nullptr)
     {
-        std::cerr << "Usage: " << argv[0] << " <path to .obj file>" << std::endl;
+        std::cerr << "Usage: " << argv[0] << " <path to .obj file> [--backend opengl|directx12|vulkan]" << std::endl;
         return -1;
     }
 
-    std::string objFilePath = argv[1];
+    std::string objFilePath = meshArgument;
 
     FN("main");
 
     OPTICK_APP("Mesh Rendering Sample");
 
-    bow::RenderDeviceAPI api = bow::RenderDeviceAPI::Vulkan;
 
     // Creating Render Device
-    bow::RenderDevicePtr device = bow::RenderDeviceManager::GetInstance().CreateDevice(api);
+    bow::RenderDeviceAPI backend = bow::examples::SelectBackend(argc, argv);
+    LOG_INFO("Render backend: %s", bow::examples::BackendName(backend));
+
+    bow::RenderDevicePtr device = bow::RenderDeviceManager::GetInstance().CreateDevice(backend);
     if (device == nullptr)
     {
         return 0;

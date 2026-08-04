@@ -230,6 +230,14 @@ class CORESYSTEMS_API EventLogger
 
     void LogAssertAndShowWindow(const char *text, ...);
 
+    //! Whether fatal errors must not open a modal dialog or trip an assert.
+    /*!
+        Set LONGBOW_NO_ERROR_DIALOG in the environment for unattended runs --
+        tests, build servers, batch rendering. Fatal errors then go to stderr
+        and the log like every other message instead of waiting for a click.
+    */
+    static bool InteractiveErrorsDisabled();
+
     std::vector<const char *> m_callStack;
     unsigned int m_previousStackLevel;
     bool m_initialized;        //!< 'true' if the logger is ready

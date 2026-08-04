@@ -4,6 +4,8 @@
 #include <CoreSystems/BowBasicTimer.h>
 #include <CoreSystems/BowLogger.h>
 
+#include <ExampleSupport/ExampleSupport.h>
+
 #include <optick.h>
 
 #include <iostream>
@@ -38,7 +40,7 @@ void main() {
 }
 )";
 
-int main(int /*argc*/, char * /*argv[]*/)
+int main(int argc, char *argv[])
 {
     FN("main");
 
@@ -47,7 +49,10 @@ int main(int /*argc*/, char * /*argv[]*/)
     ///////////////////////////////////////////////////////////////////
     // Creating Render Device and Window
 
-    bow::RenderDevicePtr device = bow::RenderDeviceManager::GetInstance().CreateDevice(bow::RenderDeviceAPI::Vulkan);
+    bow::RenderDeviceAPI backend = bow::examples::SelectBackend(argc, argv);
+    LOG_INFO("Render backend: %s", bow::examples::BackendName(backend));
+
+    bow::RenderDevicePtr device = bow::RenderDeviceManager::GetInstance().CreateDevice(backend);
     if (device == nullptr)
     {
         LOG_ERROR("Could not create device!");

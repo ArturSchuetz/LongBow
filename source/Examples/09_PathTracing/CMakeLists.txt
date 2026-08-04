@@ -5,5 +5,6 @@ longbow_add_executable(09_PathTracing
         LongBow::RenderDevice
         LongBow::InputDevice
         LongBow::Profiler
+        LongBow::ExampleSupport
     FOLDER "Examples"
 )
