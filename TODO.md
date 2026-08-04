@@ -28,33 +28,41 @@ Der ausführliche Plan steht in [docs/PLAN.md](docs/PLAN.md), die Begründung de
 | DirectX 11 | Classic | Gerät, Fenster, Swap Chain, Clear, Present. **Keine Ressourcentypen** |
 | DirectX 12 | Thin (künftig) | Rumpf aus 4 Dateien. Echte Implementierung in der Historie (`2635b41`) |
 
-## Jetzt dran
+## Jetzt dran — Stufe 3, DirectX 11
 
-### Stufe 1 — Schnittstelle aufteilen
-- [ ] Modul `ThinRenderDevice` anlegen
-- [ ] Raytracing aus `RenderDevice` herausziehen
-- [ ] `VBeginFrame`/`VEndFrame` und `VSetPushConstants` aus der klassischen Schnittstelle
-- [ ] `IShaderResourceBindings` im Classic-Tier durch Binden über Namen am Kontext ersetzen
-- [ ] OpenGL-Backend nachziehen
-- [ ] `ThinRenderDeviceManager`
+Reihenfolge bewusst geändert: Stufe 1 (Schnittstelle aufteilen) würde Vulkan und
+09_PathTracing über mehrere Stufen zerlegen, weil beide Raytracing über die klassische
+Schnittstelle nutzen. Stufe 3 ist reine Ergänzung und bricht nichts, kommt also zuerst.
 
-### Stufe 2 — OpenGL 4.5 durchgängig
-- [ ] Texturen auf `glCreateTextures`/`glTextureStorage2D`/`glTextureParameteri`
-- [ ] Framebuffer auf `glCreateFramebuffers`/`glNamedFramebufferTexture`
-- [ ] Vertex Arrays auf `glCreateVertexArrays`/`glVertexArrayAttribFormat`
-- [ ] `glBindTextureUnit` statt `glActiveTexture` + `glBindTexture`
-- [ ] Modul und Klassen von `OpenGL3x`/`OGL3x` auf `OpenGL`/`OGL` umbenennen
+### Fertig
+- [x] Buffer:  als Basis, Vertex-, Index- und Constant-Buffer darauf.
+      Dynamic → /, Default → , Read-back über Staging-Kopie
+- [x] Shader-Übersetzung: **GLSL → SPIR-V → HLSL → DXBC**, über shaderc und SPIRV-Cross aus dem
+      Vulkan SDK. Damit laufen die vorhandenen GLSL-Beispiele unverändert auf DirectX 11.
+      HLSL wird durchgereicht (Erkennung über )
+- [x] : kompiliert beide Stufen, reflektiert Vertex-Eingänge und
+      Ressourcen-Slots über , hält den Vertex-Bytecode fürs Input Layout
+- [x] Push Constants → Constant Buffer, per Name
+- [x] Texturen, Sampler, 
+- [x] Alles im Gerät verdrahtet
 
-### Stufe 3 — DirectX 11 auf Augenhöhe mit OpenGL
-- [ ] Buffer (Vertex, Index, Constant, Storage/UAV, Pixel)
-- [ ] Shader-Programm über `d3dcompiler` + `ID3D11ShaderReflection`
-- [ ] Input Layout aus der Vertex-Shader-Signatur
-- [ ] Draw-Pfad
-- [ ] Render-States als gecachte State-Objekte
-- [ ] Texturen und Sampler
-- [ ] Binden über Namen
-- [ ] Framebuffer
-- [ ] Compute
+### Als Nächstes — genau hier weitermachen
+- [ ] **** — das fehlende Stück. 
+      gibt noch  zurück, deshalb stürzt  ab (kein Fehler im Backend,
+      das Beispiel dereferenziert den Nullzeiger). Braucht:
+    -  aus  und den gesetzten Attributen
+    - Semantik-Zuordnung: SPIRV-Cross benennt übersetzte Eingänge ,
+      die GLSL-Location steckt im Semantic Index —  wertet das schon aus
+- [ ] Draw-Pfad: , , ,
+      /, dazu  des Shader-Programms
+- [ ] Render-States als gecachte Objekte (Rasterizer, Blend, DepthStencil)
+- [ ] Ressourcen-Bindung im Kontext: Namen über die Reflection in Slots auflösen,
+      //
+- [ ] Framebuffer über Render-Target-Views
+- [ ] Compute und Storage Buffer (UAV)
+
+Stand der Beispiele auf DirectX 11:  läuft (1107 Present-Aufrufe, fehlerfrei).
+Der Rest wartet auf den Draw-Pfad.
 
 ## Danach
 

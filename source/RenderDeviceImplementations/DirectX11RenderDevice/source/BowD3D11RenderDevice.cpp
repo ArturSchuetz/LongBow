@@ -1,8 +1,18 @@
 #include <DirectX11RenderDevice/BowD3D11RenderDevice.h>
 
 #include <DirectX11RenderDevice/Device/BowD3D11GraphicsWindow.h>
+#include <DirectX11RenderDevice/Device/Buffer/BowD3D11IndexBuffer.h>
+#include <DirectX11RenderDevice/Device/Shader/BowD3D11ShaderProgram.h>
+#include <DirectX11RenderDevice/Device/Textures/BowD3D11Texture2D.h>
+#include <DirectX11RenderDevice/Device/Textures/BowD3D11TextureSampler.h>
+
+#include <Resources/Resources/BowImage.h>
+#include <DirectX11RenderDevice/Device/Buffer/BowD3D11UniformBuffer.h>
+#include <DirectX11RenderDevice/Device/Buffer/BowD3D11VertexBuffer.h>
 
 #include <CoreSystems/BowLogger.h>
+
+#include <vector>
 #include <CoreSystems/Geometry/BowMeshAttribute.h>
 
 #include <RenderDevice/Device/Shader/Textures/IBowTexture2D.h>
@@ -200,18 +210,20 @@ ComputeShaderProgramPtr D3D11RenderDevice::VCreateComputeShaderProgram(const std
     return nullptr;
 }
 
-ShaderProgramPtr D3D11RenderDevice::VCreateShaderProgram(const std::string &, const std::string &)
+ShaderProgramPtr D3D11RenderDevice::VCreateShaderProgram(const std::string &VertexShaderSource, const std::string &FragementShaderSource)
 {
     FN("D3D11RenderDevice::VCreateShaderProgram");
-    ReportMissing("shader programs");
-    return nullptr;
+
+    D3D11ShaderProgramPtr program = D3D11ShaderProgramPtr(new D3D11ShaderProgram(m_device.Get(), m_deviceContext.Get(), VertexShaderSource, FragementShaderSource, std::string()));
+    return program->IsReady() ? program : nullptr;
 }
 
-ShaderProgramPtr D3D11RenderDevice::VCreateShaderProgram(const std::string &, const std::string &, const std::string &)
+ShaderProgramPtr D3D11RenderDevice::VCreateShaderProgram(const std::string &VertexShaderSource, const std::string &GeometryShaderSource, const std::string &FragementShaderSource)
 {
     FN("D3D11RenderDevice::VCreateShaderProgram");
-    ReportMissing("shader programs");
-    return nullptr;
+
+    D3D11ShaderProgramPtr program = D3D11ShaderProgramPtr(new D3D11ShaderProgram(m_device.Get(), m_deviceContext.Get(), VertexShaderSource, FragementShaderSource, GeometryShaderSource));
+    return program->IsReady() ? program : nullptr;
 }
 
 ShaderProgramPtr D3D11RenderDevice::VCreateShaderProgram(const std::string &, const std::string &, const std::string &, const std::string &)
@@ -228,18 +240,19 @@ MeshBufferPtr D3D11RenderDevice::VCreateMeshBuffers(MeshAttribute, ShaderVertexA
     return nullptr;
 }
 
-VertexBufferPtr D3D11RenderDevice::VCreateVertexBuffer(BufferHint, int, bool)
+VertexBufferPtr D3D11RenderDevice::VCreateVertexBuffer(BufferHint usageHint, int sizeInBytes, bool)
 {
     FN("D3D11RenderDevice::VCreateVertexBuffer");
-    ReportMissing("vertex buffers");
-    return nullptr;
+
+    // useForRayTracing is ignored: DirectX 11 has no acceleration structures.
+    return D3D11VertexBufferPtr(new D3D11VertexBuffer(m_device.Get(), m_deviceContext.Get(), usageHint, sizeInBytes));
 }
 
-IndexBufferPtr D3D11RenderDevice::VCreateIndexBuffer(BufferHint, IndexBufferDatatype, int, bool)
+IndexBufferPtr D3D11RenderDevice::VCreateIndexBuffer(BufferHint usageHint, IndexBufferDatatype dataType, int sizeInBytes, bool)
 {
     FN("D3D11RenderDevice::VCreateIndexBuffer");
-    ReportMissing("index buffers");
-    return nullptr;
+
+    return D3D11IndexBufferPtr(new D3D11IndexBuffer(m_device.Get(), m_deviceContext.Get(), usageHint, dataType, sizeInBytes));
 }
 
 WritePixelBufferPtr D3D11RenderDevice::VCreateWritePixelBuffer(PixelBufferHint, int)
@@ -249,11 +262,11 @@ WritePixelBufferPtr D3D11RenderDevice::VCreateWritePixelBuffer(PixelBufferHint, 
     return nullptr;
 }
 
-UniformBufferPtr D3D11RenderDevice::VCreateUniformBuffer(BufferHint, int, void *)
+UniformBufferPtr D3D11RenderDevice::VCreateUniformBuffer(BufferHint usageHint, int sizeInBytes, void *data)
 {
     FN("D3D11RenderDevice::VCreateUniformBuffer");
-    ReportMissing("uniform buffers");
-    return nullptr;
+
+    return D3D11UniformBufferPtr(new D3D11UniformBuffer(m_device.Get(), m_deviceContext.Get(), usageHint, sizeInBytes, data));
 }
 
 StorageBufferPtr D3D11RenderDevice::VCreateStorageBuffer(BufferHint, int, void *)
@@ -263,25 +276,60 @@ StorageBufferPtr D3D11RenderDevice::VCreateStorageBuffer(BufferHint, int, void *
     return nullptr;
 }
 
-Texture2DPtr D3D11RenderDevice::VCreateTexture2D(Texture2DDescription)
+Texture2DPtr D3D11RenderDevice::VCreateTexture2D(Texture2DDescription description)
 {
     FN("D3D11RenderDevice::VCreateTexture2D");
-    ReportMissing("textures");
-    return nullptr;
+
+    return D3D11Texture2DPtr(new D3D11Texture2D(m_device.Get(), m_deviceContext.Get(), description));
 }
 
-Texture2DPtr D3D11RenderDevice::VCreateTexture2D(ImagePtr)
+Texture2DPtr D3D11RenderDevice::VCreateTexture2D(ImagePtr image)
 {
     FN("D3D11RenderDevice::VCreateTexture2D");
-    ReportMissing("textures");
-    return nullptr;
+
+    const uint32_t width = image->GetWidth();
+    const uint32_t height = image->GetHeight();
+    if (width == 0 || height == 0)
+    {
+        LOG_ERROR("No image to create a texture from.");
+        return nullptr;
+    }
+
+    // Three-channel images are widened to four: DirectX has no 24-bit format,
+    // and the upload needs the row pitch to match what was allocated.
+    const uint32_t channels = image->GetNumChannels();
+
+    Texture2DPtr texture = VCreateTexture2D(Texture2DDescription(width, height, TextureFormat::RedGreenBlueAlpha8, true));
+    if (texture == nullptr)
+    {
+        return nullptr;
+    }
+
+    if (channels == 3)
+    {
+        std::vector<unsigned char> widened((size_t)width * height * 4, 255);
+        const unsigned char *source = static_cast<const unsigned char *>(image->GetData());
+        for (size_t pixel = 0; pixel < (size_t)width * height; ++pixel)
+        {
+            widened[pixel * 4 + 0] = source[pixel * 3 + 0];
+            widened[pixel * 4 + 1] = source[pixel * 3 + 1];
+            widened[pixel * 4 + 2] = source[pixel * 3 + 2];
+        }
+        texture->VCopyFromSystemMemory(widened.data(), ImageFormat::RedGreenBlueAlpha, ImageDatatype::UnsignedByte);
+    }
+    else
+    {
+        texture->VCopyFromSystemMemory(image->GetData(), ImageFormat::RedGreenBlueAlpha, ImageDatatype::UnsignedByte);
+    }
+
+    return texture;
 }
 
-TextureSamplerPtr D3D11RenderDevice::VCreateTexture2DSampler(TextureMinificationFilter, TextureMagnificationFilter, TextureWrap, TextureWrap, float)
+TextureSamplerPtr D3D11RenderDevice::VCreateTexture2DSampler(TextureMinificationFilter minificationFilter, TextureMagnificationFilter magnificationFilter, TextureWrap wrapS, TextureWrap wrapT, float maximumAnistropy)
 {
     FN("D3D11RenderDevice::VCreateTexture2DSampler");
-    ReportMissing("texture samplers");
-    return nullptr;
+
+    return D3D11TextureSamplerPtr(new D3D11TextureSampler(m_device.Get(), minificationFilter, magnificationFilter, wrapS, wrapT, maximumAnistropy));
 }
 
 std::unique_ptr<IBottomLevelAccelerationStructure> D3D11RenderDevice::VCreateBottomLevelAccelerationStructure(MeshPtr)
