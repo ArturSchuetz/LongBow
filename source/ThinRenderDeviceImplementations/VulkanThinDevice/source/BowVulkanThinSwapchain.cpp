@@ -189,9 +189,13 @@ uint32_t VulkanThinSwapchain::VAcquireNextImage()
 
     // Hand the pair to the device so the next submit picks it up. The
     // interface never mentions binary semaphores; this is where they live.
+    // The acquire semaphore belongs to the frame in flight, but the present
+    // one belongs to the image: a frame waits on the image it was given, and
+    // reusing it by frame would signal the same semaphore twice while the
+    // first signal was still pending.
     VulkanThinDevice::PendingPresentSync sync;
     sync.waitOnAcquire = semaphore;
-    sync.signalForPresent = m_presentSemaphores[slot];
+    sync.signalForPresent = m_presentSemaphores[m_currentImage];
     m_device->SetPendingPresentSync(sync);
 
     if (result == VK_ERROR_OUT_OF_DATE_KHR)
@@ -217,7 +221,7 @@ void VulkanThinSwapchain::VPresent(bool /*vsync*/)
         return;
     }
 
-    const VkSemaphore presentSemaphore = m_presentSemaphores[m_frame % m_presentSemaphores.size()];
+    const VkSemaphore presentSemaphore = m_presentSemaphores[m_currentImage];
 
     VkPresentInfoKHR presentInfo = {VK_STRUCTURE_TYPE_PRESENT_INFO_KHR};
     presentInfo.waitSemaphoreCount = 1;

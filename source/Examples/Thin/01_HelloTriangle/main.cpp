@@ -11,6 +11,7 @@
 
 #include <CoreSystems/BowLogger.h>
 
+#include <cstdlib>
 #include <fstream>
 #include <vector>
 
@@ -60,6 +61,11 @@ int main(int argc, char *argv[])
     FN("main");
 
     bow::ThinRenderDeviceAPI api = bow::ThinRenderDeviceAPI::Vulkan;
+
+    // Render a fixed number of frames and exit, so the example can be run
+    // unattended -- by a build server, or to check it draws at all.
+    uint64_t frameLimit = 0;
+
     for (int i = 1; i < argc; ++i)
     {
         const std::string argument = argv[i];
@@ -70,6 +76,10 @@ int main(int argc, char *argv[])
             {
                 api = bow::ThinRenderDeviceAPI::DirectX12;
             }
+        }
+        else if (argument == "--frames" && i + 1 < argc)
+        {
+            frameLimit = (uint64_t)std::strtoull(argv[i + 1], nullptr, 10);
         }
     }
 
@@ -198,6 +208,11 @@ int main(int argc, char *argv[])
 
     while (!glfwWindowShouldClose(window))
     {
+        if (frameLimit > 0 && frame >= frameLimit)
+        {
+            break;
+        }
+
         glfwPollEvents();
 
         const uint32_t slot = (uint32_t)(frame % FramesInFlight);
@@ -274,6 +289,8 @@ int main(int argc, char *argv[])
     }
 
     device->VWaitIdle();
+
+    LOG_INFO("Rendered %llu frames.", (unsigned long long)frame);
 
     glfwDestroyWindow(window);
     glfwTerminate();
