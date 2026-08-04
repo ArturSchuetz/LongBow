@@ -29,6 +29,7 @@ add_subdirectory(CoreSystems)
 add_subdirectory(Platform)
 add_subdirectory(Resources)
 add_subdirectory(RenderDevice)
+add_subdirectory(ThinRenderDevice)
 add_subdirectory(InputDevice)
 
 #
