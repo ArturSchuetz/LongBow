@@ -28,30 +28,38 @@ Branch: `modernize/cmake-merge`. Ziel-Repo bleibt `github.com/ArturSchuetz/LongB
 
 ## Nächste Session
 
-- [ ] Phase 1 abschließen (siehe unten)
+- [ ] **OpenGL lauffähig machen** — es fehlen genau fünf Funktionen in
+      `OpenGL3xRenderDevice/source/Device/Shader/BowOGL3xShaderProgram.cpp`, alle mit
+      `LOG_FATAL("Not yet Implemented")`. OpenGL initialisiert sonst sauber durch (GLFW, GLEW,
+      Shader-Compile, Attribut-Reflection) und bricht erst bei `VCreateResourceBindingObjects` ab:
+    - `VCreateResourceBindingObjects()` (Zeile 116)
+    - `FindShaderResources(uint32_t program)` (237) — Uniforms/Sampler/UBOs reflektieren
+    - `VSetTexture(name, texture, sampler)` (345)
+    - `VSetPushConstants(name, data, offset, size)` (352) — auf Uniforms abbilden
+    - `VSetPushConstants(shaderStage, data, offset, size)` (359)
+- [ ] DirectX 11 aus TOF portieren
 
 ## Offen
 
-### Phase 1 — Skelett
-- [ ] Zielstruktur `source/<Modul>/{include/<Modul>,source}` anlegen
-- [ ] Root-`CMakeLists.txt` neu schreiben (CMake ≥ 3.21, C++17, Optionen pro Backend)
-- [ ] `CMakePresets.json` (msvc-x64-debug/release)
-- [ ] `.clang-format`, `.gitignore` überarbeiten (aktuell werden `bin/`, `lib/`, `doc/` ignoriert
-      und einzelne Dateien force-added)
-- [ ] `CoreSystems` + `Platform` migrieren und **bauend** bekommen — erster Meilenstein
-
 ### Phase 2 — Kernmodule
-- [ ] `Resources` (Bild-/Mesh-/Material-Loader, LoadPNG)
-- [ ] `RenderDevice`, `InputDevice`, `NetworkDevice` (Interfaces + Manager)
-- [ ] Plugin-Lader plattformunabhängig machen (aktuell `LoadLibraryExW` hart auf Windows)
+- [ ] `NetworkDevice` + `WinSockNetworkDevice` aus dem alten Repo übernehmen (fehlen in
+      `long-bow-engine` komplett)
+- [ ] `GameFoundation` (Actor/Component) aus dem alten Repo übernehmen
+- [ ] Plugin-Lader plattformunabhängig machen (immer noch `LoadLibrary`, trotz
+      "cross-platform" in der README von `long-bow-engine`)
+- [ ] Logger-Injektion über DLL-Grenzen prüfen — beim Start erscheint
+      "WARNING: Logger instance already exists, but it is different from the one passed as argument"
 
 ### Phase 3 — Backends
-- [ ] OpenGL 3.x lauffähig (Referenz-Backend)
-- [ ] DirectX 12 lauffähig — offene Enden: `VCreateVertexArray(mesh,…)` und `VCreateFramebuffer`
-      geben `nullptr` zurück
 - [ ] DirectX 11 aus TOF übernehmen
-- [ ] Vulkan aus `long-bow-engine` übernehmen (inkl. Raytracing)
-- [ ] Backend-Auswahl zur Laufzeit über eine gemeinsame `IBowRenderDevice`-API verifizieren
+- [ ] DirectX 12 tatsächlich lauffähig — baut, aber `VCreateBottomLevelAccelerationStructure`
+      und `VCreateTopLevelAccelerationStructure` melden "Not yet implemented"
+- [ ] Bestes OpenGL aus TOF (67 Dateien, inkl. Dear ImGui) gegen den jetzigen Stand abgleichen
+- [ ] Backend zur Laufzeit wählbar machen (Kommandozeile/Env) statt fest einkompiliert —
+      aktuell steht in jedem Beispiel `RenderDeviceAPI::Vulkan` im Quelltext
+- [ ] Absolute Pfade aus den Beispielen entfernen, z. B.
+      `F:/Projects/masterthesis/data/Scenes/Sponza/...` in `05_Textures/main.cpp`
+- [ ] `05_Textures` erzeugt Textur und Sampler, bindet sie aber nie — Beispiel unvollständig
 
 ### Phase 4 — Bugs aus dem Altbestand
 - [ ] `NetworkDeviceManager` lädt `NetworkDevice[_d].dll`, gebaut wird `WinSockNetworkDevice[_d].dll`
@@ -97,3 +105,18 @@ Branch: `modernize/cmake-merge`. Ziel-Repo bleibt `github.com/ArturSchuetz/LongB
 - [x] Toolchain geprüft: CMake 4.2, MSVC 14.44, Vulkan SDK 1.4.341.1, Windows SDK 10.0.26100 —
       **v140 fehlt, die alte `.sln` baut auf dieser Maschine nicht**
 - [x] Branch `modernize/cmake-merge` angelegt
+- [x] Phase 1: Skelett aus `long-bow-engine` übernommen, CMake komplett neu geschrieben
+      (`cmake/LongBowModule.cmake` statt ~200 Zeilen Zeremonie pro Modul)
+- [x] `.gitignore` neu — die alte ignorierte `*.txt` und hätte **jede CMakeLists.txt**
+      stillschweigend aus dem Repo gehalten
+- [x] ThirdParty von ~350 MB auf LoadPNG (452 KB) reduziert; glslang/shaderc/SPIRV aus dem
+      Vulkan SDK, glfw/glew/optick über FetchContent
+- [x] Optick-Stub, damit die ~300 `OPTICK_EVENT`-Stellen auch ohne Profiler bauen
+- [x] Drei latente CoreSystems-Bugs behoben (Sphere-Konstruktor, Matrix3x3-Komma,
+      `math::Sqrt` → `ReciprocalSqrt`)
+- [x] Vier Vulkan-Bugs behoben (Rückgabetyp-Mismatches, redundanter Klassen-Qualifier)
+- [x] OpenGL-Backend wieder an die aktuelle `IRenderDevice`-Schnittstelle angeglichen
+- [x] Alle zehn Beispiele bauen; **Vulkan rendert nachweislich** (03_Triangle läuft im
+      Frame-Loop), OpenGL initialisiert bis zum Shader-Resource-Binding
+- [x] `07_Framebuffer` auf Resource-Bindings portiert (war mit `assert(!"Uniforms are gone!")`
+      liegengelassen)

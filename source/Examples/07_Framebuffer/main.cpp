@@ -199,33 +199,35 @@ int main(int /*argc*/, char * /*argv[]*/)
     ///////////////////////////////////////////////////////////////////
     // Render to Framebuffer
 
-    int TexID1 = 0;
+    // Textures are no longer bound on the context by slot index; they are set
+    // on a resource binding object obtained from the shader program. The two
+    // passes sample different textures through the same sampler binding, so
+    // each one gets its own object rather than being rebound every frame.
 
-    int TexID2 = 1;
+    bow::ShaderResourceBindingsPtr offscreenBindings = shaderProgram->VCreateResourceBindingObjects();
+    offscreenBindings->VSetTexture("diffuseTex", texture, sampler);
+
+    bow::ShaderResourceBindingsPtr presentBindings = shaderProgram->VCreateResourceBindingObjects();
+    presentBindings->VSetTexture("diffuseTex", renderTarget, sampler);
+
+    const uint32_t quadVertexCount = 6;
 
     while (!window->VShouldClose())
     {
         OPTICK_FRAME("MainThread");
 
-        // Render into Texture
+        // Render the source texture into the offscreen target
         context->VSetFramebuffer(frameBuffer);
-        context->VSetTexture(TexID1, texture);
-        context->VSetTextureSampler(TexID1, sampler);
-        assert(!"Uniforms are gone!");
-        // shaderProgram->VSetUniform("diffuseTex", TexID1);
         context->VClear(clearBlue);
         context->VSetViewport(bow::Viewport(0, 0, window->VGetWidth(), window->VGetHeight()));
-        context->VDraw(bow::PrimitiveType::Triangles, vertexAttributeBindings, shaderProgram, renderState);
+        context->VDraw(bow::PrimitiveType::Triangles, 0, quadVertexCount, vertexAttributeBindings, offscreenBindings, shaderProgram, renderState);
 
-        // Render Texture to Screen
+        // Render that offscreen target to the screen
         context->VSetFramebuffer(nullptr);
-        context->VSetTexture(TexID2, renderTarget);
-        context->VSetTextureSampler(TexID2, sampler);
-        assert(!"Uniforms are gone!");
-        // shaderProgram->VSetUniform("diffuseTex", TexID2);
         context->VClear(clearRed);
         context->VSetViewport(bow::Viewport(0, 0, window->VGetWidth(), window->VGetHeight()));
-        context->VDraw(bow::PrimitiveType::Triangles, vertexAttributeBindings, shaderProgram, renderState);
+        context->VDraw(bow::PrimitiveType::Triangles, 0, quadVertexCount, vertexAttributeBindings, presentBindings, shaderProgram, renderState);
+
         context->VSwapBuffers();
     }
 
