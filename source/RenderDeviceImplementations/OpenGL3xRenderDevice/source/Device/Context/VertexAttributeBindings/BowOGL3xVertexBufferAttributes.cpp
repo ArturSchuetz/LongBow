@@ -75,7 +75,7 @@ void OGLVertexBufferAttributes::SetAttribute(int location, VertexBufferAttribute
     }
 }
 
-void OGLVertexBufferAttributes::Clean()
+void OGLVertexBufferAttributes::Clean(uint32_t vertexArray)
 {
     FN("OGLVertexBufferAttributes::Clean");
 
@@ -91,11 +91,11 @@ void OGLVertexBufferAttributes::Clean()
             {
                 if (attribute != nullptr)
                 {
-                    Attach(it->first);
+                    Attach(vertexArray, it->first);
                 }
                 else
                 {
-                    Detach(it->first);
+                    Detach(vertexArray, it->first);
                 }
 
                 m_Attributes[it->first].Dirty = false;
@@ -120,27 +120,40 @@ int OGLVertexBufferAttributes::GetMaximumArrayIndex()
     return m_maximumArrayIndex;
 }
 
-void OGLVertexBufferAttributes::Attach(int location)
+void OGLVertexBufferAttributes::Attach(uint32_t vertexArray, int location)
 {
     FN("OGLVertexBufferAttributes::Attach");
-
-    LOG_TRACE("glEnableVertexAttribArray");
-    glEnableVertexAttribArray(location);
 
     VertexBufferAttributePtr attribute = m_Attributes[location].VertexBufferAttribute;
     OGLVertexBufferPtr bufferObjectGL = std::dynamic_pointer_cast<OGLVertexBuffer>(attribute->GetVertexBuffer());
 
-    bufferObjectGL->Bind();
-    LOG_TRACE("glVertexAttribPointer");
-    glVertexAttribPointer(location, attribute->GetNumberOfComponents(), OGLTypeConverter::To(attribute->GetComponentDatatype()), attribute->Normalize(), attribute->GetStrideInBytes(), (void *)attribute->GetOffsetInBytes());
+    LOG_TRACE("glEnableVertexArrayAttrib");
+    glEnableVertexArrayAttrib(vertexArray, location);
+
+    // glVertexAttribPointer folded three things into one call: which buffer to
+    // read from, where in it to start, and how a vertex is laid out. The
+    // separate-attribute-format path splits them, which is why the offset moves
+    // to the buffer binding and the format is left with a relative offset of
+    // zero -- every attribute here has a buffer of its own. DirectX 11 input
+    // layouts draw the same line, so stage 3 inherits the shape.
+    const uint32_t bindingIndex = (uint32_t)location;
+
+    LOG_TRACE("glVertexArrayVertexBuffer");
+    glVertexArrayVertexBuffer(vertexArray, bindingIndex, bufferObjectGL->GetGLHandle(), (GLintptr)attribute->GetOffsetInBytes(), (GLsizei)attribute->GetStrideInBytes());
+
+    LOG_TRACE("glVertexArrayAttribFormat");
+    glVertexArrayAttribFormat(vertexArray, location, attribute->GetNumberOfComponents(), OGLTypeConverter::To(attribute->GetComponentDatatype()), attribute->Normalize(), 0);
+
+    LOG_TRACE("glVertexArrayAttribBinding");
+    glVertexArrayAttribBinding(vertexArray, location, bindingIndex);
 }
 
-void OGLVertexBufferAttributes::Detach(int location)
+void OGLVertexBufferAttributes::Detach(uint32_t vertexArray, int location)
 {
     FN("OGLVertexBufferAttributes::Detach");
 
-    LOG_TRACE("glDisableVertexAttribArray");
-    glDisableVertexAttribArray(location);
+    LOG_TRACE("glDisableVertexArrayAttrib");
+    glDisableVertexArrayAttrib(vertexArray, location);
 }
 
 int OGLVertexBufferAttributes::NumberOfVertices(VertexBufferAttributePtr attribute)

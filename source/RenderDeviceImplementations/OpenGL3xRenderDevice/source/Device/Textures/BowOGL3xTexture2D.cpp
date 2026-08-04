@@ -106,15 +106,15 @@ GLenum OGLTexture2D::GetTarget()
     return m_target;
 }
 
-void OGLTexture2D::Bind()
+void OGLTexture2D::Bind(uint32_t textureUnitIndex)
 {
     FN("OGLTexture2D::Bind");
 
     // Without direct state access a texture had to be made current on some
     // unit before it could be touched at all; binding now only means "make
-    // this visible to the shader".
+    // this visible to the shader on this unit".
     LOG_TRACE("glBindTextureUnit");
-    glBindTextureUnit(0, m_TextureHandle);
+    glBindTextureUnit(textureUnitIndex, m_TextureHandle);
 }
 
 void OGLTexture2D::BindToLastTextureUnit()
@@ -125,12 +125,14 @@ void OGLTexture2D::BindToLastTextureUnit()
     glBindTextureUnit(m_lastTextureUnit, m_TextureHandle);
 }
 
-void OGLTexture2D::UnBind(GLenum textureTarget)
+void OGLTexture2D::UnBind(uint32_t textureUnitIndex)
 {
     FN("OGLTexture2D::UnBind");
 
+    // One call clears the unit for every target, where the target-based form
+    // needed one call per target.
     LOG_TRACE("glBindTextureUnit");
-    glBindTextureUnit(0, 0);
+    glBindTextureUnit(textureUnitIndex, 0);
 }
 
 void OGLTexture2D::VCopyFromBuffer(WritePixelBufferPtr pixelBuffer, int xOffset, int yOffset, int width, int height, ImageFormat format, ImageDatatype dataType, int rowAlignment)

@@ -94,19 +94,17 @@ void OGLTextureUnit::Clean()
     {
         Validate();
 
-        LOG_TRACE("glActiveTexture");
-        glActiveTexture(m_textureUnit);
-
         if ((m_DirtyFlags & DirtyFlags::Texture) == DirtyFlags::Texture)
         {
+            // glActiveTexture is gone: glBindTextureUnit takes the unit
+            // directly, so there is no global selector to set first.
             if (m_texture != nullptr)
             {
-                m_texture->Bind();
+                m_texture->Bind(m_textureUnitIndex);
             }
             else
             {
-                OGLTexture2D::UnBind(GL_TEXTURE_2D);
-                OGLTexture2D::UnBind(GL_TEXTURE_RECTANGLE);
+                OGLTexture2D::UnBind(m_textureUnitIndex);
             }
         }
 

@@ -31,9 +31,16 @@ class OGLTexture2D : public ITexture2D
     uint32_t GetHandle();
     GLenum GetTarget();
 
-    void Bind();
+    //! Makes this texture visible to the shader on the given unit.
+    /*!
+        Direct state access removed the need to make a texture current before
+        editing it, so binding now means only this. The unit is a parameter
+        because glBindTextureUnit names it, where glActiveTexture used to set
+        it as global state beforehand.
+    */
+    void Bind(uint32_t textureUnitIndex);
     void BindToLastTextureUnit();
-    static void UnBind(GLenum textureTarget);
+    static void UnBind(uint32_t textureUnitIndex);
 
   private:
     // You shall not copy

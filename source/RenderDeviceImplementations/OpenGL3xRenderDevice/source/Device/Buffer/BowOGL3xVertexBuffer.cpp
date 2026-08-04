@@ -1,5 +1,7 @@
 #include <OpenGL3xRenderDevice/Device/Buffer/BowOGL3xVertexBuffer.h>
 
+#include <OpenGL3xRenderDevice/Device/Buffer/BowOGL3xBufferName.h>
+
 #include <CoreSystems/BowLogger.h>
 
 
@@ -16,6 +18,13 @@ namespace bow
 OGLVertexBuffer::OGLVertexBuffer(BufferHint usageHint, int64_t sizeInBytes) : m_BufferObject(GL_ARRAY_BUFFER, usageHint, sizeInBytes) { FN("OGLVertexBuffer::OGLVertexBuffer"); }
 
 OGLVertexBuffer::~OGLVertexBuffer() { FN("OGLVertexBuffer::Bind"); }
+
+uint32_t OGLVertexBuffer::GetGLHandle()
+{
+    FN("OGLVertexBuffer::GetGLHandle");
+
+    return m_BufferObject.GetHandle()->GetValue();
+}
 
 void OGLVertexBuffer::Bind()
 {

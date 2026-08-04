@@ -22,7 +22,7 @@ OGLVertexAttributeBindings::OGLVertexAttributeBindings() : m_dirtyIndexBuffer(fa
     FN("OGLVertexAttributeBindings::OGLVertexAttributeBindings");
 
     LOG_TRACE("glGenVertexAttributeBindingss");
-    glGenVertexArrays(1, &m_VertexArrayHandle);
+    glCreateVertexArrays(1, &m_VertexArrayHandle);
 }
 
 OGLVertexAttributeBindings::~OGLVertexAttributeBindings()
@@ -49,7 +49,7 @@ void OGLVertexAttributeBindings::Clean()
 {
     FN("OGLVertexAttributeBindings::Clean");
 
-    m_Attributes.Clean();
+    m_Attributes.Clean(m_VertexArrayHandle);
 
     if (m_dirtyIndexBuffer)
     {

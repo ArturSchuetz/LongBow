@@ -29,7 +29,12 @@ class OGLFramebuffer : public IFramebuffer
     Texture2DPtr VGetDepthStencilAttachment() const;
     void VSetDepthStencilAttachment(Texture2DPtr texture);
 
-    static void Attach(uint32_t attachPoint, OGLTexture2DPtr texture);
+    //! Attaches a texture to this framebuffer.
+    /*!
+        Not static any more: with direct state access the call names the
+        framebuffer instead of acting on whichever one happens to be bound.
+    */
+    void Attach(uint32_t attachPoint, OGLTexture2DPtr texture);
 
   private:
     // You shall not copy

@@ -23,7 +23,7 @@ class OGLVertexBufferAttributes
     VertexBufferAttributePtr GetAttribute(int index);
     void SetAttribute(int Location, VertexBufferAttributePtr attribute);
 
-    void Clean();
+    void Clean(uint32_t vertexArray);
     int GetMaximumArrayIndex();
 
   private:
@@ -31,8 +31,9 @@ class OGLVertexBufferAttributes
     OGLVertexBufferAttributes(const OGLVertexBufferAttributes &) = delete;
     OGLVertexBufferAttributes &operator=(const OGLVertexBufferAttributes &) = delete;
 
-    void Attach(int index);
-    static void Detach(int index);
+    //! Points one attribute of the given vertex array at its buffer.
+    void Attach(uint32_t vertexArray, int index);
+    static void Detach(uint32_t vertexArray, int index);
 
     static inline int NumberOfVertices(VertexBufferAttributePtr attribute);
 

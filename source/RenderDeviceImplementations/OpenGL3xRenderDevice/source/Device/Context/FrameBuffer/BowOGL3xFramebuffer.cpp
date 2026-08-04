@@ -1,4 +1,6 @@
 #include <CoreSystems/BowLogger.h>
+
+#include <vector>
 #include <OpenGL3xRenderDevice/Device/Context/FrameBuffer/BowOGL3xFramebuffer.h>
 #include <OpenGL3xRenderDevice/Device/Textures/BowOGL3xTexture2D.h>
 
@@ -20,8 +22,8 @@ OGLFramebuffer::OGLFramebuffer() : m_FramebufferHandle(0), m_ColorAttachments(),
     FN("OGLFramebuffer::OGLFramebuffer");
 
     m_FramebufferHandle = 0;
-    LOG_TRACE("glGenFramebuffers");
-    glGenFramebuffers(1, &m_FramebufferHandle);
+    LOG_TRACE("glCreateFramebuffers");
+    glCreateFramebuffers(1, &m_FramebufferHandle);
 
     m_DepthAttachment = nullptr;
     m_DepthStencilAttachment = nullptr;
@@ -63,7 +65,20 @@ void OGLFramebuffer::Clean()
     {
         OGLColorAttachmentMap colorAttachments = m_ColorAttachments.Attachments;
 
-        GLenum *drawBuffers = new GLenum[colorAttachments.size()];
+        // The array is indexed by attachment slot, so it has to be as long as
+        // the highest slot in use, not as long as the number of attachments.
+        // Slots with nothing attached must read GL_NONE; the previous version
+        // sized it by count and left the gaps uninitialised.
+        uint32_t highestSlot = 0;
+        for (auto it = colorAttachments.begin(); it != colorAttachments.end(); it++)
+        {
+            if ((*it).first > highestSlot)
+            {
+                highestSlot = (*it).first;
+            }
+        }
+
+        std::vector<GLenum> drawBuffers(highestSlot + 1, GL_NONE);
         for (auto it = colorAttachments.begin(); it != colorAttachments.end(); it++)
         {
             if ((*it).second.Dirty)
@@ -77,9 +92,9 @@ void OGLFramebuffer::Clean()
                 drawBuffers[(*it).first] = GL_COLOR_ATTACHMENT0 + (*it).first;
             }
         }
-        LOG_TRACE("glDrawBuffers");
-        glDrawBuffers(colorAttachments.size(), drawBuffers);
-        delete[] drawBuffers;
+
+        LOG_TRACE("glNamedFramebufferDrawBuffers");
+        glNamedFramebufferDrawBuffers(m_FramebufferHandle, (GLsizei)drawBuffers.size(), drawBuffers.data());
 
         m_ColorAttachments.IsDirty = false;
     }
@@ -171,19 +186,13 @@ void OGLFramebuffer::Attach(uint32_t attachPoint, OGLTexture2DPtr texture)
 {
     FN("OGLFramebuffer::Attach");
 
-    if (texture != nullptr)
-    {
-        // TODO:  Mipmap level
-        // glFramebufferTexture(GL_FRAMEBUFFER, attachPoint,
-        // texture->GetHandle(), 0); <== Does not work for OpenGL3.1
-        LOG_TRACE("glFramebufferTexture2D");
-        glFramebufferTexture2D(GL_FRAMEBUFFER, attachPoint, GL_TEXTURE_2D, texture->GetHandle(), 0);
-    }
-    else
-    {
-        LOG_TRACE("glFramebufferTexture2D");
-        glFramebufferTexture2D(GL_FRAMEBUFFER, attachPoint, GL_TEXTURE_2D, 0, 0);
-    }
+    // glNamedFramebufferTexture attaches to this framebuffer whether or not
+    // it is the one currently bound. It also takes the texture rather than a
+    // texture target, which is what the note about OpenGL 3.1 was working
+    // around; the context floor is 4.5 now.
+    // TODO: mipmap level other than 0
+    LOG_TRACE("glNamedFramebufferTexture");
+    glNamedFramebufferTexture(m_FramebufferHandle, attachPoint, texture != nullptr ? texture->GetHandle() : 0, 0);
 }
 
 } // namespace bow
