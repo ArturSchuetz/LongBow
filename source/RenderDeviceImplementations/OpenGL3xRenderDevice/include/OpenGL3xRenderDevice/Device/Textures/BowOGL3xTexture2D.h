@@ -48,6 +48,7 @@ class OGLTexture2D : public ITexture2D
     GLenum m_lastTextureUnit;
 
     uint32_t m_TextureHandle;
+    uint32_t m_mipLevels;
 };
 
 typedef std::shared_ptr<OGLTexture2D> OGLTexture2DPtr;

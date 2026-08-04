@@ -17,14 +17,34 @@
 
 namespace bow
 {
+namespace
+{
+
+//! Number of mip levels a complete chain needs for the given size.
+uint32_t MipLevelCount(int width, int height)
+{
+    uint32_t levels = 1;
+    int size = (width > height) ? width : height;
+    while (size > 1)
+    {
+        size >>= 1;
+        ++levels;
+    }
+    return levels;
+}
+
+} // namespace
 
 OGLTexture2D::OGLTexture2D(Texture2DDescription description, GLenum textureTarget) : m_Description(description), m_target(textureTarget), m_TextureHandle(0)
 {
     FN("OGLTexture2D::OGLTexture2D");
 
     m_TextureHandle = 0;
-    LOG_TRACE("glGenTextures");
-    glGenTextures(1, &m_TextureHandle);
+    // glCreateTextures returns a name that already refers to a texture object
+    // of the given target. glGenTextures only reserves the name, which is why
+    // the old code had to bind before it could do anything with it.
+    LOG_TRACE("glCreateTextures");
+    glCreateTextures(m_target, 1, &m_TextureHandle);
 
     LOG_ASSERT(!(description.GetWidth() <= 0), "description.Width must be greater than zero.");
     LOG_ASSERT(!(description.GetHeight() <= 0), "description.Height must be greater than zero.");
@@ -33,10 +53,8 @@ OGLTexture2D::OGLTexture2D(Texture2DDescription description, GLenum textureTarge
     {
         LOG_ASSERT(textureTarget != GL_TEXTURE_RECTANGLE, "description.GenerateMipmaps cannot be true for texture "
                                                           "rectangles.");
-        LOG_ASSERT(IsPowerOfTwo(description.GetWidth()), "When description.GenerateMipmaps is true, the width must "
-                                                         "be a power of two.");
-        LOG_ASSERT(IsPowerOfTwo(description.GetHeight()), "When description.GenerateMipmaps is true, the height must "
-                                                          "be a power of two.");
+        // Non-power-of-two textures have had complete mipmap chains since
+        // OpenGL 2.0; the restriction this used to assert was a GL 1.x one.
     }
 
     int numberOfTextureUnits;
@@ -45,11 +63,15 @@ OGLTexture2D::OGLTexture2D(Texture2DDescription description, GLenum textureTarge
     m_lastTextureUnit = GL_TEXTURE0 + (numberOfTextureUnits - 1);
 
     OGLWritePixelBuffer::UnBind();
-    BindToLastTextureUnit();
 
-    LOG_TRACE("glTexImage2D");
-    glTexImage2D(m_target, 0, OGLTypeConverter::To(description.GetTextureFormat()), description.GetWidth(), description.GetHeight(), 0, OGLTypeConverter::TextureToPixelFormat(description.GetTextureFormat()),
-                 OGLTypeConverter::TextureToPixelType(description.GetTextureFormat()), nullptr);
+    m_mipLevels = description.GenerateMipmaps() ? MipLevelCount(description.GetWidth(), description.GetHeight()) : 1;
+
+    // Immutable storage: format and level count are fixed here and cannot be
+    // redefined afterwards. That is the point -- the driver validates once
+    // instead of on every upload, and an upload can no longer silently change
+    // the texture's format, which is what the old VCopyFromSystemMemory did.
+    LOG_TRACE("glTextureStorage2D");
+    glTextureStorage2D(m_TextureHandle, (GLsizei)m_mipLevels, OGLTypeConverter::To(description.GetTextureFormat()), description.GetWidth(), description.GetHeight());
 
     //
     // Default sampler, compatiable when attaching a non-mimapped
@@ -88,25 +110,27 @@ void OGLTexture2D::Bind()
 {
     FN("OGLTexture2D::Bind");
 
-    LOG_TRACE("glBindTexture");
-    glBindTexture(m_target, m_TextureHandle);
+    // Without direct state access a texture had to be made current on some
+    // unit before it could be touched at all; binding now only means "make
+    // this visible to the shader".
+    LOG_TRACE("glBindTextureUnit");
+    glBindTextureUnit(0, m_TextureHandle);
 }
 
 void OGLTexture2D::BindToLastTextureUnit()
 {
     FN("OGLTexture2D::BindToLastTextureUnit");
 
-    LOG_TRACE("glActiveTexture");
-    glActiveTexture(m_lastTextureUnit);
-    Bind();
+    LOG_TRACE("glBindTextureUnit");
+    glBindTextureUnit(m_lastTextureUnit, m_TextureHandle);
 }
 
 void OGLTexture2D::UnBind(GLenum textureTarget)
 {
     FN("OGLTexture2D::UnBind");
 
-    LOG_TRACE("glBindTexture");
-    glBindTexture(textureTarget, 0);
+    LOG_TRACE("glBindTextureUnit");
+    glBindTextureUnit(0, 0);
 }
 
 void OGLTexture2D::VCopyFromBuffer(WritePixelBufferPtr pixelBuffer, int xOffset, int yOffset, int width, int height, ImageFormat format, ImageDatatype dataType, int rowAlignment)
@@ -129,8 +153,8 @@ void OGLTexture2D::VCopyFromBuffer(WritePixelBufferPtr pixelBuffer, int xOffset,
     BindToLastTextureUnit();
     LOG_TRACE("glPixelStorei");
     glPixelStorei(GL_UNPACK_ALIGNMENT, rowAlignment);
-    LOG_TRACE("glTexSubImage2D");
-    glTexSubImage2D(m_target, 0, xOffset, yOffset, width, height, OGLTypeConverter::To(format), OGLTypeConverter::To(dataType), nullptr);
+    LOG_TRACE("glTextureSubImage2D");
+    glTextureSubImage2D(m_TextureHandle, 0, xOffset, yOffset, width, height, OGLTypeConverter::To(format), OGLTypeConverter::To(dataType), nullptr);
 
     GenerateMipmaps();
 }
@@ -145,12 +169,15 @@ void OGLTexture2D::VCopyFromSystemMemory(void *bitmapInSystemMemory, int width, 
 
     VerifyRowAlignment(rowAlignment);
 
-    BindToLastTextureUnit();
-
     ApplySampler(OGLTextureSampler(TextureMinificationFilter::Linear, TextureMagnificationFilter::Linear, TextureWrap::Clamp, TextureWrap::Clamp));
 
-    LOG_TRACE("glTexImage2D");
-    glTexImage2D(m_target, 0, GL_RGBA, width, height, 0, OGLTypeConverter::To(format), OGLTypeConverter::To(dataType), bitmapInSystemMemory);
+    LOG_TRACE("glPixelStorei");
+    glPixelStorei(GL_UNPACK_ALIGNMENT, rowAlignment);
+
+    // This used to call glTexImage2D with a hardcoded GL_RGBA internal format,
+    // reallocating the texture and discarding the format it was created with.
+    LOG_TRACE("glTextureSubImage2D");
+    glTextureSubImage2D(m_TextureHandle, 0, 0, 0, width, height, OGLTypeConverter::To(format), OGLTypeConverter::To(dataType), bitmapInSystemMemory);
 
     GenerateMipmaps();
 }
@@ -206,8 +233,8 @@ void OGLTexture2D::GenerateMipmaps()
 
     if (m_Description.GenerateMipmaps())
     {
-        LOG_TRACE("glGenerateMipmap");
-        glGenerateMipmap(GL_TEXTURE_2D);
+        LOG_TRACE("glGenerateTextureMipmap");
+        glGenerateTextureMipmap(m_TextureHandle);
     }
 }
 
@@ -215,19 +242,18 @@ void OGLTexture2D::ApplySampler(const OGLTextureSampler &sampler)
 {
     FN("OGLTexture2D::ApplySampler");
 
-    GLenum minFilter = OGLTypeConverter::To(sampler.MagnificationFilter);
+    // The minification filter used to be taken from MagnificationFilter too,
+    // so a texture's minification setting was silently ignored.
+    GLenum minFilter = OGLTypeConverter::To(sampler.MinificationFilter);
     GLenum magFilter = OGLTypeConverter::To(sampler.MagnificationFilter);
     GLenum wrapS = OGLTypeConverter::To(sampler.WrapS);
     GLenum wrapT = OGLTypeConverter::To(sampler.WrapT);
 
-    LOG_TRACE("glTexParameteri");
-    glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, (int)minFilter);
-    LOG_TRACE("glTexParameteri");
-    glTexParameteri(m_target, GL_TEXTURE_MAG_FILTER, (int)magFilter);
-    LOG_TRACE("glTexParameteri");
-    glTexParameteri(m_target, GL_TEXTURE_WRAP_S, (int)wrapS);
-    LOG_TRACE("glTexParameteri");
-    glTexParameteri(m_target, GL_TEXTURE_WRAP_T, (int)wrapT);
+    LOG_TRACE("glTextureParameteri");
+    glTextureParameteri(m_TextureHandle, GL_TEXTURE_MIN_FILTER, (int)minFilter);
+    glTextureParameteri(m_TextureHandle, GL_TEXTURE_MAG_FILTER, (int)magFilter);
+    glTextureParameteri(m_TextureHandle, GL_TEXTURE_WRAP_S, (int)wrapS);
+    glTextureParameteri(m_TextureHandle, GL_TEXTURE_WRAP_T, (int)wrapT);
 }
 
 } // namespace bow
