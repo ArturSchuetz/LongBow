@@ -12,7 +12,5 @@ longbow_add_plugin(OpenGL3xRenderDevice
         GLEW::GLEW
         glfw
         OpenGL::GL
-    PRIVATE_DEFS
-        GLEW_STATIC
     FOLDER "Backends/Render"
 )

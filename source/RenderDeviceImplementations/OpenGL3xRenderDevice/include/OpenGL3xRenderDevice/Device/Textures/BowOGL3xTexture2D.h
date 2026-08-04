@@ -33,7 +33,7 @@ class OGLTexture2D : public ITexture2D
 
     void Bind();
     void BindToLastTextureUnit();
-    static void OGLTexture2D::UnBind(GLenum textureTarget);
+    static void UnBind(GLenum textureTarget);
 
   private:
     // You shall not copy

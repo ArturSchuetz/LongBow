@@ -505,15 +505,17 @@ MeshBufferPtr OGLRenderDevice::VCreateMeshBuffers(MeshAttribute mesh, ShaderVert
     return MeshBufferPtr(meshBuffers);
 }
 
-VertexBufferPtr OGLRenderDevice::VCreateVertexBuffer(BufferHint usageHint, int sizeInBytes)
+VertexBufferPtr OGLRenderDevice::VCreateVertexBuffer(BufferHint usageHint, int sizeInBytes, bool useForRayTracing)
 {
     FN("OGLRenderDevice::VCreateVertexBuffer");
     OPTICK_EVENT();
 
+    // useForRayTracing is ignored: OpenGL 3.x has no acceleration structures
+    // for the buffer to feed.
     return OGLVertexBufferPtr(new OGLVertexBuffer(usageHint, sizeInBytes));
 }
 
-IndexBufferPtr OGLRenderDevice::VCreateIndexBuffer(BufferHint usageHint, IndexBufferDatatype dataType, int sizeInBytes)
+IndexBufferPtr OGLRenderDevice::VCreateIndexBuffer(BufferHint usageHint, IndexBufferDatatype dataType, int sizeInBytes, bool useForRayTracing)
 {
     FN("OGLRenderDevice::VCreateIndexBuffer");
     OPTICK_EVENT();
@@ -628,21 +630,11 @@ std::unique_ptr<IRayTracingShaderProgram> OGLRenderDevice::VCreateRayTracingShad
     return nullptr;
 }
 
-std::unique_ptr<IBottomLevelAccelerationStructure> OGLRenderDevice::VCreateBottomLevelAccelerationStructure(VertexAttributeBindingsPtr vertexAttributeBindings, ShaderResourceBindingsPtr shaderResourceBindings)
+std::unique_ptr<IBottomLevelAccelerationStructure> OGLRenderDevice::VCreateBottomLevelAccelerationStructure(MeshPtr mesh)
 {
     FN("OGLRenderDevice::VCreateBottomLevelAccelerationStructure");
     OPTICK_EVENT();
 
-    LOG_FATAL("Ray Tracing is not supported in OpenGL!");
-
-    return nullptr;
-}
-std::unique_ptr<IBottomLevelAccelerationStructure> OGLRenderDevice::VCreateBottomLevelAccelerationStructure(uint32_t offset, uint32_t count, VertexAttributeBindingsPtr vertexAttributeBindings, ShaderResourceBindingsPtr shaderResourceBindings)
-{
-    FN("OGLRenderDevice::VCreateBottomLevelAccelerationStructure");
-    OPTICK_EVENT();
-
-    VulkanVertexAttributeBindingsPtr vulkanVertexAttributeBindings = std::dynamic_pointer_cast<VulkanVertexAttributeBindings>(vertexAttributeBindings);
     LOG_FATAL("Ray Tracing is not supported in OpenGL!");
 
     return nullptr;

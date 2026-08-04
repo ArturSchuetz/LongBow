@@ -44,8 +44,8 @@ class OGLRenderDevice : public IRenderDevice
                                           const std::string &TessEvalShaderSource) override;
 
     MeshBufferPtr VCreateMeshBuffers(MeshAttribute mesh, ShaderVertexAttributeMap shaderAttributes, BufferHint usageHint) override;
-    VertexBufferPtr VCreateVertexBuffer(BufferHint usageHint, int sizeInBytes) override;
-    IndexBufferPtr VCreateIndexBuffer(BufferHint usageHint, IndexBufferDatatype dataType, int sizeInBytes) override;
+    VertexBufferPtr VCreateVertexBuffer(BufferHint usageHint, int sizeInBytes, bool useForRayTracing = false) override;
+    IndexBufferPtr VCreateIndexBuffer(BufferHint usageHint, IndexBufferDatatype dataType, int sizeInBytes, bool useForRayTracing = false) override;
     UniformBufferPtr VCreateUniformBuffer(BufferHint usageHint, int sizeInBytes, void *data) override;
     StorageBufferPtr VCreateStorageBuffer(BufferHint usageHint, int sizeInBytes, void *data) override;
 
@@ -61,8 +61,7 @@ class OGLRenderDevice : public IRenderDevice
     std::unique_ptr<IRayTracingShaderProgram> VCreateRayTracingShaderProgram(const std::string &rayGenShaderSource, const std::string &anyHitShaderSource, const std::string &closestHitShaderSource, const std::string &missShaderSource,
                                                                              const std::string &intersectionShaderSource, const std::string &callableShaderSource) override;
 
-    std::unique_ptr<IBottomLevelAccelerationStructure> VCreateBottomLevelAccelerationStructure(VertexAttributeBindingsPtr vertexAttributeBindings, ShaderResourceBindingsPtr shaderResourceBindings) override;
-    std::unique_ptr<IBottomLevelAccelerationStructure> VCreateBottomLevelAccelerationStructure(uint32_t offset, uint32_t count, VertexAttributeBindingsPtr vertexAttributeBindings, ShaderResourceBindingsPtr shaderResourceBindings) override;
+    std::unique_ptr<IBottomLevelAccelerationStructure> VCreateBottomLevelAccelerationStructure(MeshPtr mesh) override;
 
     std::unique_ptr<ITopLevelAccelerationStructure> VCreateTopLevelAccelerationStructure(const std::vector<std::unique_ptr<IBottomLevelAccelerationStructure>> &bottomLevelAccelerationStructures) override;
 

@@ -13,8 +13,8 @@ typedef std::shared_ptr<class OGLFramebufferName> OGLFramebufferNamePtr;
 class OGLFramebuffer : public IFramebuffer
 {
   public:
-    OGLFramebuffer::OGLFramebuffer();
-    OGLFramebuffer::~OGLFramebuffer();
+    OGLFramebuffer();
+    ~OGLFramebuffer();
 
     void Bind();
     static void UnBind();

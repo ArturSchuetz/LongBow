@@ -103,8 +103,13 @@ if(LONGBOW_BUILD_OPENGL)
         unset(CMAKE_POLICY_VERSION_MINIMUM)
 
         # The mirror names its static target libglew_static; give it the
-        # spelling the rest of the tree uses.
+        # spelling the rest of the tree uses. GLEW_STATIC has to travel with
+        # it -- glew.h otherwise declares its function pointers dllimport and
+        # every __glew* symbol comes out unresolved. An installed GLEW carries
+        # the matching definition on its own imported target, which is why
+        # this belongs here and not on the consuming backend.
         if(TARGET libglew_static)
+            target_compile_definitions(libglew_static PUBLIC GLEW_STATIC)
             add_library(GLEW::GLEW ALIAS libglew_static)
         endif()
     endif()
