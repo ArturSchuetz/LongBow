@@ -85,6 +85,9 @@ class D3D11RenderContext : public IRenderContext
     uint64_t m_renderStateKey;
     bool m_renderStateValid;
 
+    //! Offscreen target currently bound, or null for the window.
+    std::shared_ptr<class D3D11Framebuffer> m_boundFramebuffer;
+
     HWND m_windowHandle;
     Viewport m_viewport;
 

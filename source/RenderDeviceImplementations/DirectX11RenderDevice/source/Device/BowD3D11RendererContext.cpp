@@ -3,6 +3,7 @@
 #include <DirectX11RenderDevice/BowD3D11RenderDevice.h>
 #include <DirectX11RenderDevice/BowD3D11TypeConverter.h>
 #include <DirectX11RenderDevice/Device/Buffer/BowD3D11IndexBuffer.h>
+#include <DirectX11RenderDevice/Device/Context/FrameBuffer/BowD3D11Framebuffer.h>
 #include <DirectX11RenderDevice/Device/Buffer/BowD3D11UniformBuffer.h>
 #include <DirectX11RenderDevice/Device/Context/VertexAttributeBindings/BowD3D11VertexAttributeBindings.h>
 #include <DirectX11RenderDevice/Device/Shader/BowD3D11ShaderProgram.h>
@@ -207,6 +208,24 @@ void D3D11RenderContext::VClear(ClearState clearState)
 
     LOG_TRACE("ClearRenderTargetView");
     const float color[4] = {clearState.color.a[0], clearState.color.a[1], clearState.color.a[2], clearState.color.a[3]};
+
+    // Clearing follows whatever is bound, so that rendering into an offscreen
+    // target clears that rather than the window.
+    if (m_boundFramebuffer != nullptr)
+    {
+        const std::vector<ID3D11RenderTargetView *> &renderTargets = m_boundFramebuffer->GetRenderTargets();
+        for (size_t i = 0; i < renderTargets.size(); ++i)
+        {
+            m_deviceContext->ClearRenderTargetView(renderTargets[i], color);
+        }
+
+        if (ID3D11DepthStencilView *depth = m_boundFramebuffer->GetDepthStencilView())
+        {
+            m_deviceContext->ClearDepthStencilView(depth, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, (float)clearState.depth, (UINT8)clearState.stencil);
+        }
+        return;
+    }
+
     m_deviceContext->ClearRenderTargetView(m_backBufferView.Get(), color);
 
     if (m_depthStencilView != nullptr)
@@ -317,8 +336,7 @@ FramebufferPtr D3D11RenderContext::VCreateFramebuffer()
 {
     FN("D3D11RenderContext::VCreateFramebuffer");
 
-    LOG_ERROR("DirectX 11: framebuffers are not implemented yet.");
-    return nullptr;
+    return D3D11FramebufferPtr(new D3D11Framebuffer(m_device.Get()));
 }
 
 void D3D11RenderContext::VDraw(PrimitiveType primitiveType, VertexAttributeBindingsPtr vertexAttributeBindings, ShaderProgramPtr shaderProgram, RenderState renderState)
@@ -577,11 +595,36 @@ void D3D11RenderContext::VDrawLine(const bow::Vector3<float> & /*start*/, const 
     LOG_ERROR("DirectX 11: drawing is not implemented yet.");
 }
 
-void D3D11RenderContext::VSetFramebuffer(FramebufferPtr /*framebufer*/)
+void D3D11RenderContext::VSetFramebuffer(FramebufferPtr framebufer)
 {
     FN("D3D11RenderContext::VSetFramebuffer");
 
-    LOG_ERROR("DirectX 11: framebuffers are not implemented yet.");
+    // A null framebuffer means the window again, which is the back buffer view
+    // the swap chain handed out.
+    if (framebufer == nullptr)
+    {
+        m_boundFramebuffer.reset();
+        ID3D11RenderTargetView *renderTargets[] = {m_backBufferView.Get()};
+        m_deviceContext->OMSetRenderTargets(1, renderTargets, m_depthStencilView.Get());
+        return;
+    }
+
+    D3D11FramebufferPtr framebuffer = std::dynamic_pointer_cast<D3D11Framebuffer>(framebufer);
+    if (framebuffer == nullptr)
+    {
+        LOG_ERROR("The framebuffer was not created by the DirectX 11 device.");
+        return;
+    }
+
+    const std::vector<ID3D11RenderTargetView *> &renderTargets = framebuffer->GetRenderTargets();
+    if (renderTargets.empty())
+    {
+        LOG_ERROR("The framebuffer has no colour attachment to render into.");
+        return;
+    }
+
+    m_boundFramebuffer = framebuffer;
+    m_deviceContext->OMSetRenderTargets((UINT)renderTargets.size(), renderTargets.data(), framebuffer->GetDepthStencilView());
 }
 
 void D3D11RenderContext::VTraceRays(void * /*shaderProgram*/, ShaderResourceBindingsPtr /*resourceBindings*/, Texture2DPtr /*outputImage*/, uint32_t /*width*/, uint32_t /*height*/)
