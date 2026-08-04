@@ -19,19 +19,30 @@ OGLBuffer::OGLBuffer(uint32_t type, BufferHint usageHint, int64_t sizeInBytes) :
     m_name = OGLBufferNamePtr(new OGLBufferName());
 
     //
-    // Allocating here with GL.BufferData, then writing with GL.BufferSubData
-    // in CopyFromSystemMemory() should not have any serious overhead:
+    // Allocating here, then writing with CopyFromSystemMemory() should not
+    // have any serious overhead:
     //
     //   http://www.opengl.org/discussion_boards/ubbthreads.php?ubb=showflat&Number=267373#Post267373
     //
-    // Alternately, we can delay GL.BufferData until the first
+    // Alternately, we can delay the allocation until the first
     // CopyFromSystemMemory() call.
     //
-    LOG_TRACE("glBindVertexArray");
-    glBindVertexArray(0);
-    Bind();
-    LOG_TRACE("glBufferData");
-    glBufferData(m_type, sizeInBytes, nullptr, m_UsageHint);
+    if (glNamedBufferData != nullptr)
+    {
+        LOG_TRACE("glNamedBufferData");
+        glNamedBufferData(m_name->GetValue(), sizeInBytes, nullptr, m_UsageHint);
+    }
+    else
+    {
+        // Bind-to-edit disturbs whatever was bound to this target, and the
+        // vertex array has to be unbound first so an element buffer binding
+        // does not end up recorded in it.
+        LOG_TRACE("glBindVertexArray");
+        glBindVertexArray(0);
+        Bind();
+        LOG_TRACE("glBufferData");
+        glBufferData(m_type, sizeInBytes, nullptr, m_UsageHint);
+    }
 }
 
 OGLBuffer::~OGLBuffer() { FN("OGLBuffer::~OGLBuffer"); }
@@ -45,11 +56,19 @@ void OGLBuffer::CopyFromSystemMemory(const void *bufferInSystemMemory, int64_t d
                                                                             "equal to SizeInBytes.");
     LOG_ASSERT(!(lengthInBytes < 0), "lengthInBytes must be greater than or equal to zero.");
 
-    LOG_TRACE("glBindVertexArray");
-    glBindVertexArray(0);
-    Bind();
-    LOG_TRACE("glBufferSubData");
-    glBufferSubData(m_type, destinationOffsetInBytes, lengthInBytes, bufferInSystemMemory);
+    if (glNamedBufferSubData != nullptr)
+    {
+        LOG_TRACE("glNamedBufferSubData");
+        glNamedBufferSubData(m_name->GetValue(), destinationOffsetInBytes, lengthInBytes, bufferInSystemMemory);
+    }
+    else
+    {
+        LOG_TRACE("glBindVertexArray");
+        glBindVertexArray(0);
+        Bind();
+        LOG_TRACE("glBufferSubData");
+        glBufferSubData(m_type, destinationOffsetInBytes, lengthInBytes, bufferInSystemMemory);
+    }
 }
 
 std::shared_ptr<void> OGLBuffer::CopyToSystemMemory(int64_t offsetInBytes, int64_t lengthInBytes)
@@ -61,14 +80,25 @@ std::shared_ptr<void> OGLBuffer::CopyToSystemMemory(int64_t offsetInBytes, int64
     LOG_ASSERT(!(offsetInBytes + lengthInBytes > m_sizeInBytes), "offsetInBytes + lengthInBytes must be less than or equal to "
                                                                  "SizeInBytes.");
 
-    void *bufferInSystemMemory = malloc(lengthInBytes);
+    // Allocated with new[] and released with delete[]: the previous version
+    // paired malloc with a delete[] deleter, which is undefined behaviour.
+    unsigned char *bufferInSystemMemory = new unsigned char[lengthInBytes];
 
-    LOG_TRACE("glBindVertexArray");
-    glBindVertexArray(0);
-    Bind();
-    LOG_TRACE("glGetBufferSubData");
-    glGetBufferSubData(m_type, offsetInBytes, lengthInBytes, bufferInSystemMemory);
-    return std::shared_ptr<void>(bufferInSystemMemory, [](void *ptr) { delete[] ptr; });
+    if (glGetNamedBufferSubData != nullptr)
+    {
+        LOG_TRACE("glGetNamedBufferSubData");
+        glGetNamedBufferSubData(m_name->GetValue(), offsetInBytes, lengthInBytes, bufferInSystemMemory);
+    }
+    else
+    {
+        LOG_TRACE("glBindVertexArray");
+        glBindVertexArray(0);
+        Bind();
+        LOG_TRACE("glGetBufferSubData");
+        glGetBufferSubData(m_type, offsetInBytes, lengthInBytes, bufferInSystemMemory);
+    }
+
+    return std::shared_ptr<void>(bufferInSystemMemory, [](void *ptr) { delete[] static_cast<unsigned char *>(ptr); });
 }
 
 int64_t OGLBuffer::GetSizeInBytes()

@@ -39,9 +39,40 @@ bool OGLGraphicsWindow::Initialize(uint32_t width, uint32_t height, const std::s
     // Headless Rendering
     // glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
+    // Ask for a core profile explicitly.
+    //
+    // Without these hints GLFW hands back whatever the driver happens to
+    // default to, which on most desktop drivers is a compatibility profile.
+    // That silently kept removed entry points such as glBegin working and left
+    // the backend's actual version requirement undefined. 4.5 is the floor
+    // because direct state access, used throughout the buffer and texture
+    // code, became core there.
+    LOG_TRACE("glfwWindowHint");
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+
+#ifdef _DEBUG
+    // A debug context is what makes glDebugMessageCallback deliver anything.
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+#endif
+
     // Creating Window with a cool custom deleter
     LOG_TRACE("glfwCreateWindow");
-    m_Window = glfwCreateWindow(width, height, (title + " (OpenGL3x)").c_str(), monitor, NULL);
+    m_Window = glfwCreateWindow(width, height, (title + " (OpenGL)").c_str(), monitor, NULL);
+
+    if (!m_Window)
+    {
+        // Fall back to 3.3 core so the backend still comes up on hardware or
+        // drivers that stop short of 4.5. Direct state access is then absent
+        // and the affected paths report it rather than crashing.
+        LOG_WARNING("No OpenGL 4.5 core context available, retrying with 3.3 core.");
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        LOG_TRACE("glfwCreateWindow");
+        m_Window = glfwCreateWindow(width, height, (title + " (OpenGL)").c_str(), monitor, NULL);
+    }
 
     if (g_Windows.find(m_Window) == g_Windows.end())
     {

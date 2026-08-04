@@ -109,6 +109,17 @@ class OGLRenderContext : public IRenderContext
 
     GLFWwindow *m_window;
     OGLRenderDevice *m_device;
+
+    int m_versionMajor;
+    int m_versionMinor;
+    bool m_hasDirectStateAccess;
+
+    //! Creates the buffer, vertex array and shader VDrawLine needs, once.
+    bool EnsureLineResources();
+
+    uint32_t m_lineProgram;
+    uint32_t m_lineVertexBuffer;
+    uint32_t m_lineVertexArray;
     static OGLRenderContext *m_currentContext;
     bool m_initialized;
     bool m_vsync;

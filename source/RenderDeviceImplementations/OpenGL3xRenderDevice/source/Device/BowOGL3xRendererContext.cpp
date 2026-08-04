@@ -33,8 +33,63 @@ namespace bow
 
 OGLRenderContext *OGLRenderContext::m_currentContext;
 
+namespace
+{
+
+//! Routes driver diagnostics into the engine log.
+/*!
+    Without this the only way to notice a bad enum, an incomplete framebuffer
+    or a shader falling back to software is to call glGetError by hand after
+    every entry point. The driver knows all of it already; this asks it to say
+    so, with severity mapped onto the engine's own levels.
+*/
+void APIENTRY OpenGLDebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei /*length*/, const GLchar *message, const void * /*userParam*/)
+{
+    const char *sourceName = "other";
+    switch (source)
+    {
+    case GL_DEBUG_SOURCE_API: sourceName = "api"; break;
+    case GL_DEBUG_SOURCE_WINDOW_SYSTEM: sourceName = "window system"; break;
+    case GL_DEBUG_SOURCE_SHADER_COMPILER: sourceName = "shader compiler"; break;
+    case GL_DEBUG_SOURCE_THIRD_PARTY: sourceName = "third party"; break;
+    case GL_DEBUG_SOURCE_APPLICATION: sourceName = "application"; break;
+    default: break;
+    }
+
+    const char *typeName = "other";
+    switch (type)
+    {
+    case GL_DEBUG_TYPE_ERROR: typeName = "error"; break;
+    case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: typeName = "deprecated"; break;
+    case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR: typeName = "undefined behaviour"; break;
+    case GL_DEBUG_TYPE_PORTABILITY: typeName = "portability"; break;
+    case GL_DEBUG_TYPE_PERFORMANCE: typeName = "performance"; break;
+    case GL_DEBUG_TYPE_MARKER: typeName = "marker"; break;
+    default: break;
+    }
+
+    switch (severity)
+    {
+    case GL_DEBUG_SEVERITY_HIGH:
+        LOG_ERROR("OpenGL [%s/%s/%u]: %s", sourceName, typeName, id, message);
+        break;
+    case GL_DEBUG_SEVERITY_MEDIUM:
+        LOG_WARNING("OpenGL [%s/%s/%u]: %s", sourceName, typeName, id, message);
+        break;
+    case GL_DEBUG_SEVERITY_LOW:
+        LOG_WARNING("OpenGL [%s/%s/%u]: %s", sourceName, typeName, id, message);
+        break;
+    default:
+        LOG_TRACE("OpenGL [%s/%s/%u]: %s", sourceName, typeName, id, message);
+        break;
+    }
+}
+
+} // namespace
+
 OGLRenderContext::OGLRenderContext(GLFWwindow *window)
     : m_viewport(), m_clearColor(), m_clearDepth(1.0f), m_clearStencil(0), m_renderState(), m_boundShaderProgram(nullptr), m_textureUnits(nullptr), m_boundFramebuffer(nullptr), m_setFramebuffer(nullptr), m_window(window), m_device(nullptr),
+      m_versionMajor(0), m_versionMinor(0), m_hasDirectStateAccess(false), m_lineProgram(0), m_lineVertexBuffer(0), m_lineVertexArray(0),
       m_initialized(false), m_vsync(false)
 {
     FN("OGLRenderContext::OGLRenderContext");
@@ -90,14 +145,39 @@ bool OGLRenderContext::Initialize(OGLRenderDevice *device)
     // Checking GL version
     LOG_TRACE("glGetString");
     const GLubyte *GLVersionString = glGetString(GL_VERSION);
-    LOG_TRACE("Using GL_VERSION: %s", GLVersionString);
+    LOG_INFO("OpenGL %s, %s, %s", GLVersionString, glGetString(GL_RENDERER), glGetString(GL_VENDOR));
 
+    glGetIntegerv(GL_MAJOR_VERSION, &m_versionMajor);
+    glGetIntegerv(GL_MINOR_VERSION, &m_versionMinor);
+
+    // Direct state access became core in 4.5. Paths that would otherwise call
+    // glNamedBufferData and friends check this and fall back to bind-to-edit.
+    m_hasDirectStateAccess = (m_versionMajor > 4) || (m_versionMajor == 4 && m_versionMinor >= 5);
+    if (!m_hasDirectStateAccess)
+    {
+        LOG_WARNING("OpenGL %d.%d has no core direct state access; falling back to bind-to-edit.", m_versionMajor, m_versionMinor);
+    }
+
+    if (glDebugMessageCallback != nullptr)
+    {
+        LOG_TRACE("glDebugMessageCallback");
+        glEnable(GL_DEBUG_OUTPUT);
+        // Synchronous delivery costs performance but makes the callback fire
+        // on the call that caused the problem, so the log points at the right
+        // place instead of somewhere later in the frame.
+        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+        glDebugMessageCallback(OpenGLDebugCallback, nullptr);
+        // Notifications are the driver chatting about buffer memory; the log
+        // is verbose enough already.
+        glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
+    }
+
+    // Only GL_CLAMP_READ_COLOR survives in the core profile. The vertex and
+    // fragment variants were removed along with the fixed-function pipeline
+    // and had been raising GL_INVALID_ENUM here on every startup, unnoticed
+    // until the debug callback above started reporting it.
     LOG_TRACE("glClampColor");
     glClampColor(GL_CLAMP_READ_COLOR, GL_FALSE);
-    LOG_TRACE("glClampColor");
-    glClampColor(GL_CLAMP_VERTEX_COLOR, GL_FALSE);
-    LOG_TRACE("glClampColor");
-    glClampColor(GL_CLAMP_FRAGMENT_COLOR, GL_FALSE);
 
     m_initialized = true;
     return m_initialized;
@@ -313,18 +393,94 @@ void OGLRenderContext::VDrawLine(const bow::Vector3<float> &start, const bow::Ve
 
     m_textureUnits->Clean();
 
-    LOG_TRACE("glFlush");
-    glFlush();
     ApplyFramebuffer();
 
-    LOG_TRACE("glBegin");
-    glBegin(GL_LINES);
-    LOG_TRACE("glVertex3f");
-    glVertex3f(start.x, start.y, start.z);
-    LOG_TRACE("glVertex3f");
-    glVertex3f(end.x, end.y, end.z);
-    LOG_TRACE("glEnd");
-    glEnd();
+    // glBegin/glVertex/glEnd was removed with the core profile. The line goes
+    // through a small dedicated vertex buffer and shader instead, both created
+    // on first use so a program that never draws a line pays nothing.
+    if (!EnsureLineResources())
+    {
+        return;
+    }
+
+    const float vertices[6] = {start.x, start.y, start.z, end.x, end.y, end.z};
+
+    LOG_TRACE("glNamedBufferSubData");
+    glNamedBufferSubData(m_lineVertexBuffer, 0, sizeof(vertices), vertices);
+
+    LOG_TRACE("glUseProgram");
+    glUseProgram(m_lineProgram);
+    LOG_TRACE("glBindVertexArray");
+    glBindVertexArray(m_lineVertexArray);
+    LOG_TRACE("glDrawArrays");
+    glDrawArrays(GL_LINES, 0, 2);
+    LOG_TRACE("glBindVertexArray");
+    glBindVertexArray(0);
+
+    // The shader program the caller had bound is no longer current.
+    m_boundShaderProgram = nullptr;
+}
+
+bool OGLRenderContext::EnsureLineResources()
+{
+    FN("OGLRenderContext::EnsureLineResources");
+
+    if (m_lineProgram != 0)
+    {
+        return true;
+    }
+
+    if (!m_hasDirectStateAccess)
+    {
+        LOG_ERROR("VDrawLine needs OpenGL 4.5 or newer.");
+        return false;
+    }
+
+    static const char *vertexSource = "#version 450 core\n"
+                                      "layout(location = 0) in vec3 inPosition;\n"
+                                      "void main() { gl_Position = vec4(inPosition, 1.0); }\n";
+
+    static const char *fragmentSource = "#version 450 core\n"
+                                        "layout(location = 0) out vec4 outColor;\n"
+                                        "void main() { outColor = vec4(1.0); }\n";
+
+    const GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexShader, 1, &vertexSource, nullptr);
+    glCompileShader(vertexShader);
+
+    const GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &fragmentSource, nullptr);
+    glCompileShader(fragmentShader);
+
+    m_lineProgram = glCreateProgram();
+    glAttachShader(m_lineProgram, vertexShader);
+    glAttachShader(m_lineProgram, fragmentShader);
+    glLinkProgram(m_lineProgram);
+
+    GLint linkStatus = GL_FALSE;
+    glGetProgramiv(m_lineProgram, GL_LINK_STATUS, &linkStatus);
+
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+    if (linkStatus == GL_FALSE)
+    {
+        LOG_ERROR("Could not link the line shader used by VDrawLine.");
+        glDeleteProgram(m_lineProgram);
+        m_lineProgram = 0;
+        return false;
+    }
+
+    glCreateBuffers(1, &m_lineVertexBuffer);
+    glNamedBufferData(m_lineVertexBuffer, sizeof(float) * 6, nullptr, GL_DYNAMIC_DRAW);
+
+    glCreateVertexArrays(1, &m_lineVertexArray);
+    glVertexArrayVertexBuffer(m_lineVertexArray, 0, m_lineVertexBuffer, 0, sizeof(float) * 3);
+    glEnableVertexArrayAttrib(m_lineVertexArray, 0);
+    glVertexArrayAttribFormat(m_lineVertexArray, 0, 3, GL_FLOAT, GL_FALSE, 0);
+    glVertexArrayAttribBinding(m_lineVertexArray, 0, 0);
+
+    return true;
 }
 /*
 void OGLRenderContext::VSetTexture(uint32_t textureId, Texture2DPtr texture)
