@@ -37,6 +37,7 @@ add_subdirectory(InputDevice)
 #
 
 add_subdirectory(RenderDeviceImplementations)
+add_subdirectory(ThinRenderDeviceImplementations)
 add_subdirectory(InputDeviceImplementations)
 
 if(LONGBOW_BUILD_EXAMPLES)
