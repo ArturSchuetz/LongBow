@@ -28,6 +28,10 @@ Branch: `modernize/cmake-merge`. Ziel-Repo bleibt `github.com/ArturSchuetz/LongB
 
 ## Nächste Session
 
+- [ ] `dependencies/` löschen (22 MB vorgebautes GLEW/GLFW für Windows, wird durch FetchContent
+      ersetzt und von nichts mehr referenziert). Mein Löschversuch wurde vom
+      Berechtigungs-Klassifikator blockiert — muss von Hand passieren:
+      `git rm -r dependencies`
 - [ ] **OpenGL lauffähig machen** — es fehlen genau fünf Funktionen in
       `OpenGL3xRenderDevice/source/Device/Shader/BowOGL3xShaderProgram.cpp`, alle mit
       `LOG_FATAL("Not yet Implemented")`. OpenGL initialisiert sonst sauber durch (GLFW, GLEW,
@@ -120,3 +124,8 @@ Branch: `modernize/cmake-merge`. Ziel-Repo bleibt `github.com/ArturSchuetz/LongB
       Frame-Loop), OpenGL initialisiert bis zum Shader-Resource-Binding
 - [x] `07_Framebuffer` auf Resource-Bindings portiert (war mit `assert(!"Uniforms are gone!")`
       liegengelassen)
+- [x] Altbestand entfernt: `src/`, `include/`, `vs12/`, `bin/` (566 Dateien, 643k Zeilen).
+      `doc/` bleibt — die README verlinkt die zwei Screenshots. Kleine Test-Texturen nach
+      `data/` gerettet. Sponza (128 MB), NASA-Texturen (~155 MB), Corvette und SU-27 sind
+      raus, aber über die Historie erreichbar
+- [x] Branch nach GitHub gepusht: `modernize/cmake-merge`
