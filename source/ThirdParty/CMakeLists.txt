@@ -16,6 +16,9 @@ set(CMAKE_FOLDER "ThirdParty")
 add_library(LoadPNG STATIC LoadPNG/source/lodepng.cpp LoadPNG/include/LoadPNG/lodepng.h)
 add_library(LongBow::LoadPNG ALIAS LoadPNG)
 target_include_directories(LoadPNG PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/LoadPNG/include")
+# The vendored header carries a generate_export_header block that defaults to
+# __declspec(dllimport); this tells it we are linking the static variant.
+target_compile_definitions(LoadPNG PUBLIC LOADPNG_STATIC_DEFINE)
 set_target_properties(LoadPNG PROPERTIES
     POSITION_INDEPENDENT_CODE ON
     FOLDER "ThirdParty"
@@ -75,18 +78,34 @@ FetchContent_MakeAvailable(glfw)
 #
 
 if(LONGBOW_BUILD_OPENGL)
-    FetchContent_Declare(glew
-        GIT_REPOSITORY https://github.com/Perlmint/glew-cmake.git
-        GIT_TAG        glew-cmake-2.2.0
-        GIT_SHALLOW    ON
-    )
-    set(glew-cmake_BUILD_SHARED OFF CACHE BOOL "" FORCE)
-    set(ONLY_LIBS               ON  CACHE BOOL "" FORCE)
-    FetchContent_MakeAvailable(glew)
+    # An installed GLEW (system package, vcpkg, Homebrew) is preferred; the
+    # fetch below is the fallback for machines without one.
+    #
+    # GLOBAL matters: find_package creates IMPORTED targets scoped to the
+    # calling directory, and the backend that consumes GLEW lives in a sibling
+    # directory, where an unscoped GLEW::GLEW would not be visible.
+    find_package(GLEW QUIET GLOBAL)
 
-    # The mirror names its static target libglew_static; give it the spelling
-    # the rest of the tree uses.
-    if(TARGET libglew_static AND NOT TARGET GLEW::GLEW)
-        add_library(GLEW::GLEW ALIAS libglew_static)
+    if(NOT TARGET GLEW::GLEW)
+        FetchContent_Declare(glew
+            GIT_REPOSITORY https://github.com/Perlmint/glew-cmake.git
+            GIT_TAG        glew-cmake-2.2.0
+            GIT_SHALLOW    ON
+        )
+        set(glew-cmake_BUILD_SHARED OFF CACHE BOOL "" FORCE)
+        set(ONLY_LIBS               ON  CACHE BOOL "" FORCE)
+
+        # glew-cmake still declares cmake_minimum_required(VERSION 2.8), which
+        # CMake 4 refuses outright. The floor only applies while this
+        # subproject configures.
+        set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+        FetchContent_MakeAvailable(glew)
+        unset(CMAKE_POLICY_VERSION_MINIMUM)
+
+        # The mirror names its static target libglew_static; give it the
+        # spelling the rest of the tree uses.
+        if(TARGET libglew_static)
+            add_library(GLEW::GLEW ALIAS libglew_static)
+        endif()
     endif()
 endif()

@@ -1,4 +1,7 @@
-cmake_minimum_required(VERSION 3.21)
+# 3.24 for find_package(... GLOBAL): ThirdParty resolves dependencies that the
+# backends in sibling directories consume, and imported targets are otherwise
+# scoped to the directory that found them.
+cmake_minimum_required(VERSION 3.24)
 
 project(LongBow
     VERSION     2.0.0
@@ -32,10 +35,22 @@ endif()
 
 find_package(Vulkan QUIET)
 
-set(LONGBOW_CAN_BUILD_VULKAN    ${Vulkan_FOUND})
-set(LONGBOW_CAN_BUILD_DIRECTX11 ${WIN32})
-set(LONGBOW_CAN_BUILD_DIRECTX12 ${WIN32})
-set(LONGBOW_CAN_BUILD_OPENGL    ON)
+set(backend_dir "${CMAKE_CURRENT_SOURCE_DIR}/source/RenderDeviceImplementations")
+
+# A backend is buildable when the platform supports it *and* its sources are
+# present -- DirectX 11 is still being ported over and is absent for now.
+function(longbow_backend_available out platform_ok dir)
+    if(platform_ok AND IS_DIRECTORY "${backend_dir}/${dir}")
+        set(${out} ON  PARENT_SCOPE)
+    else()
+        set(${out} OFF PARENT_SCOPE)
+    endif()
+endfunction()
+
+longbow_backend_available(LONGBOW_CAN_BUILD_OPENGL    ON             OpenGL3xRenderDevice)
+longbow_backend_available(LONGBOW_CAN_BUILD_DIRECTX11 "${WIN32}"     DirectX11RenderDevice)
+longbow_backend_available(LONGBOW_CAN_BUILD_DIRECTX12 "${WIN32}"     DirectX12RenderDevice)
+longbow_backend_available(LONGBOW_CAN_BUILD_VULKAN    "${Vulkan_FOUND}" VulkanRenderDevice)
 
 option(LONGBOW_BUILD_OPENGL    "Build the OpenGL 3.x render backend"  ${LONGBOW_CAN_BUILD_OPENGL})
 option(LONGBOW_BUILD_DIRECTX11 "Build the DirectX 11 render backend"  ${LONGBOW_CAN_BUILD_DIRECTX11})
@@ -46,11 +61,13 @@ option(LONGBOW_BUILD_TESTS     "Build the test suite"                 OFF)
 option(LONGBOW_BUILD_DOCS      "Build the Doxygen documentation"      OFF)
 option(LONGBOW_ENABLE_PROFILER "Enable Optick profiler instrumentation" OFF)
 
-foreach(backend VULKAN DIRECTX11 DIRECTX12)
+foreach(backend OPENGL VULKAN DIRECTX11 DIRECTX12)
     if(LONGBOW_BUILD_${backend} AND NOT LONGBOW_CAN_BUILD_${backend})
         message(FATAL_ERROR
-            "LONGBOW_BUILD_${backend}=ON but this platform cannot build it. "
-            "DirectX needs Windows; Vulkan needs the Vulkan SDK (set VULKAN_SDK).")
+            "LONGBOW_BUILD_${backend}=ON but this backend is unavailable. "
+            "DirectX needs Windows, Vulkan needs the Vulkan SDK (set VULKAN_SDK), "
+            "and the backend's sources must be present under "
+            "source/RenderDeviceImplementations/.")
     endif()
 endforeach()
 

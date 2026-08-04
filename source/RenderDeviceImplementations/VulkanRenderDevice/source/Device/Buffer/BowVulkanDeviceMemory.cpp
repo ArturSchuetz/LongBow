@@ -69,7 +69,7 @@ bool VulkanDeviceMemory::AllocateMemory(VkMemoryPropertyFlags properties)
     if (result != VK_SUCCESS)
     {
         LOG_ERROR("VulkanBuffer: %s", VulkanTypeConverter::ToString(result).c_str());
-        return nullptr;
+        return false;
     }
 
     return true;

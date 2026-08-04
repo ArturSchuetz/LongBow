@@ -31,7 +31,7 @@ class VulkanTypeConverter
     static VkFilter ToVkFilter(TextureMinificationFilter filter);
     static VkSamplerAddressMode ToVkSamplerAddressMode(TextureWrap wrap);
 
-    static VkBufferUsageFlags VulkanTypeConverter::ToVkBufferUsageFlags(BufferHint hint);
+    static VkBufferUsageFlags ToVkBufferUsageFlags(BufferHint hint);
     static VkIndexType ToVkIndexType(IndexBufferDatatype dataType);
     static ShaderVertexAttributeType ToShaderVertexAttributeType(const spirv_cross::SPIRType &type);
     static VkBool32 ToVkBool32(bool boolean);

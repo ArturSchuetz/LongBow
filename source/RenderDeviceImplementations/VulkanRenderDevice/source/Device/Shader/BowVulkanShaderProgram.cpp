@@ -845,7 +845,7 @@ ShaderResourceBindingsPtr VulkanShaderProgram::VCreateResourceBindingObjects()
     if (result != VK_SUCCESS)
     {
         LOG_ERROR("VulkanShaderProgram: %s", VulkanTypeConverter::ToString(result).c_str());
-        return false;
+        return nullptr;
     }
 
     VulkanShaderResourceBindingsPtr shaderBindings = std::make_shared<VulkanShaderResourceBindings>(m_logicalDevice, shaderDescriptorSets);
@@ -917,7 +917,7 @@ ShaderResourceBindingsPtr VulkanShaderProgram::VCreateComputeResourceBindingObje
     if (result != VK_SUCCESS)
     {
         LOG_ERROR("VulkanShaderProgram: %s", VulkanTypeConverter::ToString(result).c_str());
-        return false;
+        return nullptr;
     }
 
     VulkanShaderResourceBindingsPtr shaderBindings = std::make_shared<VulkanShaderResourceBindings>(m_logicalDevice, shaderDescriptorSets);
