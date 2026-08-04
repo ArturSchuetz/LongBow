@@ -1,5 +1,6 @@
 #include <OpenGL3xRenderDevice/Device/Shader/BowOGL3xShaderProgram.h>
 
+#include <OpenGL3xRenderDevice/Device/Shader/BowOGL3xGlslAdapter.h>
 #include <OpenGL3xRenderDevice/Device/Shader/BowOGL3xShaderResourceBindings.h>
 
 #include <OpenGL3xRenderDevice/BowOGL3xTypeConverter.h>
@@ -36,12 +37,12 @@ OGLShaderProgram::OGLShaderProgram(const std::string &VertexShaderSource, const 
         LOG_ERROR("Could not create Shaderobject.");
 
     m_ready = false;
-    m_vertexShader = OGLShaderObjectPtr(new OGLShaderObject(GL_VERTEX_SHADER, VertexShaderSource));
+    m_vertexShader = OGLShaderObjectPtr(new OGLShaderObject(GL_VERTEX_SHADER, AdaptShaderSource(VertexShaderSource)));
     if (GeometryShaderSource.length() > 0)
     {
-        m_geometryShader = OGLShaderObjectPtr(new OGLShaderObject(GL_GEOMETRY_SHADER, GeometryShaderSource));
+        m_geometryShader = OGLShaderObjectPtr(new OGLShaderObject(GL_GEOMETRY_SHADER, AdaptShaderSource(GeometryShaderSource)));
     }
-    m_fragmentShader = OGLShaderObjectPtr(new OGLShaderObject(GL_FRAGMENT_SHADER, FragmentShaderSource));
+    m_fragmentShader = OGLShaderObjectPtr(new OGLShaderObject(GL_FRAGMENT_SHADER, AdaptShaderSource(FragmentShaderSource)));
 
     LOG_TRACE("glAttachShader");
     glAttachShader(m_ShaderProgramHandle, m_vertexShader->GetShader());
@@ -77,6 +78,69 @@ OGLShaderProgram::OGLShaderProgram(const std::string &VertexShaderSource, const 
     m_shaderResources = FindShaderResources(m_ShaderProgramHandle);
     m_storageBuffers = FindStorageBuffers();
     m_uniformBuffers = FindUniformBuffers();
+
+    CreatePushConstantBuffers();
+}
+
+std::string OGLShaderProgram::AdaptShaderSource(const std::string &source)
+{
+    FN("OGLShaderProgram::AdaptShaderSource");
+
+    GlslAdapter::Result adapted = GlslAdapter::Adapt(source);
+
+    for (const auto &entry : adapted.pushConstantBlocks)
+    {
+        m_pushConstantBlockNames[entry.first] = entry.second;
+    }
+
+    return adapted.source;
+}
+
+void OGLShaderProgram::CreatePushConstantBuffers()
+{
+    FN("OGLShaderProgram::CreatePushConstantBuffers");
+
+    // Each converted push-constant block became an ordinary uniform block, so
+    // it needs a uniform buffer behind it. The size comes from the linked
+    // program rather than from the caller, so a mismatched write is caught.
+    uint32_t nextBindingPoint = (uint32_t)m_uniformBuffers.size() + (uint32_t)m_storageBuffers.size();
+
+    for (const auto &entry : m_pushConstantBlockNames)
+    {
+        const std::string &instanceName = entry.first;
+        const std::string &blockName = entry.second;
+
+        LOG_TRACE("glGetUniformBlockIndex");
+        const GLuint blockIndex = glGetUniformBlockIndex(m_ShaderProgramHandle, blockName.c_str());
+        if (blockIndex == GL_INVALID_INDEX)
+        {
+            // The block was declared but never read, so the linker removed it.
+            LOG_TRACE("Push constant block '%s' was optimised out of the program.", blockName.c_str());
+            continue;
+        }
+
+        GLint blockSize = 0;
+        LOG_TRACE("glGetActiveUniformBlockiv");
+        glGetActiveUniformBlockiv(m_ShaderProgramHandle, blockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &blockSize);
+
+        PushConstantBlock block;
+        block.blockName = blockName;
+        block.bindingPoint = nextBindingPoint++;
+        block.sizeInBytes = (size_t)blockSize;
+        block.buffer = 0;
+
+        LOG_TRACE("glCreateBuffers");
+        glCreateBuffers(1, &block.buffer);
+        LOG_TRACE("glNamedBufferData");
+        glNamedBufferData(block.buffer, blockSize, nullptr, GL_DYNAMIC_DRAW);
+
+        LOG_TRACE("glUniformBlockBinding");
+        glUniformBlockBinding(m_ShaderProgramHandle, blockIndex, block.bindingPoint);
+
+        m_pushConstantBlocks[instanceName] = block;
+
+        LOG_TRACE("\t\tPushConstants: %s -> block %s, %d bytes", instanceName.c_str(), blockName.c_str(), blockSize);
+    }
 }
 
 OGLShaderProgram::~OGLShaderProgram()
@@ -441,6 +505,24 @@ void OGLShaderProgram::VSetPushConstants(const char *name, const void *data, siz
     if (data == nullptr || size == 0)
     {
         LOG_ERROR("No data given for push constant '%s'.", name);
+        return;
+    }
+
+    // A Vulkan push-constant block was rewritten into a uniform block, so the
+    // write goes into the buffer standing behind it.
+    std::unordered_map<std::string, PushConstantBlock>::const_iterator block = m_pushConstantBlocks.find(name);
+    if (block != m_pushConstantBlocks.end())
+    {
+        if (offset + size > block->second.sizeInBytes)
+        {
+            LOG_ERROR("Push constant '%s' is %u bytes, but the write covers %u.", name, (unsigned)block->second.sizeInBytes, (unsigned)(offset + size));
+            return;
+        }
+
+        LOG_TRACE("glNamedBufferSubData");
+        glNamedBufferSubData(block->second.buffer, (GLintptr)offset, (GLsizeiptr)size, data);
+        LOG_TRACE("glBindBufferBase");
+        glBindBufferBase(GL_UNIFORM_BUFFER, block->second.bindingPoint, block->second.buffer);
         return;
     }
 

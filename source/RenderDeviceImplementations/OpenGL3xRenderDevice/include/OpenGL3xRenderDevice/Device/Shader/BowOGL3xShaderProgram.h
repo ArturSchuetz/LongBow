@@ -71,6 +71,24 @@ class OGLShaderProgram : public IShaderProgram
     ShaderVertexAttributeMap m_shaderVertexAttributes;
     OGLFragmentOutputsPtr m_fragmentOutputs;
 
+    //! Uniform buffer standing in for a Vulkan push-constant block.
+    struct PushConstantBlock
+    {
+        std::string blockName;
+        uint32_t buffer;
+        uint32_t bindingPoint;
+        size_t sizeInBytes;
+    };
+
+    //! Adapts Vulkan GLSL and records the push-constant blocks it converted.
+    std::string AdaptShaderSource(const std::string &source);
+
+    //! Allocates the uniform buffer backing each converted push-constant block.
+    void CreatePushConstantBuffers();
+
+    std::unordered_map<std::string, std::string> m_pushConstantBlockNames;
+    std::unordered_map<std::string, PushConstantBlock> m_pushConstantBlocks;
+
     ShaderResourceMap m_shaderResources;
     std::unordered_map<std::string, ShaderUniformBufferUnit> m_uniformBuffers;
     std::unordered_map<std::string, ShaderStorageBufferUnit> m_storageBuffers;
