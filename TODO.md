@@ -21,58 +21,47 @@ Der ausführliche Plan steht in [docs/PLAN.md](docs/PLAN.md), die Begründung de
 
 ## Stand
 
-| Backend | Tier | Stand |
-|---|---|---|
-| OpenGL | Classic | 9/9 Beispiele, 4.5-Core-Kontext, Buffer auf DSA. Texturen/Framebuffer/VAOs noch 3.x |
-| Vulkan | Thin (künftig) | 9/9 Beispiele, inkl. Raytracing. Läuft noch über die klassische Fassade |
-| DirectX 11 | Classic | Gerät, Fenster, Swap Chain, Clear, Present. **Keine Ressourcentypen** |
-| DirectX 12 | Thin (künftig) | Rumpf aus 4 Dateien. Echte Implementierung in der Historie (`2635b41`) |
+| Backend | Tier | Beispiele | Anmerkung |
+|---|---|---|---|
+| OpenGL 4.5 | Classic | **9/9** | Core Profile, Direct State Access durchgehend, Debug-Callback |
+| Vulkan 1.3 | Thin (künftig) | **9/9** | inkl. Raytracing; läuft noch über die klassische Fassade |
+| DirectX 11 | Classic | **7/9** | offen: 01_Input (GLFW-Input am rohen HWND), 09 (kein Raytracing) |
+| DirectX 12 | Thin (künftig) | 0/9 | unverändert Rumpf aus vier Dateien |
 
-## Jetzt dran — Stufe 3, DirectX 11
+### Stufen
 
-Reihenfolge bewusst geändert: Stufe 1 (Schnittstelle aufteilen) würde Vulkan und
-`09_PathTracing` über mehrere Stufen zerlegen, weil beide Raytracing über die klassische
-Schnittstelle nutzen. Stufe 3 ist reine Ergänzung und bricht nichts, kommt also zuerst.
+| Stufe | Stand |
+|---|---|
+| 1 — Schnittstelle aufteilen | offen (bewusst zurückgestellt, siehe unten) |
+| 2 — OpenGL 4.5 | **fertig** |
+| 3 — DirectX 11 | **fertig bis auf Input und Raytracing** |
+| 4 — Thin-Schnittstelle | offen |
+| 5 — Vulkan auf Thin | offen |
+| 6 — DirectX 12 auf Thin | offen |
+| 7 — Shader-Pipeline zur Buildzeit | offen (Übersetzung läuft zur Laufzeit im DX11-Backend) |
+| 8 — Beispiele Classic/Thin, GLSL/HLSL | offen |
+| 9 — NetworkDevice, GameFoundation, ImGui | offen |
+| 10 — Öffentlichkeit | teilweise: **LICENSE und README fertig**, Rest offen |
 
-### Fertig
+## Jetzt dran
 
-- [x] Buffer: `D3D11Buffer` als Basis, Vertex-, Index- und Constant-Buffer darauf.
-      Dynamic wird gemappt (DISCARD), Default geht über `UpdateSubresource`,
-      Read-back über eine Staging-Kopie
-- [x] **Shader-Übersetzung GLSL → SPIR-V → HLSL → DXBC** über shaderc und SPIRV-Cross aus dem
-      Vulkan SDK. Damit laufen die vorhandenen GLSL-Beispiele unverändert auf DirectX 11.
-      HLSL wird durchgereicht, erkannt am fehlenden `#version`.
-      SPIRV-Cross korrigiert dabei Clip-Space und Y-Richtung, weil GLSL die Tiefe von -1..1
-      und den Ursprung unten hat, DirectX 0..1 und oben
-- [x] `D3D11ShaderProgram`: kompiliert beide Stufen, reflektiert Vertex-Eingänge und
-      Ressourcen-Slots über `ID3D11ShaderReflection`, hält den Vertex-Bytecode fürs Input Layout
-- [x] Push Constants werden auf Constant Buffer abgebildet, adressiert über den Namen
-- [x] Texturen (mit Verbreiterung von 3 auf 4 Kanäle), Sampler als State-Objekte,
-      `D3D11ShaderResourceBindings`
-- [x] Alles im Gerät verdrahtet
+Reihenfolge bewusst geändert: Stufe 1 würde Vulkan und `09_PathTracing` über mehrere Stufen
+zerlegen, weil beide Raytracing über die klassische Schnittstelle nutzen. Erst wenn Stufe 4
+und 5 fertig sind, ist der Schnitt schmerzfrei.
 
-### Genau hier weitermachen
+### Rest von Stufe 3
+- [ ] Win32-Input-Backend, damit `01_Input` auf DirectX 11 läuft. Der Input geht über GLFW,
+      das DirectX-Fenster ist ein rohes HWND — entweder ein `RawInput`-Backend oder das
+      DirectX-Fenster auf GLFW umstellen (GLFW kann `glfwGetWin32Window`)
+- [ ] `09_PathTracing` soll auf DX11 „kein Raytracing" melden statt
+      „shader-creation-failed" — die Meldung entsteht, weil das Beispiel abbricht, bevor
+      der RT-Pfad überhaupt erreicht wird
 
-- [ ] **`D3D11VertexAttributeBindings`** — das fehlende Stück.
-      `VCreateVertexAttributeBindings` gibt noch `nullptr` zurück, deshalb stürzt
-      `03_Triangle` ab: nicht das Backend, sondern das Beispiel dereferenziert den Nullzeiger.
-      Gebraucht wird:
-    - ein `ID3D11InputLayout`, erzeugt aus `D3D11ShaderProgram::GetVertexByteCode()`
-      und den gesetzten Attributen
-    - die Semantik-Zuordnung: SPIRV-Cross benennt übersetzte Eingänge `TEXCOORD<n>` und
-      legt die GLSL-Location in den Semantic Index. `ReflectVertexInput` wertet das bereits
-      aus und legt die Attribute unter dieser Location ab
-- [ ] Draw-Pfad im Kontext: `IASetVertexBuffers`, `IASetIndexBuffer`,
-      `IASetPrimitiveTopology`, `Draw`/`DrawIndexed`, davor `Bind()` des Shader-Programms
-- [ ] Render-States als gecachte Objekte (Rasterizer, Blend, DepthStencil) —
-      DirectX will Objekte, wo OpenGL Einzelaufrufe nimmt
-- [ ] Ressourcen im Kontext binden: Namen über die Reflection in Slots auflösen, dann
-      `VSSetConstantBuffers`, `PSSetShaderResources`, `PSSetSamplers`
-- [ ] Framebuffer über Render-Target-Views
-- [ ] Compute und Storage Buffer (UAV)
-
-Stand auf DirectX 11: `02_HelloWorld` läuft fehlerfrei (1107 Present-Aufrufe im Testlauf).
-Der Rest wartet auf den Draw-Pfad.
+### Dann Stufe 4 und 5
+Die Thin-Schnittstelle entwerfen und Vulkan darauf heben. Der Vulkan-Backend enthält die
+Objekte bereits intern (`CommandBuffer`, `CommandPool`, `Fence`, `Semaphore`, `Pipeline`,
+`RenderPass`, `Swapchain`, `LogicalDevice`, `PhysicalDevice`, `QueueFamily`, `DeviceMemory`),
+sie müssen nur nach außen gelegt werden. Details in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Danach
 
