@@ -16,6 +16,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(LongBowModule)
+include(LongBowShaders)
 
 # Only meaningful when LongBow is the top-level project; as a subdirectory the
 # parent decides about output layout, IDE folders and testing.

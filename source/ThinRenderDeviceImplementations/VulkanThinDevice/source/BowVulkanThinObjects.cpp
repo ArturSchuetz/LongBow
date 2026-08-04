@@ -34,30 +34,52 @@ void VulkanThinQueue::VSubmit(const std::vector<ThinCommandListPtr> &commandList
         buffers.push_back(info);
     }
 
-    VkSemaphoreSubmitInfo wait = {VK_STRUCTURE_TYPE_SEMAPHORE_SUBMIT_INFO};
-    VkSemaphoreSubmitInfo signal = {VK_STRUCTURE_TYPE_SEMAPHORE_SUBMIT_INFO};
-
-    VkSubmitInfo2 submit = {VK_STRUCTURE_TYPE_SUBMIT_INFO_2};
-    submit.commandBufferInfoCount = (uint32_t)buffers.size();
-    submit.pCommandBufferInfos = buffers.data();
+    std::vector<VkSemaphoreSubmitInfo> waits;
+    std::vector<VkSemaphoreSubmitInfo> signals;
 
     if (waitFence != nullptr)
     {
+        VkSemaphoreSubmitInfo wait = {VK_STRUCTURE_TYPE_SEMAPHORE_SUBMIT_INFO};
         wait.semaphore = static_cast<VulkanThinFence *>(waitFence.get())->GetHandle();
         wait.value = waitValue;
         wait.stageMask = VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT;
-        submit.waitSemaphoreInfoCount = 1;
-        submit.pWaitSemaphoreInfos = &wait;
+        waits.push_back(wait);
     }
 
     if (signalFence != nullptr)
     {
+        VkSemaphoreSubmitInfo signal = {VK_STRUCTURE_TYPE_SEMAPHORE_SUBMIT_INFO};
         signal.semaphore = static_cast<VulkanThinFence *>(signalFence.get())->GetHandle();
         signal.value = signalValue;
         signal.stageMask = VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT;
-        submit.signalSemaphoreInfoCount = 1;
-        submit.pSignalSemaphoreInfos = &signal;
+        signals.push_back(signal);
     }
+
+    // Anything the swapchain left behind: wait until the image is free to
+    // render into, and signal that it is ready to present.
+    const VulkanThinDevice::PendingPresentSync presentSync = m_device->TakePendingPresentSync();
+    if (presentSync.waitOnAcquire != VK_NULL_HANDLE)
+    {
+        VkSemaphoreSubmitInfo wait = {VK_STRUCTURE_TYPE_SEMAPHORE_SUBMIT_INFO};
+        wait.semaphore = presentSync.waitOnAcquire;
+        wait.stageMask = VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT;
+        waits.push_back(wait);
+    }
+    if (presentSync.signalForPresent != VK_NULL_HANDLE)
+    {
+        VkSemaphoreSubmitInfo signal = {VK_STRUCTURE_TYPE_SEMAPHORE_SUBMIT_INFO};
+        signal.semaphore = presentSync.signalForPresent;
+        signal.stageMask = VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT;
+        signals.push_back(signal);
+    }
+
+    VkSubmitInfo2 submit = {VK_STRUCTURE_TYPE_SUBMIT_INFO_2};
+    submit.commandBufferInfoCount = (uint32_t)buffers.size();
+    submit.pCommandBufferInfos = buffers.data();
+    submit.waitSemaphoreInfoCount = (uint32_t)waits.size();
+    submit.pWaitSemaphoreInfos = waits.data();
+    submit.signalSemaphoreInfoCount = (uint32_t)signals.size();
+    submit.pSignalSemaphoreInfos = signals.data();
 
     VulkanCheck(vkQueueSubmit2(m_queue, 1, &submit, VK_NULL_HANDLE), "vkQueueSubmit2");
 }

@@ -351,6 +351,13 @@ ThinQueuePtr VulkanThinDevice::VGetQueue(ThinQueueType type)
     return created;
 }
 
+VulkanThinDevice::PendingPresentSync VulkanThinDevice::TakePendingPresentSync()
+{
+    const PendingPresentSync taken = m_pendingPresentSync;
+    m_pendingPresentSync = PendingPresentSync();
+    return taken;
+}
+
 uint32_t VulkanThinDevice::FindMemoryType(uint32_t typeBits, VkMemoryPropertyFlags properties) const
 {
     for (uint32_t i = 0; i < m_memoryProperties.memoryTypeCount; ++i)

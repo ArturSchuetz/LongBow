@@ -61,6 +61,23 @@ class VulkanThinDevice : public IThinDevice
     */
     uint32_t FindMemoryType(uint32_t typeBits, VkMemoryPropertyFlags properties) const;
 
+    //! Binary semaphores the next submit has to wait on and signal.
+    /*!
+        Swapchain acquire and present are the one place Vulkan still requires
+        binary semaphores, and the thin interface deliberately does not expose
+        them. The swapchain leaves the pair for the current image here, the
+        next submit consumes it, and present waits on the signalled one. That
+        keeps the whole mechanism inside the backend.
+    */
+    struct PendingPresentSync
+    {
+        VkSemaphore waitOnAcquire = VK_NULL_HANDLE;
+        VkSemaphore signalForPresent = VK_NULL_HANDLE;
+    };
+
+    void SetPendingPresentSync(const PendingPresentSync &sync) { m_pendingPresentSync = sync; }
+    PendingPresentSync TakePendingPresentSync();
+
   private:
     VulkanThinDevice(const VulkanThinDevice &) = delete;
     VulkanThinDevice &operator=(const VulkanThinDevice &) = delete;
@@ -80,6 +97,8 @@ class VulkanThinDevice : public IThinDevice
     uint32_t m_transferFamily;
 
     std::unordered_map<uint32_t, ThinQueuePtr> m_queues;
+
+    PendingPresentSync m_pendingPresentSync;
 
     ThinDeviceCapabilities m_capabilities;
     bool m_initialized;

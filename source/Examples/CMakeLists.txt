@@ -17,6 +17,9 @@ add_subdirectory(07_Framebuffer)
 add_subdirectory(08_ComputeShader)
 add_subdirectory(09_PathTracing)
 
+# Thin-tier examples
+add_subdirectory(Thin)
+
 # The examples are useless without a backend to load, so make sure whichever
 # ones are enabled are built before them.
 foreach(example

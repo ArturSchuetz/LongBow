@@ -183,8 +183,16 @@ uint32_t VulkanThinSwapchain::VAcquireNextImage()
         return 0;
     }
 
-    const VkSemaphore semaphore = m_acquireSemaphores[m_frame % m_acquireSemaphores.size()];
+    const size_t slot = m_frame % m_acquireSemaphores.size();
+    const VkSemaphore semaphore = m_acquireSemaphores[slot];
     const VkResult result = vkAcquireNextImageKHR(m_device->GetHandle(), m_swapchain, UINT64_MAX, semaphore, VK_NULL_HANDLE, &m_currentImage);
+
+    // Hand the pair to the device so the next submit picks it up. The
+    // interface never mentions binary semaphores; this is where they live.
+    VulkanThinDevice::PendingPresentSync sync;
+    sync.waitOnAcquire = semaphore;
+    sync.signalForPresent = m_presentSemaphores[slot];
+    m_device->SetPendingPresentSync(sync);
 
     if (result == VK_ERROR_OUT_OF_DATE_KHR)
     {
@@ -209,7 +217,11 @@ void VulkanThinSwapchain::VPresent(bool /*vsync*/)
         return;
     }
 
+    const VkSemaphore presentSemaphore = m_presentSemaphores[m_frame % m_presentSemaphores.size()];
+
     VkPresentInfoKHR presentInfo = {VK_STRUCTURE_TYPE_PRESENT_INFO_KHR};
+    presentInfo.waitSemaphoreCount = 1;
+    presentInfo.pWaitSemaphores = &presentSemaphore;
     presentInfo.swapchainCount = 1;
     presentInfo.pSwapchains = &m_swapchain;
     presentInfo.pImageIndices = &m_currentImage;
