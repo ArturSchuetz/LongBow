@@ -66,7 +66,7 @@ class D3D11ShaderProgram : public IShaderProgram
     D3D11ShaderProgram &operator=(const D3D11ShaderProgram &) = delete;
 
     bool CompileStage(const std::string &source, const char *target, Microsoft::WRL::ComPtr<ID3DBlob> &byteCode);
-    void ReflectVertexInput(ID3DBlob *byteCode);
+    void ReflectVertexInput(ID3DBlob *byteCode, const std::unordered_map<uint32_t, std::string> &originalNames);
     void ReflectResources(ID3DBlob *byteCode, bool vertexStage);
 
     ID3D11Device *m_device;

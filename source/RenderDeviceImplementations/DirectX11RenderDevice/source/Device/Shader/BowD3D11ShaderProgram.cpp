@@ -99,7 +99,7 @@ D3D11ShaderProgram::D3D11ShaderProgram(ID3D11Device *device, ID3D11DeviceContext
         }
     }
 
-    ReflectVertexInput(m_vertexByteCode.Get());
+    ReflectVertexInput(m_vertexByteCode.Get(), vertex.attributeNames);
     ReflectResources(m_vertexByteCode.Get(), true);
     ReflectResources(pixelByteCode.Get(), false);
 
@@ -137,7 +137,7 @@ bool D3D11ShaderProgram::CompileStage(const std::string &source, const char *tar
     return true;
 }
 
-void D3D11ShaderProgram::ReflectVertexInput(ID3DBlob *byteCode)
+void D3D11ShaderProgram::ReflectVertexInput(ID3DBlob *byteCode, const std::unordered_map<uint32_t, std::string> &originalNames)
 {
     FN("D3D11ShaderProgram::ReflectVertexInput");
 
@@ -172,10 +172,21 @@ void D3D11ShaderProgram::ReflectVertexInput(ID3DBlob *byteCode)
         // engine addresses an attribute by.
         const int location = (int)parameter.SemanticIndex;
 
-        std::string name = parameter.SemanticName;
-        if (parameter.SemanticIndex != 0 || name == "TEXCOORD")
+        // Prefer the name the shader was written with; fall back to the
+        // semantic when the source was HLSL to begin with and there is none.
+        std::string name;
+        std::unordered_map<uint32_t, std::string>::const_iterator original = originalNames.find((uint32_t)location);
+        if (original != originalNames.end())
         {
-            name += std::to_string(parameter.SemanticIndex);
+            name = original->second;
+        }
+        else
+        {
+            name = parameter.SemanticName;
+            if (parameter.SemanticIndex != 0)
+            {
+                name += std::to_string(parameter.SemanticIndex);
+            }
         }
 
         LOG_TRACE("\t\tName: %s, \tLocation: %d", name.c_str(), location);
@@ -247,9 +258,6 @@ ShaderVertexAttributePtr D3D11ShaderProgram::VGetVertexAttribute(std::string nam
         }
     }
 
-    // Translated shaders lose their GLSL attribute names -- SPIRV-Cross emits
-    // TEXCOORD<location> -- so a lookup by the name the example used falls
-    // back to the location encoded in the semantic.
     return nullptr;
 }
 

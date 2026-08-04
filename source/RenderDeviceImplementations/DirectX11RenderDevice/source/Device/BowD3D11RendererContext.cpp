@@ -1,11 +1,21 @@
 #include <DirectX11RenderDevice/Device/BowD3D11RenderContext.h>
 
 #include <DirectX11RenderDevice/BowD3D11RenderDevice.h>
+#include <DirectX11RenderDevice/BowD3D11TypeConverter.h>
+#include <DirectX11RenderDevice/Device/Buffer/BowD3D11IndexBuffer.h>
+#include <DirectX11RenderDevice/Device/Buffer/BowD3D11UniformBuffer.h>
+#include <DirectX11RenderDevice/Device/Context/VertexAttributeBindings/BowD3D11VertexAttributeBindings.h>
+#include <DirectX11RenderDevice/Device/Shader/BowD3D11ShaderProgram.h>
+#include <DirectX11RenderDevice/Device/Shader/BowD3D11ShaderResourceBindings.h>
+#include <DirectX11RenderDevice/Device/Textures/BowD3D11Texture2D.h>
+#include <DirectX11RenderDevice/Device/Textures/BowD3D11TextureSampler.h>
 
 #include <CoreSystems/BowLogger.h>
 #include <CoreSystems/Geometry/BowMeshAttribute.h>
 
 #include <RenderDevice/BowRenderState.h>
+#include <RenderDevice/Device/Context/Mesh/BowMeshBuffers.h>
+#include <RenderDevice/Device/Context/VertexAttributeBindings/BowVertexBufferAttribute.h>
 
 #include <optick.h>
 
@@ -16,7 +26,7 @@
 namespace bow
 {
 
-D3D11RenderContext::D3D11RenderContext(HWND windowHandle, uint32_t width, uint32_t height) : m_windowHandle(windowHandle), m_viewport(0, 0, (int)width, (int)height), m_initialized(false)
+D3D11RenderContext::D3D11RenderContext(HWND windowHandle, uint32_t width, uint32_t height) : m_windowHandle(windowHandle), m_viewport(0, 0, (int)width, (int)height), m_renderStateKey(0), m_renderStateValid(false), m_initialized(false)
 {
     FN("D3D11RenderContext::D3D11RenderContext");
 }
@@ -272,20 +282,35 @@ VertexAttributeBindingsPtr D3D11RenderContext::VCreateVertexAttributeBindings(Me
     return nullptr;
 }
 
-VertexAttributeBindingsPtr D3D11RenderContext::VCreateVertexAttributeBindings(MeshBufferPtr /*meshBuffers*/)
+VertexAttributeBindingsPtr D3D11RenderContext::VCreateVertexAttributeBindings(MeshBufferPtr meshBuffers)
 {
     FN("D3D11RenderContext::VCreateVertexAttributeBindings");
 
-    LOG_ERROR("DirectX 11: vertex attribute bindings are not implemented yet.");
-    return nullptr;
+    if (meshBuffers == nullptr)
+    {
+        return nullptr;
+    }
+
+    VertexAttributeBindingsPtr bindings = VCreateVertexAttributeBindings();
+    if (meshBuffers->IndexBuffer != nullptr)
+    {
+        bindings->VSetIndexBuffer(meshBuffers->IndexBuffer);
+    }
+
+    VertexBufferAttributeMap attributes = meshBuffers->GetAttributes();
+    for (auto it = attributes.begin(); it != attributes.end(); ++it)
+    {
+        bindings->VSetAttribute(it->first, it->second);
+    }
+
+    return bindings;
 }
 
 VertexAttributeBindingsPtr D3D11RenderContext::VCreateVertexAttributeBindings()
 {
     FN("D3D11RenderContext::VCreateVertexAttributeBindings");
 
-    LOG_ERROR("DirectX 11: vertex attribute bindings are not implemented yet.");
-    return nullptr;
+    return D3D11VertexAttributeBindingsPtr(new D3D11VertexAttributeBindings(m_device.Get(), m_deviceContext.Get()));
 }
 
 FramebufferPtr D3D11RenderContext::VCreateFramebuffer()
@@ -296,26 +321,253 @@ FramebufferPtr D3D11RenderContext::VCreateFramebuffer()
     return nullptr;
 }
 
-void D3D11RenderContext::VDraw(PrimitiveType /*primitiveType*/, VertexAttributeBindingsPtr /*vertexAttributeBindings*/, ShaderProgramPtr /*shaderProgram*/, RenderState /*renderState*/)
+void D3D11RenderContext::VDraw(PrimitiveType primitiveType, VertexAttributeBindingsPtr vertexAttributeBindings, ShaderProgramPtr shaderProgram, RenderState renderState)
 {
     FN("D3D11RenderContext::VDraw");
+    OPTICK_EVENT();
 
-    LOG_ERROR("DirectX 11: drawing is not implemented yet.");
+    D3D11VertexAttributeBindingsPtr bindings = std::dynamic_pointer_cast<D3D11VertexAttributeBindings>(vertexAttributeBindings);
+    const uint32_t count = (bindings != nullptr) ? bindings->GetVertexCount() : 0;
+
+    Draw(primitiveType, 0, count, vertexAttributeBindings, nullptr, shaderProgram, renderState);
 }
 
-void D3D11RenderContext::VDraw(PrimitiveType /*primitiveType*/, uint32_t /*offset*/, uint32_t /*count*/, VertexAttributeBindingsPtr /*vertexAttributeBindings*/, ShaderProgramPtr /*shaderProgram*/, RenderState /*renderState*/)
+void D3D11RenderContext::VDraw(PrimitiveType primitiveType, uint32_t offset, uint32_t count, VertexAttributeBindingsPtr vertexAttributeBindings, ShaderProgramPtr shaderProgram, RenderState renderState)
 {
     FN("D3D11RenderContext::VDraw");
+    OPTICK_EVENT();
 
-    LOG_ERROR("DirectX 11: drawing is not implemented yet.");
+    Draw(primitiveType, offset, count, vertexAttributeBindings, nullptr, shaderProgram, renderState);
 }
 
-void D3D11RenderContext::VDraw(PrimitiveType /*primitiveType*/, uint32_t /*offset*/, uint32_t /*count*/, VertexAttributeBindingsPtr /*vertexAttributeBindings*/, ShaderResourceBindingsPtr /*shaderResourceBindings*/, ShaderProgramPtr /*shaderProgram*/,
-                               RenderState /*renderState*/)
+void D3D11RenderContext::VDraw(PrimitiveType primitiveType, uint32_t offset, uint32_t count, VertexAttributeBindingsPtr vertexAttributeBindings, ShaderResourceBindingsPtr shaderResourceBindings, ShaderProgramPtr shaderProgram,
+                               RenderState renderState)
 {
     FN("D3D11RenderContext::VDraw");
+    OPTICK_EVENT();
 
-    LOG_ERROR("DirectX 11: drawing is not implemented yet.");
+    Draw(primitiveType, offset, count, vertexAttributeBindings, shaderResourceBindings, shaderProgram, renderState);
+}
+
+void D3D11RenderContext::Draw(PrimitiveType primitiveType, uint32_t offset, uint32_t count, VertexAttributeBindingsPtr vertexAttributeBindings, ShaderResourceBindingsPtr shaderResourceBindings, ShaderProgramPtr shaderProgram, RenderState renderState)
+{
+    FN("D3D11RenderContext::Draw");
+
+    D3D11ShaderProgramPtr program = std::dynamic_pointer_cast<D3D11ShaderProgram>(shaderProgram);
+    D3D11VertexAttributeBindingsPtr bindings = std::dynamic_pointer_cast<D3D11VertexAttributeBindings>(vertexAttributeBindings);
+
+    if (program == nullptr || bindings == nullptr)
+    {
+        LOG_ERROR("The shader program or the vertex attribute bindings were not created by the DirectX 11 device.");
+        return;
+    }
+
+    if (count == 0)
+    {
+        return;
+    }
+
+    ApplyRenderState(renderState);
+
+    // The program has to be set before the resource bindings, which resolve
+    // their names through its reflection, and before the input layout, which
+    // is validated against its vertex signature.
+    program->Bind();
+
+    if (!bindings->Bind(program))
+    {
+        return;
+    }
+
+    ApplyShaderResourceBindings(shaderResourceBindings, program);
+
+    LOG_TRACE("IASetPrimitiveTopology");
+    m_deviceContext->IASetPrimitiveTopology(D3D11TypeConverter::ToPrimitiveTopology(primitiveType));
+
+    if (bindings->VGetIndexBuffer() != nullptr)
+    {
+        LOG_TRACE("DrawIndexed");
+        m_deviceContext->DrawIndexed(count, offset, 0);
+    }
+    else
+    {
+        LOG_TRACE("Draw");
+        m_deviceContext->Draw(count, offset);
+    }
+}
+
+void D3D11RenderContext::ApplyRenderState(const RenderState &renderState)
+{
+    FN("D3D11RenderContext::ApplyRenderState");
+
+    // A cheap identity for the settings that matter, so the state objects are
+    // only rebuilt when something actually changed.
+    uint64_t key = 0;
+    key |= (uint64_t)(renderState.faceCulling.Enabled ? 1 : 0) << 0;
+    key |= (uint64_t)renderState.faceCulling.Face << 1;
+    key |= (uint64_t)renderState.faceCulling.FrontFaceWindingOrder << 4;
+    key |= (uint64_t)(renderState.depthTest.Enabled ? 1 : 0) << 6;
+    key |= (uint64_t)renderState.depthTest.Function << 7;
+    key |= (uint64_t)(renderState.depthMask ? 1 : 0) << 11;
+    key |= (uint64_t)(renderState.blending.Enabled ? 1 : 0) << 12;
+    key |= (uint64_t)renderState.rasterizationMode << 13;
+
+    if (m_renderStateValid && key == m_renderStateKey)
+    {
+        return;
+    }
+
+    D3D11_RASTERIZER_DESC rasterizer = {};
+    rasterizer.FillMode = (renderState.rasterizationMode == RasterizationMode::Fill) ? D3D11_FILL_SOLID : D3D11_FILL_WIREFRAME;
+    if (!renderState.faceCulling.Enabled)
+    {
+        rasterizer.CullMode = D3D11_CULL_NONE;
+    }
+    else
+    {
+        rasterizer.CullMode = (renderState.faceCulling.Face == CullFace::Front) ? D3D11_CULL_FRONT : D3D11_CULL_BACK;
+    }
+    // SPIRV-Cross flips Y when it translates a GLSL vertex shader, which
+    // reverses the winding the rasteriser sees, so the front face is the
+    // opposite of what the render state names.
+    rasterizer.FrontCounterClockwise = (renderState.faceCulling.FrontFaceWindingOrder == WindingOrder::Clockwise) ? TRUE : FALSE;
+    rasterizer.DepthClipEnable = TRUE;
+    rasterizer.ScissorEnable = renderState.scissorTest.Enabled ? TRUE : FALSE;
+
+    m_rasterizerState.Reset();
+    m_device->CreateRasterizerState(&rasterizer, &m_rasterizerState);
+    m_deviceContext->RSSetState(m_rasterizerState.Get());
+
+    D3D11_DEPTH_STENCIL_DESC depthStencil = {};
+    depthStencil.DepthEnable = renderState.depthTest.Enabled ? TRUE : FALSE;
+    depthStencil.DepthWriteMask = renderState.depthMask ? D3D11_DEPTH_WRITE_MASK_ALL : D3D11_DEPTH_WRITE_MASK_ZERO;
+    switch (renderState.depthTest.Function)
+    {
+    case DepthTestFunction::Never:
+        depthStencil.DepthFunc = D3D11_COMPARISON_NEVER;
+        break;
+    case DepthTestFunction::Less:
+        depthStencil.DepthFunc = D3D11_COMPARISON_LESS;
+        break;
+    case DepthTestFunction::Equal:
+        depthStencil.DepthFunc = D3D11_COMPARISON_EQUAL;
+        break;
+    case DepthTestFunction::LessThanOrEqual:
+        depthStencil.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+        break;
+    case DepthTestFunction::Greater:
+        depthStencil.DepthFunc = D3D11_COMPARISON_GREATER;
+        break;
+    case DepthTestFunction::NotEqual:
+        depthStencil.DepthFunc = D3D11_COMPARISON_NOT_EQUAL;
+        break;
+    case DepthTestFunction::GreaterThanOrEqual:
+        depthStencil.DepthFunc = D3D11_COMPARISON_GREATER_EQUAL;
+        break;
+    default:
+        depthStencil.DepthFunc = D3D11_COMPARISON_ALWAYS;
+        break;
+    }
+
+    m_depthStencilState.Reset();
+    m_device->CreateDepthStencilState(&depthStencil, &m_depthStencilState);
+    m_deviceContext->OMSetDepthStencilState(m_depthStencilState.Get(), 0);
+
+    D3D11_BLEND_DESC blend = {};
+    blend.RenderTarget[0].BlendEnable = renderState.blending.Enabled ? TRUE : FALSE;
+    blend.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+    blend.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+    blend.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+    blend.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+    blend.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+    blend.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    blend.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+    m_blendState.Reset();
+    m_device->CreateBlendState(&blend, &m_blendState);
+    m_deviceContext->OMSetBlendState(m_blendState.Get(), nullptr, 0xFFFFFFFF);
+
+    m_renderStateKey = key;
+    m_renderStateValid = true;
+}
+
+void D3D11RenderContext::ApplyShaderResourceBindings(ShaderResourceBindingsPtr shaderResourceBindings, const D3D11ShaderProgramPtr &program)
+{
+    FN("D3D11RenderContext::ApplyShaderResourceBindings");
+
+    if (shaderResourceBindings == nullptr)
+    {
+        return;
+    }
+
+    D3D11ShaderResourceBindingsPtr bindings = std::dynamic_pointer_cast<D3D11ShaderResourceBindings>(shaderResourceBindings);
+    if (bindings == nullptr)
+    {
+        LOG_ERROR("Resource bindings were not created by the DirectX 11 device.");
+        return;
+    }
+
+    // The names the caller used are turned into slots here, using what the
+    // shader reflection reported. DirectX binds per stage, so a resource the
+    // reflection saw in both has to be set twice.
+    for (const auto &entry : bindings->GetTextures())
+    {
+        const D3D11ShaderProgram::ResourceSlot *slot = program->FindTexture(entry.first);
+        if (slot == nullptr)
+        {
+            LOG_WARNING("Shader has no texture named '%s'; the binding is ignored.", entry.first.c_str());
+            continue;
+        }
+
+        ID3D11ShaderResourceView *views[] = {entry.second.texture->GetShaderResourceView()};
+        if (slot->inVertexStage)
+        {
+            m_deviceContext->VSSetShaderResources(slot->slot, 1, views);
+        }
+        if (slot->inPixelStage)
+        {
+            m_deviceContext->PSSetShaderResources(slot->slot, 1, views);
+        }
+
+        if (entry.second.sampler != nullptr)
+        {
+            // SPIRV-Cross names the sampler after the combined image sampler
+            // it split, prefixed, so the texture name is tried first and the
+            // sampler slot falls back to the texture slot when it matches.
+            const D3D11ShaderProgram::ResourceSlot *samplerSlot = program->FindSampler(entry.first);
+            const uint32_t index = (samplerSlot != nullptr) ? samplerSlot->slot : slot->slot;
+
+            ID3D11SamplerState *samplers[] = {entry.second.sampler->GetHandle()};
+            if (slot->inVertexStage)
+            {
+                m_deviceContext->VSSetSamplers(index, 1, samplers);
+            }
+            if (slot->inPixelStage)
+            {
+                m_deviceContext->PSSetSamplers(index, 1, samplers);
+            }
+        }
+    }
+
+    for (const auto &entry : bindings->GetUniformBuffers())
+    {
+        const D3D11ShaderProgram::ResourceSlot *slot = program->FindConstantBuffer(entry.first);
+        if (slot == nullptr)
+        {
+            LOG_WARNING("Shader has no constant buffer named '%s'; the binding is ignored.", entry.first.c_str());
+            continue;
+        }
+
+        ID3D11Buffer *buffers[] = {entry.second->GetHandle()};
+        if (slot->inVertexStage)
+        {
+            m_deviceContext->VSSetConstantBuffers(slot->slot, 1, buffers);
+        }
+        if (slot->inPixelStage)
+        {
+            m_deviceContext->PSSetConstantBuffers(slot->slot, 1, buffers);
+        }
+    }
 }
 
 void D3D11RenderContext::VDrawLine(const bow::Vector3<float> & /*start*/, const bow::Vector3<float> & /*end*/)

@@ -2,6 +2,7 @@
 #include <DirectX11RenderDevice/DirectX11RenderDevice_api.h>
 
 #include <string>
+#include <unordered_map>
 
 namespace bow
 {
@@ -35,6 +36,15 @@ class ShaderTranslator
         bool ok;
         std::string hlsl;
         std::string message;
+
+        //! Location to the attribute name the GLSL used.
+        /*!
+            SPIRV-Cross renames stage inputs to TEXCOORD<location> when it
+            emits HLSL, because HLSL addresses them by semantic. Callers still
+            look an attribute up by the name they wrote in the shader, so the
+            original names are read out of the SPIR-V before that happens.
+        */
+        std::unordered_map<uint32_t, std::string> attributeNames;
     };
 
     //! Translates GLSL to Shader Model 5.0 HLSL, or passes HLSL through.

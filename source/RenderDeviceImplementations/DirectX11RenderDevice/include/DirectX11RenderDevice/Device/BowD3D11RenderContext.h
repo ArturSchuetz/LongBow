@@ -62,6 +62,29 @@ class D3D11RenderContext : public IRenderContext
     bool CreateBackBufferViews();
     void ReleaseBackBufferViews();
 
+    //! Sets everything a draw needs and issues it.
+    void Draw(PrimitiveType primitiveType, uint32_t offset, uint32_t count, VertexAttributeBindingsPtr vertexAttributeBindings, ShaderResourceBindingsPtr shaderResourceBindings, ShaderProgramPtr shaderProgram, RenderState renderState);
+
+    //! Applies a render state, creating and caching the state objects it needs.
+    /*!
+        DirectX 11 wants rasterizer, blend and depth-stencil settings as objects
+        created ahead of time, where OpenGL takes individual calls. Building one
+        per draw would be wasteful, so they are cached by the settings they were
+        built from.
+    */
+    void ApplyRenderState(const RenderState &renderState);
+
+    //! Resolves the names in the bindings to slots using the shader reflection.
+    void ApplyShaderResourceBindings(ShaderResourceBindingsPtr shaderResourceBindings, const std::shared_ptr<class D3D11ShaderProgram> &program);
+
+    Microsoft::WRL::ComPtr<ID3D11RasterizerState> m_rasterizerState;
+    Microsoft::WRL::ComPtr<ID3D11BlendState> m_blendState;
+    Microsoft::WRL::ComPtr<ID3D11DepthStencilState> m_depthStencilState;
+
+    //! What the cached state objects were built from, so they can be reused.
+    uint64_t m_renderStateKey;
+    bool m_renderStateValid;
+
     HWND m_windowHandle;
     Viewport m_viewport;
 

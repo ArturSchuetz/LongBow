@@ -100,6 +100,19 @@ ShaderTranslator::Result ShaderTranslator::ToHLSL(const std::string &source, Sta
         commonOptions.vertex.flip_vert_y = true;
         hlslCompiler.set_common_options(commonOptions);
 
+        // Read the stage input names before compiling: the HLSL that comes
+        // out has TEXCOORD semantics and no trace of what they were called.
+        const spirv_cross::ShaderResources resources = hlslCompiler.get_shader_resources();
+        for (const spirv_cross::Resource &input : resources.stage_inputs)
+        {
+            const uint32_t location = hlslCompiler.get_decoration(input.id, spv::DecorationLocation);
+            const std::string name = hlslCompiler.get_name(input.id);
+            if (!name.empty())
+            {
+                result.attributeNames[location] = name;
+            }
+        }
+
         result.hlsl = hlslCompiler.compile();
         result.ok = true;
     }
