@@ -23,7 +23,7 @@ foreach(example
     00_TimerTest 01_Input 02_HelloWorld 03_Triangle 04_Cube
     05_Textures 06_MeshRendering 07_Framebuffer 08_ComputeShader 09_PathTracing)
     foreach(backend
-        OpenGL3xRenderDevice DirectX11RenderDevice DirectX12RenderDevice
+        OpenGLRenderDevice DirectX11RenderDevice DirectX12RenderDevice
         VulkanRenderDevice NativeInputDevice DirectInputDevice)
         if(TARGET ${backend})
             add_dependencies(${example} ${backend})

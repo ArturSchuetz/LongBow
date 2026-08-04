@@ -57,8 +57,8 @@ const char *PluginName(RenderDeviceAPI api)
         return "DirectX11RenderDevice";
     case RenderDeviceAPI::DirectX12:
         return "DirectX12RenderDevice";
-    case RenderDeviceAPI::OpenGL3x:
-        return "OpenGL3xRenderDevice";
+    case RenderDeviceAPI::OpenGL:
+        return "OpenGLRenderDevice";
     case RenderDeviceAPI::Vulkan:
         return "VulkanRenderDevice";
     }

@@ -9,7 +9,7 @@ enum class RenderDeviceAPI : char
 {
     DirectX11,
     DirectX12,
-    OpenGL3x,
+    OpenGL,
     Vulkan,
 };
 

@@ -33,7 +33,7 @@ bool ParseBackendName(const std::string &name, RenderDeviceAPI &api)
 
     if (lowered == "opengl" || lowered == "opengl3x" || lowered == "gl")
     {
-        api = RenderDeviceAPI::OpenGL3x;
+        api = RenderDeviceAPI::OpenGL;
         return true;
     }
     if (lowered == "directx11" || lowered == "dx11" || lowered == "d3d11")
@@ -102,7 +102,7 @@ const char *BackendName(RenderDeviceAPI api)
 {
     switch (api)
     {
-    case RenderDeviceAPI::OpenGL3x:
+    case RenderDeviceAPI::OpenGL:
         return "OpenGL 3.x";
     case RenderDeviceAPI::DirectX11:
         return "DirectX 11";

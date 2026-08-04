@@ -2,7 +2,7 @@
 # opens by name at runtime, so they are never linked into the engine itself.
 
 if(LONGBOW_BUILD_OPENGL)
-    add_subdirectory(OpenGL3xRenderDevice)
+    add_subdirectory(OpenGLRenderDevice)
 endif()
 
 if(LONGBOW_BUILD_DIRECTX11)
