@@ -31,37 +31,47 @@ Der ausführliche Plan steht in [docs/PLAN.md](docs/PLAN.md), die Begründung de
 ## Jetzt dran — Stufe 3, DirectX 11
 
 Reihenfolge bewusst geändert: Stufe 1 (Schnittstelle aufteilen) würde Vulkan und
-09_PathTracing über mehrere Stufen zerlegen, weil beide Raytracing über die klassische
+`09_PathTracing` über mehrere Stufen zerlegen, weil beide Raytracing über die klassische
 Schnittstelle nutzen. Stufe 3 ist reine Ergänzung und bricht nichts, kommt also zuerst.
 
 ### Fertig
-- [x] Buffer:  als Basis, Vertex-, Index- und Constant-Buffer darauf.
-      Dynamic → /, Default → , Read-back über Staging-Kopie
-- [x] Shader-Übersetzung: **GLSL → SPIR-V → HLSL → DXBC**, über shaderc und SPIRV-Cross aus dem
+
+- [x] Buffer: `D3D11Buffer` als Basis, Vertex-, Index- und Constant-Buffer darauf.
+      Dynamic wird gemappt (DISCARD), Default geht über `UpdateSubresource`,
+      Read-back über eine Staging-Kopie
+- [x] **Shader-Übersetzung GLSL → SPIR-V → HLSL → DXBC** über shaderc und SPIRV-Cross aus dem
       Vulkan SDK. Damit laufen die vorhandenen GLSL-Beispiele unverändert auf DirectX 11.
-      HLSL wird durchgereicht (Erkennung über )
-- [x] : kompiliert beide Stufen, reflektiert Vertex-Eingänge und
-      Ressourcen-Slots über , hält den Vertex-Bytecode fürs Input Layout
-- [x] Push Constants → Constant Buffer, per Name
-- [x] Texturen, Sampler, 
+      HLSL wird durchgereicht, erkannt am fehlenden `#version`.
+      SPIRV-Cross korrigiert dabei Clip-Space und Y-Richtung, weil GLSL die Tiefe von -1..1
+      und den Ursprung unten hat, DirectX 0..1 und oben
+- [x] `D3D11ShaderProgram`: kompiliert beide Stufen, reflektiert Vertex-Eingänge und
+      Ressourcen-Slots über `ID3D11ShaderReflection`, hält den Vertex-Bytecode fürs Input Layout
+- [x] Push Constants werden auf Constant Buffer abgebildet, adressiert über den Namen
+- [x] Texturen (mit Verbreiterung von 3 auf 4 Kanäle), Sampler als State-Objekte,
+      `D3D11ShaderResourceBindings`
 - [x] Alles im Gerät verdrahtet
 
-### Als Nächstes — genau hier weitermachen
-- [ ] **** — das fehlende Stück. 
-      gibt noch  zurück, deshalb stürzt  ab (kein Fehler im Backend,
-      das Beispiel dereferenziert den Nullzeiger). Braucht:
-    -  aus  und den gesetzten Attributen
-    - Semantik-Zuordnung: SPIRV-Cross benennt übersetzte Eingänge ,
-      die GLSL-Location steckt im Semantic Index —  wertet das schon aus
-- [ ] Draw-Pfad: , , ,
-      /, dazu  des Shader-Programms
-- [ ] Render-States als gecachte Objekte (Rasterizer, Blend, DepthStencil)
-- [ ] Ressourcen-Bindung im Kontext: Namen über die Reflection in Slots auflösen,
-      //
+### Genau hier weitermachen
+
+- [ ] **`D3D11VertexAttributeBindings`** — das fehlende Stück.
+      `VCreateVertexAttributeBindings` gibt noch `nullptr` zurück, deshalb stürzt
+      `03_Triangle` ab: nicht das Backend, sondern das Beispiel dereferenziert den Nullzeiger.
+      Gebraucht wird:
+    - ein `ID3D11InputLayout`, erzeugt aus `D3D11ShaderProgram::GetVertexByteCode()`
+      und den gesetzten Attributen
+    - die Semantik-Zuordnung: SPIRV-Cross benennt übersetzte Eingänge `TEXCOORD<n>` und
+      legt die GLSL-Location in den Semantic Index. `ReflectVertexInput` wertet das bereits
+      aus und legt die Attribute unter dieser Location ab
+- [ ] Draw-Pfad im Kontext: `IASetVertexBuffers`, `IASetIndexBuffer`,
+      `IASetPrimitiveTopology`, `Draw`/`DrawIndexed`, davor `Bind()` des Shader-Programms
+- [ ] Render-States als gecachte Objekte (Rasterizer, Blend, DepthStencil) —
+      DirectX will Objekte, wo OpenGL Einzelaufrufe nimmt
+- [ ] Ressourcen im Kontext binden: Namen über die Reflection in Slots auflösen, dann
+      `VSSetConstantBuffers`, `PSSetShaderResources`, `PSSetSamplers`
 - [ ] Framebuffer über Render-Target-Views
 - [ ] Compute und Storage Buffer (UAV)
 
-Stand der Beispiele auf DirectX 11:  läuft (1107 Present-Aufrufe, fehlerfrei).
+Stand auf DirectX 11: `02_HelloWorld` läuft fehlerfrei (1107 Present-Aufrufe im Testlauf).
 Der Rest wartet auf den Draw-Pfad.
 
 ## Danach
