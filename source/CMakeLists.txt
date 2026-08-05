@@ -31,6 +31,8 @@ add_subdirectory(Resources)
 add_subdirectory(RenderDevice)
 add_subdirectory(ThinRenderDevice)
 add_subdirectory(InputDevice)
+add_subdirectory(NetworkDevice)
+add_subdirectory(GameFoundation)
 
 #
 # Backends
@@ -39,6 +41,7 @@ add_subdirectory(InputDevice)
 add_subdirectory(RenderDeviceImplementations)
 add_subdirectory(ThinRenderDeviceImplementations)
 add_subdirectory(InputDeviceImplementations)
+add_subdirectory(NetworkDeviceImplementations)
 
 if(LONGBOW_BUILD_EXAMPLES)
     add_subdirectory(Examples)

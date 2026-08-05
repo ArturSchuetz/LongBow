@@ -1,0 +1,19 @@
+/**
+ * @file IBowNetworkDevice.h
+ * @brief Declarations for IBowNetworkDevice.
+ */
+
+#pragma once
+#include <CoreSystems/BowCorePredeclares.h>
+#include <NetworkDevice/BowNetworkPredeclares.h>
+
+namespace bow {
+
+	class INetworkDevice
+	{
+	public:
+		INetworkDevice(void){};
+		virtual ~INetworkDevice(void){}
+		virtual void VRelease(void) = 0;
+	};
+}
