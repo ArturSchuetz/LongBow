@@ -128,8 +128,10 @@ int main(int argc, char *argv[])
         commandPools.push_back(device->VCreateCommandPool(bow::ThinQueueType::Graphics));
     }
 
-    const std::vector<char> vertexByteCode = ReadShader("shaders/Triangle.vertex.spv");
-    const std::vector<char> fragmentByteCode = ReadShader("shaders/Triangle.fragment.spv");
+    // Both forms came from the same HLSL file; only the extension differs.
+    const char *suffix = (api == bow::ThinRenderDeviceAPI::DirectX12) ? ".dxil" : ".spv";
+    const std::vector<char> vertexByteCode = ReadShader(std::string("shaders/Triangle.vertex") + suffix);
+    const std::vector<char> fragmentByteCode = ReadShader(std::string("shaders/Triangle.fragment") + suffix);
     if (vertexByteCode.empty() || fragmentByteCode.empty())
     {
         return -1;
